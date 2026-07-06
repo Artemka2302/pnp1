@@ -1,0 +1,147 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ПНП — промышленная комплектация и инженерные поставки{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}ПНП помогает подбирать, поставлять и сопровождать промышленное оборудование, комплектующие и инженерные решения для объектов по всей России.{% endblock %}">
+  <meta name="theme-color" content="#0f4f78">
+
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#main-content">Перейти к содержимому</a>
+
+  <header class="site-header" data-site-header>
+    <div class="topbar">
+      <div class="container topbar__inner">
+        <span class="topbar__note">Поставка промышленного оборудования и комплектующих</span>
+        <div class="topbar__contacts" aria-label="Быстрые контакты">
+          <a href="tel:+79214370438">+7 921 437-04-38</a>
+          <a href="mailto:info@pnp1.ru">info@pnp1.ru</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container header-main">
+      <a class="brand" href="/" aria-label="ПНП, перейти на главную">
+        <span class="brand__mark">ПНП</span>
+        <span class="brand__text">
+          <span class="brand__name">ПНП</span>
+          <span class="brand__caption">инженерная комплектация объектов</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" id="main-nav" data-main-nav aria-label="Основная навигация">
+        <a href="/">Главная</a>
+        <a href="/about/">О компании</a>
+        <a href="/catalog/">Каталог</a>
+        <a href="/vendors/">Производители</a>
+        <a href="/partners/">Партнерам</a>
+        <a href="/contacts/">Контакты</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="button button--ghost" href="/contacts/#request">Оставить заявку</a>
+        <button class="menu-toggle" type="button" data-nav-toggle aria-controls="main-nav" aria-expanded="false">
+          <span class="menu-toggle__line"></span>
+          <span class="menu-toggle__line"></span>
+          <span class="menu-toggle__line"></span>
+          <span class="visually-hidden">Открыть меню</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    {% block content %}
+    <section class="page-hero">
+      <div class="container page-hero__inner">
+        <p class="eyebrow">ПНП</p>
+        <h1>Промышленная комплектация без лишней бюрократии</h1>
+        <p class="page-hero__lead">Замените этот блок содержимым конкретной страницы через <code>{% verbatim %}{% block content %}{% endverbatim %}</code>.</p>
+      </div>
+    </section>
+    {% endblock %}
+
+    {% block before_footer %}
+    <section class="request-band" id="request" aria-labelledby="request-title">
+      <div class="container request-band__inner">
+        <div>
+          <p class="eyebrow">Заявка</p>
+          <h2 id="request-title">Нужна комплектация или подбор аналога?</h2>
+          <p>Отправьте спецификацию, артикулы или описание задачи. Команда ПНП уточнит условия и подготовит ответ по поставке.</p>
+        </div>
+        <div class="request-band__actions">
+          <a class="button button--primary" href="mailto:info@pnp1.ru">Написать на почту</a>
+          <a class="button button--outline" href="tel:+79214370438">Позвонить</a>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+  </main>
+
+  <footer class="site-footer" id="contacts">
+    <div class="container site-footer__grid">
+      <div class="site-footer__brand">
+        <a class="brand brand--footer" href="/" aria-label="ПНП, перейти на главную">
+          <span class="brand__mark">ПНП</span>
+          <span class="brand__text">
+            <span class="brand__name">ПНП</span>
+            <span class="brand__caption">промышленные поставки</span>
+          </span>
+        </a>
+        <p>Комплектация предприятий, строительных и производственных объектов оборудованием, материалами и запасными частями.</p>
+      </div>
+
+      <div class="site-footer__column">
+        <h2>Разделы</h2>
+        <ul>
+          <li><a href="/about/">О компании</a></li>
+          <li><a href="/catalog/">Каталог</a></li>
+          <li><a href="/vendors/">Производители</a></li>
+          <li><a href="/partners/">Партнерам</a></li>
+          <li><a href="/contacts/">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div class="site-footer__column">
+        <h2>Контакты</h2>
+        <ul>
+          <li><a href="tel:+79214370438">+7 921 437-04-38</a></li>
+          <li><a href="mailto:info@pnp1.ru">info@pnp1.ru</a></li>
+          <li>117545, Москва, ул. Подольских Курсантов, д. 3, стр. 29</li>
+        </ul>
+      </div>
+
+      <div class="site-footer__column">
+        <h2>Документы</h2>
+        <ul>
+          <li><a href="/privacy/">Политика обработки персональных данных</a></li>
+          <li><a href="/consent/">Согласие на обработку персональных данных</a></li>
+        </ul>
+        <details class="footer-details">
+          <summary>Реквизиты</summary>
+          <p>ООО СЗ «ПНП»</p>
+          <p>ИНН 7801790399, КПП 781001001</p>
+          <p>ОГРН 1237800046598</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="container site-footer__bottom">
+      <p>© <span data-current-year>2026</span> ПНП. Все права защищены.</p>
+      <p>Сайт: <a href="https://www.pnp1.ru/">www.pnp1.ru</a></p>
+    </div>
+  </footer>
+
+  <a class="floating-call" href="tel:+79214370438" aria-label="Позвонить в ПНП">
+    <span>Позвонить</span>
+  </a>
+
+  <script src="{% static 'js/base.js' %}" defer></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
