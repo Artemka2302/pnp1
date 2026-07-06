@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Производители ПНП{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <p class="eyebrow">Производители</p>
+  <h1>База производителей</h1>
+  <p>Производители и их привязки к товарным группам берутся из базы данных.</p>
+  <form class="search-form" method="get">
+    <input type="search" name="q" value="{{ query }}" placeholder="Поиск по бренду, системе или товарной группе">
+    <button class="btn btn-primary" type="submit">Найти</button>
+  </form>
+</section>
+
+<section class="section">
+  <div class="logo-grid vendor-grid">
+    {% for vendor in vendors %}
+      <article class="vendor-card">
+        <a class="logo-card" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener">
+          {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
+        </a>
+        <h2>{{ vendor.name }}</h2>
+        <div class="chips">
+          {% for group in vendor.product_groups.all|slice:":4" %}
+            <span>{{ group.title }}</span>
+          {% endfor %}
+        </div>
+      </article>
+    {% empty %}
+      <p class="muted">По запросу ничего не найдено.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

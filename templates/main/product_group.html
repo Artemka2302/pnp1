@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ group.title }} — товарная группа{% endblock %}
+
+{% block content %}
+<section class="page-hero product-hero">
+  {% if group.image %}<img src="{% static group.image %}" alt="{{ group.title }}">{% endif %}
+  <div>
+    <p class="eyebrow">Товарная группа</p>
+    <h1>{{ group.title }}</h1>
+    <p>{{ group.catalog_path }}</p>
+  </div>
+</section>
+
+<section class="section two-column">
+  <article class="panel">
+    <div class="section-head">
+      <p class="eyebrow">Типы продукции</p>
+      <h2>Что можно добавить в заявку</h2>
+    </div>
+    <div class="type-list">
+      {% for type in group.types.all %}
+        <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ type.title|capfirst }}">
+          <span>{{ type.title|capfirst }}</span>
+          <small>Добавить</small>
+        </button>
+      {% empty %}
+        <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ group.title }}">
+          <span>{{ group.title }}</span>
+          <small>Добавить</small>
+        </button>
+      {% endfor %}
+    </div>
+  </article>
+
+  <aside class="panel">
+    <div class="section-head">
+      <p class="eyebrow">Мини-заявка</p>
+      <h2>Выбранные позиции</h2>
+    </div>
+    <textarea class="request-textarea" data-request-output rows="10" placeholder="Выберите тип продукции слева. Здесь появится структура заявки."></textarea>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{% url 'contacts' %}">Отправить заявку</a>
+      <button class="btn btn-secondary" type="button" data-request-clear>Очистить</button>
+    </div>
+  </aside>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Производители</p>
+    <h2>Связанные с товарной группой</h2>
+  </div>
+  <div class="logo-grid">
+    {% for vendor in group.vendors.all %}
+      <a class="logo-card" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener">
+        {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
+      </a>
+    {% empty %}
+      <p class="muted">Производители пока не привязаны.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

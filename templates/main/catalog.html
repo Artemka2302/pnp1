@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Каталог ПНП{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <p class="eyebrow">Каталог</p>
+  <h1>Каталог поставки</h1>
+  <p>Структура хранится в базе: блоки, направления, системы, товарные группы, типы продукции и производители.</p>
+</section>
+
+<section class="section">
+  <div class="card-grid card-grid-main">
+    {% for block in blocks %}
+      <a class="image-card" href="{% url 'catalog_block' block.slug %}">
+        {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
+        <div class="card-body">
+          <p class="eyebrow">Блок</p>
+          <h2>{{ block.title }}</h2>
+          <p>{{ block.summary }}</p>
+          <div class="chips">
+            <span>{{ block.direction_count }} направлений</span>
+            <span>{{ block.system_count }} систем</span>
+            <span>{{ block.group_count }} групп</span>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

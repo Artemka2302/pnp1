@@ -1,8 +1,31 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
     path("about/", views.about, name="about"),
-    path("base/", views.base, name='base'),
+    path("contacts/", views.contacts, name="contacts"),
+    path("catalog/", views.catalog, name="catalog"),
+    path("catalog/<slug:block_slug>/", views.catalog_block, name="catalog_block"),
+    path(
+        "catalog/<slug:block_slug>/<slug:direction_slug>/",
+        views.catalog_direction,
+        name="catalog_direction",
+    ),
+    path(
+        "catalog/<slug:block_slug>/<slug:direction_slug>/<slug:system_slug>/",
+        views.catalog_system,
+        name="catalog_system",
+    ),
+    path(
+        "catalog/<slug:block_slug>/<slug:direction_slug>/<slug:system_slug>/<slug:group_slug>/",
+        views.product_group,
+        name="product_group",
+    ),
+    path("vendors/", views.vendors, name="vendors"),
+    path("partners/", views.partners, name="partners"),
+    path("assets/<path:path>", views.legacy_asset_redirect, name="legacy_asset_redirect"),
+    path("<slug:page>/", views.legacy_page, name="legacy_page_slash"),
+    path("<slug:page>", views.legacy_page, name="legacy_page"),
 ]

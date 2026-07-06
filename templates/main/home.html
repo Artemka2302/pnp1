@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Первый Национальный Поставщик</p>
+    <h1>Единый центр комплектации строительных объектов</h1>
+    <p>Берем на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{% url 'catalog' %}">Открыть каталог</a>
+      <a class="btn btn-secondary" href="{% url 'vendors' %}">Производители</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <span>{{ stats.blocks }} блоков</span>
+    <span>{{ stats.directions }} направлений</span>
+    <span>{{ stats.systems }} систем</span>
+    <span>{{ stats.groups }} товарных групп</span>
+    <span>{{ stats.vendors }} производителей</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Каталог</p>
+    <h2>Основные направления поставки</h2>
+  </div>
+  <div class="card-grid card-grid-main">
+    {% for block in blocks %}
+      <a class="image-card" href="{% url 'catalog_block' block.slug %}">
+        {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
+        <div class="card-body">
+          <p class="eyebrow">Блок</p>
+          <h3>{{ block.title }}</h3>
+          <p>{{ block.summary }}</p>
+          <div class="chips">
+            <span>{{ block.direction_count }} направлений</span>
+            <span>{{ block.system_count }} систем</span>
+            <span>{{ block.group_count }} групп</span>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Партнеры</p>
+    <h2>Популярные бренды</h2>
+  </div>
+  <div class="logo-row">
+    {% for partner in featured_partners %}
+      <a class="logo-card" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener">
+        {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

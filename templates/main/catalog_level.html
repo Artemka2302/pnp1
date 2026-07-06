@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }} — {{ level }}{% endblock %}
+
+{% block content %}
+<section class="page-hero compact">
+  <p class="eyebrow">{{ level }}</p>
+  <h1>{{ object.title }}</h1>
+  {% if object.summary %}<p>{{ object.summary }}</p>{% endif %}
+  {% if object.purpose %}<p>{{ object.purpose }}</p>{% endif %}
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <p class="eyebrow">Следующий уровень</p>
+    <h2>{{ child_level }}</h2>
+  </div>
+  <div class="card-grid">
+    {% for child in children %}
+      {% if child_level == "Направление" %}
+        <a class="image-card compact-card" href="{% url 'catalog_direction' object.slug child.slug %}">
+      {% elif child_level == "Система" %}
+        <a class="image-card compact-card" href="{% url 'catalog_system' object.block.slug object.slug child.slug %}">
+      {% else %}
+        <a class="image-card compact-card" href="{% url 'product_group' object.direction.block.slug object.direction.slug object.slug child.slug %}">
+      {% endif %}
+          {% if child.image %}<img src="{% static child.image %}" alt="{{ child.title }}">{% endif %}
+          <div class="card-body">
+            <p class="eyebrow">{{ child_level }}</p>
+            <h3>{{ child.title }}</h3>
+            {% if child.purpose %}<p>{{ child.purpose }}</p>{% endif %}
+            {% if child.product_groups %}
+              <div class="chips"><span>{{ child.product_groups.count }} групп</span></div>
+            {% endif %}
+          </div>
+        </a>
+    {% empty %}
+      <p class="muted">На этом уровне пока нет элементов.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
