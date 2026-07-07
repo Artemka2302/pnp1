@@ -4,6 +4,7 @@ from django.db import transaction
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.views.decorators.http import require_POST
 
@@ -177,33 +178,181 @@ def product_group(request, block_slug, direction_slug, system_slug, group_slug):
     return render(request, "main/product_group.html", {"group": group})
 
 
-def vendors(request):
-    query = request.GET.get("q", "").strip()
-    vendors_qs = Vendor.objects.prefetch_related("product_groups__system__direction__block")
+def request_param(request, *names):
+    for name in names:
+        value = request.GET.get(name, "").strip()
+        if value:
+            return value
+    return ""
+
+
+def vendor_filter_params(request):
+    vendor_values = []
+    for name in ("vendors", "vendor", "vendor_slug"):
+        vendor_values.extend(value.strip() for value in request.GET.getlist(name) if value.strip())
+
+    return {
+        "query": request_param(request, "q", "vendorSearch"),
+        "block": request_param(request, "block", "vendorBlock"),
+        "direction": request_param(request, "direction", "vendorDirection"),
+        "system": request_param(request, "system", "vendorSystem"),
+        "group": request_param(request, "group", "product_group", "vendorProduct"),
+        "vendors": list(dict.fromkeys(vendor_values)),
+    }
+
+
+def apply_vendor_filters(queryset, filters):
+    query = filters["query"]
     if query:
-        vendors_qs = vendors_qs.filter(
+        queryset = queryset.filter(
             Q(name__icontains=query)
+            | Q(notes__icontains=query)
             | Q(product_groups__title__icontains=query)
+            | Q(product_groups__types__title__icontains=query)
             | Q(product_groups__system__title__icontains=query)
             | Q(product_groups__system__direction__title__icontains=query)
-        ).distinct()
+            | Q(product_groups__system__direction__block__title__icontains=query)
+        )
+    if filters["block"]:
+        queryset = queryset.filter(
+            Q(product_groups__system__direction__block__slug=filters["block"])
+            | Q(product_groups__system__direction__block__title=filters["block"])
+        )
+    if filters["direction"]:
+        queryset = queryset.filter(
+            Q(product_groups__system__direction__slug=filters["direction"])
+            | Q(product_groups__system__direction__title=filters["direction"])
+        )
+    if filters["system"]:
+        queryset = queryset.filter(
+            Q(product_groups__system__slug=filters["system"])
+            | Q(product_groups__system__title=filters["system"])
+        )
+    if filters["group"]:
+        queryset = queryset.filter(
+            Q(product_groups__slug=filters["group"])
+            | Q(product_groups__title=filters["group"])
+        )
+    if filters["vendors"]:
+        queryset = queryset.filter(Q(slug__in=filters["vendors"]) | Q(name__in=filters["vendors"]))
+    return queryset.distinct()
+
+
+def vendor_page_context(request):
+    filters = vendor_filter_params(request)
+    vendor_base_qs = Vendor.objects.filter(vendorproductgroup__show_in_vendors=True)
+    vendors_qs = apply_vendor_filters(vendor_base_qs, filters).order_by("name")
+    cloud_filters = {**filters, "vendors": []}
+    cloud_vendors_qs = apply_vendor_filters(vendor_base_qs, cloud_filters).order_by("name")
+
+    group_rows_qs = ProductGroup.objects.filter(vendorproductgroup__show_in_vendors=True)
+    query = filters["query"]
+    if query:
+        group_rows_qs = group_rows_qs.filter(
+            Q(title__icontains=query)
+            | Q(types__title__icontains=query)
+            | Q(system__title__icontains=query)
+            | Q(system__direction__title__icontains=query)
+            | Q(system__direction__block__title__icontains=query)
+            | Q(vendors__name__icontains=query)
+            | Q(vendors__notes__icontains=query)
+        )
+    if filters["block"]:
+        group_rows_qs = group_rows_qs.filter(
+            Q(system__direction__block__slug=filters["block"])
+            | Q(system__direction__block__title=filters["block"])
+        )
+    if filters["direction"]:
+        group_rows_qs = group_rows_qs.filter(
+            Q(system__direction__slug=filters["direction"])
+            | Q(system__direction__title=filters["direction"])
+        )
+    if filters["system"]:
+        group_rows_qs = group_rows_qs.filter(
+            Q(system__slug=filters["system"])
+            | Q(system__title=filters["system"])
+        )
+    if filters["group"]:
+        group_rows_qs = group_rows_qs.filter(Q(slug=filters["group"]) | Q(title=filters["group"]))
+    if filters["vendors"]:
+        group_rows_qs = group_rows_qs.filter(Q(vendors__slug__in=filters["vendors"]) | Q(vendors__name__in=filters["vendors"]))
+
+    group_rows_qs = (
+        group_rows_qs.select_related("system__direction__block")
+        .prefetch_related(Prefetch("vendors", queryset=vendors_qs))
+        .distinct()
+        .order_by(
+            "system__direction__block__sort_order",
+            "system__direction__sort_order",
+            "system__sort_order",
+            "sort_order",
+            "title",
+        )
+    )
+
     blocks = CatalogBlock.objects.annotate(
         direction_count=Count("directions", distinct=True),
         system_count=Count("directions__systems", distinct=True),
         group_count=Count("directions__systems__product_groups", distinct=True),
         vendor_count=Count("directions__systems__product_groups__vendors", distinct=True),
     )
-    return render(
-        request,
-        "main/vendors.html",
-        {
-            "vendors": vendors_qs[:500],
-            "query": query,
-            "blocks": blocks,
-            "vendor_count": Vendor.objects.count(),
-            "group_count": ProductGroup.objects.count(),
-        },
+    directions = Direction.objects.select_related("block").order_by("block__sort_order", "sort_order", "title")
+    direction_cards = directions.annotate(
+        system_count=Count("systems", distinct=True),
+        group_count=Count("systems__product_groups", distinct=True),
+        vendor_count=Count("systems__product_groups__vendors", distinct=True),
     )
+    selected_vendors = Vendor.objects.none()
+    if filters["vendors"]:
+        selected_vendors = Vendor.objects.filter(Q(slug__in=filters["vendors"]) | Q(name__in=filters["vendors"])).order_by("name")
+    vendor_options = list(
+        Vendor.objects.filter(vendorproductgroup__show_in_vendors=True)
+        .distinct()
+        .order_by("name")
+        .values("slug", "name")
+    )
+
+    return {
+        "filters": filters,
+        "query": filters["query"],
+        "selected_vendors": selected_vendors,
+        "vendor_options": vendor_options,
+        "blocks": blocks,
+        "directions": directions,
+        "direction_cards": direction_cards,
+        "systems": CatalogSystem.objects.select_related("direction__block").order_by(
+            "direction__block__sort_order",
+            "direction__sort_order",
+            "sort_order",
+            "title",
+        ),
+        "product_groups": ProductGroup.objects.select_related("system__direction__block").order_by(
+            "system__direction__block__sort_order",
+            "system__direction__sort_order",
+            "system__sort_order",
+            "sort_order",
+            "title",
+        ),
+        "vendors": cloud_vendors_qs[:500],
+        "group_rows": group_rows_qs[:300],
+        "filtered_vendor_count": vendors_qs.count(),
+        "filtered_group_count": group_rows_qs.count(),
+        "vendor_count": Vendor.objects.filter(vendorproductgroup__show_in_vendors=True).distinct().count(),
+        "group_count": ProductGroup.objects.filter(vendorproductgroup__show_in_vendors=True).distinct().count(),
+    }
+
+
+def vendors(request):
+    context = vendor_page_context(request)
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse(
+            {
+                "count_html": render_to_string("main/partials/vendor_count.html", context, request=request),
+                "cloud_html": render_to_string("main/partials/vendor_cloud.html", context, request=request),
+                "rows_html": render_to_string("main/partials/vendor_rows.html", context, request=request),
+            }
+        )
+    return render(request, "main/vendors.html", context)
 
 
 def partners(request):
