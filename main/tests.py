@@ -3,7 +3,7 @@ import json
 from django.core.management import call_command
 from django.test import Client, TestCase
 
-from .models import CatalogBlock, CatalogSystem, Direction, Lead, LeadItem, ProductGroup, ProductType
+from .models import CatalogBlock, CatalogSystem, Direction, Lead, LeadItem, ProductGroup, ProductType, Vendor
 
 
 class PublicRouteSmokeTests(TestCase):
@@ -30,6 +30,36 @@ class PublicRouteSmokeTests(TestCase):
         for url, status_code in expected_statuses.items():
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(url).status_code, status_code)
+
+    def test_vendor_ajax_filter_updates_cloud_and_rows(self):
+        response = self.client.get(
+            "/vendors/",
+            {"direction": "it-infrastructure", "q": "Eltex"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("Найдено:", data["count_html"])
+        self.assertIn("Eltex", data["cloud_html"])
+        self.assertIn("data-vendor-chip", data["cloud_html"])
+        self.assertIn("vendor-row", data["rows_html"])
+
+    def test_vendor_ajax_filter_accepts_selected_vendors(self):
+        vendors = list(Vendor.objects.filter(name__in=["Eltex", "Kaspersky"]).order_by("name"))
+        self.assertEqual(len(vendors), 2)
+
+        response = self.client.get(
+            "/vendors/",
+            {"vendors": [vendor.slug for vendor in vendors]},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("Eltex", data["cloud_html"])
+        self.assertIn("Kaspersky", data["cloud_html"])
+        self.assertGreater(data["cloud_html"].count("data-vendor-chip"), 2)
 
 
 class MiniRequestApiTests(TestCase):

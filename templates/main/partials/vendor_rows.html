@@ -1,0 +1,29 @@
+{% for group in group_rows %}
+  <article class="vendor-row">
+    <div class="vendor-meta">
+      <span>{{ group.system.direction.block.title }}</span>
+      <b>{{ group.title }}</b>
+      <small>{{ group.system.direction.title }} · {{ group.system.title }}</small>
+    </div>
+    <div>
+      <div class="vendor-brands">
+        {% for vendor in group.vendors.all|slice:":24" %}
+          <button class="vendor-chip vendor-chip-text" type="button" data-vendor-chip="{{ vendor.name }}">{{ vendor.name }}</button>
+        {% empty %}
+          <span class="vendor-chip">Производители не привязаны</span>
+        {% endfor %}
+      </div>
+      <div class="vendor-row-actions">
+        <a class="link-more" href="{% url 'product_group' group.system.direction.block.slug group.system.direction.slug group.system.slug group.slug %}">Открыть товарную группу →</a>
+      </div>
+    </div>
+  </article>
+{% empty %}
+  <article class="vendor-row empty-row">
+    <div class="vendor-meta">
+      <span>Поиск</span>
+      <b>Ничего не найдено</b>
+      <small>Измените фильтры или отправьте спецификацию — проверим бренд вручную и предложим подходящую замену.</small>
+    </div>
+  </article>
+{% endfor %}

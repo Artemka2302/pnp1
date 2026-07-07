@@ -27,16 +27,17 @@
   <div class="container">
     <div class="section-head"><div><h2>Основные направления</h2></div></div>
     <div class="vendor-direction-grid">
-      {% for block in blocks %}
+      {% for direction in direction_cards %}
         <article class="vendor-direction-card">
-          <div class="vendor-direction-top"><i>{{ forloop.counter|stringformat:"02d" }}</i><span>{{ block.vendor_count }} производителей</span></div>
-          <h3>{{ block.title }}</h3>
-          <p>{{ block.summary }}</p>
+          <div class="vendor-direction-top"><i>{{ forloop.counter|stringformat:"02d" }}</i><span>{{ direction.vendor_count }} производителей</span></div>
+          <h3>{{ direction.title }}</h3>
+          <p>{{ direction.purpose|default:direction.block.title }}</p>
           <div class="direction-position-list">
-            <b>{{ block.direction_count }} направлений</b>
-            <b>{{ block.group_count }} групп</b>
+            <b>{{ direction.block.title }}</b>
+            <b>{{ direction.system_count }} систем</b>
+            <b>{{ direction.group_count }} групп</b>
           </div>
-          <a class="link-more" href="{% url 'catalog_block' block.slug %}">Смотреть каталог →</a>
+          <a class="link-more" href="{% url 'vendors' %}?direction={{ direction.slug }}#vendorRowsSection" data-vendor-direction-card="{{ direction.slug }}">Смотреть производителей →</a>
         </article>
       {% endfor %}
     </div>
@@ -56,21 +57,71 @@
         </div>
       </div>
       <div class="vendor-master-panel">
-        <form class="vendor-toolbar vendor-toolbar-main" method="get">
+        <form class="vendor-toolbar vendor-toolbar-main" method="get" action="{% url 'vendors' %}" data-vendor-filter-form>
           <div class="field vendor-search-field">
             <label for="vendorSearch">Поиск по бренду / производителю / типу оборудования</label>
-            <input id="vendorSearch" name="q" value="{{ query }}" placeholder="Например: Eltex, DEPO, фанера, насосы, фасад, СКУД">
+            <div class="vendor-search-control">
+              <input id="vendorSearch" name="q" value="{{ query }}" placeholder="Например: Eltex, DEPO, фанера, насосы, фасад, СКУД" autocomplete="off">
+              <div class="vendor-suggestions" data-vendor-suggestions hidden></div>
+            </div>
           </div>
-          <button class="btn" type="submit">Найти</button>
-          <div class="vendor-count">{{ vendor_count }} производителей · {{ group_count }} товарных групп</div>
+          <div class="field vendor-block-field">
+            <label for="vendorBlock">Блок</label>
+            <select id="vendorBlock" name="block" data-vendor-filter>
+              <option value="">Все блоки</option>
+              {% for block in blocks %}
+                <option value="{{ block.slug }}" {% if filters.block == block.slug or filters.block == block.title %}selected{% endif %}>{{ block.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field vendor-direction-field">
+            <label for="vendorDirection">Направление</label>
+            <select id="vendorDirection" name="direction" data-vendor-filter>
+              <option value="">Все направления</option>
+              {% for direction in directions %}
+                <option value="{{ direction.slug }}" {% if filters.direction == direction.slug or filters.direction == direction.title %}selected{% endif %}>{{ direction.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field vendor-system-field">
+            <label for="vendorSystem">Система</label>
+            <select id="vendorSystem" name="system" data-vendor-filter>
+              <option value="">Все системы</option>
+              {% for system in systems %}
+                <option value="{{ system.slug }}" {% if filters.system == system.slug or filters.system == system.title %}selected{% endif %}>{{ system.direction.title }} / {{ system.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field vendor-group-field">
+            <label for="vendorGroup">Товарная группа</label>
+            <select id="vendorGroup" name="group" data-vendor-filter>
+              <option value="">Все товарные группы</option>
+              {% for group in product_groups %}
+                <option value="{{ group.slug }}" {% if filters.group == group.slug or filters.group == group.title %}selected{% endif %}>{{ group.system.title }} / {{ group.title }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="vendor-actions-field">
+            <button class="btn vendor-submit" type="submit">Найти</button>
+            <button class="btn ghost vendor-clear" type="button" data-vendor-clear>Очистить</button>
+          </div>
+          <div class="vendor-selected-list" data-selected-vendors>
+            {% for vendor in selected_vendors %}
+              <span class="vendor-selected-chip" data-selected-vendor="{{ vendor.slug }}">
+                {{ vendor.name }}
+                <button type="button" data-vendor-remove="{{ vendor.slug }}" aria-label="Убрать {{ vendor.name }}">×</button>
+                <input type="hidden" name="vendors" value="{{ vendor.slug }}" data-vendor-hidden="{{ vendor.slug }}">
+              </span>
+            {% empty %}
+              <span class="vendor-selected-empty" data-vendor-empty>Производители не выбраны</span>
+            {% endfor %}
+          </div>
+          <div class="vendor-count" data-vendor-count>{% include "main/partials/vendor_count.html" %}</div>
         </form>
-        <div class="all-manufacturer-cloud">
-          {% for vendor in vendors %}
-            <a class="vendor-chip strong" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener">{{ vendor.name }}</a>
-          {% empty %}
-            <span class="vendor-chip more">По запросу ничего не найдено</span>
-          {% endfor %}
+        <div class="all-manufacturer-cloud" data-vendor-cloud>
+          {% include "main/partials/vendor_cloud.html" %}
         </div>
+        {{ vendor_options|json_script:"vendorOptionsData" }}
       </div>
     </div>
   </div>
@@ -79,26 +130,8 @@
 <section class="section" id="vendorRowsSection">
   <div class="container">
     <div class="section-head"><div><h2>Производители по товарным группам</h2></div></div>
-    <div class="vendor-list">
-      {% for vendor in vendors|slice:":80" %}
-        <article class="vendor-row">
-          <div class="vendor-meta">
-            <span>Производитель</span>
-            <b>{{ vendor.name }}</b>
-            {% if vendor.official_site %}<small>{{ vendor.official_site }}</small>{% endif %}
-          </div>
-          <div>
-            <div class="vendor-brands">
-              {% for group in vendor.product_groups.all|slice:":10" %}
-                <a class="vendor-chip" href="{% url 'product_group' group.system.direction.block.slug group.system.direction.slug group.system.slug group.slug %}">{{ group.title }}</a>
-              {% empty %}
-                <span class="vendor-chip">Товарные группы не привязаны</span>
-              {% endfor %}
-            </div>
-            {% if vendor.notes %}<p class="vendor-note">{{ vendor.notes }}</p>{% endif %}
-          </div>
-        </article>
-      {% endfor %}
+    <div class="vendor-list" id="vendorRows" data-vendor-rows>
+      {% include "main/partials/vendor_rows.html" %}
     </div>
   </div>
 </section>
