@@ -42,9 +42,11 @@ def index(request):
         system_count=Count("directions__systems", distinct=True),
         group_count=Count("directions__systems__product_groups", distinct=True),
     )
+    partners_qs = Partner.objects.order_by("-show_on_home", "name")
+
     context = {
         "blocks": blocks,
-        "featured_partners": Partner.objects.filter(show_on_home=True)[:18],
+        "featured_partners": partners_qs,
         "featured_vendors": Vendor.objects.filter(vendorproductgroup__show_on_home=True).distinct()[:24],
         "stats": {
             "blocks": CatalogBlock.objects.count(),

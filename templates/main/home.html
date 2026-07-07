@@ -79,12 +79,8 @@
         <a class="link-more" href="{% url 'vendors' %}">Справочник производителей →</a>
       </div>
     </div>
-    <div class="partners-preview popular-logo-grid">
-      {% for partner in featured_partners %}
-        <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ partner.name }}">
-          {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
-        </a>
-      {% endfor %}
+    <div data-home-brand-content>
+      {% include "main/partials/home_popular_brands.html" %}
     </div>
   </div>
 </section>

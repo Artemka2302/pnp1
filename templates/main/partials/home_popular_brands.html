@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="home-brand-carousel" data-brand-carousel>
+  <button class="brand-carousel-arrow brand-carousel-arrow-prev" type="button" data-brand-prev aria-label="Предыдущие бренды">
+    &lsaquo;
+  </button>
+
+  <div class="home-brand-viewport">
+    <div class="partners-preview popular-logo-grid home-brand-track" data-brand-track>
+      {% for partner in featured_partners %}
+        <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ partner.name }}">
+          {% if partner.logo %}
+            <img src="{% static partner.logo %}" alt="{{ partner.name }}">
+          {% else %}
+            <span>{{ partner.name }}</span>
+          {% endif %}
+        </a>
+      {% empty %}
+        <p class="partner-empty-state">Бренды не найдены</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button class="brand-carousel-arrow brand-carousel-arrow-next" type="button" data-brand-next aria-label="Следующие бренды">
+    &rsaquo;
+  </button>
+</div>

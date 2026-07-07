@@ -167,6 +167,40 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const initHomeBrandCarousel = () => {
+    document.querySelectorAll("[data-brand-carousel]").forEach(carousel => {
+      const track = carousel.querySelector("[data-brand-track]");
+      const prev = carousel.querySelector("[data-brand-prev]");
+      const next = carousel.querySelector("[data-brand-next]");
+      if (!track || !prev || !next) return;
+
+      let frame = null;
+
+      const updateButtons = () => {
+        const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+        prev.disabled = track.scrollLeft <= 4;
+        next.disabled = track.scrollLeft >= maxScroll - 4;
+        carousel.classList.toggle("is-scrollable", maxScroll > 4);
+      };
+
+      const scheduleUpdate = () => {
+        if (frame) cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(updateButtons);
+      };
+
+      const scrollTrack = direction => {
+        const distance = Math.max(track.clientWidth * 0.82, 320);
+        track.scrollBy({ left: direction * distance, behavior: "smooth" });
+      };
+
+      prev.addEventListener("click", () => scrollTrack(-1));
+      next.addEventListener("click", () => scrollTrack(1));
+      track.addEventListener("scroll", scheduleUpdate);
+      window.addEventListener("resize", scheduleUpdate);
+      updateButtons();
+    });
+  };
+
   const initVendorFilters = () => {
     const form = document.querySelector("[data-vendor-filter-form]");
     if (!form) return;
@@ -509,5 +543,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   initVendorFilters();
+  initHomeBrandCarousel();
   renderRequest();
 });
