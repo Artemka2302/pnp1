@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Контакты — ПНП{% endblock %}
+
+{% block content %}
+<section class="hero hero-small">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="eyebrow">Контакты</div>
+    <h1>Запросить <span class="accent-word">коммерческое предложение</span></h1>
+    <p class="hero-subtitle">Опишите задачу, прикрепите спецификацию или укажите направление поставки. Мы подготовим предложение под параметры объекта.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container contact-layout">
+    <article class="glass request-panel" id="request-form">
+      <h2>Форма запроса</h2>
+      <form class="form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="source" value="contact">
+
+        <div class="form-row">
+          <div class="field"><label for="name">Имя / компания</label><input id="name" name="name" placeholder="Например: ООО СтройПроект" autocomplete="organization" required></div>
+          <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 ..." autocomplete="tel" required></div>
+        </div>
+
+        <div class="form-row">
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="name@company.ru" autocomplete="email"></div>
+          <div class="field">
+            <label for="category">Направление</label>
+            <select id="category" name="category">
+              <option value="" selected>Выберите направление</option>
+              {% for direction in directions %}
+                <option>{{ direction.title }}</option>
+              {% endfor %}
+              <option>Комплексная заявка</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field"><label for="object">Объект</label><input id="object" name="object" placeholder="Тип объекта, город, сроки" autocomplete="off"></div>
+        <div class="field"><label for="message">Комментарий</label><textarea id="message" name="message" placeholder="Опишите задачу или вставьте список позиций"></textarea></div>
+
+        <div class="field file-field">
+          <label for="specification">Спецификация / файл</label>
+          <label class="upload-box" for="specification"><span data-file-label>Прикрепить файл / спецификацию</span><small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small></label>
+          <input class="file-input" id="specification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
+        </div>
+
+        <button class="btn light" type="submit">Отправить заявку →</button>
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        <div class="form-assurance" aria-label="Что будет после отправки заявки">
+          <span><b>Проверим</b><small>спецификацию и состав</small></span>
+          <span><b>Подберём</b><small>производителей и аналоги</small></span>
+          <span><b>Вернёмся</b><small>с КП и сроками</small></span>
+        </div>
+        <p class="form-consent">Нажимая кнопку, вы соглашаетесь на обработку данных для подготовки ответа по заявке.</p>
+      </form>
+    </article>
+
+    <aside class="contact-mini">
+      <h3>Контакты компании</h3>
+      <div class="contact-line"><span>Телефон</span><a href="tel:+79214370438">+7 921 437 04 38</a></div>
+      <div class="contact-line"><span>Email</span><a href="mailto:info@pnp1.ru">info@pnp1.ru</a></div>
+      <div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div>
+      <div class="contact-line"><span>Адрес</span><b>Россия</b></div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

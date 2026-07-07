@@ -1,36 +1,111 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Производители ПНП{% endblock %}
+{% block title %}Производители под требования проекта — ПНП{% endblock %}
 
 {% block content %}
-<section class="page-hero compact">
-  <p class="eyebrow">Производители</p>
-  <h1>База производителей</h1>
-  <p>Производители и их привязки к товарным группам берутся из базы данных.</p>
-  <form class="search-form" method="get">
-    <input type="search" name="q" value="{{ query }}" placeholder="Поиск по бренду, системе или товарной группе">
-    <button class="btn btn-primary" type="submit">Найти</button>
-  </form>
+<section class="hero hero-small vendors-hero">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="eyebrow">Производители</div>
+    <h1>Производители <span class="accent-word">под требования проекта</span></h1>
+    <p class="hero-subtitle">Работаем с широким перечнем брендов и заводов: от архитектурных и конструктивных решений до инженерных систем, ЭОМ, слаботочных сетей, ОВиК, водоснабжения, технологического оборудования и доступной среды.</p>
+    <div class="hero-actions">
+      <a class="btn" href="{% url 'contacts' %}#request-form">Отправить спецификацию</a>
+      <a class="btn ghost" href="#allManufacturers">Получить подбор по производителям →</a>
+    </div>
+    <div class="hero-features vendor-hero-features">
+      <div class="feature-mini"><i aria-hidden="true">01</i><span>комплектация по разделам<br>документации</span></div>
+      <div class="feature-mini"><i aria-hidden="true">02</i><span>подбор замен<br>под спецификацию</span></div>
+      <div class="feature-mini"><i aria-hidden="true">03</i><span>позиции, сроки<br>персональное сопровождение</span></div>
+      <div class="feature-mini"><i aria-hidden="true">04</i><span>материалы, документы<br>логистика объекта</span></div>
+    </div>
+  </div>
 </section>
 
-<section class="section">
-  <div class="logo-grid vendor-grid">
-    {% for vendor in vendors %}
-      <article class="vendor-card">
-        <a class="logo-card" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener">
-          {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
-        </a>
-        <h2>{{ vendor.name }}</h2>
-        <div class="chips">
-          {% for group in vendor.product_groups.all|slice:":4" %}
-            <span>{{ group.title }}</span>
+<section class="section compact">
+  <div class="container">
+    <div class="section-head"><div><h2>Основные направления</h2></div></div>
+    <div class="vendor-direction-grid">
+      {% for block in blocks %}
+        <article class="vendor-direction-card">
+          <div class="vendor-direction-top"><i>{{ forloop.counter|stringformat:"02d" }}</i><span>{{ block.vendor_count }} производителей</span></div>
+          <h3>{{ block.title }}</h3>
+          <p>{{ block.summary }}</p>
+          <div class="direction-position-list">
+            <b>{{ block.direction_count }} направлений</b>
+            <b>{{ block.group_count }} групп</b>
+          </div>
+          <a class="link-more" href="{% url 'catalog_block' block.slug %}">Смотреть каталог →</a>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="allManufacturers">
+  <div class="container">
+    <div class="vendor-master-card">
+      <div class="vendor-master-copy">
+        <span class="soft-label">База производителей</span>
+        <h2>Все производители</h2>
+        <p>Быстро найдите бренд, производителя, направление или товарную группу. Если нужной позиции нет в списке, отправьте спецификацию — подберём решение или корректную замену под требования проекта.</p>
+        <div class="vendor-master-actions">
+          <a class="btn light" href="{% url 'contacts' %}#request-form">Отправить список позиций →</a>
+          <a class="btn ghost" href="{% url 'catalog' %}">Выбрать направление</a>
+        </div>
+      </div>
+      <div class="vendor-master-panel">
+        <form class="vendor-toolbar vendor-toolbar-main" method="get">
+          <div class="field vendor-search-field">
+            <label for="vendorSearch">Поиск по бренду / производителю / типу оборудования</label>
+            <input id="vendorSearch" name="q" value="{{ query }}" placeholder="Например: Eltex, DEPO, фанера, насосы, фасад, СКУД">
+          </div>
+          <button class="btn" type="submit">Найти</button>
+          <div class="vendor-count">{{ vendor_count }} производителей · {{ group_count }} товарных групп</div>
+        </form>
+        <div class="all-manufacturer-cloud">
+          {% for vendor in vendors %}
+            <a class="vendor-chip strong" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener">{{ vendor.name }}</a>
+          {% empty %}
+            <span class="vendor-chip more">По запросу ничего не найдено</span>
           {% endfor %}
         </div>
-      </article>
-    {% empty %}
-      <p class="muted">По запросу ничего не найдено.</p>
-    {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="vendorRowsSection">
+  <div class="container">
+    <div class="section-head"><div><h2>Производители по товарным группам</h2></div></div>
+    <div class="vendor-list">
+      {% for vendor in vendors|slice:":80" %}
+        <article class="vendor-row">
+          <div class="vendor-meta">
+            <span>Производитель</span>
+            <b>{{ vendor.name }}</b>
+            {% if vendor.official_site %}<small>{{ vendor.official_site }}</small>{% endif %}
+          </div>
+          <div>
+            <div class="vendor-brands">
+              {% for group in vendor.product_groups.all|slice:":10" %}
+                <a class="vendor-chip" href="{% url 'product_group' group.system.direction.block.slug group.system.direction.slug group.system.slug group.slug %}">{{ group.title }}</a>
+              {% empty %}
+                <span class="vendor-chip">Товарные группы не привязаны</span>
+              {% endfor %}
+            </div>
+            {% if vendor.notes %}<p class="vendor-note">{{ vendor.notes }}</p>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section compact">
+  <div class="container service-band">
+    <div class="left"><h2>Есть спецификация или бренд-лист?</h2><p>Пришлите список позиций. Проверим производителей, предложим аналоги и подготовим коммерческое предложение под ваш объект.</p><a class="btn light" href="{% url 'contacts' %}#request-form">Отправить запрос →</a></div>
   </div>
 </section>
 {% endblock %}

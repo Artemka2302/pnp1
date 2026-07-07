@@ -1,32 +1,71 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Каталог ПНП{% endblock %}
+{% block title %}Каталог решений — ПНП{% endblock %}
+{% block body_class %}catalog-master-site-preview catalog-master-public{% endblock %}
 
 {% block content %}
-<section class="page-hero compact">
-  <p class="eyebrow">Каталог</p>
-  <h1>Каталог поставки</h1>
-  <p>Структура хранится в базе: блоки, направления, системы, товарные группы, типы продукции и производители.</p>
+<section class="hero hero-small catalog-master-preview-hero" style="--master-preview-hero-image:url('{% static 'assets/img/hero-cover.webp' %}')">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="eyebrow">Каталог</div>
+    <h1>Каталог <span class="accent-word">решений</span> ПНП</h1>
+    <p class="hero-subtitle">Структура каталога хранится в базе: блоки, направления, системы, товарные группы, типы продукции и производители.</p>
+    <div class="catalog-master-preview-meta">
+      <article><b>{{ stats.blocks }}</b><span>глобальных блоков</span></article>
+      <article><b>{{ stats.directions }}</b><span>направлений</span></article>
+      <article><b>{{ stats.groups }}</b><span>товарных групп</span></article>
+    </div>
+  </div>
 </section>
 
 <section class="section">
-  <div class="card-grid card-grid-main">
-    {% for block in blocks %}
-      <a class="image-card" href="{% url 'catalog_block' block.slug %}">
-        {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
-        <div class="card-body">
-          <p class="eyebrow">Блок</p>
-          <h2>{{ block.title }}</h2>
-          <p>{{ block.summary }}</p>
-          <div class="chips">
-            <span>{{ block.direction_count }} направлений</span>
-            <span>{{ block.system_count }} систем</span>
-            <span>{{ block.group_count }} групп</span>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="soft-label">База комплектации</span>
+        <h2>Основные блоки поставки</h2>
+      </div>
+      <a class="btn ghost" href="{% url 'contacts' %}#request-form">Отправить спецификацию →</a>
+    </div>
+
+    <div class="solutions-grid-v11 catalog-master-block-preview">
+      {% for block in blocks %}
+        <a class="solution-card-v11" href="{% url 'catalog_block' block.slug %}">
+          <div class="solution-media">
+            {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
           </div>
-        </div>
-      </a>
-    {% endfor %}
+          <div class="solution-body">
+            <div class="solution-kicker">Блок <span>{{ forloop.counter|stringformat:"02d" }}</span></div>
+            <h3>{{ block.title }}</h3>
+            <p>{{ block.summary }}</p>
+            <div class="solution-tags">
+              <span>{{ block.direction_count }} направлений</span>
+              <span>{{ block.system_count }} систем</span>
+              <span>{{ block.group_count }} групп</span>
+            </div>
+            <div class="catalog-master-system-block">
+              <b class="catalog-master-card-chip-title">Направления</b>
+              <div class="catalog-master-chip-row">
+                {% for direction in block.directions.all|slice:":5" %}
+                  <span class="catalog-master-chip">{{ direction.title }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section compact">
+  <div class="container service-band">
+    <div class="left">
+      <h2>Есть спецификация или список позиций?</h2>
+      <p>Пришлите файл или опишите задачу. Сохраним заявку в Django и подготовим подбор по каталогу.</p>
+      <a class="btn light" href="{% url 'contacts' %}#request-form">Отправить запрос →</a>
+    </div>
   </div>
 </section>
 {% endblock %}

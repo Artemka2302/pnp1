@@ -1,61 +1,131 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block body_class %}home-page{% endblock %}
+
 {% block content %}
-<section class="hero">
-  <div class="hero-copy">
-    <p class="eyebrow">Первый Национальный Поставщик</p>
-    <h1>Единый центр комплектации строительных объектов</h1>
-    <p>Берем на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="{% url 'catalog' %}">Открыть каталог</a>
-      <a class="btn btn-secondary" href="{% url 'vendors' %}">Производители</a>
+<section class="hero hero-light hero-v13" id="top">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Первый национальный поставщик</div>
+        <h1>Единый центр <span class="accent-word">комплектации</span> строительных объектов</h1>
+        <p class="hero-subtitle">Берём на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
+        <div class="hero-actions">
+          <a class="btn" href="{% url 'contacts' %}#request-form">Отправить спецификацию</a>
+          <a class="btn ghost" href="{% url 'catalog' %}">Открыть каталог →</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-features home-hero-features">
+      <div class="feature-mini"><i aria-hidden="true">✓</i><span>Надёжные решения<br>и проверенные бренды</span></div>
+      <div class="feature-mini"><i aria-hidden="true">⌬</i><span>Комплексные поставки<br>точно в срок</span></div>
+      <div class="feature-mini"><i aria-hidden="true">?</i><span>Экспертная поддержка<br>на всех этапах</span></div>
+      <div class="feature-mini feature-mini-single-center"><i aria-hidden="true">П</i><span>Единый центр<br>комплектации объекта</span></div>
     </div>
   </div>
-  <div class="hero-panel">
-    <span>{{ stats.blocks }} блоков</span>
-    <span>{{ stats.directions }} направлений</span>
-    <span>{{ stats.systems }} систем</span>
-    <span>{{ stats.groups }} товарных групп</span>
-    <span>{{ stats.vendors }} производителей</span>
+</section>
+
+<section class="section compact why-v13 home-why-v13">
+  <div class="container">
+    <div class="section-head"><div><h2>Почему мы</h2></div></div>
+    <div class="why-grid-v13">
+      <article><i>01</i><b>Закрываем объект по направлениям</b><span>Архитектура, конструктив, инженерные системы, безопасность, связь и специальные разделы.</span></article>
+      <article><i>02</i><b>Работаем со спецификациями и ТЗ</b><span>Принимаем проектную документацию, ведомости и заявки, чтобы собрать подбор и КП.</span></article>
+      <article><i>03</i><b>Подбираем производителей и аналоги</b><span>Используем базу брендов и предлагаем альтернативы по срокам, бюджету и наличию.</span></article>
+      <article><i>04</i><b>Сопровождаем поставку</b><span>Ведём путь от первичного запроса до коммерческого предложения и отгрузки.</span></article>
+      <article><i>05</i><b>Фокус на строительные объекты</b><span>Учитываем совместимость, сроки, комплектацию, документы и требования проекта.</span></article>
+      <article><i>06</i><b>ПНП</b><span>Используем продуктовую экспертизу и фирменную систему ПНП для понятного подбора решений.</span></article>
+    </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="section-head">
-    <p class="eyebrow">Каталог</p>
-    <h2>Основные направления поставки</h2>
-  </div>
-  <div class="card-grid card-grid-main">
-    {% for block in blocks %}
-      <a class="image-card" href="{% url 'catalog_block' block.slug %}">
-        {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
-        <div class="card-body">
-          <p class="eyebrow">Блок</p>
-          <h3>{{ block.title }}</h3>
-          <p>{{ block.summary }}</p>
-          <div class="chips">
-            <span>{{ block.direction_count }} направлений</span>
-            <span>{{ block.system_count }} систем</span>
-            <span>{{ block.group_count }} групп</span>
+  <div class="container">
+    <div class="section-head">
+      <div><h2>Основные направления поставки</h2></div>
+      <a class="link-more" href="{% url 'catalog' %}">Смотреть все направления →</a>
+    </div>
+    <div class="solutions-grid-v11 home-main-block-grid">
+      {% for block in blocks %}
+        <a class="solution-card-v11" href="{% url 'catalog_block' block.slug %}">
+          <div class="solution-media">
+            {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
           </div>
-        </div>
-      </a>
-    {% endfor %}
+          <div class="solution-body">
+            <div class="solution-kicker">Блок <span>{{ forloop.counter|stringformat:"02d" }}</span></div>
+            <h3>{{ block.title }}</h3>
+            <p>{{ block.summary }}</p>
+            <div class="solution-tags">
+              <span>{{ block.direction_count }} направлений</span>
+              <span>{{ block.system_count }} систем</span>
+              <span>{{ block.group_count }} групп</span>
+            </div>
+            <div class="solution-actions"><span class="btn small">Открыть</span></div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-head">
-    <p class="eyebrow">Партнеры</p>
-    <h2>Популярные бренды</h2>
+<section class="section compact">
+  <div class="container">
+    <div class="section-head">
+      <div><h2>Популярные бренды</h2></div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <a class="link-more" href="{% url 'partners' %}">Ключевые партнёры →</a>
+        <a class="link-more" href="{% url 'vendors' %}">Справочник производителей →</a>
+      </div>
+    </div>
+    <div class="partners-preview popular-logo-grid">
+      {% for partner in featured_partners %}
+        <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ partner.name }}">
+          {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
+        </a>
+      {% endfor %}
+    </div>
   </div>
-  <div class="logo-row">
-    {% for partner in featured_partners %}
-      <a class="logo-card" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener">
-        {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
-      </a>
-    {% endfor %}
+</section>
+
+<section class="section compact">
+  <div class="container">
+    <div class="glass vendor-home-card">
+      <div class="section-head">
+        <div><h2>Комплексная комплектация объекта</h2></div>
+        <a class="btn ghost" href="{% url 'vendors' %}">Открыть справочник производителей →</a>
+      </div>
+      <div class="vendor-stats">
+        <div class="stat"><strong>{{ stats.blocks }}</strong><span>блоков поставки</span></div>
+        <div class="stat"><strong>{{ stats.directions }}</strong><span>направлений каталога</span></div>
+        <div class="stat"><strong>{{ stats.groups }}</strong><span>товарных групп</span></div>
+        <div class="stat"><strong>{{ stats.vendors }}</strong><span>производителей в базе</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section compact">
+  <div class="container home-bottom">
+    <article class="glass home-about-sales">
+      <h2>О компании</h2>
+      <p>ПНП объединяет подбор оборудования, работу с производителями и сопровождение заявок для строительных объектов.</p>
+      <p class="sales-trigger">Вместо разрозненных прайсов клиент получает рабочий комплект под объект: позиции, аналоги, сроки поставки и понятные точки риска.</p>
+      <div class="about-sales-points"><span><b>Проверяем</b><small>спецификацию</small></span><span><b>Подбираем</b><small>аналоги</small></span><span><b>Готовим КП</b><small>под задачу</small></span></div>
+    </article>
+    <article class="glass request-panel">
+      <h2>Запросить <span class="accent-word">коммерческое предложение</span></h2>
+      <p>Отправьте спецификацию или опишите задачу — подготовим оптимальное предложение в кратчайшие сроки.</p>
+      <div class="upload-box">Спецификацию, ведомость или список позиций можно приложить в форме заявки<br><small>PDF, DOC, XLS, DWG, JPG</small></div>
+      <div class="hero-actions"><a class="btn light" href="{% url 'contacts' %}#request-form">Отправить запрос →</a></div>
+    </article>
+    <aside class="contact-mini">
+      <h3>Контакты</h3>
+      <div class="contact-line"><span>Телефон</span><a href="tel:+79214370438">+7 921 437 04 38</a></div>
+      <div class="contact-line"><span>Email</span><a href="mailto:info@pnp1.ru">info@pnp1.ru</a></div>
+      <div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div>
+    </aside>
   </div>
 </section>
 {% endblock %}

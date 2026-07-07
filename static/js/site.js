@@ -1,15 +1,33 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.querySelector("[data-nav-toggle]");
-  const nav = document.querySelector("[data-nav]");
-  if (toggle && nav) {
-    toggle.addEventListener("click", () => nav.classList.toggle("is-open"));
+  const menuBtn = document.querySelector("#menuBtn");
+  const mainNav = document.querySelector("#mainNav");
+  if (menuBtn && mainNav) {
+    menuBtn.addEventListener("click", () => mainNav.classList.toggle("open"));
   }
 
-  const output = document.querySelector("[data-request-output]");
-  const clear = document.querySelector("[data-request-clear]");
-  const buttons = document.querySelectorAll("[data-request-item]");
+  const contactMenu = document.querySelector("[data-header-contact]");
+  const contactToggle = document.querySelector("[data-header-contact-toggle]");
+  if (contactMenu && contactToggle) {
+    contactToggle.addEventListener("click", event => {
+      event.stopPropagation();
+      const isOpen = contactMenu.classList.toggle("is-open");
+      contactToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+    document.addEventListener("click", event => {
+      if (contactMenu.contains(event.target)) return;
+      contactMenu.classList.remove("is-open");
+      contactToggle.setAttribute("aria-expanded", "false");
+    });
+  }
 
   const storageKey = "pnp_catalog_request_items";
+  const output = document.querySelector("[data-request-output]");
+  const hiddenItems = document.querySelector("[data-request-items]");
+  const clear = document.querySelector("[data-request-clear]");
+  const buttons = document.querySelectorAll("[data-request-item]");
+  const miniForm = document.querySelector("[data-mini-request-form]");
+  const requestStatus = document.querySelector("[data-request-status]");
+  const requestSubmit = document.querySelector("[data-request-submit]");
 
   const readItems = () => {
     try {
@@ -23,9 +41,23 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(storageKey, JSON.stringify(items));
   };
 
+  const setStatus = (element, message, isError = false) => {
+    if (!element) return;
+    element.textContent = message;
+    element.classList.toggle("is-error", isError);
+  };
+
+  const syncButtons = items => {
+    buttons.forEach(button => {
+      button.classList.toggle("is-selected", items.includes(button.dataset.requestItem));
+    });
+  };
+
   const renderRequest = () => {
-    if (!output) return;
     const items = readItems();
+    if (hiddenItems) hiddenItems.value = JSON.stringify(items);
+    syncButtons(items);
+    if (!output) return;
     if (!items.length) {
       output.value = "";
       return;
@@ -51,12 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const items = readItems();
       if (items.includes(value)) {
         writeItems(items.filter(item => item !== value));
-        button.classList.remove("is-selected");
       } else {
         items.push(value);
         writeItems(items);
-        button.classList.add("is-selected");
       }
+      setStatus(requestStatus, "");
       renderRequest();
     });
   });
@@ -64,10 +95,77 @@ document.addEventListener("DOMContentLoaded", () => {
   if (clear) {
     clear.addEventListener("click", () => {
       writeItems([]);
-      buttons.forEach(button => button.classList.remove("is-selected"));
+      setStatus(requestStatus, "");
       renderRequest();
     });
   }
+
+  const submitForm = async (form, statusElement, submitButton, options = {}) => {
+    const formData = new FormData(form);
+    if (options.items) formData.set("items", JSON.stringify(options.items));
+    if (options.requestText !== undefined) formData.set("request_text", options.requestText);
+    if (!formData.get("source")) formData.set("source", "catalog_request");
+
+    if (submitButton) submitButton.disabled = true;
+    setStatus(statusElement, "Отправляем заявку...");
+    try {
+      const response = await fetch(form.dataset.requestUrl || form.dataset.leadUrl || form.action, {
+        method: "POST",
+        body: formData,
+        credentials: "same-origin",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || "Не удалось отправить заявку.");
+      }
+      setStatus(statusElement, `Заявка #${data.lead_id} сохранена.`);
+      form.reset();
+      return data;
+    } catch (error) {
+      setStatus(statusElement, error.message || "Не удалось отправить заявку.", true);
+      return null;
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  };
+
+  if (miniForm) {
+    miniForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      const items = readItems();
+      if (!items.length && !output.value.trim()) {
+        setStatus(requestStatus, "Добавьте позицию из каталога.", true);
+        return;
+      }
+      const data = await submitForm(miniForm, requestStatus, requestSubmit, {
+        items,
+        requestText: output.value.trim(),
+      });
+      if (data) {
+        writeItems([]);
+        renderRequest();
+        if (hiddenItems) hiddenItems.value = "[]";
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-lead-form]").forEach(form => {
+    const status = form.querySelector("[data-form-status]");
+    const submit = form.querySelector("[type='submit']");
+    const fileInput = form.querySelector("input[type='file']");
+    const fileLabel = form.querySelector("[data-file-label]");
+    if (fileInput && fileLabel) {
+      fileInput.addEventListener("change", () => {
+        const count = fileInput.files.length;
+        fileLabel.textContent = count ? `Выбрано файлов: ${count}` : "Прикрепить файл / спецификацию";
+      });
+    }
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      await submitForm(form, status, submit);
+    });
+  });
 
   renderRequest();
 });

@@ -1,65 +1,111 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ group.title }} — товарная группа{% endblock %}
+{% block title %}{{ group.title }} — товарная группа — ПНП{% endblock %}
+{% block body_class %}catalog-master-site-preview catalog-master-public{% endblock %}
 
 {% block content %}
-<section class="page-hero product-hero">
-  {% if group.image %}<img src="{% static group.image %}" alt="{{ group.title }}">{% endif %}
-  <div>
-    <p class="eyebrow">Товарная группа</p>
+<section class="hero hero-small solution-detail-hero catalog-master-preview-hero" style="--master-preview-hero-image:url('{% if group.image %}{% static group.image %}{% else %}{% static 'assets/img/catalog/empty-photo-placeholder.svg' %}{% endif %}')">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="eyebrow">Товарная группа</div>
     <h1>{{ group.title }}</h1>
-    <p>{{ group.catalog_path }}</p>
+    <p class="hero-subtitle">{{ group.catalog_path }}</p>
+    <div class="hero-actions">
+      <a class="btn" href="{% url 'contacts' %}#request-form">Запросить КП</a>
+      <a class="btn ghost" href="{% url 'catalog_system' group.system.direction.block.slug group.system.direction.slug group.system.slug %}">← Назад к системе</a>
+    </div>
   </div>
 </section>
 
-<section class="section two-column">
-  <article class="panel">
-    <div class="section-head">
-      <p class="eyebrow">Типы продукции</p>
-      <h2>Что можно добавить в заявку</h2>
-    </div>
-    <div class="type-list">
-      {% for type in group.types.all %}
-        <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ type.title|capfirst }}">
-          <span>{{ type.title|capfirst }}</span>
-          <small>Добавить</small>
-        </button>
-      {% empty %}
-        <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ group.title }}">
-          <span>{{ group.title }}</span>
-          <small>Добавить</small>
-        </button>
-      {% endfor %}
-    </div>
-  </article>
-
-  <aside class="panel">
-    <div class="section-head">
-      <p class="eyebrow">Мини-заявка</p>
-      <h2>Выбранные позиции</h2>
-    </div>
-    <textarea class="request-textarea" data-request-output rows="10" placeholder="Выберите тип продукции слева. Здесь появится структура заявки."></textarea>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="{% url 'contacts' %}">Отправить заявку</a>
-      <button class="btn btn-secondary" type="button" data-request-clear>Очистить</button>
-    </div>
-  </aside>
+<section class="section compact">
+  <div class="container solution-detail-summary">
+    <article><b>{{ group.types.count }}</b><span>типов продукции</span></article>
+    <article><b>{{ group.attributes.count }}</b><span>характеристик</span></article>
+    <article><b>{{ group.vendors.count }}</b><span>производителей</span></article>
+  </div>
 </section>
 
 <section class="section">
-  <div class="section-head">
-    <p class="eyebrow">Производители</p>
-    <h2>Связанные с товарной группой</h2>
+  <div class="container grid-2">
+    <article class="glass">
+      <span class="soft-label">Типы продукции</span>
+      <h2>Что можно добавить в заявку</h2>
+      <div class="type-list" style="margin-top:22px">
+        {% for type in group.types.all %}
+          <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ type.title|capfirst }}">
+            <span>{{ type.title|capfirst }}</span>
+            <small>Добавить</small>
+          </button>
+        {% empty %}
+          <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ group.title }}">
+            <span>{{ group.title }}</span>
+            <small>Добавить</small>
+          </button>
+        {% endfor %}
+      </div>
+
+      {% if group.attributes.all %}
+        <div class="catalog-master-system-block">
+          <b class="catalog-master-card-chip-title">Характеристики для уточнения</b>
+          <div class="catalog-master-product-type-tags" style="margin-top:12px">
+            {% for attribute in group.attributes.all|slice:":16" %}
+              <span>{{ attribute.title }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </article>
+
+    <aside class="glass request-panel">
+      <span class="soft-label">Мини-заявка</span>
+      <h2>Выбранные позиции</h2>
+      <form class="mini-request-form" method="post" enctype="multipart/form-data" data-mini-request-form data-request-url="{% url 'api_mini_request' %}">
+        {% csrf_token %}
+        <input type="hidden" name="source" value="catalog_mini">
+        <input type="hidden" name="product_group_slug" value="{{ group.slug }}">
+        <input type="hidden" name="items" data-request-items>
+        <div class="field">
+          <label for="request_text">Состав заявки</label>
+          <textarea id="request_text" name="request_text" data-request-output rows="8" placeholder="Выберите тип продукции слева. Здесь появится структура заявки."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="field"><label for="mini_name">Имя / компания</label><input id="mini_name" type="text" name="contact_name" autocomplete="name"></div>
+          <div class="field"><label for="mini_phone">Телефон</label><input id="mini_phone" type="tel" name="phone" autocomplete="tel" required></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="mini_email">Email</label><input id="mini_email" type="email" name="email" autocomplete="email"></div>
+          <div class="field"><label for="mini_company">Компания</label><input id="mini_company" type="text" name="company" autocomplete="organization"></div>
+        </div>
+        <div class="field"><label for="mini_message">Комментарий</label><textarea id="mini_message" name="message" rows="3" placeholder="Сроки, объём, объект или аналоги"></textarea></div>
+        <div class="field"><label for="mini_files">Файл</label><input id="mini_files" type="file" name="files" multiple></div>
+
+        <div class="hero-actions">
+          <button class="btn light" type="submit" data-request-submit>Отправить заявку →</button>
+          <button class="btn ghost" type="button" data-request-clear>Очистить</button>
+        </div>
+        <p class="request-status" data-request-status aria-live="polite"></p>
+      </form>
+    </aside>
   </div>
-  <div class="logo-grid">
-    {% for vendor in group.vendors.all %}
-      <a class="logo-card" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener">
-        {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
-      </a>
-    {% empty %}
-      <p class="muted">Производители пока не привязаны.</p>
-    {% endfor %}
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="soft-label">Производители</span><h2>Связанные с товарной группой</h2></div>
+      <a class="link-more" href="{% url 'vendors' %}?q={{ group.title|urlencode }}">Смотреть в справочнике →</a>
+    </div>
+    <div class="django-logo-grid">
+      {% for vendor in group.vendors.all %}
+        <a class="logo-tile" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ vendor.name }}">
+          {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
+        </a>
+      {% empty %}
+        <p class="muted">Производители пока не привязаны.</p>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endblock %}

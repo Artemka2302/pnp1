@@ -25,6 +25,8 @@ urlpatterns = [
     ),
     path("vendors/", views.vendors, name="vendors"),
     path("partners/", views.partners, name="partners"),
+    path("api/catalog-request/", views.catalog_request_api, name="api_catalog_request"),
+    path("api/mini-request/", views.catalog_request_api, name="api_mini_request"),
     path("assets/<path:path>", views.legacy_asset_redirect, name="legacy_asset_redirect"),
     path("<slug:page>/", views.legacy_page, name="legacy_page_slash"),
     path("<slug:page>", views.legacy_page, name="legacy_page"),

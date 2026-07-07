@@ -1,32 +1,58 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Партнеры ПНП{% endblock %}
+{% block title %}Партнёры и бренды — ПНП{% endblock %}
 
 {% block content %}
-<section class="page-hero compact">
-  <p class="eyebrow">Партнеры</p>
-  <h1>Партнерская база</h1>
-  <p>Партнеры отображаются из ORM, без вшитых JS-массивов.</p>
-  <form class="search-form" method="get">
-    <input type="search" name="q" value="{{ query }}" placeholder="Поиск по партнеру или категории">
-    <button class="btn btn-primary" type="submit">Найти</button>
-  </form>
+<section class="hero hero-small">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="eyebrow">Партнёры и бренды</div>
+    <h1>Партнёры <span class="accent-word">и бренды</span></h1>
+    <p class="hero-subtitle">Мы сотрудничаем с ведущими производителями и поставщиками оборудования, чтобы предлагать клиентам надёжные решения, проверенные временем и опытом совместных проектов.</p>
+    <div class="hero-features partner-hero-features">
+      <div class="feature-mini"><i aria-hidden="true">01</i><span>Официальные партнёрства<br>и прямые поставки</span></div>
+      <div class="feature-mini"><i aria-hidden="true">02</i><span>Оборудование с гарантией<br>качества и поддержки</span></div>
+      <div class="feature-mini"><i aria-hidden="true">03</i><span>Комплексные решения<br>под ключ</span></div>
+      <div class="feature-mini"><i aria-hidden="true">04</i><span>Подбор аналогов<br>под требования объекта</span></div>
+    </div>
+  </div>
 </section>
 
 <section class="section">
-  <div class="logo-grid vendor-grid">
-    {% for partner in partners %}
-      <article class="vendor-card">
-        <a class="logo-card" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener">
-          {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
-        </a>
-        <h2>{{ partner.name }}</h2>
-        {% if partner.category %}<p>{{ partner.category }}</p>{% endif %}
-      </article>
-    {% empty %}
-      <p class="muted">По запросу ничего не найдено.</p>
-    {% endfor %}
+  <div class="container">
+    <div class="section-head">
+      <div><h2>Наши партнёры</h2></div>
+      <a class="btn ghost" href="{% url 'vendors' %}">Все производители →</a>
+    </div>
+    <form class="partners-tools" method="get">
+      <div class="field">
+        <label for="partnerSearch">Поиск по партнёрам</label>
+        <input id="partnerSearch" name="q" type="search" value="{{ query }}" placeholder="Например: DKC, климат, освещение, безопасность">
+      </div>
+      <button class="btn" type="submit">Найти</button>
+    </form>
+    <div class="partners-grid" style="margin-top:22px">
+      {% for partner in partners %}
+        <article class="partner-card">
+          <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener">
+            {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
+          </a>
+          <h3>{{ partner.name }}</h3>
+          {% if partner.category %}<p class="partner-meta">{{ partner.category }}</p>{% endif %}
+          {% if partner.note %}<p>{{ partner.note }}</p>{% endif %}
+        </article>
+      {% empty %}
+        <div class="empty-state">Ничего не найдено. Попробуйте другой бренд или направление.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section compact">
+  <div class="container service-band">
+    <div class="left"><h2>Найдём лучшее решение для вашего объекта</h2><p>Подберём оптимальное оборудование и подготовим персональное коммерческое предложение с учётом задач и бюджета проекта.</p></div>
+    <div><div class="hero-actions"><a class="btn" href="{% url 'catalog' %}">Подобрать оборудование</a><a class="btn ghost" href="{% url 'contacts' %}#request-form">Запросить КП</a></div></div>
   </div>
 </section>
 {% endblock %}

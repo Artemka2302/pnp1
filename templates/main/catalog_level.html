@@ -1,43 +1,73 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ object.title }} — {{ level }}{% endblock %}
+{% block title %}{{ object.title }} — {{ level }} — ПНП{% endblock %}
+{% block body_class %}catalog-master-site-preview catalog-master-public{% endblock %}
 
 {% block content %}
-<section class="page-hero compact">
-  <p class="eyebrow">{{ level }}</p>
-  <h1>{{ object.title }}</h1>
-  {% if object.summary %}<p>{{ object.summary }}</p>{% endif %}
-  {% if object.purpose %}<p>{{ object.purpose }}</p>{% endif %}
+<section class="hero hero-small catalog-master-preview-hero" style="--master-preview-hero-image:url('{% if object.image %}{% static object.image %}{% else %}{% static 'assets/img/hero-cover.webp' %}{% endif %}')">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="eyebrow">{{ level }}</div>
+    <h1>{{ object.title }}</h1>
+    {% if object.summary %}<p class="hero-subtitle">{{ object.summary }}</p>{% endif %}
+    {% if object.purpose %}<p class="hero-subtitle">{{ object.purpose }}</p>{% endif %}
+    <div class="hero-actions">
+      <a class="btn" href="{% url 'contacts' %}#request-form">Запросить КП</a>
+      <a class="btn ghost" href="{% url 'catalog' %}">← Каталог</a>
+    </div>
+  </div>
+</section>
+
+<section class="section compact">
+  <div class="container solution-detail-summary">
+    <article><b>{{ children|length }}</b><span>{{ child_level|lower }}</span></article>
+    <article><b>{{ level }}</b><span>текущий уровень каталога</span></article>
+    <article><b>ORM</b><span>данные из базы Django</span></article>
+  </div>
 </section>
 
 <section class="section">
-  <div class="section-head">
-    <p class="eyebrow">Следующий уровень</p>
-    <h2>{{ child_level }}</h2>
-  </div>
-  <div class="card-grid">
-    {% for child in children %}
-      {% if child_level == "Направление" %}
-        <a class="image-card compact-card" href="{% url 'catalog_direction' object.slug child.slug %}">
-      {% elif child_level == "Система" %}
-        <a class="image-card compact-card" href="{% url 'catalog_system' object.block.slug object.slug child.slug %}">
-      {% else %}
-        <a class="image-card compact-card" href="{% url 'product_group' object.direction.block.slug object.direction.slug object.slug child.slug %}">
-      {% endif %}
-          {% if child.image %}<img src="{% static child.image %}" alt="{{ child.title }}">{% endif %}
-          <div class="card-body">
-            <p class="eyebrow">{{ child_level }}</p>
-            <h3>{{ child.title }}</h3>
-            {% if child.purpose %}<p>{{ child.purpose }}</p>{% endif %}
-            {% if child.product_groups %}
-              <div class="chips"><span>{{ child.product_groups.count }} групп</span></div>
-            {% endif %}
-          </div>
-        </a>
-    {% empty %}
-      <p class="muted">На этом уровне пока нет элементов.</p>
-    {% endfor %}
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="soft-label">Следующий уровень</span>
+        <h2>{{ child_level }}</h2>
+      </div>
+    </div>
+
+    <div class="solutions-grid-v11 catalog-master-direction-preview">
+      {% for child in children %}
+        {% if child_level == "Направление" %}
+          <a class="solution-card-v11" href="{% url 'catalog_direction' object.slug child.slug %}">
+        {% elif child_level == "Система" %}
+          <a class="solution-card-v11" href="{% url 'catalog_system' object.block.slug object.slug child.slug %}">
+        {% else %}
+          <a class="solution-card-v11" href="{% url 'product_group' object.direction.block.slug object.direction.slug object.slug child.slug %}">
+        {% endif %}
+            <div class="solution-media">
+              {% if child.image %}<img src="{% static child.image %}" alt="{{ child.title }}">{% else %}<img src="{% static 'assets/img/catalog/empty-photo-placeholder.svg' %}" alt="{{ child.title }}">{% endif %}
+            </div>
+            <div class="solution-body">
+              <div class="solution-kicker">{{ child_level }} <span>{{ forloop.counter|stringformat:"02d" }}</span></div>
+              <h3>{{ child.title }}</h3>
+              {% if child.purpose %}<p>{{ child.purpose }}</p>{% endif %}
+              {% if child.product_groups %}
+                <div class="solution-tags"><span>{{ child.product_groups.count }} групп</span></div>
+              {% endif %}
+              {% if child.systems %}
+                <div class="solution-tags"><span>{{ child.systems.count }} систем</span></div>
+              {% endif %}
+              {% if child.directions %}
+                <div class="solution-tags"><span>{{ child.directions.count }} направлений</span></div>
+              {% endif %}
+              <div class="solution-actions"><span class="btn small">Открыть</span></div>
+            </div>
+          </a>
+      {% empty %}
+        <p class="muted">На этом уровне пока нет элементов.</p>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endblock %}

@@ -10,28 +10,94 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+
+def env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on", "да"}
+
+
+def env_list(name, default=None):
+    value = os.getenv(name)
+    if value is None:
+        return default or []
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def sqlite_name_from_url(database_url):
+    parsed = urlparse(database_url)
+    database_path = unquote(parsed.path)
+    if os.name == "nt" and len(database_path) > 3 and database_path[0] == "/" and database_path[2] == ":":
+        database_path = database_path[1:]
+    return database_path or BASE_DIR / "db.sqlite3"
+
+
+def database_config():
+    database_url = os.getenv("DATABASE_URL")
+    if database_url:
+        parsed = urlparse(database_url)
+        if parsed.scheme in {"postgres", "postgresql"}:
+            config = {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": unquote(parsed.path.lstrip("/")),
+                "USER": unquote(parsed.username or ""),
+                "PASSWORD": unquote(parsed.password or ""),
+                "HOST": parsed.hostname or "",
+                "PORT": str(parsed.port or ""),
+            }
+            return {key: value for key, value in config.items() if value != ""}
+        if parsed.scheme == "sqlite":
+            return {
+                "ENGINE": "django.db.backends.sqlite3",
+                "NAME": sqlite_name_from_url(database_url),
+            }
+
+    db_engine = os.getenv("DB_ENGINE", "sqlite").strip().lower()
+    if db_engine in {"postgres", "postgresql"}:
+        return {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME", "pnp1"),
+            "USER": os.getenv("DB_USER", "pnp1"),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+            "PORT": os.getenv("DB_PORT", "5432"),
+        }
+
+    return {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / os.getenv("SQLITE_NAME", "db.sqlite3"),
+    }
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-v-0tvv9_+k9br#d-rcazjsqkm=c=7q2bdmk(m$wkzgi9n&g^(g'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-local-pnp-dev-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool("DJANGO_DEBUG", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env_list(
+    "DJANGO_ALLOWED_HOSTS",
+    ["127.0.0.1", "localhost", "testserver"] if DEBUG else [],
+)
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -73,12 +139,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DATABASES = {"default": database_config()}
 
 
 # Password validation

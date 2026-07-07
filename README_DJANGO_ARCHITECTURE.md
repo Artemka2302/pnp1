@@ -72,14 +72,15 @@ python manage.py import_pnp_data
 
 ## Перенос на PostgreSQL
 
-1. Подключить PostgreSQL в `settings.py` через `DATABASES`.
-2. Выполнить миграции:
+1. Заполнить `.env` по примеру `.env.example`.
+2. Подключить PostgreSQL через `DATABASE_URL` или переменные `DB_ENGINE`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`.
+3. Выполнить миграции:
 
 ```bash
 python manage.py migrate
 ```
 
-3. Импортировать данные:
+4. Импортировать данные:
 
 ```bash
 python manage.py import_pnp_data
@@ -87,10 +88,31 @@ python manage.py import_pnp_data
 
 Такой перенос предпочтительнее, чем `dumpdata/loaddata`, потому что база пересобирается из исходного каталожного справочника и CSV-маппинга.
 
+## Заявки из каталога
+
+Добавлен минимальный backend-контур для мини-заявки:
+
+- `Lead` — контакт, источник, статус, текст заявки, привязка к товарной группе и будущий `bitrix_lead_id`.
+- `LeadItem` — позиции заявки с snapshot-названиями и nullable-связями с каталогом.
+- `UploadedFile` — файлы спецификаций и вложения к заявке.
+- `POST /api/mini-request/`
+- `POST /api/catalog-request/`
+
+API принимает form-data или JSON. Bitrix-интеграция намеренно не реализована в этом слое: лид сохраняется локально, а отправку в Bitrix нужно добавлять отдельным сервисом/задачей.
+
+## Локальная проверка
+
+```bash
+python manage.py check
+python manage.py migrate
+python manage.py import_pnp_data
+python manage.py test
+python manage.py runserver 127.0.0.1:8010
+```
+
 ## Что дальше писать разработчику
 
-- API для заявок и AI-чата.
-- Модели `Lead`, `LeadItem`, `UploadedFile`.
-- Интеграцию с Bitrix.
+- Bitrix-сервис для передачи сохраненных `Lead`.
+- API для AI-чата.
 - Нормальный backend-поиск по каталогу.
 - Редактирование данных через собственные views/forms или отдельную админку, если она понадобится позже.
