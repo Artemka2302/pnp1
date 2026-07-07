@@ -533,6 +533,7 @@ def catalog_request_api(request):
     product_group_slug = payload_value(payload, "product_group_slug")
     product_group_title = payload_value(payload, "product_group_title")
     items = parse_request_items(payload_value(payload, "items"))
+    uploaded_files = request_files(request)
 
     allowed_sources = {choice[0] for choice in Lead.SOURCE_CHOICES}
     if source not in allowed_sources:
@@ -540,7 +541,7 @@ def catalog_request_api(request):
 
     if not phone and not email:
         return JsonResponse({"ok": False, "error": "Укажите телефон или email."}, status=400)
-    if not items and not request_text and not message:
+    if not items and not request_text and not message and not uploaded_files:
         return JsonResponse({"ok": False, "error": "Добавьте позицию или комментарий к заявке."}, status=400)
 
     product_group = resolve_product_group(product_group_slug, product_group_title)
@@ -596,7 +597,7 @@ def catalog_request_api(request):
             created_items = 1
 
         uploaded_count = 0
-        for uploaded_file in request_files(request):
+        for uploaded_file in uploaded_files:
             UploadedFile.objects.create(
                 lead=lead,
                 file=uploaded_file,

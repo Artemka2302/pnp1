@@ -113,8 +113,35 @@
     <article class="glass request-panel">
       <h2>Запросить <span class="accent-word">коммерческое предложение</span></h2>
       <p>Отправьте спецификацию или опишите задачу — подготовим оптимальное предложение в кратчайшие сроки.</p>
-      <div class="upload-box">Спецификацию, ведомость или список позиций можно приложить в форме заявки<br><small>PDF, DOC, XLS, DWG, JPG</small></div>
-      <div class="hero-actions"><a class="btn light" href="{% url 'contacts' %}#request-form">Отправить запрос →</a></div>
+      <form class="home-request-form" action="{% url 'contacts' %}#request-form" data-home-request-transfer data-contact-url="{% url 'contacts' %}#request-form" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="field">
+            <label for="homeRequestName">Имя / компания</label>
+            <input id="homeRequestName" name="name" placeholder="ООО СтройПроект" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="homeRequestContact">Телефон или email</label>
+            <input id="homeRequestContact" name="phone" placeholder="+7 ... / email" autocomplete="tel">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="homeRequestMessage">Комментарий</label>
+          <textarea id="homeRequestMessage" name="message" placeholder="Опишите задачу или добавьте список позиций"></textarea>
+        </div>
+
+        <div class="field file-field">
+          <label class="upload-box" for="homeSpecification">
+            <span data-file-label>Прикрепить файл / спецификацию</span>
+            <small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small>
+          </label>
+          <input class="file-input" id="homeSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
+          <div class="file-list" data-file-list hidden></div>
+        </div>
+
+        <button class="btn light" type="submit">Отправить запрос →</button>
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+      </form>
     </article>
     <aside class="contact-mini">
       <h3>Контакты</h3>

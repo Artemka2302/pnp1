@@ -150,22 +150,239 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const transferMetaKey = "pnp_home_request_transfer";
+  const transferDbName = "pnp_home_request_files";
+  const transferStoreName = "files";
+  const transferFilesKey = "selected";
+  const defaultFileLabel = "Прикрепить файл / спецификацию";
+  const filePickerState = new WeakMap();
+
+  const formatFileSize = size => {
+    if (!Number.isFinite(size) || size <= 0) return "0 Б";
+    const units = ["Б", "КБ", "МБ", "ГБ"];
+    let value = size;
+    let unitIndex = 0;
+    while (value >= 1024 && unitIndex < units.length - 1) {
+      value /= 1024;
+      unitIndex += 1;
+    }
+    const precision = value >= 10 || unitIndex === 0 ? 0 : 1;
+    return `${value.toFixed(precision)} ${units[unitIndex]}`;
+  };
+
+  const setInputFiles = (fileInput, files) => {
+    if (!fileInput || typeof DataTransfer === "undefined") return;
+    const transfer = new DataTransfer();
+    Array.from(files || []).forEach(file => transfer.items.add(file));
+    fileInput.files = transfer.files;
+  };
+
+  const fileSignature = file => `${file.name}|${file.size}|${file.lastModified}`;
+
+  const updateFileLabel = (fileLabel, count) => {
+    if (!fileLabel) return;
+    if (!count) {
+      fileLabel.textContent = defaultFileLabel;
+      return;
+    }
+    fileLabel.textContent = count === 1 ? "Выбран 1 файл" : `Выбрано файлов: ${count}`;
+  };
+
+  const initFilePicker = form => {
+    const fileInput = form.querySelector("input[type='file']");
+    const fileLabel = form.querySelector("[data-file-label]");
+    let fileList = form.querySelector("[data-file-list]");
+    if (!fileInput) return;
+    const state = { files: Array.from(fileInput.files || []) };
+    filePickerState.set(fileInput, state);
+
+    if (!fileList) {
+      fileList = document.createElement("div");
+      fileList.className = "file-list";
+      fileList.dataset.fileList = "";
+      fileList.hidden = true;
+      fileInput.after(fileList);
+    }
+
+    const renderFiles = () => {
+      const files = state.files;
+      updateFileLabel(fileLabel, files.length);
+      fileList.innerHTML = "";
+      fileList.hidden = !files.length;
+
+      files.forEach((file, index) => {
+        const item = document.createElement("div");
+        item.className = "file-list-item";
+
+        const meta = document.createElement("span");
+        meta.className = "file-list-meta";
+        meta.textContent = `${file.name} · ${formatFileSize(file.size)}`;
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "file-list-remove";
+        remove.dataset.fileRemove = String(index);
+        remove.setAttribute("aria-label", `Удалить ${file.name}`);
+        remove.textContent = "×";
+
+        item.append(meta, remove);
+        fileList.append(item);
+      });
+    };
+
+    const syncFiles = () => {
+      setInputFiles(fileInput, state.files);
+      renderFiles();
+    };
+
+    fileInput.addEventListener("change", () => {
+      const existing = new Set(state.files.map(fileSignature));
+      Array.from(fileInput.files || []).forEach(file => {
+        const signature = fileSignature(file);
+        if (existing.has(signature)) return;
+        existing.add(signature);
+        state.files.push(file);
+      });
+      syncFiles();
+    });
+
+    fileList.addEventListener("click", event => {
+      const remove = event.target.closest("[data-file-remove]");
+      if (!remove) return;
+      const removeIndex = Number(remove.dataset.fileRemove);
+      state.files = state.files.filter((_, index) => index !== removeIndex);
+      syncFiles();
+    });
+
+    syncFiles();
+  };
+
+  const openTransferDb = () =>
+    new Promise((resolve, reject) => {
+      if (!("indexedDB" in window)) {
+        reject(new Error("IndexedDB is not available."));
+        return;
+      }
+      const request = indexedDB.open(transferDbName, 1);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(transferStoreName)) db.createObjectStore(transferStoreName);
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+
+  const writeTransferFiles = async files => {
+    const db = await openTransferDb();
+    try {
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(transferStoreName, "readwrite");
+        tx.objectStore(transferStoreName).put(Array.from(files || []), transferFilesKey);
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+    } finally {
+      db.close();
+    }
+  };
+
+  const readTransferFiles = async () => {
+    const db = await openTransferDb();
+    try {
+      return await new Promise((resolve, reject) => {
+        const tx = db.transaction(transferStoreName, "readonly");
+        const request = tx.objectStore(transferStoreName).get(transferFilesKey);
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => reject(request.error);
+      });
+    } finally {
+      db.close();
+    }
+  };
+
+  const clearTransferFiles = async () => {
+    try {
+      const db = await openTransferDb();
+      try {
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction(transferStoreName, "readwrite");
+          tx.objectStore(transferStoreName).delete(transferFilesKey);
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+      } finally {
+        db.close();
+      }
+    } catch {
+      // Nothing to clear.
+    }
+  };
+
+  const initHomeRequestTransfer = () => {
+    const form = document.querySelector("[data-home-request-transfer]");
+    if (!form) return;
+    initFilePicker(form);
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      const fileInput = form.querySelector("input[type='file']");
+      const payload = {
+        name: form.elements.name?.value || "",
+        phone: form.elements.phone?.value || "",
+        message: form.elements.message?.value || "",
+      };
+      sessionStorage.setItem(transferMetaKey, JSON.stringify(payload));
+      try {
+        await writeTransferFiles(fileInput?.files || []);
+      } catch (error) {
+        console.error(error);
+      }
+      window.location.href = form.dataset.contactUrl || form.action;
+    });
+  };
+
   document.querySelectorAll("[data-lead-form]").forEach(form => {
     const status = form.querySelector("[data-form-status]");
     const submit = form.querySelector("[type='submit']");
-    const fileInput = form.querySelector("input[type='file']");
-    const fileLabel = form.querySelector("[data-file-label]");
-    if (fileInput && fileLabel) {
-      fileInput.addEventListener("change", () => {
-        const count = fileInput.files.length;
-        fileLabel.textContent = count ? `Выбрано файлов: ${count}` : "Прикрепить файл / спецификацию";
-      });
-    }
+    initFilePicker(form);
     form.addEventListener("submit", async event => {
       event.preventDefault();
       await submitForm(form, status, submit);
     });
   });
+
+  const initContactRequestTransfer = async () => {
+    const raw = sessionStorage.getItem(transferMetaKey);
+    if (!raw) return;
+
+    const form = document.querySelector("[data-lead-form]");
+    if (!form) return;
+
+    let payload = {};
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      payload = {};
+    }
+
+    if (payload.name && form.elements.name && !form.elements.name.value) form.elements.name.value = payload.name;
+    if (payload.phone && form.elements.phone && !form.elements.phone.value) form.elements.phone.value = payload.phone;
+    if (payload.message && form.elements.message && !form.elements.message.value) form.elements.message.value = payload.message;
+
+    try {
+      const files = await readTransferFiles();
+      const fileInput = form.querySelector("input[type='file']");
+      if (files.length && fileInput && typeof DataTransfer !== "undefined") {
+        setInputFiles(fileInput, files);
+        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      sessionStorage.removeItem(transferMetaKey);
+      await clearTransferFiles();
+    }
+  };
 
   const initHomeBrandCarousel = () => {
     document.querySelectorAll("[data-brand-carousel]").forEach(carousel => {
@@ -555,5 +772,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initVendorFilters();
   initHomeBrandCarousel();
+  initHomeRequestTransfer();
+  initContactRequestTransfer();
   renderRequest();
 });

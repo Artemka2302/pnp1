@@ -614,6 +614,108 @@ button.vendor-chip {
   color: #ffb1c5;
 }
 
+.home-request-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.home-request-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.home-request-form textarea {
+  min-height: 96px;
+}
+
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-field .upload-box {
+  display: block;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.file-field .upload-box:hover {
+  border-color: rgba(255,255,255,.48);
+  background: rgba(255,255,255,.055);
+  transform: translateY(-1px);
+}
+
+.file-field .upload-box span {
+  display: block;
+  color: #fff;
+  font-weight: 850;
+}
+
+.file-field .upload-box small {
+  display: block;
+  margin-top: 6px;
+}
+
+.file-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.file-list[hidden] {
+  display: none;
+}
+
+.file-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 42px;
+  padding: 9px 10px 9px 13px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  background: rgba(255,255,255,.075);
+}
+
+.file-list-meta {
+  min-width: 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-list-remove {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.file-list-remove:hover {
+  background: rgba(214,168,185,.28);
+}
+
 .form-assurance {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -644,6 +746,7 @@ button.vendor-chip {
   .catalog-master-filter-grid,
   .catalog-master-preview-meta,
   .partners-preview.popular-logo-grid,
+  .home-request-form .form-row,
   .mini-request-form .form-row,
   .form-assurance {
     grid-template-columns: 1fr;
