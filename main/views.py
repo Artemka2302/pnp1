@@ -1,5 +1,6 @@
 import json
 
+from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, JsonResponse
@@ -292,6 +293,11 @@ def vendor_page_context(request):
         )
     )
 
+    group_rows_paginator = Paginator(group_rows_qs, 10)
+    group_rows_page_obj = group_rows_paginator.get_page(request.GET.get("rows_page"))
+    group_rows_query_params = request.GET.copy()
+    group_rows_query_params.pop("rows_page", None)
+
     blocks = CatalogBlock.objects.annotate(
         direction_count=Count("directions", distinct=True),
         system_count=Count("directions__systems", distinct=True),
@@ -336,7 +342,9 @@ def vendor_page_context(request):
             "title",
         ),
         "vendors": cloud_vendors_qs[:500],
-        "group_rows": group_rows_qs[:300],
+        "group_rows": group_rows_page_obj.object_list,
+        "group_rows_page_obj": group_rows_page_obj,
+        "group_rows_querystring": group_rows_query_params.urlencode(),
         "filtered_vendor_count": vendors_qs.count(),
         "filtered_group_count": group_rows_qs.count(),
         "vendor_count": Vendor.objects.filter(vendorproductgroup__show_in_vendors=True).distinct().count(),

@@ -27,3 +27,23 @@
     </div>
   </article>
 {% endfor %}
+
+{% if group_rows_page_obj.has_other_pages %}
+  <nav class="vendor-rows-pagination" aria-label="Страницы товарных групп">
+    {% if group_rows_page_obj.has_previous %}
+      <a class="vendor-rows-page-link" href="?{% if group_rows_querystring %}{{ group_rows_querystring }}&{% endif %}rows_page={{ group_rows_page_obj.previous_page_number }}" data-vendor-page-link>
+        Назад
+      </a>
+    {% endif %}
+
+    <span class="vendor-rows-page-current">
+      Страница {{ group_rows_page_obj.number }} из {{ group_rows_page_obj.paginator.num_pages }}
+    </span>
+
+    {% if group_rows_page_obj.has_next %}
+      <a class="vendor-rows-page-link" href="?{% if group_rows_querystring %}{{ group_rows_querystring }}&{% endif %}rows_page={{ group_rows_page_obj.next_page_number }}" data-vendor-page-link>
+        Вперед
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}

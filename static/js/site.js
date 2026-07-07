@@ -341,8 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.scrollTo({ top, behavior: "smooth" });
     };
 
-    const updateVendors = async (options = {}) => {
-      const url = buildUrl();
+    const requestVendors = async (url, options = {}) => {
       if (controller) controller.abort();
       controller = new AbortController();
       if (submit) submit.disabled = true;
@@ -365,6 +364,10 @@ document.addEventListener("DOMContentLoaded", () => {
       } finally {
         if (submit) submit.disabled = false;
       }
+    };
+
+    const updateVendors = async (options = {}) => {
+      await requestVendors(buildUrl(), options);
     };
 
     const hideSuggestions = () => {
@@ -495,6 +498,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("click", event => {
+      const pageLink = event.target.closest("[data-vendor-page-link]");
+      if (pageLink) {
+        event.preventDefault();
+        hideSuggestions();
+        requestVendors(new URL(pageLink.href), { scroll: true });
+        return;
+      }
+
       const suggestion = event.target.closest("[data-vendor-suggestion]");
       if (suggestion) {
         event.preventDefault();
