@@ -770,7 +770,85 @@ document.addEventListener("DOMContentLoaded", () => {
     syncVendorChipState();
   };
 
+  const initPartnersFilter = () => {
+    const form = document.querySelector("[data-partners-filter-form]");
+    if (!form) return;
+    const categoryList = form.querySelector("[data-partner-category-list]");
+    const results = document.querySelector("[data-partner-results]");
+    const search = form.querySelector("input[name='q']");
+    if (!categoryList || !results) return;
+
+    let requestId = 0;
+
+    const buildUrl = page => {
+      const url = new URL(form.action, window.location.origin);
+      const formData = new FormData(form);
+      const query = String(formData.get("q") || "").trim();
+      if (query) url.searchParams.set("q", query);
+      formData.getAll("category").forEach(category => {
+        if (category) url.searchParams.append("category", category);
+      });
+      if (page) url.searchParams.set("page", page);
+      return url;
+    };
+
+    const updatePartners = async urlOverride => {
+      const url = urlOverride || buildUrl();
+      const currentRequest = ++requestId;
+      form.classList.add("is-loading");
+      try {
+        const response = await fetch(url, {
+          credentials: "same-origin",
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+        const data = await response.json();
+        if (!response.ok || currentRequest !== requestId) return;
+        categoryList.innerHTML = data.categories_html;
+        results.innerHTML = data.results_html;
+        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (currentRequest === requestId) form.classList.remove("is-loading");
+      }
+    };
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      updatePartners();
+    });
+
+    form.addEventListener("change", event => {
+      if (!event.target.matches("input[name='category']")) return;
+      updatePartners();
+    });
+
+    form.addEventListener("click", event => {
+      const clearButton = event.target.closest("[data-partner-clear-categories]");
+      if (!clearButton) return;
+      event.preventDefault();
+      form.querySelectorAll("input[name='category']").forEach(input => {
+        input.checked = false;
+      });
+      updatePartners();
+    });
+
+    results.addEventListener("click", event => {
+      const pageLink = event.target.closest("[data-partner-page-link]");
+      if (!pageLink) return;
+      event.preventDefault();
+      updatePartners(new URL(pageLink.href, window.location.origin));
+    });
+
+    search?.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      updatePartners();
+    });
+  };
+
   initVendorFilters();
+  initPartnersFilter();
   initHomeBrandCarousel();
   initHomeRequestTransfer();
   initContactRequestTransfer();

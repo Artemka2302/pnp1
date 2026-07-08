@@ -1,0 +1,9 @@
+<button class="partner-category-chip partner-category-clear{% if not filters.categories %} is-active{% endif %}" type="button" data-partner-clear-categories>
+  <span><i>Все</i><b>{{ total_count }}</b></span>
+</button>
+{% for item in partner_categories %}
+  <label class="partner-category-chip">
+    <input type="checkbox" name="category" value="{{ item.title }}" {% if item.title in filters.categories %}checked{% endif %}>
+    <span><i>{{ item.title }}</i><b>{{ item.count }}</b></span>
+  </label>
+{% endfor %}
