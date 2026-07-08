@@ -61,6 +61,41 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("Kaspersky", data["cloud_html"])
         self.assertGreater(data["cloud_html"].count("data-vendor-chip"), 2)
 
+    def test_catalog_search_api_returns_grouped_results(self):
+        response = self.client.get(
+            "/api/catalog-search/",
+            {"q": "фанера"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(data["total_count"], 0)
+        self.assertIn("Товарные группы", data["html"])
+        self.assertIn("catalog-search-path", data["html"])
+        self.assertIn("data-request-item", data["html"])
+
+    def test_catalog_search_api_links_vendors_to_vendor_filter(self):
+        response = self.client.get(
+            "/api/catalog-search/",
+            {"q": "Eltex"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertGreater(data["total_count"], 0)
+        self.assertIn("Производители", data["html"])
+        self.assertIn("vendorRowsSection", data["html"])
+
+    def test_catalog_page_contains_level_navigator_data(self):
+        response = self.client.get("/catalog/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "data-catalog-level-shell")
+        self.assertContains(response, "catalogLevelData")
+        self.assertContains(response, "Каталог по уровням")
+
 
 class MiniRequestApiTests(TestCase):
     def setUp(self):

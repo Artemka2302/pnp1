@@ -19,6 +19,55 @@
   </div>
 </section>
 
+<section class="section compact catalog-level-section" id="catalogLevelNavigator">
+  <div class="container">
+    <div class="catalog-level-head">
+      <div>
+        <span class="soft-label">Каталог по уровням</span>
+        <h2>Подберите позицию по структуре проекта</h2>
+      </div>
+      <a class="link-more" href="{% url 'contacts' %}#request-form">Перейти к заявке →</a>
+    </div>
+
+    <div class="catalog-level-shell" data-catalog-level-shell>
+      <aside class="catalog-level-sidebar">
+        <div class="catalog-level-search">
+          <label for="catalogLevelSearch">Поиск по каталогу</label>
+          <input id="catalogLevelSearch" type="search" data-catalog-level-search placeholder="Найти раздел, систему или материал" autocomplete="off">
+        </div>
+        <div class="catalog-level-tree" data-catalog-level-tree aria-label="Разделы каталога"></div>
+      </aside>
+
+      <main class="catalog-level-main">
+        <nav class="catalog-level-breadcrumbs" data-catalog-level-breadcrumbs aria-label="Путь в каталоге"></nav>
+
+        <article class="catalog-level-hero" data-catalog-level-hero>
+          <div class="catalog-level-hero-copy">
+            <span class="catalog-level-kicker" data-catalog-level-kicker></span>
+            <h3 class="catalog-level-title" data-catalog-level-title></h3>
+            <p class="catalog-level-summary" data-catalog-level-summary></p>
+            <div class="catalog-level-stats" data-catalog-level-stats></div>
+          </div>
+          <div class="catalog-level-hero-media" data-catalog-level-media></div>
+        </article>
+
+        <div class="catalog-level-subhead">
+          <div>
+            <span class="soft-label" data-catalog-level-child-label>Следующий уровень</span>
+            <h3 data-catalog-level-list-title>Выберите раздел</h3>
+          </div>
+          <a class="btn ghost small" data-catalog-level-open href="{% url 'catalog' %}">Открыть страницу</a>
+        </div>
+
+        <div class="catalog-level-card-grid" data-catalog-level-cards></div>
+        <aside class="catalog-level-selection-panel" data-catalog-selection-panel hidden aria-live="polite"></aside>
+      </main>
+    </div>
+
+    {{ catalog_level_data|json_script:"catalogLevelData" }}
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
     <div class="section-head">

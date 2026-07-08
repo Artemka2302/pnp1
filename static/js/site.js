@@ -24,10 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const output = document.querySelector("[data-request-output]");
   const hiddenItems = document.querySelector("[data-request-items]");
   const clear = document.querySelector("[data-request-clear]");
-  const buttons = document.querySelectorAll("[data-request-item]");
   const miniForm = document.querySelector("[data-mini-request-form]");
   const requestStatus = document.querySelector("[data-request-status]");
   const requestSubmit = document.querySelector("[data-request-submit]");
+  const recentLists = document.querySelectorAll("[data-catalog-recent-list]");
 
   const readItems = () => {
     try {
@@ -48,8 +48,73 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const syncButtons = items => {
-    buttons.forEach(button => {
-      button.classList.toggle("is-selected", items.includes(button.dataset.requestItem));
+    document.querySelectorAll("[data-request-item]").forEach(button => {
+      const selected = items.includes(button.dataset.requestItem);
+      button.classList.toggle("is-selected", selected);
+      if (button.classList.contains("catalog-search-add")) {
+        button.textContent = selected ? "В заявке" : "Добавить в заявку";
+      }
+      if (button.classList.contains("catalog-level-type-row")) {
+        const action = button.querySelector("[data-catalog-type-action]");
+        if (action) action.textContent = selected ? "В заявке" : "Добавить";
+      }
+    });
+  };
+
+  const requestItemParts = item => {
+    const [system = "", group = "", type = ""] = String(item || "").split("|");
+    return { system, group, type };
+  };
+
+  const formatRequestItems = items => {
+    if (!items.length) return "";
+    const groups = new Map();
+    for (const item of items) {
+      const { system, group, type } = requestItemParts(item);
+      const key = [system, group].filter(Boolean).join(": ");
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(type || group);
+    }
+    const lines = ["Заявка из каталога:"];
+    for (const [group, types] of groups) {
+      lines.push(`${group}:`);
+      for (const type of types) lines.push(`- ${type}`);
+    }
+    return lines.join("\n");
+  };
+
+  const renderRecentItems = () => {
+    const items = readItems();
+    recentLists.forEach(list => {
+      list.innerHTML = "";
+      if (!items.length) {
+        const empty = document.createElement("p");
+        empty.className = "catalog-recent-empty";
+        empty.textContent = "Позиции пока не выбраны.";
+        list.append(empty);
+        return;
+      }
+      items.slice(-6).reverse().forEach(item => {
+        const { system, group, type } = requestItemParts(item);
+        const row = document.createElement("div");
+        row.className = "catalog-recent-item";
+
+        const text = document.createElement("span");
+        const title = document.createElement("b");
+        title.textContent = type || group;
+        const path = document.createElement("small");
+        path.textContent = [system, group].filter(Boolean).join(" / ");
+        text.append(title, path);
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.dataset.catalogRecentRemove = item;
+        remove.setAttribute("aria-label", "Убрать позицию");
+        remove.textContent = "×";
+
+        row.append(text, remove);
+        list.append(row);
+      });
     });
   };
 
@@ -57,39 +122,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const items = readItems();
     if (hiddenItems) hiddenItems.value = JSON.stringify(items);
     syncButtons(items);
-    if (!output) return;
-    if (!items.length) {
-      output.value = "";
-      return;
-    }
-    const groups = new Map();
-    for (const item of items) {
-      const [system, group, type] = item.split("|");
-      const key = `${system}: ${group}`;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(type);
-    }
-    const lines = ["Заявка из каталога:"];
-    for (const [group, types] of groups) {
-      lines.push(`${group}:`);
-      for (const type of types) lines.push(`- ${type}`);
-    }
-    output.value = lines.join("\n");
+    renderRecentItems();
+    const requestText = formatRequestItems(items);
+    if (output) output.value = requestText;
+    document.dispatchEvent(new CustomEvent("pnp:request-items-changed", { detail: { items, requestText } }));
   };
 
-  buttons.forEach(button => {
-    button.addEventListener("click", () => {
-      const value = button.dataset.requestItem;
-      const items = readItems();
-      if (items.includes(value)) {
-        writeItems(items.filter(item => item !== value));
-      } else {
-        items.push(value);
-        writeItems(items);
-      }
-      setStatus(requestStatus, "");
-      renderRequest();
-    });
+  const toggleRequestItem = value => {
+    if (!value) return;
+    const items = readItems();
+    if (items.includes(value)) {
+      writeItems(items.filter(item => item !== value));
+    } else {
+      items.push(value);
+      writeItems(items);
+    }
+    setStatus(requestStatus, "");
+    renderRequest();
+  };
+
+  document.addEventListener("click", event => {
+    const requestButton = event.target.closest("[data-request-item]");
+    if (requestButton) {
+      event.preventDefault();
+      toggleRequestItem(requestButton.dataset.requestItem);
+      return;
+    }
+
+    const removeRecent = event.target.closest("[data-catalog-recent-remove]");
+    if (!removeRecent) return;
+    event.preventDefault();
+    writeItems(readItems().filter(item => item !== removeRecent.dataset.catalogRecentRemove));
+    renderRequest();
   });
 
   if (clear) {
@@ -99,6 +163,548 @@ document.addEventListener("DOMContentLoaded", () => {
       renderRequest();
     });
   }
+
+  const initCatalogSearch = () => {
+    const root = document.querySelector("[data-catalog-search]");
+    if (!root) return;
+    const input = root.querySelector("[data-catalog-search-input]");
+    const submit = root.querySelector("[data-catalog-search-submit]");
+    const results = root.querySelector("[data-catalog-search-results]");
+    const searchUrl = root.dataset.searchUrl;
+    if (!input || !results || !searchUrl) return;
+
+    let controller = null;
+    let timer = null;
+
+    const requestSearch = async () => {
+      const query = input.value.trim();
+      if (controller) controller.abort();
+      controller = new AbortController();
+      const url = new URL(searchUrl, window.location.origin);
+      if (query) url.searchParams.set("q", query);
+      root.classList.add("is-loading");
+      try {
+        const response = await fetch(url, {
+          credentials: "same-origin",
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+          signal: controller.signal,
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error("Не удалось выполнить поиск.");
+        results.innerHTML = data.html || "";
+        renderRequest();
+      } catch (error) {
+        if (error.name !== "AbortError") console.error(error);
+      } finally {
+        root.classList.remove("is-loading");
+      }
+    };
+
+    const scheduleSearch = () => {
+      clearTimeout(timer);
+      timer = setTimeout(requestSearch, 180);
+    };
+
+    input.addEventListener("input", scheduleSearch);
+    input.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      clearTimeout(timer);
+      requestSearch();
+    });
+    submit?.addEventListener("click", requestSearch);
+
+    root.addEventListener("click", event => {
+      const quick = event.target.closest("[data-catalog-search-query]");
+      if (quick) {
+        input.value = quick.dataset.catalogSearchQuery || "";
+        requestSearch();
+        input.focus();
+        return;
+      }
+
+      const reset = event.target.closest("[data-catalog-search-reset]");
+      if (!reset) return;
+      input.value = "";
+      requestSearch();
+      input.focus();
+    });
+  };
+
+  const initCatalogLevelNavigator = () => {
+    const root = document.querySelector("[data-catalog-level-shell]");
+    const dataScript = document.querySelector("#catalogLevelData");
+    if (!root || !dataScript) return;
+
+    let catalogData = {};
+    try {
+      catalogData = JSON.parse(dataScript.textContent || "{}");
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+
+    const nodes = catalogData.nodes || {};
+    const roots = catalogData.roots || Object.keys(nodes).filter(id => !nodes[id]?.parent);
+    const search = root.querySelector("[data-catalog-level-search]");
+    const tree = root.querySelector("[data-catalog-level-tree]");
+    const breadcrumbs = root.querySelector("[data-catalog-level-breadcrumbs]");
+    const kicker = root.querySelector("[data-catalog-level-kicker]");
+    const title = root.querySelector("[data-catalog-level-title]");
+    const summary = root.querySelector("[data-catalog-level-summary]");
+    const stats = root.querySelector("[data-catalog-level-stats]");
+    const media = root.querySelector("[data-catalog-level-media]");
+    const childLabel = root.querySelector("[data-catalog-level-child-label]");
+    const listTitle = root.querySelector("[data-catalog-level-list-title]");
+    const cards = root.querySelector("[data-catalog-level-cards]");
+    const openLink = root.querySelector("[data-catalog-level-open]");
+    const selectionPanel = root.querySelector("[data-catalog-selection-panel]");
+    if (!tree || !cards || !roots.length) return;
+
+    const expanded = new Set(roots);
+    let activeId = catalogData.initialActiveId || roots[0];
+    let query = "";
+
+    const levelNames = {
+      global_block: "Блок",
+      direction: "Направление",
+      system: "Система",
+      product_group: "Товарная группа",
+    };
+
+    const nextLevelNames = {
+      global_block: "Направления",
+      direction: "Системы",
+      system: "Товарные группы",
+      product_group: "Типы продукции",
+    };
+
+    const normalize = value => String(value || "")
+      .toLowerCase()
+      .replaceAll("ё", "е")
+      .replace(/[–—-]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const nodeText = node => normalize([
+      node.title,
+      node.label,
+      node.summary,
+      ...(node.path || []),
+      ...(node.productTypes || []),
+      ...(node.brands || []),
+      ...(node.attributes || []),
+      ...(node.aliases || []),
+    ].filter(Boolean).join(" "));
+
+    const getChildren = id => nodes[id]?.children || [];
+
+    const nodeMatchesSelf = id => {
+      if (!query) return true;
+      return nodeText(nodes[id] || {}).includes(query);
+    };
+
+    const subtreeMatches = id => {
+      if (!query) return true;
+      if (nodeMatchesSelf(id)) return true;
+      return getChildren(id).some(childId => subtreeMatches(childId));
+    };
+
+    const ancestors = id => {
+      const result = [];
+      let current = nodes[id];
+      while (current?.parent && nodes[current.parent]) {
+        result.unshift(current.parent);
+        current = nodes[current.parent];
+      }
+      return result;
+    };
+
+    const visibleIds = ids => ids.filter(id => nodes[id] && subtreeMatches(id));
+
+    const firstVisibleId = ids => {
+      for (const id of ids) {
+        if (!nodes[id] || !subtreeMatches(id)) continue;
+        if (nodeMatchesSelf(id)) return id;
+        const child = firstVisibleId(getChildren(id));
+        return child || id;
+      }
+      return "";
+    };
+
+    const expandPath = id => {
+      ancestors(id).forEach(parentId => expanded.add(parentId));
+    };
+
+    const expandMatches = () => {
+      if (!query) return;
+      Object.keys(nodes).forEach(id => {
+        if (nodeMatchesSelf(id)) expandPath(id);
+      });
+    };
+
+    const requestValueFor = (node, typeTitle) => {
+      const path = node.path || [];
+      const system = path[2] || "";
+      const group = path[3] || node.title || "";
+      return [system, group, typeTitle || group].filter(Boolean).join("|");
+    };
+
+    const button = (className, text = "") => {
+      const element = document.createElement("button");
+      element.type = "button";
+      element.className = className;
+      if (text) element.textContent = text;
+      return element;
+    };
+
+    const renderStats = (target, items) => {
+      target.innerHTML = "";
+      (items || []).forEach(item => {
+        const stat = document.createElement("span");
+        const value = document.createElement("b");
+        const label = document.createElement("small");
+        value.textContent = item.value;
+        label.textContent = item.label;
+        stat.append(value, label);
+        target.append(stat);
+      });
+    };
+
+    const renderTreeBranch = (ids, depth = 0) => {
+      const fragment = document.createDocumentFragment();
+      visibleIds(ids).forEach(id => {
+        const node = nodes[id];
+        const children = getChildren(id);
+        const isOpen = expanded.has(id) || Boolean(query);
+        const item = document.createElement("div");
+        item.className = `catalog-level-tree-item level-${node.level || ""}`;
+        item.style.setProperty("--depth", depth);
+
+        const row = document.createElement("div");
+        row.className = "catalog-level-tree-row";
+        row.classList.toggle("is-active", id === activeId);
+        row.classList.toggle("is-match", Boolean(query) && nodeMatchesSelf(id));
+
+        const toggle = button("catalog-level-tree-toggle", children.length ? (isOpen ? "−" : "+") : "");
+        toggle.disabled = !children.length;
+        toggle.addEventListener("click", () => {
+          if (isOpen) expanded.delete(id);
+          else expanded.add(id);
+          renderTree();
+        });
+
+        const select = button("catalog-level-tree-node");
+        select.dataset.catalogLevelNode = id;
+        const name = document.createElement("span");
+        name.textContent = node.title;
+        const meta = document.createElement("small");
+        const count = children.length || (node.productTypes || []).length || (node.brands || []).length;
+        meta.textContent = children.length ? `${count} разделов` : `${count} позиций`;
+        select.append(name, meta);
+
+        row.append(toggle, select);
+        item.append(row);
+        if (children.length && isOpen) {
+          const childList = document.createElement("div");
+          childList.className = "catalog-level-tree-children";
+          childList.append(renderTreeBranch(children, depth + 1));
+          item.append(childList);
+        }
+        fragment.append(item);
+      });
+      return fragment;
+    };
+
+    const renderTree = () => {
+      tree.innerHTML = "";
+      const visible = visibleIds(roots);
+      if (!visible.length) {
+        const empty = document.createElement("div");
+        empty.className = "catalog-level-empty";
+        empty.innerHTML = "<h3>Ничего не найдено</h3><p>Попробуйте другой материал, систему, тип продукции или производителя.</p>";
+        tree.append(empty);
+        return;
+      }
+      tree.append(renderTreeBranch(roots));
+    };
+
+    const renderBreadcrumbs = node => {
+      if (!breadcrumbs) return;
+      breadcrumbs.innerHTML = "";
+      [...ancestors(node.id), node.id].forEach((id, index, list) => {
+        const current = nodes[id];
+        if (!current) return;
+        if (index > 0) {
+          const slash = document.createElement("span");
+          slash.textContent = "/";
+          breadcrumbs.append(slash);
+        }
+        const crumb = button("catalog-level-crumb", current.title);
+        crumb.dataset.catalogLevelNode = id;
+        crumb.classList.toggle("is-current", index === list.length - 1);
+        breadcrumbs.append(crumb);
+      });
+    };
+
+    const renderHero = node => {
+      if (kicker) kicker.textContent = levelNames[node.level] || node.label || "Каталог";
+      if (title) title.textContent = node.title || "";
+      if (summary) summary.textContent = node.summary || "Выберите следующий уровень каталога или добавьте позицию в заявку.";
+      if (stats) renderStats(stats, node.stats || []);
+      if (openLink) {
+        openLink.href = node.url || "#";
+        openLink.hidden = !node.url;
+      }
+      if (media) {
+        media.innerHTML = "";
+        if (node.image) {
+          const image = document.createElement("img");
+          image.src = node.image;
+          image.alt = node.title || "";
+          media.append(image);
+        }
+      }
+    };
+
+    const createChildCard = child => {
+      const card = button("catalog-level-card");
+      card.dataset.catalogLevelNode = child.id;
+
+      const mediaBox = document.createElement("span");
+      mediaBox.className = "catalog-level-card-media";
+      if (child.image) {
+        const image = document.createElement("img");
+        image.src = child.image;
+        image.alt = child.title || "";
+        mediaBox.append(image);
+      }
+
+      const body = document.createElement("span");
+      body.className = "catalog-level-card-body";
+      const label = document.createElement("small");
+      label.textContent = levelNames[child.level] || child.label || "";
+      const heading = document.createElement("b");
+      heading.textContent = child.title || "";
+      const text = document.createElement("span");
+      text.textContent = child.summary || (child.path || []).join(" / ");
+      const cardStats = document.createElement("span");
+      cardStats.className = "catalog-level-card-stats";
+      (child.stats || []).slice(0, 3).forEach(stat => {
+        const chip = document.createElement("i");
+        chip.textContent = `${stat.value} ${stat.label}`;
+        cardStats.append(chip);
+      });
+      body.append(label, heading, text, cardStats);
+      card.append(mediaBox, body);
+      return card;
+    };
+
+    const createTypeRow = (node, typeTitle) => {
+      const value = requestValueFor(node, typeTitle);
+      const row = button("catalog-level-type-row");
+      row.dataset.requestItem = value;
+      const name = document.createElement("span");
+      name.textContent = typeTitle;
+      const action = document.createElement("small");
+      action.dataset.catalogTypeAction = "";
+      action.textContent = readItems().includes(value) ? "В заявке" : "Добавить";
+      row.append(name, action);
+      row.classList.toggle("is-selected", readItems().includes(value));
+      return row;
+    };
+
+    const createManufacturerCard = manufacturer => {
+      const link = document.createElement("a");
+      link.className = "catalog-level-manufacturer";
+      link.href = manufacturer.url || manufacturer.site || "#";
+      if (manufacturer.logo) {
+        const image = document.createElement("img");
+        image.src = manufacturer.logo;
+        image.alt = manufacturer.name || "";
+        link.append(image);
+      } else {
+        const name = document.createElement("span");
+        name.textContent = manufacturer.name || "Производитель";
+        link.append(name);
+      }
+      return link;
+    };
+
+    const renderLeaf = node => {
+      const section = document.createElement("div");
+      section.className = "catalog-level-leaf";
+
+      const types = document.createElement("section");
+      types.className = "catalog-level-leaf-section";
+      const typeTitle = document.createElement("h4");
+      typeTitle.textContent = "Добавить позицию в заявку";
+      const typeGrid = document.createElement("div");
+      typeGrid.className = "catalog-level-type-list";
+      if ((node.productTypes || []).length) {
+        node.productTypes.forEach(type => typeGrid.append(createTypeRow(node, type)));
+      } else {
+        const fallback = createTypeRow(node, node.title);
+        typeGrid.append(fallback);
+      }
+      types.append(typeTitle, typeGrid);
+      section.append(types);
+
+      if ((node.manufacturers || []).length) {
+        const manufacturers = document.createElement("section");
+        manufacturers.className = "catalog-level-leaf-section";
+        const manufacturersTitle = document.createElement("h4");
+        manufacturersTitle.textContent = "Связанные производители";
+        const list = document.createElement("div");
+        list.className = "catalog-level-manufacturer-grid";
+        node.manufacturers.forEach(manufacturer => list.append(createManufacturerCard(manufacturer)));
+        manufacturers.append(manufacturersTitle, list);
+        section.append(manufacturers);
+      }
+
+      if ((node.attributes || []).length) {
+        const attributes = document.createElement("section");
+        attributes.className = "catalog-level-leaf-section";
+        const attributesTitle = document.createElement("h4");
+        attributesTitle.textContent = "Уточняющие параметры";
+        const tags = document.createElement("div");
+        tags.className = "catalog-level-tag-row";
+        node.attributes.slice(0, 18).forEach(attribute => {
+          const tag = document.createElement("span");
+          tag.textContent = attribute;
+          tags.append(tag);
+        });
+        attributes.append(attributesTitle, tags);
+        section.append(attributes);
+      }
+
+      return section;
+    };
+
+    const renderCards = node => {
+      cards.innerHTML = "";
+      const children = getChildren(node.id).map(id => nodes[id]).filter(Boolean);
+      if (childLabel) childLabel.textContent = nextLevelNames[node.level] || "Каталог";
+      if (listTitle) listTitle.textContent = children.length ? `Что входит в «${node.title}»` : "Позиции и производители";
+
+      if (children.length) {
+        children.forEach(child => cards.append(createChildCard(child)));
+        return;
+      }
+
+      cards.append(renderLeaf(node));
+      syncButtons(readItems());
+    };
+
+    const renderSelectionPanel = () => {
+      if (!selectionPanel) return;
+      const items = readItems();
+      selectionPanel.innerHTML = "";
+      selectionPanel.hidden = !items.length;
+      if (!items.length) return;
+
+      const head = document.createElement("div");
+      head.className = "catalog-level-selection-head";
+      const titleElement = document.createElement("h4");
+      titleElement.textContent = "Выбрано в заявку";
+      const count = document.createElement("span");
+      count.textContent = `${items.length}`;
+      head.append(titleElement, count);
+
+      const list = document.createElement("div");
+      list.className = "catalog-level-selection-list";
+      items.slice().reverse().forEach(item => {
+        const { system, group, type } = requestItemParts(item);
+        const row = document.createElement("div");
+        row.className = "catalog-level-selection-item";
+        const copy = document.createElement("span");
+        const name = document.createElement("b");
+        name.textContent = type || group;
+        const path = document.createElement("small");
+        path.textContent = [system, group].filter(Boolean).join(" / ");
+        copy.append(name, path);
+        const remove = button("catalog-level-selection-remove", "×");
+        remove.dataset.catalogSelectionRemove = item;
+        remove.setAttribute("aria-label", "Убрать позицию");
+        row.append(copy, remove);
+        list.append(row);
+      });
+
+      const actions = document.createElement("div");
+      actions.className = "catalog-level-selection-actions";
+      const clearButton = button("btn ghost small", "Очистить");
+      clearButton.dataset.catalogSelectionClear = "";
+      const requestLink = document.createElement("a");
+      requestLink.className = "btn small";
+      requestLink.href = "/contacts/#request-form";
+      requestLink.textContent = "К заявке";
+      actions.append(clearButton, requestLink);
+
+      selectionPanel.append(head, list, actions);
+    };
+
+    const renderAll = () => {
+      const activeNode = nodes[activeId] || nodes[roots[0]];
+      if (!activeNode) return;
+      renderTree();
+      renderBreadcrumbs(activeNode);
+      renderHero(activeNode);
+      renderCards(activeNode);
+      renderSelectionPanel();
+    };
+
+    const setActive = id => {
+      if (!nodes[id]) return;
+      activeId = id;
+      expandPath(id);
+      renderAll();
+    };
+
+    root.addEventListener("click", event => {
+      const nodeButton = event.target.closest("[data-catalog-level-node]");
+      if (!nodeButton) return;
+      event.preventDefault();
+      setActive(nodeButton.dataset.catalogLevelNode);
+    });
+
+    selectionPanel?.addEventListener("click", event => {
+      const remove = event.target.closest("[data-catalog-selection-remove]");
+      if (remove) {
+        event.preventDefault();
+        writeItems(readItems().filter(item => item !== remove.dataset.catalogSelectionRemove));
+        renderRequest();
+        return;
+      }
+
+      const clearButton = event.target.closest("[data-catalog-selection-clear]");
+      if (!clearButton) return;
+      event.preventDefault();
+      writeItems([]);
+      renderRequest();
+    });
+
+    search?.addEventListener("input", () => {
+      query = normalize(search.value);
+      expandMatches();
+      if (query && !subtreeMatches(activeId)) activeId = firstVisibleId(roots) || activeId;
+      renderAll();
+    });
+
+    search?.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      const first = firstVisibleId(roots);
+      if (first) setActive(first);
+    });
+
+    document.addEventListener("pnp:request-items-changed", () => {
+      syncButtons(readItems());
+      renderSelectionPanel();
+    });
+
+    expandPath(activeId);
+    renderAll();
+  };
 
   const submitForm = async (form, statusElement, submitButton, options = {}) => {
     const formData = new FormData(form);
@@ -382,6 +988,22 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionStorage.removeItem(transferMetaKey);
       await clearTransferFiles();
     }
+  };
+
+  const initContactCatalogItems = () => {
+    const form = document.querySelector("[data-lead-form]");
+    if (!form) return;
+    const message = form.querySelector("textarea[name='message']");
+
+    const syncContactItems = () => {
+      const items = readItems();
+      if (hiddenItems) hiddenItems.value = JSON.stringify(items);
+      if (!message || !items.length || message.value.trim()) return;
+      message.value = formatRequestItems(items);
+    };
+
+    syncContactItems();
+    document.addEventListener("pnp:request-items-changed", syncContactItems);
   };
 
   const initHomeBrandCarousel = () => {
@@ -855,8 +1477,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initVendorFilters();
   initPartnersFilter();
+  initCatalogSearch();
+  initCatalogLevelNavigator();
   initHomeBrandCarousel();
   initHomeRequestTransfer();
   initContactRequestTransfer();
+  initContactCatalogItems();
   renderRequest();
 });

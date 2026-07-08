@@ -19,6 +19,7 @@
       <form class="form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="source" value="contact">
+        <input type="hidden" name="items" data-request-items>
 
         <div class="form-row">
           <div class="field"><label for="name">Имя / компания</label><input id="name" name="name" placeholder="Например: ООО СтройПроект" autocomplete="organization" required></div>

@@ -1,0 +1,70 @@
+{% if query %}
+  {% if result_groups %}
+    <div class="catalog-search-summary">
+      <b>{{ total_count }}</b>
+      <span>результатов по запросу «{{ query }}»</span>
+    </div>
+
+    {% for group in result_groups %}
+      <section class="catalog-search-group">
+        <h3>{{ group.title }}</h3>
+        <div class="catalog-search-result-list">
+          {% for item in group.items %}
+            <article class="catalog-search-result-card">
+              <div class="catalog-search-result-main">
+                {% if item.logo_url %}
+                  <img class="catalog-search-result-logo" src="{{ item.logo_url }}" alt="{{ item.title }}">
+                {% endif %}
+                <div>
+                  <span class="catalog-search-kind">{{ item.kind }}</span>
+                  <h4>{{ item.title }}</h4>
+                  {% if item.path %}<p class="catalog-search-path">{{ item.path }}</p>{% endif %}
+                  {% if item.summary %}<p class="catalog-search-description">{{ item.summary|truncatechars:160 }}</p>{% endif %}
+                </div>
+              </div>
+
+              {% if item.vendors %}
+                <div class="catalog-search-vendors" aria-label="Связанные производители">
+                  {% for vendor in item.vendors %}
+                    <a href="{{ vendor.url }}" title="{{ vendor.name }}">
+                      {% if vendor.logo_url %}<img src="{{ vendor.logo_url }}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              {% if item.related_groups %}
+                <div class="catalog-search-related">
+                  {% for related in item.related_groups %}
+                    <a href="{{ related.url }}">{{ related.path }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="catalog-search-actions">
+                {% if item.url %}<a class="link-more" href="{{ item.url }}">Открыть →</a>{% endif %}
+                {% if item.request_item %}
+                  <button class="btn small catalog-search-add" type="button" data-request-item="{{ item.request_item }}">Добавить в заявку</button>
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  {% else %}
+    <div class="catalog-search-empty">
+      <h3>Ничего не найдено</h3>
+      <p>Попробуйте другое название, бренд или отправьте спецификацию. Менеджер подберёт позицию или корректный аналог.</p>
+      <div class="hero-actions">
+        <a class="btn" href="{% url 'contacts' %}#request-form">Отправить список позиций →</a>
+        <button class="btn ghost" type="button" data-catalog-search-reset>Очистить поиск</button>
+      </div>
+    </div>
+  {% endif %}
+{% else %}
+  <div class="catalog-search-empty">
+    <h3>Начните вводить запрос</h3>
+    <p>Ищем по разделам, системам, товарным группам, типам продукции, характеристикам и производителям.</p>
+  </div>
+{% endif %}
