@@ -553,10 +553,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return url;
     };
 
-    const writeUrl = url => {
+    const writeUrl = (url, options = {}) => {
       if (!window.history || !window.history.replaceState) return;
-      const currentHash = window.location.hash === "#vendorRowsSection" ? "#vendorRowsSection" : "";
-      window.history.replaceState(null, "", `${url.pathname}${url.search}${currentHash}`);
+      const hash = options.rowsHash || (window.location.hash === "#vendorRowsSection" ? "#vendorRowsSection" : "");
+      window.history.replaceState(null, "", `${url.pathname}${url.search}${hash}`);
     };
 
     const scrollToRows = () => {
@@ -584,7 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cloud && data.cloud_html !== undefined) cloud.innerHTML = data.cloud_html;
         if (rows && data.rows_html !== undefined) rows.innerHTML = data.rows_html;
         syncVendorChipState();
-        writeUrl(url);
+        writeUrl(url, options);
         if (options.scroll) requestAnimationFrame(scrollToRows);
       } catch (error) {
         if (error.name !== "AbortError") console.error(error);
@@ -760,12 +760,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("[data-vendor-direction-card]").forEach(link => {
       link.addEventListener("click", event => {
         event.preventDefault();
+        if (search) search.value = "";
         if (blockSelect) blockSelect.value = "";
         if (systemSelect) systemSelect.value = "";
         if (groupSelect) groupSelect.value = "";
         if (directionSelect) directionSelect.value = link.dataset.vendorDirectionCard || "";
+        selectedVendors.clear();
+        hideSuggestions();
+        renderSelectedVendors();
         syncCustomSelects();
-        document.querySelector("#allManufacturers")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        updateVendors({ scroll: true, rowsHash: "#vendorRowsSection" });
       });
     });
 
