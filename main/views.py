@@ -1,6 +1,7 @@
 import json
 from urllib.parse import urlencode
 
+from django.contrib.staticfiles import finders
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q
@@ -22,6 +23,13 @@ from .models import (
     UploadedFile,
     Vendor,
 )
+
+
+def first_existing_static_path(*paths):
+    for path in paths:
+        if finders.find(path):
+            return path
+    return ""
 
 
 def catalog_queryset():
@@ -333,6 +341,10 @@ def vendor_page_context(request):
             preview_vendors_by_direction[direction_id].append(vendor)
     for direction in direction_cards:
         direction.preview_vendors = preview_vendors_by_direction.get(direction.id, [])
+        direction.vendor_icon = first_existing_static_path(
+            f"assets/img/vendors/mini-cards/{direction.slug}.svg",
+            f"assets/img/vendors/directions/{direction.slug}.svg",
+        )
     selected_vendors = Vendor.objects.none()
     if filters["vendors"]:
         selected_vendors = Vendor.objects.filter(Q(slug__in=filters["vendors"]) | Q(name__in=filters["vendors"])).order_by("name")
