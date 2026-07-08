@@ -30,7 +30,7 @@
       {% for direction in direction_cards %}
         <article class="vendor-direction-card" {% if direction.image %}style="--direction-photo: url('{% static direction.image %}')"{% endif %}>
           <div class="vendor-direction-top">
-            <i>{% if direction.image %}<img src="{% static direction.image %}" alt="{{ direction.title }}">{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</i>
+            <i>{% if direction.vendor_icon %}<img src="{% static direction.vendor_icon %}" alt="{{ direction.title }}">{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</i>
             <span>{{ direction.vendor_count }} производителей</span>
           </div>
           <h3>{{ direction.title }}</h3>

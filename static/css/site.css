@@ -2369,16 +2369,16 @@ button.vendor-chip.is-selected:focus-visible {
   height: 46px !important;
   overflow: hidden !important;
   border-radius: 11px !important;
-  border: 1px solid rgba(255, 255, 255, .18) !important;
-  background: rgba(143, 33, 71, .86) !important;
+  border: 1px solid rgba(212, 122, 152, .34) !important;
+  background: rgba(143, 33, 71, .18) !important;
   box-shadow: 0 12px 24px rgba(0, 0, 0, .28) !important;
 }
 
 .vendor-direction-top i img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
-  filter: saturate(1.05) contrast(1.05) brightness(.9);
+  object-fit: contain !important;
+  filter: none !important;
 }
 
 .vendor-direction-top span {
