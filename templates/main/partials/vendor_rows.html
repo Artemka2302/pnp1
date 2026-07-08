@@ -8,7 +8,7 @@
     <div>
       <div class="vendor-brands">
         {% for vendor in group.vendors.all|slice:":24" %}
-          <button class="vendor-chip vendor-chip-text" type="button" data-vendor-chip="{{ vendor.name }}">{{ vendor.name }}</button>
+          <button class="vendor-chip vendor-chip-text" type="button" data-vendor-chip="{{ vendor.slug }}" data-vendor-chip-name="{{ vendor.name }}">{{ vendor.name }}</button>
         {% empty %}
           <span class="vendor-chip">Производители не привязаны</span>
         {% endfor %}

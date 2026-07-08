@@ -25,26 +25,23 @@
       <div><h2>Наши партнёры</h2></div>
       <a class="btn ghost" href="{% url 'vendors' %}">Все производители →</a>
     </div>
-    <form class="partners-tools" method="get">
-      <div class="field">
+    <form class="partners-filter-panel" method="get" action="{% url 'partners' %}" data-partners-filter-form>
+      <div class="partners-search-card">
         <label for="partnerSearch">Поиск по партнёрам</label>
-        <input id="partnerSearch" name="q" type="search" value="{{ query }}" placeholder="Например: DKC, климат, освещение, безопасность">
+        <div class="partners-search-control">
+          <input id="partnerSearch" name="q" type="search" value="{{ filters.q }}" placeholder="Например: DAICHI, Рубеж, климат, освещение, безопасность">
+          <button class="btn" type="submit">Найти</button>
+        </div>
       </div>
-      <button class="btn" type="submit">Найти</button>
+
+      <div class="partners-category-card">
+        <div class="partners-category-list" aria-label="Фильтр по категориям" data-partner-category-list>
+          {% include "main/partials/partner_category_chips.html" %}
+        </div>
+      </div>
     </form>
-    <div class="partners-grid" style="margin-top:22px">
-      {% for partner in partners %}
-        <article class="partner-card">
-          <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener">
-            {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
-          </a>
-          <h3>{{ partner.name }}</h3>
-          {% if partner.category %}<p class="partner-meta">{{ partner.category }}</p>{% endif %}
-          {% if partner.note %}<p>{{ partner.note }}</p>{% endif %}
-        </article>
-      {% empty %}
-        <div class="empty-state">Ничего не найдено. Попробуйте другой бренд или направление.</div>
-      {% endfor %}
+    <div class="partners-results-grid" data-partner-results>
+      {% include "main/partials/partner_results.html" %}
     </div>
   </div>
 </section>

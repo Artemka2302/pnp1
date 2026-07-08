@@ -1,0 +1,38 @@
+{% load static %}
+
+<div class="partners-grid">
+  {% for partner in partners %}
+    <article class="partner-card">
+      <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener">
+        {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}">{% else %}<span>{{ partner.name }}</span>{% endif %}
+      </a>
+      <h3>{{ partner.name }}</h3>
+      {% if partner.category %}<p class="partner-meta">{{ partner.category }}</p>{% endif %}
+      {% if partner.note %}<p>{{ partner.note }}</p>{% endif %}
+    </article>
+  {% empty %}
+    <div class="empty-state">Ничего не найдено. Попробуйте другой бренд или направление.</div>
+  {% endfor %}
+</div>
+
+{% if pagination.has_pages %}
+  <nav class="partners-pagination" aria-label="Страницы партнёров">
+    {% if pagination.previous_url %}
+      <a class="partner-page-link" href="{{ pagination.previous_url }}" data-partner-page-link>Назад</a>
+    {% endif %}
+
+    {% for item in pagination.items %}
+      {% if item.ellipsis %}
+        <span class="partner-page-current">...</span>
+      {% elif item.is_current %}
+        <span class="partner-page-current">{{ item.number }}</span>
+      {% else %}
+        <a class="partner-page-link" href="{{ item.url }}" data-partner-page-link>{{ item.number }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if pagination.next_url %}
+      <a class="partner-page-link" href="{{ pagination.next_url }}" data-partner-page-link>Вперёд</a>
+    {% endif %}
+  </nav>
+{% endif %}

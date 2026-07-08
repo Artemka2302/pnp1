@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
 from django.db import transaction
@@ -387,12 +388,102 @@ def vendors(request):
     return render(request, "main/vendors.html", context)
 
 
+def partner_parent_category(category):
+    return (category or "").split("/", 1)[0].strip()
+
+
+def partner_parent_category_filter(category):
+    return (
+        Q(category=category)
+        | Q(category__startswith=f"{category}/")
+        | Q(category__startswith=f"{category} /")
+    )
+
+
 def partners(request):
     query = request.GET.get("q", "").strip()
-    partners_qs = Partner.objects.filter(show_on_partners=True)
+    categories = [
+        value.strip()
+        for value in request.GET.getlist("category")
+        if value.strip()
+    ]
+
+    base_qs = Partner.objects.filter(show_on_partners=True)
+
     if query:
-        partners_qs = partners_qs.filter(Q(name__icontains=query) | Q(category__icontains=query))
-    return render(request, "main/partners.html", {"partners": partners_qs, "query": query})
+        base_qs = base_qs.filter(
+            Q(name__icontains=query)
+            | Q(category__icontains=query)
+            | Q(note__icontains=query)
+        )
+
+    category_counts = {}
+    for item in base_qs.exclude(category="").values_list("category", flat=True):
+        title = partner_parent_category(item)
+        if not title:
+            continue
+        category_counts[title] = category_counts.get(title, 0) + 1
+
+    partner_categories = [
+        {"title": title, "count": count}
+        for title, count in sorted(category_counts.items())
+    ]
+
+    partners_qs = base_qs
+    if categories:
+        category_filter = Q()
+        for category in categories:
+            category_filter |= partner_parent_category_filter(category)
+        partners_qs = partners_qs.filter(category_filter)
+
+    paginator = Paginator(partners_qs.order_by("priority", "name"), 9)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    pagination_params = []
+    if query:
+        pagination_params.append(("q", query))
+    pagination_params.extend(("category", category) for category in categories)
+
+    def partner_page_url(page_number):
+        params = [*pagination_params, ("page", page_number)]
+        return f"?{urlencode(params)}"
+
+    page_items = []
+    for page_number in paginator.get_elided_page_range(page_obj.number, on_each_side=1, on_ends=1):
+        if page_number == paginator.ELLIPSIS:
+            page_items.append({"ellipsis": True})
+        else:
+            page_items.append(
+                {
+                    "number": page_number,
+                    "url": partner_page_url(page_number),
+                    "is_current": page_number == page_obj.number,
+                }
+            )
+
+    context = {
+        "partners": page_obj.object_list,
+        "page_obj": page_obj,
+        "pagination": {
+            "has_pages": page_obj.has_other_pages(),
+            "previous_url": partner_page_url(page_obj.previous_page_number()) if page_obj.has_previous() else "",
+            "next_url": partner_page_url(page_obj.next_page_number()) if page_obj.has_next() else "",
+            "items": page_items,
+        },
+        "filters": {
+            "q": query,
+            "categories": categories,
+        },
+        "partner_categories": partner_categories,
+        "total_count": base_qs.count(),
+    }
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse(
+            {
+                "categories_html": render_to_string("main/partials/partner_category_chips.html", context, request=request),
+                "results_html": render_to_string("main/partials/partner_results.html", context, request=request),
+            }
+        )
+    return render(request, "main/partners.html", context)
 
 
 def payload_value(payload, key, default=""):

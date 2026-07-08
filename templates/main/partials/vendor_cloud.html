@@ -1,5 +1,5 @@
 {% for vendor in vendors %}
-  <button class="vendor-chip strong" type="button" data-vendor-chip="{{ vendor.name }}">{{ vendor.name }}</button>
+  <button class="vendor-chip strong" type="button" data-vendor-chip="{{ vendor.slug }}" data-vendor-chip-name="{{ vendor.name }}">{{ vendor.name }}</button>
 {% empty %}
   <span class="vendor-chip more">По запросу ничего не найдено</span>
 {% endfor %}

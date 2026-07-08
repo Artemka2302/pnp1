@@ -441,6 +441,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const normalizeVendor = value => String(value || "").trim().toLowerCase().replaceAll("ё", "е");
 
+    const findVendor = (value, name) => {
+      const normalizedValue = normalizeVendor(value);
+      const normalizedName = normalizeVendor(name);
+      return (
+        vendorOptions.find(item => item.slug === value)
+        || vendorOptions.find(item => normalizeVendor(item.name) === normalizedValue)
+        || vendorOptions.find(item => normalizeVendor(item.name) === normalizedName)
+      );
+    };
+
     selectedList?.querySelectorAll("[data-vendor-hidden]").forEach(input => {
       const vendor = vendorOptions.find(item => item.slug === input.value) || { slug: input.value, name: input.value };
       selectedVendors.set(vendor.slug, vendor.name);
@@ -594,46 +604,28 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const syncVendorChipState = () => {
-      const selectedNames = new Set([...selectedVendors.values()].map(normalizeVendor));
       document.querySelectorAll("[data-vendor-chip]").forEach(chip => {
-        const name = chip.dataset.vendorChip || chip.textContent.trim();
-        chip.classList.toggle("is-selected", selectedNames.has(normalizeVendor(name)));
+        const value = chip.dataset.vendorChip || "";
+        const name = chip.dataset.vendorChipName || chip.textContent.trim();
+        const vendor = findVendor(value, name);
+        const isSelected = vendor
+          ? selectedVendors.has(vendor.slug)
+          : [...selectedVendors.values()].some(selectedName => normalizeVendor(selectedName) === normalizeVendor(name || value));
+        chip.classList.toggle("is-selected", isSelected);
+        chip.setAttribute("aria-pressed", String(isSelected));
       });
     };
 
     const renderSelectedVendors = () => {
       if (!selectedList) return;
       selectedList.innerHTML = "";
-      if (!selectedVendors.size) {
-        const empty = document.createElement("span");
-        empty.className = "vendor-selected-empty";
-        empty.dataset.vendorEmpty = "";
-        empty.textContent = "Производители не выбраны";
-        selectedList.append(empty);
-        syncVendorChipState();
-        return;
-      }
-
-      for (const [slug, name] of selectedVendors) {
-        const chip = document.createElement("span");
-        chip.className = "vendor-selected-chip";
-        chip.dataset.selectedVendor = slug;
-        chip.append(document.createTextNode(name));
-
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.dataset.vendorRemove = slug;
-        remove.setAttribute("aria-label", `Убрать ${name}`);
-        remove.textContent = "×";
-        chip.append(remove);
-
+      for (const [slug] of selectedVendors) {
         const hidden = document.createElement("input");
         hidden.type = "hidden";
         hidden.name = "vendors";
         hidden.value = slug;
         hidden.dataset.vendorHidden = slug;
-        chip.append(hidden);
-        selectedList.append(chip);
+        selectedList.append(hidden);
       }
       syncVendorChipState();
     };
@@ -641,6 +633,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const addVendor = (slug, name) => {
       if (!slug) return;
       selectedVendors.set(slug, name || slug);
+      if (search) search.value = "";
+      hideSuggestions();
+      renderSelectedVendors();
+    };
+
+    const toggleVendor = (slug, name) => {
+      if (!slug) return;
+      if (selectedVendors.has(slug)) selectedVendors.delete(slug);
+      else selectedVendors.set(slug, name || slug);
       if (search) search.value = "";
       hideSuggestions();
       renderSelectedVendors();
@@ -742,10 +743,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const chip = event.target.closest("[data-vendor-chip]");
       if (!chip) return;
       event.preventDefault();
-      const name = chip.dataset.vendorChip || chip.textContent.trim();
-      const vendor = vendorOptions.find(item => item.name === name) || vendorOptions.find(item => normalizeVendor(item.name) === normalizeVendor(name));
-      if (vendor) addVendor(vendor.slug, vendor.name);
-      else if (search) search.value = name;
+      const value = chip.dataset.vendorChip || "";
+      const name = chip.dataset.vendorChipName || chip.textContent.trim();
+      const vendor = findVendor(value, name);
+      if (vendor) toggleVendor(vendor.slug, vendor.name);
+      else if (search) search.value = name || value;
       search?.focus();
     });
 
@@ -770,7 +772,85 @@ document.addEventListener("DOMContentLoaded", () => {
     syncVendorChipState();
   };
 
+  const initPartnersFilter = () => {
+    const form = document.querySelector("[data-partners-filter-form]");
+    if (!form) return;
+    const categoryList = form.querySelector("[data-partner-category-list]");
+    const results = document.querySelector("[data-partner-results]");
+    const search = form.querySelector("input[name='q']");
+    if (!categoryList || !results) return;
+
+    let requestId = 0;
+
+    const buildUrl = page => {
+      const url = new URL(form.action, window.location.origin);
+      const formData = new FormData(form);
+      const query = String(formData.get("q") || "").trim();
+      if (query) url.searchParams.set("q", query);
+      formData.getAll("category").forEach(category => {
+        if (category) url.searchParams.append("category", category);
+      });
+      if (page) url.searchParams.set("page", page);
+      return url;
+    };
+
+    const updatePartners = async urlOverride => {
+      const url = urlOverride || buildUrl();
+      const currentRequest = ++requestId;
+      form.classList.add("is-loading");
+      try {
+        const response = await fetch(url, {
+          credentials: "same-origin",
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+        const data = await response.json();
+        if (!response.ok || currentRequest !== requestId) return;
+        categoryList.innerHTML = data.categories_html;
+        results.innerHTML = data.results_html;
+        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (currentRequest === requestId) form.classList.remove("is-loading");
+      }
+    };
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      updatePartners();
+    });
+
+    form.addEventListener("change", event => {
+      if (!event.target.matches("input[name='category']")) return;
+      updatePartners();
+    });
+
+    form.addEventListener("click", event => {
+      const clearButton = event.target.closest("[data-partner-clear-categories]");
+      if (!clearButton) return;
+      event.preventDefault();
+      form.querySelectorAll("input[name='category']").forEach(input => {
+        input.checked = false;
+      });
+      updatePartners();
+    });
+
+    results.addEventListener("click", event => {
+      const pageLink = event.target.closest("[data-partner-page-link]");
+      if (!pageLink) return;
+      event.preventDefault();
+      updatePartners(new URL(pageLink.href, window.location.origin));
+    });
+
+    search?.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      updatePartners();
+    });
+  };
+
   initVendorFilters();
+  initPartnersFilter();
   initHomeBrandCarousel();
   initHomeRequestTransfer();
   initContactRequestTransfer();
