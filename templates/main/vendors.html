@@ -105,15 +105,9 @@
             <button class="btn vendor-submit" type="submit">Найти</button>
             <button class="btn ghost vendor-clear" type="button" data-vendor-clear>Очистить</button>
           </div>
-          <div class="vendor-selected-list" data-selected-vendors>
+          <div class="vendor-selected-fields" data-selected-vendors>
             {% for vendor in selected_vendors %}
-              <span class="vendor-selected-chip" data-selected-vendor="{{ vendor.slug }}">
-                {{ vendor.name }}
-                <button type="button" data-vendor-remove="{{ vendor.slug }}" aria-label="Убрать {{ vendor.name }}">×</button>
-                <input type="hidden" name="vendors" value="{{ vendor.slug }}" data-vendor-hidden="{{ vendor.slug }}">
-              </span>
-            {% empty %}
-              <span class="vendor-selected-empty" data-vendor-empty>Производители не выбраны</span>
+              <input type="hidden" name="vendors" value="{{ vendor.slug }}" data-vendor-hidden="{{ vendor.slug }}">
             {% endfor %}
           </div>
           <div class="vendor-count" data-vendor-count>{% include "main/partials/vendor_count.html" %}</div>
