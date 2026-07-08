@@ -28,14 +28,31 @@
     <div class="section-head"><div><h2>Основные направления</h2></div></div>
     <div class="vendor-direction-grid">
       {% for direction in direction_cards %}
-        <article class="vendor-direction-card">
-          <div class="vendor-direction-top"><i>{{ forloop.counter|stringformat:"02d" }}</i><span>{{ direction.vendor_count }} производителей</span></div>
+        <article class="vendor-direction-card" {% if direction.image %}style="--direction-photo: url('{% static direction.image %}')"{% endif %}>
+          <div class="vendor-direction-top">
+            <i>{% if direction.image %}<img src="{% static direction.image %}" alt="{{ direction.title }}">{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</i>
+            <span>{{ direction.vendor_count }} производителей</span>
+          </div>
           <h3>{{ direction.title }}</h3>
           <p>{{ direction.purpose|default:direction.block.title }}</p>
           <div class="direction-position-list">
             <b>{{ direction.block.title }}</b>
             <b>{{ direction.system_count }} систем</b>
             <b>{{ direction.group_count }} групп</b>
+          </div>
+          <div class="vendor-direction-logo-strip" aria-label="Производители направления">
+            {% for vendor in direction.preview_vendors %}
+              <span class="vendor-chip vendor-chip-logo" title="{{ vendor.name }}">
+                {% if vendor.logo %}
+                  <img src="{% static vendor.logo %}" alt="{{ vendor.name }}">
+                  <b class="vendor-logo-fallback">{{ vendor.name }}</b>
+                {% else %}
+                  <b>{{ vendor.name }}</b>
+                {% endif %}
+              </span>
+            {% empty %}
+              <span class="vendor-chip vendor-chip-empty">Производители уточняются</span>
+            {% endfor %}
           </div>
           <a class="link-more" href="{% url 'vendors' %}?direction={{ direction.slug }}#vendorRowsSection" data-vendor-direction-card="{{ direction.slug }}">Смотреть производителей →</a>
         </article>

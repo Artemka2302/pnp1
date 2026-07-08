@@ -47,26 +47,38 @@
       <div><h2>Основные направления поставки</h2></div>
       <a class="link-more" href="{% url 'catalog' %}">Смотреть все направления →</a>
     </div>
-    <div class="solutions-grid-v11 home-main-block-grid">
-      {% for block in blocks %}
-        <a class="solution-card-v11" href="{% url 'catalog_block' block.slug %}">
-          <div class="solution-media">
-            {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
-          </div>
-          <div class="solution-body">
-            <div class="solution-kicker">Блок <span>{{ forloop.counter|stringformat:"02d" }}</span></div>
-            <h3>{{ block.title }}</h3>
-            <p>{{ block.summary }}</p>
-            <div class="solution-tags">
-              <span>{{ block.direction_count }} направлений</span>
-              <span>{{ block.system_count }} систем</span>
-              <span>{{ block.group_count }} групп</span>
-            </div>
-            <div class="solution-actions"><span class="btn small">Открыть</span></div>
-          </div>
-        </a>
-      {% endfor %}
-    </div>
+<div class="home-main-block-grid">
+  {% for block in blocks %}
+    <article class="home-main-block-card {% if forloop.counter <= 2 %}is-major{% endif %}">
+      <a class="home-main-block-media" href="{% url 'catalog_block' block.slug %}">
+        {% if block.image %}
+          <img src="{% static block.image %}" alt="{{ block.title }}">
+        {% endif %}
+      </a>
+
+      <div class="home-main-block-body">
+        <em>{{ block.system_count }} систем · {{ block.group_count }} групп</em>
+
+        <h3>{{ block.title }}</h3>
+        <p>{{ block.summary }}</p>
+
+        <div class="home-main-block-chips">
+          {% for direction in block.directions.all|slice:":3" %}
+            <span>{{ direction.title }}</span>
+          {% endfor %}
+          {% if block.directions.count > 3 %}
+            <span>+{{ block.directions.count|add:"-3" }}</span>
+          {% endif %}
+        </div>
+
+        <div class="category-actions">
+          <a class="btn small" href="{% url 'catalog_block' block.slug %}">Открыть блок →</a>
+          <a class="btn ghost small" href="{% url 'contacts' %}#request-form">Запросить КП</a>
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+</div>
   </div>
 </section>
 

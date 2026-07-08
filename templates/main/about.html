@@ -90,10 +90,10 @@
 <section class="section compact about-language-section">
   <div class="container">
     <span class="soft-label">ДЛЯ КОГО</span>
-    <h2 class="about-language-title">
+    <h2 class="about-language-title" >
       Говорим на языке проектировщиков,<br>
-       строителей и заказчиков
-       
+       строителей и заказчиков 
+
     </h2>
 
     <div class="about-language-grid">
@@ -136,11 +136,50 @@
         {% endfor %}
       </div>
     </article>
-    <article class="glass">
-      <h2>Информация для партнёров</h2>
-      <p>Если вы производитель или поставщик и хотите передать официальные материалы, логотипы или каталог продукции, отправьте информацию через форму заявки.</p>
-      <div class="hero-actions"><a class="btn" href="{% url 'contacts' %}#request-form">Связаться →</a></div>
-    </article>
+<article class="glass partner-info-card">
+  <h2>Информация<br>для партнёров</h2>
+
+  <details class="partner-requisites" open>
+    <summary>Показать реквизиты</summary>
+
+    <div class="partner-requisites-grid">
+      <div class="partner-requisite-item">
+        <span>Полное наименование</span>
+        <b>Общество с ограниченной ответственностью специализированный застройщик «ПНП»</b>
+      </div>
+
+      <div class="partner-requisite-item">
+        <span>Сокращённое наименование</span>
+        <b>ООО СЗ «ПНП»</b>
+      </div>
+
+      <div class="partner-requisite-item">
+        <span>ИНН / КПП</span>
+        <b>2900000600 / 772601001</b>
+      </div>
+
+      <div class="partner-requisite-item">
+        <span>ОГРН</span>
+        <b>1232900007977</b>
+      </div>
+
+      <div class="partner-requisite-item">
+        <span>Юридический адрес</span>
+        <b>117545, г. Москва, ул. Подольских Курсантов, д. 3 стр. 2, помещ. 1/2</b>
+      </div>
+
+      <div class="partner-requisite-item">
+        <span>Банк</span>
+        <b>ПАО Сбербанк</b>
+      </div>
+    </div>
+  </details>
+
+  <div class="partner-info-actions">
+    <a class="btn" href="{% url 'contacts' %}#request-form">Запросить КП</a>
+    <a class="btn ghost" href="{% url 'vendors' %}">Производители →</a>
+  </div>
+</article>
   </div>
 </section>
 {% endblock %}

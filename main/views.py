@@ -305,11 +305,33 @@ def vendor_page_context(request):
         vendor_count=Count("directions__systems__product_groups__vendors", distinct=True),
     )
     directions = Direction.objects.select_related("block").order_by("block__sort_order", "sort_order", "title")
-    direction_cards = directions.annotate(
+    direction_cards = list(directions.annotate(
         system_count=Count("systems", distinct=True),
         group_count=Count("systems__product_groups", distinct=True),
         vendor_count=Count("systems__product_groups__vendors", distinct=True),
+    ))
+    preview_vendor_rows = (
+        Vendor.objects.filter(
+            product_groups__system__direction__in=direction_cards,
+            vendorproductgroup__show_in_vendors=True,
+        )
+        .exclude(logo="")
+        .values(
+            "product_groups__system__direction_id",
+            "name",
+            "logo",
+        )
+        .distinct()
+        .order_by("product_groups__system__direction_id", "name")
     )
+    preview_vendors_by_direction = {}
+    for vendor in preview_vendor_rows:
+        direction_id = vendor["product_groups__system__direction_id"]
+        preview_vendors_by_direction.setdefault(direction_id, [])
+        if len(preview_vendors_by_direction[direction_id]) < 3:
+            preview_vendors_by_direction[direction_id].append(vendor)
+    for direction in direction_cards:
+        direction.preview_vendors = preview_vendors_by_direction.get(direction.id, [])
     selected_vendors = Vendor.objects.none()
     if filters["vendors"]:
         selected_vendors = Vendor.objects.filter(Q(slug__in=filters["vendors"]) | Q(name__in=filters["vendors"])).order_by("name")
