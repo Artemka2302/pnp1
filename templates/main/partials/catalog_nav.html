@@ -1,0 +1,59 @@
+{% load static %}
+
+<aside class="catalog-side-panel" data-catalog-side-panel>
+  <div class="catalog-search-box">
+    <label for="catalogSearch">Поиск по каталогу</label>
+    <div class="catalog-search-control">
+      <input id="catalogSearch" type="search" placeholder="Например: ПО, ОСП, насосы, СКУД" autocomplete="off" data-catalog-search>
+      <button type="button" aria-label="Очистить поиск" data-catalog-search-clear>×</button>
+    </div>
+    <div class="catalog-search-results" data-catalog-search-results hidden></div>
+  </div>
+
+  {{ catalog_search_items|json_script:"catalogSearchData" }}
+
+  <nav class="catalog-tree" aria-label="Структура каталога" data-catalog-tree>
+    {% for block in catalog_tree %}
+      <section class="catalog-tree-node catalog-tree-block {% if active_catalog.block == block.slug %}is-open is-current-branch{% endif %}" data-catalog-node>
+        <div class="catalog-tree-row">
+          <button class="catalog-tree-toggle" type="button" aria-label="Свернуть или раскрыть блок" aria-expanded="{% if active_catalog.block == block.slug %}true{% else %}false{% endif %}" data-catalog-toggle></button>
+          <a class="{% if active_catalog.block == block.slug and not active_catalog.direction %}is-active{% endif %}" href="{{ block.get_absolute_url }}" data-catalog-link data-catalog-target="block:{{ block.slug }}">{{ block.title }}</a>
+          <span>Блок</span>
+        </div>
+        <div class="catalog-tree-children">
+          {% for direction in block.directions.all %}
+            <section class="catalog-tree-node catalog-tree-direction {% if active_catalog.direction == direction.slug %}is-open is-current-branch{% endif %}" data-catalog-node>
+              <div class="catalog-tree-row">
+                <button class="catalog-tree-toggle" type="button" aria-label="Свернуть или раскрыть направление" aria-expanded="{% if active_catalog.direction == direction.slug %}true{% else %}false{% endif %}" data-catalog-toggle></button>
+                <a class="{% if active_catalog.direction == direction.slug and not active_catalog.system %}is-active{% endif %}" href="{{ direction.get_absolute_url }}" data-catalog-link data-catalog-target="direction:{{ direction.slug }}">{{ direction.title }}</a>
+                <span>Направление</span>
+              </div>
+              <div class="catalog-tree-children">
+                {% for system in direction.systems.all %}
+                  <section class="catalog-tree-node catalog-tree-system {% if active_catalog.system == system.slug %}is-open is-current-branch{% endif %}" data-catalog-node>
+                    <div class="catalog-tree-row">
+                      <button class="catalog-tree-toggle" type="button" aria-label="Свернуть или раскрыть систему" aria-expanded="{% if active_catalog.system == system.slug %}true{% else %}false{% endif %}" data-catalog-toggle></button>
+                      <a class="{% if active_catalog.system == system.slug and not active_catalog.group %}is-active{% endif %}" href="{{ system.get_absolute_url }}" data-catalog-link data-catalog-target="system:{{ system.slug }}">{{ system.title }}</a>
+                      <span>Система</span>
+                    </div>
+                    <div class="catalog-tree-children">
+                      {% for group in system.product_groups.all %}
+                        <div class="catalog-tree-node catalog-tree-group" data-catalog-node>
+                          <div class="catalog-tree-row">
+                            <i aria-hidden="true"></i>
+                            <a class="{% if active_catalog.group == group.slug %}is-active{% endif %}" href="{{ group.get_absolute_url }}" data-catalog-link data-catalog-target="group:{{ group.slug }}">{{ group.title }}</a>
+                            <span>Товарная группа</span>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </section>
+                {% endfor %}
+              </div>
+            </section>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </nav>
+</aside>

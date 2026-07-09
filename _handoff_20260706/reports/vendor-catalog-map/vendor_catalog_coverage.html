@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<title>PNP vendor catalog coverage</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0d1b2f;color:#eef4ff;margin:0;padding:28px}
+h1,h2{margin:0 0 14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:20px 0}
+.card{border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:14px;background:rgba(255,255,255,.05)}
+.card b{display:block;font-size:28px;color:#ffb2cc}
+table{width:100%;border-collapse:collapse;margin:12px 0 28px;background:rgba(255,255,255,.04)}
+th,td{border-bottom:1px solid rgba(255,255,255,.1);padding:9px;text-align:left;vertical-align:top}
+th{color:#ffb2cc;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+</style>
+<h1>PNP: карта поставщиков по каталогу</h1>
+<div class="cards">
+  <div class="card"><span>Всего производителей</span><b>388</b></div>
+  <div class="card"><span>Связей с каталогом</span><b>792</b></div>
+  <div class="card"><span>Покрыто товарных групп</span><b>235</b></div>
+  <div class="card"><span>Без поставщика</span><b>0</b></div>
+</div>
+<h2>Первые непокрытые товарные группы</h2>
+<table><thead><tr><th>Блок</th><th>Направление</th><th>Система</th><th>Группа</th><th>Поставщиков</th><th>Статус</th></tr></thead><tbody></tbody></table>
+<h2>Ручная проверка</h2>
+<table><thead><tr><th>Поставщик</th><th>Тип из таблицы</th><th>Причина</th><th>Статус</th></tr></thead><tbody><tr><td>Creavit</td><td>Мосбилд 2024</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>Компания &quot;МаГрин&quot;</td><td>Мосбилд 2024</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>ООО &quot;СЭСТ-ЛЮВЭ&quot;</td><td>Мосбилд 2024</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>ООО «ТД «РусКомпозит»</td><td>Мосбилд 2024</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>ООО Век</td><td>Мосбилд 2025</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>Старопетровское</td><td>Мосбилд 2024</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>Холдинг &quot;Герметик Центр&quot;</td><td>Мосбилд 2024</td><td>source_noise_or_event</td><td>logo_ready</td></tr>
+<tr><td>Курский Завод Композитных Материалов</td><td>Композитная арматура</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>ООО «Уральский асбоцементный завод»</td><td>Хризотилцементные листы</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>БЕЛАНД</td><td>Медицина, госпиталя</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>ГК «МОДУЛЬ»</td><td>Медицина, госпиталя</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>ОАО ИНТЕГРАЛ</td><td>Медицина, госпиталя</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>ООО «ПОДОЛЬСКИЙ ЗАВОД СТЕНОВЫХ И ПОТОЛОЧНЫХ ПАНЕЛЕЙ»</td><td>Медицина, госпиталя</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>АО «ЗАВОД «ФИОЛЕНТ»</td><td>строит. инструм</td><td>no_catalog_group_match</td><td>logo_ready</td></tr>
+<tr><td>ООО «Научно Производственное Предприятие ЭЛМА ЭЛЕКТРОНИКС»</td><td>Электро 2025</td><td>source_noise_or_event</td><td>logo_ready</td></tr></tbody></table>

@@ -2,71 +2,48 @@
 {% load static %}
 
 {% block title %}{{ object.title }} — {{ level }} — ПНП{% endblock %}
-{% block body_class %}catalog-master-site-preview catalog-master-public{% endblock %}
+{% block body_class %}catalog-page catalog-master-site-preview catalog-master-public{% endblock %}
 
 {% block content %}
-<section class="hero hero-small catalog-master-preview-hero" style="--master-preview-hero-image:url('{% if object.image %}{% static object.image %}{% else %}{% static 'assets/img/hero-cover.webp' %}{% endif %}')">
+<section class="catalog-hero catalog-level-hero" style="--catalog-hero-image:url('{% if object.image %}{% static object.image %}{% else %}{% static 'assets/img/hero-cover.webp' %}{% endif %}')">
   <div class="vertical-accent"></div>
   <div class="container">
-    <div class="eyebrow">{{ level }}</div>
+    {% include "main/partials/catalog_breadcrumbs.html" %}
+    <span class="soft-label">{{ level }}</span>
     <h1>{{ object.title }}</h1>
-    {% if object.summary %}<p class="hero-subtitle">{{ object.summary }}</p>{% endif %}
-    {% if object.purpose %}<p class="hero-subtitle">{{ object.purpose }}</p>{% endif %}
-    <div class="hero-actions">
-      <a class="btn" href="{% url 'contacts' %}#request-form">Запросить КП</a>
-      <a class="btn ghost" href="{% url 'catalog' %}">← Каталог</a>
-    </div>
+    {% if object.summary %}
+      <p>{{ object.summary }}</p>
+    {% elif object.purpose %}
+      <p>{{ object.purpose }}</p>
+    {% else %}
+      <p>Откройте следующий уровень каталога, чтобы перейти к системам, товарным группам и производителям.</p>
+    {% endif %}
   </div>
 </section>
 
-<section class="section compact">
-  <div class="container solution-detail-summary">
-    <article><b>{{ children|length }}</b><span>{{ child_level|lower }}</span></article>
-    <article><b>{{ level }}</b><span>текущий уровень каталога</span></article>
-    <article><b>ORM</b><span>данные из базы Django</span></article>
-  </div>
-</section>
+<section class="section catalog-section">
+  <div class="container catalog-layout">
+    {% include "main/partials/catalog_nav.html" %}
 
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <span class="soft-label">Следующий уровень</span>
-        <h2>{{ child_level }}</h2>
+    <div class="catalog-main">
+      <div class="section-head">
+        <div>
+          <span class="soft-label">Следующий уровень</span>
+          <h2>{{ child_level }}</h2>
+        </div>
+        <a class="link-more" href="{% url 'contacts' %}#request-form">Запросить КП →</a>
       </div>
-    </div>
 
-    <div class="solutions-grid-v11 catalog-master-direction-preview">
-      {% for child in children %}
-        {% if child_level == "Направление" %}
-          <a class="solution-card-v11" href="{% url 'catalog_direction' object.slug child.slug %}">
-        {% elif child_level == "Система" %}
-          <a class="solution-card-v11" href="{% url 'catalog_system' object.block.slug object.slug child.slug %}">
-        {% else %}
-          <a class="solution-card-v11" href="{% url 'product_group' object.direction.block.slug object.direction.slug object.slug child.slug %}">
-        {% endif %}
-            <div class="solution-media">
-              {% if child.image %}<img src="{% static child.image %}" alt="{{ child.title }}">{% else %}<img src="{% static 'assets/img/catalog/empty-photo-placeholder.svg' %}" alt="{{ child.title }}">{% endif %}
-            </div>
-            <div class="solution-body">
-              <div class="solution-kicker">{{ child_level }} <span>{{ forloop.counter|stringformat:"02d" }}</span></div>
-              <h3>{{ child.title }}</h3>
-              {% if child.purpose %}<p>{{ child.purpose }}</p>{% endif %}
-              {% if child.product_groups %}
-                <div class="solution-tags"><span>{{ child.product_groups.count }} групп</span></div>
-              {% endif %}
-              {% if child.systems %}
-                <div class="solution-tags"><span>{{ child.systems.count }} систем</span></div>
-              {% endif %}
-              {% if child.directions %}
-                <div class="solution-tags"><span>{{ child.directions.count }} направлений</span></div>
-              {% endif %}
-              <div class="solution-actions"><span class="btn small">Открыть</span></div>
-            </div>
-          </a>
-      {% empty %}
-        <p class="muted">На этом уровне пока нет элементов.</p>
-      {% endfor %}
+      <div class="catalog-level-grid">
+        {% for item in children %}
+          {% include "main/partials/catalog_card.html" with card_level=child_level %}
+        {% empty %}
+          <article class="glass catalog-empty-state">
+            <h3>На этом уровне пока нет элементов</h3>
+            <p>Структура сохранена в базе. Можно добавить следующий уровень через импорт или ORM.</p>
+          </article>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>

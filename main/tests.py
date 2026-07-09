@@ -3,7 +3,18 @@ import json
 from django.core.management import call_command
 from django.test import Client, TestCase
 
-from .models import CatalogBlock, CatalogSystem, Direction, Lead, LeadItem, ProductGroup, ProductType, Vendor
+from .models import (
+    CatalogBlock,
+    CatalogSystem,
+    ConsentLog,
+    CookieConsentLog,
+    Direction,
+    Lead,
+    LeadItem,
+    ProductGroup,
+    ProductType,
+    Vendor,
+)
 
 
 class PublicRouteSmokeTests(TestCase):
@@ -88,13 +99,13 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("Производители", data["html"])
         self.assertIn("vendorRowsSection", data["html"])
 
-    def test_catalog_page_contains_level_navigator_data(self):
+    def test_catalog_page_contains_interactive_catalog_data(self):
         response = self.client.get("/catalog/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "data-catalog-level-shell")
-        self.assertContains(response, "catalogLevelData")
-        self.assertContains(response, "Каталог по уровням")
+        self.assertContains(response, "catalogInteractiveData")
+        self.assertContains(response, "data-catalog-stage")
+        self.assertContains(response, "data-catalog-card-grid")
 
 
 class MiniRequestApiTests(TestCase):
@@ -118,6 +129,7 @@ class MiniRequestApiTests(TestCase):
                 "product_group_slug": self.group.slug,
                 "contact_name": "Test User",
                 "phone": "+7 900 000-00-00",
+                "consent": "1",
                 "request_text": "Заявка из каталога:\nДревесные плитные материалы: Фанера\n- Фанера ФСФ",
                 "items": json.dumps(["Древесные плитные материалы|Фанера|Фанера ФСФ"]),
             },
@@ -126,9 +138,26 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Lead.objects.count(), 1)
         self.assertEqual(LeadItem.objects.count(), 1)
+        self.assertEqual(ConsentLog.objects.count(), 1)
         item = LeadItem.objects.get()
         self.assertEqual(item.product_group, self.group)
         self.assertEqual(item.product_type, self.product_type)
+
+    def test_api_requires_consent(self):
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "catalog_mini",
+                "product_group_slug": self.group.slug,
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "request_text": "Нужна фанера",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Lead.objects.count(), 0)
+        self.assertEqual(ConsentLog.objects.count(), 0)
 
     def test_api_requires_contact(self):
         response = self.client.post(
@@ -141,3 +170,15 @@ class MiniRequestApiTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Lead.objects.count(), 0)
+
+    def test_cookie_consent_is_logged(self):
+        response = self.client.post(
+            "/api/cookie-consent/",
+            data=json.dumps({"choice": "rejected", "page_url": "http://testserver/catalog/"}),
+            content_type="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(CookieConsentLog.objects.count(), 1)
+        self.assertEqual(CookieConsentLog.objects.get().choice, "rejected")

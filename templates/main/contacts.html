@@ -41,6 +41,18 @@
         </div>
 
         <div class="field"><label for="object">Объект</label><input id="object" name="object" placeholder="Тип объекта, город, сроки" autocomplete="off"></div>
+
+        <div class="field contact-selected-items" data-contact-request-items hidden>
+          <div class="contact-selected-items-head">
+            <label>Выбранные позиции из каталога</label>
+            <span><b data-request-count>0</b> поз.</span>
+          </div>
+          <div class="mini-request-selected-list contact-selected-items-list" data-request-list>
+            Выберите тип продукции — здесь появится структура заявки из каталога.
+          </div>
+          <button class="btn ghost small" type="button" data-request-clear>Очистить выбор</button>
+        </div>
+
         <div class="field"><label for="message">Комментарий</label><textarea id="message" name="message" placeholder="Опишите задачу или вставьте список позиций"></textarea></div>
 
         <div class="field file-field">
@@ -48,8 +60,13 @@
           <label class="upload-box" for="specification"><span data-file-label>Прикрепить файл / спецификацию</span><small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small></label>
           <input class="file-input" id="specification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
           <div class="file-list" data-file-list hidden></div>
+          <p class="file-warning">Не загружайте паспорта, медицинские данные, биометрию и чужие персональные данные без законного основания.</p>
         </div>
 
+        <label class="form-consent-check">
+          <input type="checkbox" name="consent" value="1" required>
+          <span>Согласен на обработку персональных данных для подготовки ответа по заявке. Ознакомлен с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">политикой обработки данных</a> и <a href="{% url 'consent' %}" target="_blank" rel="noopener">текстом согласия</a>.</span>
+        </label>
         <button class="btn light" type="submit">Отправить заявку →</button>
         <p class="form-status" data-form-status role="status" aria-live="polite"></p>
         <div class="form-assurance" aria-label="Что будет после отправки заявки">
@@ -57,7 +74,6 @@
           <span><b>Подберём</b><small>производителей и аналоги</small></span>
           <span><b>Вернёмся</b><small>с КП и сроками</small></span>
         </div>
-        <p class="form-consent">Нажимая кнопку, вы соглашаетесь на обработку данных для подготовки ответа по заявке.</p>
       </form>
     </article>
 

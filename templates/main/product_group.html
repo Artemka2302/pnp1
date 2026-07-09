@@ -2,110 +2,100 @@
 {% load static %}
 
 {% block title %}{{ group.title }} — товарная группа — ПНП{% endblock %}
-{% block body_class %}catalog-master-site-preview catalog-master-public{% endblock %}
+{% block body_class %}catalog-page catalog-product-page catalog-master-site-preview catalog-master-public{% endblock %}
 
 {% block content %}
-<section class="hero hero-small solution-detail-hero catalog-master-preview-hero" style="--master-preview-hero-image:url('{% if group.image %}{% static group.image %}{% else %}{% static 'assets/img/catalog/empty-photo-placeholder.svg' %}{% endif %}')">
-  <div class="vertical-accent"></div>
+<section class="section catalog-product-shell">
   <div class="container">
-    <div class="eyebrow">Товарная группа</div>
-    <h1>{{ group.title }}</h1>
-    <p class="hero-subtitle">{{ group.catalog_path }}</p>
-    <div class="hero-actions">
-      <a class="btn" href="{% url 'contacts' %}#request-form">Запросить КП</a>
-      <a class="btn ghost" href="{% url 'catalog_system' group.system.direction.block.slug group.system.direction.slug group.system.slug %}">← Назад к системе</a>
-    </div>
-  </div>
-</section>
+    <nav class="catalog-product-crumbs" aria-label="Путь в каталоге">
+      <a href="{% url 'catalog' %}">Каталог</a>
+      <a href="{{ group.system.direction.block.get_absolute_url }}">{{ group.system.direction.block.title }}</a>
+      <a href="{{ group.system.direction.get_absolute_url }}">{{ group.system.direction.title }}</a>
+      <a href="{{ group.system.get_absolute_url }}">{{ group.system.title }}</a>
+      <span>{{ group.title }}</span>
+    </nav>
 
-<section class="section compact">
-  <div class="container solution-detail-summary">
-    <article><b>{{ group.types.count }}</b><span>типов продукции</span></article>
-    <article><b>{{ group.attributes.count }}</b><span>характеристик</span></article>
-    <article><b>{{ group.vendors.count }}</b><span>производителей</span></article>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container grid-2">
-    <article class="glass">
-      <span class="soft-label">Типы продукции</span>
-      <h2>Что можно добавить в заявку</h2>
-      <div class="type-list" style="margin-top:22px">
-        {% for type in group.types.all %}
-          <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ type.title|capfirst }}">
-            <span>{{ type.title|capfirst }}</span>
-            <small>Добавить</small>
-          </button>
-        {% empty %}
-          <button class="type-item" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ group.title }}">
-            <span>{{ group.title }}</span>
-            <small>Добавить</small>
-          </button>
-        {% endfor %}
+    <article class="catalog-product-hero-card" style="--catalog-hero-image:url('{% if group.image %}{% static group.image %}{% else %}{% static 'assets/img/catalog/empty-photo-placeholder.svg' %}{% endif %}')">
+      <span class="soft-label">Товарная группа</span>
+      <h1>{{ group.title }}</h1>
+      <p>Товарная группа внутри системы «{{ group.system.title }}». Помогаем уточнить исполнение, формат, объём, сроки и требования проекта.</p>
+      <div class="catalog-hero-meta">
+        <span>{{ group.types.count|default:1 }} типов</span>
+        <span>{{ group.vendors.count }} брендов</span>
       </div>
-
-      {% if group.attributes.all %}
-        <div class="catalog-master-system-block">
-          <b class="catalog-master-card-chip-title">Характеристики для уточнения</b>
-          <div class="catalog-master-product-type-tags" style="margin-top:12px">
-            {% for attribute in group.attributes.all|slice:":16" %}
-              <span>{{ attribute.title }}</span>
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
     </article>
 
-    <aside class="glass request-panel">
-      <span class="soft-label">Мини-заявка</span>
-      <h2>Выбранные позиции</h2>
-      <form class="mini-request-form" method="post" enctype="multipart/form-data" data-mini-request-form data-request-url="{% url 'api_mini_request' %}">
-        {% csrf_token %}
-        <input type="hidden" name="source" value="catalog_mini">
-        <input type="hidden" name="product_group_slug" value="{{ group.slug }}">
-        <input type="hidden" name="items" data-request-items>
-        <div class="field">
-          <label for="request_text">Состав заявки</label>
-          <textarea id="request_text" name="request_text" data-request-output rows="8" placeholder="Выберите тип продукции слева. Здесь появится структура заявки."></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="field"><label for="mini_name">Имя / компания</label><input id="mini_name" type="text" name="contact_name" autocomplete="name"></div>
-          <div class="field"><label for="mini_phone">Телефон</label><input id="mini_phone" type="tel" name="phone" autocomplete="tel" required></div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label for="mini_email">Email</label><input id="mini_email" type="email" name="email" autocomplete="email"></div>
-          <div class="field"><label for="mini_company">Компания</label><input id="mini_company" type="text" name="company" autocomplete="organization"></div>
-        </div>
-        <div class="field"><label for="mini_message">Комментарий</label><textarea id="mini_message" name="message" rows="3" placeholder="Сроки, объём, объект или аналоги"></textarea></div>
-        <div class="field"><label for="mini_files">Файл</label><input id="mini_files" type="file" name="files" multiple></div>
-
-        <div class="hero-actions">
-          <button class="btn light" type="submit" data-request-submit>Отправить заявку →</button>
-          <button class="btn ghost" type="button" data-request-clear>Очистить</button>
-        </div>
-        <p class="request-status" data-request-status aria-live="polite"></p>
-      </form>
-    </aside>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <div><span class="soft-label">Производители</span><h2>Связанные с товарной группой</h2></div>
-      <a class="link-more" href="{% url 'vendors' %}?q={{ group.title|urlencode }}">Смотреть в справочнике →</a>
+    <div class="catalog-product-title-row">
+      <div>
+        <h2>Подбор по товарной группе</h2>
+        <p>Выберите тип продукции или сразу отправьте позицию в заявку.</p>
+      </div>
     </div>
-    <div class="django-logo-grid">
-      {% for vendor in group.vendors.all %}
-        <a class="logo-tile" href="{{ vendor.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ vendor.name }}">
-          {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
-        </a>
-      {% empty %}
-        <p class="muted">Производители пока не привязаны.</p>
-      {% endfor %}
-    </div>
+
+    <article class="glass catalog-product-passport-card">
+      <span class="soft-label">Паспорт товарной группы</span>
+      <h2>{{ group.title }}</h2>
+      <p>Товарная группа внутри системы «{{ group.system.title }}». Помогаем уточнить исполнение, формат, объём, сроки и требования проекта.</p>
+
+      <div class="catalog-product-passport-grid">
+        <section class="catalog-product-type-panel">
+          <h3>Типы продукции</h3>
+          <div class="catalog-product-type-list">
+            {% for type in group.types.all %}
+              <button class="catalog-product-type-row" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ type.title|capfirst }}">
+                <span>
+                  <b>{{ type.title|capfirst }}</b>
+                  <small>Добавить этот тип в заявку</small>
+                </span>
+                <i aria-hidden="true">+</i>
+              </button>
+            {% empty %}
+              <button class="catalog-product-type-row" type="button" data-request-item="{{ group.system.title }}|{{ group.title }}|{{ group.title }}">
+                <span>
+                  <b>{{ group.title }}</b>
+                  <small>Добавить товарную группу в заявку</small>
+                </span>
+                <i aria-hidden="true">+</i>
+              </button>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="catalog-product-brand-panel">
+          <h3>Бренды / производители</h3>
+          <div class="catalog-product-brand-grid">
+            {% for vendor in group.vendors.all %}
+              <a class="logo-tile" href="{% url 'vendors' %}?vendors={{ vendor.slug }}#allManufacturers" title="{{ vendor.name }}">
+                {% if vendor.logo %}<img src="{% static vendor.logo %}" alt="{{ vendor.name }}">{% else %}<span>{{ vendor.name }}</span>{% endif %}
+              </a>
+            {% empty %}
+              <div class="catalog-product-empty-note">Производители уточняются снабжением.</div>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+    </article>
+
+    <section class="glass catalog-mini-request catalog-mini-request-compact" data-catalog-request-panel>
+      <input type="hidden" name="items" data-request-items>
+      <textarea class="mini-request-raw" name="request_text" data-request-output aria-label="Комментарий к заявке"></textarea>
+
+      <div class="mini-request-head">
+        <div>
+          <span class="soft-label">Мини-заявка <b data-request-count>0</b></span>
+          <h3>Выбранные позиции</h3>
+        </div>
+        <button class="btn ghost small" type="button" data-request-clear>Очистить</button>
+      </div>
+
+      <div class="mini-request-selected-list" data-request-list>
+        Выберите тип продукции — здесь появится структура заявки из каталога.
+      </div>
+
+      <div class="mini-request-actions">
+        <a class="btn light" href="{% url 'contacts' %}#request-form">Перейти к заявке</a>
+      </div>
+    </section>
   </div>
 </section>
 {% endblock %}

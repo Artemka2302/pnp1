@@ -1,0 +1,822 @@
+﻿[
+    {
+        "path":  "_redirects",
+        "bytes":  19882,
+        "sha256":  "949e7e499ddf5b52c8d5c9d9b0fcc0ea5be0f6ad49c9c199e901b4639cf24d46"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/elektrik-art.svg",
+        "bytes":  2791,
+        "sha256":  "1913a73f8c9d51fdfcd45ee6600e222bf6a1b7f898befcd1b74c7ae361d2defd"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/elektroschit.png",
+        "bytes":  13415,
+        "sha256":  "94c942f7746ab83789755d53fa96fc6017a3ffa9e4eaa3ac5fdbc5f888807812"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/elektrotehmash-kabelnyy-zavod.png",
+        "bytes":  15580,
+        "sha256":  "85df6972591e90ff72debd33dfe59fbb30f132b95bae5b7a66bddb5296110b1e"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/lc-kabel.png",
+        "bytes":  21270,
+        "sha256":  "dd9ce6009b5401cb372a6a4d4aa86fcd6d889afedf83a00afc5f123d6256cfbd"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/nizhegorodskiy-opytno-eksperimentalnyy-zavod.png",
+        "bytes":  12048,
+        "sha256":  "45b726a46caac1b77cd02ff63374afc84c1e0adde6e59a87e0b4b7463536df97"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-afk-lider.png",
+        "bytes":  2959,
+        "sha256":  "497ba0db91955b787293e3b0c4d4696139a8f7d2ab3824d4c8e054c59103afa3"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-alfapol.svg",
+        "bytes":  2177,
+        "sha256":  "1a729e0ff16941c80643fee5b85c82f3ad9388bf78a27e307dac3545e6887b4b"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-bronoteks.png",
+        "bytes":  33219,
+        "sha256":  "e8d47951367db0f8561a627419e622ab8e61dcaf4909bf4063170ef8306d08db"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-energolab.svg",
+        "bytes":  7113,
+        "sha256":  "3831e5144b5d9a3f2444ba0114dee69c721c3e01bd73fc6c19e2c3bac71d071c"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-fabrika-lestnits-eyfel.png",
+        "bytes":  284716,
+        "sha256":  "ac006aa2b04bbcb57e2b64a8d1deb9b91612d32b0a4dc8e9d6da6151bcb47573"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-izomaks-rus.svg",
+        "bytes":  7438,
+        "sha256":  "720f6e1e8cef111ea319af0601022cb34f39488c09742ba44fcc17bc7f21ea4d"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-nevidimye-reshetki.svg",
+        "bytes":  17961,
+        "sha256":  "a15237dd70590f9eba22928025e56df7a8f9f37c8aab51a74b6a0d759998cd2d"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-npp-magnito-kontakt.svg",
+        "bytes":  1694,
+        "sha256":  "1fde03d28724b9e659e66023766c70c0e10db59afcd2568e3f78b413c4374a5d"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-pf-hammer.svg",
+        "bytes":  5062,
+        "sha256":  "085ebfe3c267ba8ef5bb39706c73aff610999a6a25d7efe9bffecb2dbcdcfe39"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/ooo-tehnoservis.png",
+        "bytes":  32940,
+        "sha256":  "b280e2ac542e36ffab8f7122feb87653c1da53969bacb7bd2e5f4632d15571c7"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/opytno-konstruktorskoe-predpriyatie-elka-kabel.png",
+        "bytes":  15838,
+        "sha256":  "60dc080f4146ffedc46041077d18fbb8cc32f187b696efda367247f6a1c8c861"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/prays-lista-net-kazhduyu-zayavku-rassmatrivayut-individualno-dostavku-mogut-sdelat-platnuyu-otgruzka-tolko-s-zavoda.png",
+        "bytes":  6246,
+        "sha256":  "92dc3638823904a811d97a6abbfa7fb474c5de31f45a7b29e64ea218bd484b4d"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/salini.svg",
+        "bytes":  2955,
+        "sha256":  "d931750f724bfc90b70d3d9d02c74403fab35eaac387f2bcda93e1529d83b92e"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/segmentenergo-kabelnyy-zavod.svg",
+        "bytes":  9756,
+        "sha256":  "d9fbd74717ec663fe993e82d2dc1c527f0750c9081b4e4cbf9c2879d1f7bbf92"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/torgovyy-dom-misti.png",
+        "bytes":  11521,
+        "sha256":  "5ecf08538237f0a40370de8ff753b9662a9a6cd0bb4c47d8a1801525643d4a43"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/tpk-tatpolimer.png",
+        "bytes":  6536,
+        "sha256":  "d998727836e6ead686654cf350b27c56ffc88dd182f541fcbcbc24ee9b8b6f35"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/tsentr-komplektatsii-oborudovaniem.png",
+        "bytes":  24833,
+        "sha256":  "d32288ca5a239c3f65882f78fc11595cc3544476e0c3a397a80412346b0651af"
+    },
+    {
+        "path":  "assets/img/logos/vendors/import-20260630/vse-zaprosy-rasschityvaem-individualno-po-kazhdoy-marke-svoi-min-partii-otgruzka-tolko-s-zavoda.svg",
+        "bytes":  3332,
+        "sha256":  "77ec9ccff850c17c379aa016436f77fdd357ae2b4415c00d01f1d38e82dae9ea"
+    },
+    {
+        "path":  "assets/img/solutions/detail/architecture/architecture-facades-facade-hpl-panels.webp",
+        "bytes":  44548,
+        "sha256":  "cd8a109acb093f6440619917b2dc9860e790c0c1605a3505a659c3785cc530d6"
+    },
+    {
+        "path":  "assets/img/solutions/detail/constructive/constructive-krepezh-fasteners.webp",
+        "bytes":  73860,
+        "sha256":  "d88848d9906091cb5685069b0f55b9ec4e2e8d931ff2dfb59dfa8eb29741bfec"
+    },
+    {
+        "path":  "assets/img/solutions/detail/constructive/constructive-partitions-profil-dlya-gipsokartona-local.webp",
+        "bytes":  65652,
+        "sha256":  "b66a106b30a7a78df3c4ff481d2af1781a4246386c60eb0f3ab5c189a1e17202"
+    },
+    {
+        "path":  "assets/js/app.js",
+        "bytes":  229233,
+        "sha256":  "57e0d863d436c10e925513f3dd36778cf55712d0b0c6897fbd4a25700e939969"
+    },
+    {
+        "path":  "assets/js/data.js",
+        "bytes":  1480370,
+        "sha256":  "caae782db808925689ba925004b92426b8d82355e1ff52219cbf0a6c26720d54"
+    },
+    {
+        "path":  "catalog.html",
+        "bytes":  714668,
+        "sha256":  "78aa8e2c54c469efaac4ac8d83a7291d6ad924e71007e05324b910bfba83b2e9"
+    },
+    {
+        "path":  "catalog-building-materials.html",
+        "bytes":  726150,
+        "sha256":  "b116c16d1a8f4b129d1c0d84777d47e9c7cc0460ffd75f04316d6f1bfc0a6f3f"
+    },
+    {
+        "path":  "catalog-energy.html",
+        "bytes":  720997,
+        "sha256":  "915a2e4bb4e8a259ce0750ffaa6e0ff5d4d1dbc159489c588e53baa722a4520d"
+    },
+    {
+        "path":  "catalog-engineering-equipment.html",
+        "bytes":  733551,
+        "sha256":  "01a4ad4f775c925410395102cc03daa481d7ce18a0639e422fdc1f6bf6f1d49c"
+    },
+    {
+        "path":  "catalog-it-equipment-and-software.html",
+        "bytes":  719741,
+        "sha256":  "40f503d20ab3078e7da05f4e39e76c55ca314a4571f61414fc99da580f8af809"
+    },
+    {
+        "path":  "catalog-tech-equipment.html",
+        "bytes":  722314,
+        "sha256":  "5e312803f4e60c28ecb19dd4d7970b36fd12b26d012169835e1dfc378b3ca84f"
+    },
+    {
+        "path":  "data/catalog_product_group_images.json",
+        "bytes":  29431,
+        "sha256":  "f02bbb407b9f0e316d9b278b275a1bdd4b7402ef1a1caac0acb4ff72ab66ea2d"
+    },
+    {
+        "path":  "data/catalog_vendor_map.csv",
+        "bytes":  601314,
+        "sha256":  "3fbd40bece452f978071ae5cf34973f71e244053d1e7024bb53ca1e157890838"
+    },
+    {
+        "path":  "data/catalog_vendor_map.json",
+        "bytes":  1105268,
+        "sha256":  "8dc5a5ef358a5a29be6f0a0e0a909bb46273515307e10fbccb4784347cc441ac"
+    },
+    {
+        "path":  "data/catalog_vendor_map_summary.json",
+        "bytes":  1294,
+        "sha256":  "37e6d7414455dbbed6c110fcede4f5ffe46a80a2c8d0bc420344ba305772fe4d"
+    },
+    {
+        "path":  "data/vendors_master.csv",
+        "bytes":  196559,
+        "sha256":  "dfc92059219bb0c83c086d84e23d6a79eda38cecd1d3d617b0dfa9f34decc1da"
+    },
+    {
+        "path":  "PNP_HANDOFF_README_20260706.md",
+        "bytes":  3456,
+        "sha256":  "457ca7be8e16efc5f82a2023133d5fabbf8d88e62c1d88699f2e7803ed4e5d26"
+    },
+    {
+        "path":  "reports/CATALOG_MASTER_PUBLIC_BUILD_20260615.md",
+        "bytes":  520,
+        "sha256":  "00ea448dda545101b625997e4311e129882b9604fedbee946f06d5d07b8609a0"
+    },
+    {
+        "path":  "reports/catalog-content-control/catalog_content_matrix_current.csv",
+        "bytes":  169130,
+        "sha256":  "6203fabd9998a62d7f1e9db1404ec61fade01436b24985badf0833abd819ec7f"
+    },
+    {
+        "path":  "reports/catalog-content-control/catalog_content_matrix_current.html",
+        "bytes":  211715,
+        "sha256":  "46eed82d5d88d652d495775cb6b62bebee6fbd4cda33c965cc4b878a78903a80"
+    },
+    {
+        "path":  "reports/content-queues/PNP_CONTENT_NEXT_QUEUES_CURRENT.json",
+        "bytes":  903,
+        "sha256":  "5949959e9f56542d54780fa29817992215cdcf44809507802ad273d6cba53c47"
+    },
+    {
+        "path":  "reports/content-queues/PNP_CONTENT_NEXT_QUEUES_CURRENT.md",
+        "bytes":  2897,
+        "sha256":  "737d5d8a54d421ea0103639c9f61d64679d40c54bfe859700ede051fcc6b89da"
+    },
+    {
+        "path":  "reports/content-queues/PNP_PHOTOCARD_P0_QUEUE_CURRENT.csv",
+        "bytes":  111,
+        "sha256":  "3a5d9a827f05f10fbd2e004b7834f3852e40ecbc824a7bd5dc33ffedec1638d5"
+    },
+    {
+        "path":  "reports/content-queues/PNP_VENDOR_ALIAS_CANDIDATE_REVIEW_CURRENT.csv",
+        "bytes":  182,
+        "sha256":  "e0773366037f3a808c23cea6442e63d759224eeb733669caee11eb5f83cdf4e5"
+    },
+    {
+        "path":  "reports/content-queues/PNP_VENDOR_MANUAL_REVIEW_QUEUE_CURRENT.csv",
+        "bytes":  4687,
+        "sha256":  "ee41c44229f9caf8289c50c3b6d650ae73ac0acb9469c75ef1576fb90b85eb66"
+    },
+    {
+        "path":  "reports/content-queues/PNP_VENDOR_MAPPED_PENDING_REVIEW_CURRENT.csv",
+        "bytes":  1728,
+        "sha256":  "d13c5e8341c67cc48d5c5d50e7cb767aea08327d8f76a97ea7795dcde4868f42"
+    },
+    {
+        "path":  "reports/content-queues/PNP_VENDOR_P0_COVERAGE_QUEUE_CURRENT.csv",
+        "bytes":  101,
+        "sha256":  "c8ff9e900e9c5ad5c8b6e50bc2c50f9cae742251b4522b9b8f9b73c11cbcd0d9"
+    },
+    {
+        "path":  "reports/photo-card-audit/PNP_PRODUCT_GROUP_PHOTOCARD_GENERATION_BRIEF_20260624.md",
+        "bytes":  2033,
+        "sha256":  "467c657e2c105740cba9e7a770aa385a028d5112b646b0ac8dfb598279cb95f7"
+    },
+    {
+        "path":  "reports/PNP_MVP_CONTROL_STATUS_CURRENT.json",
+        "bytes":  1567,
+        "sha256":  "b31c329329ef7a75218fa3915d90737322fb38099a2bcaa9cbd405ee1ae7e3c1"
+    },
+    {
+        "path":  "reports/PNP_MVP_CONTROL_STATUS_CURRENT.md",
+        "bytes":  2281,
+        "sha256":  "9ef555f8b0499d557ebfa05a6746d656411b1234ac70da7e33b17d09a913e550"
+    },
+    {
+        "path":  "reports/vendor-catalog-map/PNP_VENDOR_COVERAGE_GAPS_CURRENT.md",
+        "bytes":  1448,
+        "sha256":  "7227087d09adac1987510c563570fd005a1bb943a93348cb08db60ab982f1614"
+    },
+    {
+        "path":  "reports/vendor-catalog-map/PNP_VENDOR_MANUAL_REVIEW_CURRENT.md",
+        "bytes":  4160,
+        "sha256":  "58a34de7b959a9ab2b6fd8271f525e9138de4bbd4878b4e36cbfc9f8a45a3057"
+    },
+    {
+        "path":  "reports/vendor-catalog-map/vendor_catalog_coverage.csv",
+        "bytes":  45656,
+        "sha256":  "6c1eb6c8a90b25ce1da865fa58528c762c51386bc5e3d5d8dd198c7d6c60026d"
+    },
+    {
+        "path":  "reports/vendor-catalog-map/vendor_catalog_coverage.html",
+        "bytes":  3941,
+        "sha256":  "f95eba9dc9f5a5ce7a528cc5d69e036782c9091089c4393537a369b247668947"
+    },
+    {
+        "path":  "reports/vendor-catalog-map/vendor_catalog_manual_review.csv",
+        "bytes":  5572,
+        "sha256":  "eed83b090249a1315935c5bd4903ffd5afd3d9fe9da914717a27911403efdd06"
+    },
+    {
+        "path":  "reports/vendor-catalog-map/vendor_catalog_missing_groups_current.csv",
+        "bytes":  98,
+        "sha256":  "452009062709be15cdb3048d879916a03283b805fee77aa8ad0af0e6831ffd6e"
+    },
+    {
+        "path":  "solution-accessibility.html",
+        "bytes":  718228,
+        "sha256":  "442a6f2fa314cdecd2d859a65515059b2ff36f968e0de94dc4d00e31dc3f42c7"
+    },
+    {
+        "path":  "solution-accessibility-accessibility-lifters-system.html",
+        "bytes":  715758,
+        "sha256":  "f9872df7680d696185027ec17e2adf7b9739664620b9308985dabe5dee9cf7e2"
+    },
+    {
+        "path":  "solution-accessibility-handrails.html",
+        "bytes":  715633,
+        "sha256":  "a4a6c3da9e2b5015f34e63861001593a1c65e052077258d2acfec9644b3c11e3"
+    },
+    {
+        "path":  "solution-accessibility-informatsionnoe-obespechenie.html",
+        "bytes":  715876,
+        "sha256":  "b8526ccc6df7b4206a74f9d6366338f7326de38c5893f9b10b12eafa9f8bdc31"
+    },
+    {
+        "path":  "solution-accessibility-parkovochnye-mesta.html",
+        "bytes":  715746,
+        "sha256":  "2f63d72e204c154259b178bf1d3908116c554f1d8029a60baa902b87d125680a"
+    },
+    {
+        "path":  "solution-accessibility-puti-dvizheniya-po-territorii.html",
+        "bytes":  715880,
+        "sha256":  "2ca0cbb1a8cf7dedd5c7eade1e8c7189a83ea42cae3d05775a336091c16296d5"
+    },
+    {
+        "path":  "solution-accessibility-ramps.html",
+        "bytes":  715613,
+        "sha256":  "8c266608129684dda6a249b6e154a3d54a6a30dd38ca3e2ce9a01c21cbca8e09"
+    },
+    {
+        "path":  "solution-accessibility-ramps-and-traps.html",
+        "bytes":  715713,
+        "sha256":  "e9aa091bda26fdf19a228385841d86c7c092f74f2e3b343b19bb242d5ba34540"
+    },
+    {
+        "path":  "solution-accessibility-vertikalnoe-peremeschenie.html",
+        "bytes":  715844,
+        "sha256":  "984deaf04ce45daadfd05ba186b4a30c4d309511b4b7fb5906a0f22876472266"
+    },
+    {
+        "path":  "solution-accessibility-vhodnaya-gruppa.html",
+        "bytes":  715704,
+        "sha256":  "f38b2d60ede91abde148e8dbfaf24bd566d2f53f6bc5ec57a98fa8014696831c"
+    },
+    {
+        "path":  "solution-architecture.html",
+        "bytes":  718302,
+        "sha256":  "aa922b2d0528745f4d6d0658479c6498cfae16e430410c28b0cd53cdd06c1b29"
+    },
+    {
+        "path":  "solution-architecture-ceilings.html",
+        "bytes":  715727,
+        "sha256":  "573aca0c63f91e6eb9614494a7dd476141f118234940d7ba214d990e58b62553"
+    },
+    {
+        "path":  "solution-architecture-facades.html",
+        "bytes":  715714,
+        "sha256":  "b28fa8b9c8ba351a502c52524886d0401e9902d5721c2c3ca8f94b5dc698058a"
+    },
+    {
+        "path":  "solution-architecture-finishing-materials.html",
+        "bytes":  715909,
+        "sha256":  "c7fa7e858cabda94d027efaa0edafeff8994f1fdc6100449ca29c1ea44eeb8ec"
+    },
+    {
+        "path":  "solution-architecture-floors.html",
+        "bytes":  715689,
+        "sha256":  "06b90940a19c41b987368c1a366da25cc10ae4cc4fc3c6506d4ffa4fda72e4d7"
+    },
+    {
+        "path":  "solution-architecture-interior-wall-panels.html",
+        "bytes":  715959,
+        "sha256":  "61940293dbbc66bbc97ed76206ebe844c74e44ebbfa703447e33f95186397f9c"
+    },
+    {
+        "path":  "solution-architecture-roofing-systems.html",
+        "bytes":  715844,
+        "sha256":  "dfab13d92ad94be1fae2d48752f9dcd291c222776849274b638f12681fdd437d"
+    },
+    {
+        "path":  "solution-architecture-windows-doors-glazing.html",
+        "bytes":  715904,
+        "sha256":  "c04b95d81951106fcb8285cbe9e84771c9b989bb1c1728f45ca7b4a2be98d60c"
+    },
+    {
+        "path":  "solution-constructive.html",
+        "bytes":  718291,
+        "sha256":  "6df80d2850ce8a193f0b97edb30a756976a67ef6f40905bbd78b3f9da9b3f560"
+    },
+    {
+        "path":  "solution-constructive-concrete-structures.html",
+        "bytes":  715927,
+        "sha256":  "6fb0776cd53452d2436ae4940c3833e476d38809f52f650fca0cb18e2a1fd164"
+    },
+    {
+        "path":  "solution-constructive-fundamenty-i-svai.html",
+        "bytes":  715855,
+        "sha256":  "f158ca7f21df0155beb68079c0ed2d67b5a0abe17a28cb755a911e8b8d43702f"
+    },
+    {
+        "path":  "solution-constructive-geosynthetic-materials.html",
+        "bytes":  715970,
+        "sha256":  "ff458a52e8acaa36c92568fe2b0e3bf182d9f64205ff39f5fa4b9f96d2547382"
+    },
+    {
+        "path":  "solution-constructive-inertnye-i-sypuchie-materialy.html",
+        "bytes":  716008,
+        "sha256":  "16c51b8f15b7323cf038c5915d81f729bfc5f6f3e241ac4da6b9a0c7f5fa0e8b"
+    },
+    {
+        "path":  "solution-constructive-inertnye-i-vyazhuschie-materialy.html",
+        "bytes":  716020,
+        "sha256":  "f9a5a5b7cf1b3858952561f61a47194dfd7aa7209beaea397b919de81b1897ea"
+    },
+    {
+        "path":  "solution-constructive-krepezh.html",
+        "bytes":  715716,
+        "sha256":  "6198f62597057a7ccaf5f9ca2cd41c6689d6c684ca331b9f35bd61fd32df3821"
+    },
+    {
+        "path":  "solution-constructive-masonry-and-wall-materials.html",
+        "bytes":  716017,
+        "sha256":  "0d793343d15ed51e1f81f4bf850a70fdc6e715833565d67f95536e64f8b1310f"
+    },
+    {
+        "path":  "solution-constructive-metall.html",
+        "bytes":  715712,
+        "sha256":  "ae185a52ea116bb6b84676ff5c07e8b2482afe036bde24acc1a555412d4bbeb2"
+    },
+    {
+        "path":  "solution-constructive-partitions.html",
+        "bytes":  715796,
+        "sha256":  "42d7da001dcf118b9b3142c5097007ad1a02fa4576fb0e351ba029211db62360"
+    },
+    {
+        "path":  "solution-constructive-wood-based-panel-materials.html",
+        "bytes":  715984,
+        "sha256":  "28b1f190a8946d79706aca65bf0d0f500187aca1cf8657b9fc9c7af706a7c42d"
+    },
+    {
+        "path":  "solution-eom.html",
+        "bytes":  718250,
+        "sha256":  "a18012df3fb5e78d1a1266a3254362dff83b866f2f458301ba6dff8159b2446d"
+    },
+    {
+        "path":  "solution-eom-cable-products.html",
+        "bytes":  715823,
+        "sha256":  "972453012b5bc2933c67340568785280d78b41fc706216edd86a669add99f2f1"
+    },
+    {
+        "path":  "solution-eom-electrical-equipment.html",
+        "bytes":  715508,
+        "sha256":  "14202ec8ade4eeea93894bfc86461204e4507977420402510b7b902d6b3f6dfc"
+    },
+    {
+        "path":  "solution-eom-indoor-lighting.html",
+        "bytes":  715487,
+        "sha256":  "300cd870792327baf4cb81339cb4ece664f6f4d576c29d6aafdd78734e52eba2"
+    },
+    {
+        "path":  "solution-eom-kabelenesuschie-sistemy.html",
+        "bytes":  715514,
+        "sha256":  "f10c50cc448edf04d70ee3cfd92f1a9ebb1191d5e0d22c4253b5745a2b0dc219"
+    },
+    {
+        "path":  "solution-eom-lighting-devices.html",
+        "bytes":  715453,
+        "sha256":  "43576a847145f1d2bf8caaf436edcd5b8f4ff5abbe22fd8b6babebbd746a7a23"
+    },
+    {
+        "path":  "solution-eom-outdoor-lighting.html",
+        "bytes":  715473,
+        "sha256":  "9bbb8b568dba47d814ca7565b7fd3bae2a33d3ea3b7b3554a23c8ac3533751dd"
+    },
+    {
+        "path":  "solution-eom-security-lighting.html",
+        "bytes":  715476,
+        "sha256":  "2440ec81e3a9c6ad5a66bf241d589ba7c369b67b602c848e802ce8d3ed0d73c4"
+    },
+    {
+        "path":  "solution-eom-transformer-and-distribution-substations.html",
+        "bytes":  715871,
+        "sha256":  "cc631fb822c58ae1a31acae01003bbc58ea306f38e085f13ba6de81965a14c26"
+    },
+    {
+        "path":  "solution-ev-charging-infrastructure.html",
+        "bytes":  718222,
+        "sha256":  "b2b6fc566d4ca6442d6a38daf1a4bcd913f62e5ea63f7b5f3ce33183d3687651"
+    },
+    {
+        "path":  "solution-ev-charging-infrastructure-ev-charging-stations.html",
+        "bytes":  716141,
+        "sha256":  "49cb578e52bc652624d355782b89e477d0e60342c58352cac3c4ca531a0929c8"
+    },
+    {
+        "path":  "solution-fire.html",
+        "bytes":  718235,
+        "sha256":  "7b3bf5ac977812d21991c2142d2a587cf1fe458273f141f56f3bd8c154cb8bcb"
+    },
+    {
+        "path":  "solution-fire-automatic-fire-alarm.html",
+        "bytes":  715696,
+        "sha256":  "a5c2c5d92ef682b452b681371c8d43a3835382bef7aa2d949583b7522bc0bca4"
+    },
+    {
+        "path":  "solution-gas.html",
+        "bytes":  717904,
+        "sha256":  "7cafaf350f4666cbd4db3f46a803a2af9f3d4fec46dacafe3de0ca7d5ee1d46a"
+    },
+    {
+        "path":  "solution-gas-gas-analysis.html",
+        "bytes":  715631,
+        "sha256":  "7504ce7ffcde1358cbcca3cb9a2be7089639c1179ff4fa4aeb98f9afa1ea6696"
+    },
+    {
+        "path":  "solution-hvac.html",
+        "bytes":  718539,
+        "sha256":  "d26b272545d68ac2876bf667b971f147f417eeb945953b5f51c4eba36a95df4a"
+    },
+    {
+        "path":  "solution-hvac-air-conditioning.html",
+        "bytes":  715927,
+        "sha256":  "6be5ad7307de4f879357623ebc519da0abb4657d39ef5bf632d89aa3bcd10145"
+    },
+    {
+        "path":  "solution-hvac-air-ventilation.html",
+        "bytes":  715854,
+        "sha256":  "2e5062ea2ac02482bd4a6bba522d12f896770f38aa468a0d3f81366352876f17"
+    },
+    {
+        "path":  "solution-hvac-heating-radiators.html",
+        "bytes":  715703,
+        "sha256":  "45694fce5adc251bb23a8ea9b695da12d87d2c57c463e6c9a4a055f6fed2ea23"
+    },
+    {
+        "path":  "solution-hvac-individual-heat-substation.html",
+        "bytes":  715937,
+        "sha256":  "af93d4e906258f97a96f09acc0aa53f13690c3329ef7d8d4ec233e6c83da29b5"
+    },
+    {
+        "path":  "solution-hvac-teplovye-seti.html",
+        "bytes":  715705,
+        "sha256":  "fadd15e1575a4eec1aaa8c3cebeae50c9992d088e0ef53696771ee5f0fb34233"
+    },
+    {
+        "path":  "solution-hvac-teplovye-zavesy.html",
+        "bytes":  715732,
+        "sha256":  "787d00e416737facb582533984712c7352cbd26ba1a970366673f3afb550db0e"
+    },
+    {
+        "path":  "solution-it-infrastructure.html",
+        "bytes":  718327,
+        "sha256":  "4ee1588afebf70c70c0669c8f6aff2379e64b40c20d281fa591ba86c7575b862"
+    },
+    {
+        "path":  "solution-it-infrastructure-corporate-devices.html",
+        "bytes":  715868,
+        "sha256":  "5c6375eb9d27346ea54e7efa31b94bca905469096c8c56ec6c41375919c091a3"
+    },
+    {
+        "path":  "solution-it-infrastructure-datacenter-infrastructure.html",
+        "bytes":  715863,
+        "sha256":  "625131fde025677dcf53d045a6a95ed3ea2f9eb641c0133e0111454791d555c6"
+    },
+    {
+        "path":  "solution-it-infrastructure-informatsionnaya-bezopasnost.html",
+        "bytes":  715912,
+        "sha256":  "0d27bd21aabb18f9c775484092a24b9606e29f419ec29e10ac9c2c0695f86bfc"
+    },
+    {
+        "path":  "solution-it-infrastructure-network-equipment.html",
+        "bytes":  715828,
+        "sha256":  "67f2686234b32a4e8b1bf94d691573023025534b6fb5e13fd1e4c3cf82002439"
+    },
+    {
+        "path":  "solution-it-infrastructure-servers-and-datacenter.html",
+        "bytes":  715779,
+        "sha256":  "7b225b926850fd5caf367768b19e23b3330e76d7d24296d66037a6721c0f7512"
+    },
+    {
+        "path":  "solution-it-infrastructure-software-and-management.html",
+        "bytes":  715804,
+        "sha256":  "c8b9d65b30506cc34d9c02c0f2488cf88ff4987689cd86f18800bae8e47bca97"
+    },
+    {
+        "path":  "solution-it-infrastructure-workstations.html",
+        "bytes":  715753,
+        "sha256":  "c71ad6317aee0b2f168c23f9c8a1774a1de08d9587dd215dc77ab4d8284af4d8"
+    },
+    {
+        "path":  "solution-landscaping-and-site-improvement.html",
+        "bytes":  718455,
+        "sha256":  "6c39f97c90a0a916c819e1c5a9b940c93fe0624a68b964b8ba653958af5cbddd"
+    },
+    {
+        "path":  "solution-landscaping-and-site-improvement-dorozhnye-plity.html",
+        "bytes":  716041,
+        "sha256":  "6542745f0c5697cee44d88fffedbcb3626635986f43248070fc886dc9d0b1110"
+    },
+    {
+        "path":  "solution-landscaping-and-site-improvement-malye-arhitekturnye-formy-maf.html",
+        "bytes":  716247,
+        "sha256":  "64f9a093eae99ac7a1fe7ec24d1cbd22e6dbc45b558ffcaaadbde2a3be8ee3ac"
+    },
+    {
+        "path":  "solution-landscaping-and-site-improvement-ograzhdeniya-i-zonirovanie.html",
+        "bytes":  716180,
+        "sha256":  "4d4814cfc7807c8d3e38760de86bf837e432a1cb6eb1a5f55fba52c56c726b4e"
+    },
+    {
+        "path":  "solution-landscaping-and-site-improvement-osveschenie-territorii.html",
+        "bytes":  716130,
+        "sha256":  "76c4286e98fa0331b19ceca94b881ffae3a68bf9070b6c9b976353eed70e5354"
+    },
+    {
+        "path":  "solution-landscaping-and-site-improvement-pokrytiya.html",
+        "bytes":  715962,
+        "sha256":  "66dd02b7979720515ace6ded513d47c3c7f74d5135fb3997f79bf6112a06d6e1"
+    },
+    {
+        "path":  "solution-low-current.html",
+        "bytes":  718724,
+        "sha256":  "9d2d510dd748773dc51edc4003ca28dbb422124d6d7f8a4ebb09e276c07ab6f1"
+    },
+    {
+        "path":  "solution-low-current-access-control-systems.html",
+        "bytes":  716119,
+        "sha256":  "ce5eb22f52c94a932a1d42630320480e1724886d032d3330b8d498c82264e77e"
+    },
+    {
+        "path":  "solution-low-current-cable-networks-and-fols.html",
+        "bytes":  715958,
+        "sha256":  "f9ac29231a29be2d1e90d78f86737fa8524b040bc6df3105e1ef82501e7ffc97"
+    },
+    {
+        "path":  "solution-low-current-information-collection-processing-systems.html",
+        "bytes":  716248,
+        "sha256":  "bddb31951e6dd59ba957d9160b6b1948880df3f4acbb780b72a9ef9fe1bc5178"
+    },
+    {
+        "path":  "solution-low-current-intrusion-alarm-systems.html",
+        "bytes":  716043,
+        "sha256":  "b3f9cc2de2edfd2c1da2cf38542baab997aaec7a73602de6e7fb93a5ecb5cdf2"
+    },
+    {
+        "path":  "solution-low-current-pass-management-automation.html",
+        "bytes":  716163,
+        "sha256":  "526e5cd39cad93e5068c1a4e9b1472ff2585b9bd152871947b26d529a31ee869"
+    },
+    {
+        "path":  "solution-low-current-perimeter-intrusion-alarm-systems.html",
+        "bytes":  716238,
+        "sha256":  "997e3f1a0dd14d414331dc945fd14da2c9a27490826afb84eb6b4d55e1131a95"
+    },
+    {
+        "path":  "solution-low-current-sistemy-svyazi-i-dispetcherizatsii.html",
+        "bytes":  716072,
+        "sha256":  "d4213a066948f3e1eba7e8fdc9d4801344c47735f4fa4c5a8f3b561c4b46d006"
+    },
+    {
+        "path":  "solution-low-current-video-surveillance-and-network-equipment.html",
+        "bytes":  716215,
+        "sha256":  "cadefeb3c5bb11c15edde354ca3fba0c05b9cd8694d755706d93f7f1779d254b"
+    },
+    {
+        "path":  "solutions.html",
+        "bytes":  1324,
+        "sha256":  "bebc89bb355ab45fc58107c7ab5aefe69e6dcea5b42d512c1df009b03efab9c3"
+    },
+    {
+        "path":  "solution-tech-equipment.html",
+        "bytes":  719146,
+        "sha256":  "4e30f855c87c282aa44c483ffa7617cc87ef33fb1464f697e63c5896960f0cc0"
+    },
+    {
+        "path":  "solution-tech-equipment-aktovyy-zal.html",
+        "bytes":  715882,
+        "sha256":  "5c0dd162bd647da2ff6062db54fa1ee8a03c7c93fbffbdb0487ae72f0cdc7ad3"
+    },
+    {
+        "path":  "solution-tech-equipment-bibliotechnoe-oborudovanie.html",
+        "bytes":  716082,
+        "sha256":  "424db2a60aee6846b579f5790342926fc91ec120ba9cdf2b6fbf4a07a4640896"
+    },
+    {
+        "path":  "solution-tech-equipment-complectation.html",
+        "bytes":  715929,
+        "sha256":  "acb08d6deb6a440e38a991dd52eee3a73563e91f7934465bb3bd61b3986b1c3c"
+    },
+    {
+        "path":  "solution-tech-equipment-hozyaystvennoe-oborudovanie.html",
+        "bytes":  716096,
+        "sha256":  "16b6527cc22433d2d013eaf9d89cb642da9264b9943e122757f96a90a758b853"
+    },
+    {
+        "path":  "solution-tech-equipment-inspection-equipment.html",
+        "bytes":  716080,
+        "sha256":  "df3d9f723186280547da80be5d11fae5d9a403b48912e3678b50b0a860e35ed5"
+    },
+    {
+        "path":  "solution-tech-equipment-laboratornoe-oborudovanie.html",
+        "bytes":  716078,
+        "sha256":  "03ebdd419eb84a755a76a150abb8a3e926236505fa06d99db16cd97992f04658"
+    },
+    {
+        "path":  "solution-tech-equipment-mebel.html",
+        "bytes":  715813,
+        "sha256":  "10ad2c57575ab5d57f6bc7cf524fbc976a037c62dcad602b4c1ee25aee7cb680"
+    },
+    {
+        "path":  "solution-tech-equipment-media-equipment.html",
+        "bytes":  716025,
+        "sha256":  "212aac7a70740987bb8c2b169671f2be81a33748ff6d6a26dc6b161458c75167"
+    },
+    {
+        "path":  "solution-tech-equipment-medical-gases-and-equipment.html",
+        "bytes":  716175,
+        "sha256":  "de36577025fdd0c33d91f5e5a0e2500b6e569bcf2a28ab46f445a0f73de68645"
+    },
+    {
+        "path":  "solution-tech-equipment-oborudovanie-garderoba.html",
+        "bytes":  716036,
+        "sha256":  "40e84d8b5e383e16906b98775ba9ca58dc7b48a50993faa8edfcf8d786389e45"
+    },
+    {
+        "path":  "solution-tech-equipment-oborudovanie-sanuzlov.html",
+        "bytes":  716022,
+        "sha256":  "6c563bb4c2c4fb0824b638be18ff18e053807d5932800e3a414a4c840ae75614"
+    },
+    {
+        "path":  "solution-tech-equipment-oborudovanie-stolovoy-i-pischebloka.html",
+        "bytes":  716188,
+        "sha256":  "62807c52025f7f3a49adce6786ca7f1b1489f1ca3a9e8b26ed303f9e74899130"
+    },
+    {
+        "path":  "solution-tech-equipment-small-architectural-forms.html",
+        "bytes":  715898,
+        "sha256":  "d4cc0e029c80dad441ecc896fc68fee9c3cefe49c18290770c7be8dacdb5cc18"
+    },
+    {
+        "path":  "solution-tech-equipment-sportivnoe-oborudovanie.html",
+        "bytes":  716050,
+        "sha256":  "b45ee477365138168a61d4d47c5307224c16c3488d19ef7b382dc655c3442eb0"
+    },
+    {
+        "path":  "solution-tech-equipment-stellazhi.html",
+        "bytes":  715849,
+        "sha256":  "5ddb72fe452eb5aa975f30c5e94e44a5cd1abc12d27ceee4320c18c89c7f3ab0"
+    },
+    {
+        "path":  "solution-vertical-transport.html",
+        "bytes":  718350,
+        "sha256":  "ba17940fae88498c9166942bc2f634f805abb8208f6401864c5c3a3e9603e7f6"
+    },
+    {
+        "path":  "solution-vertical-transport-automation-and-dispatching.html",
+        "bytes":  716109,
+        "sha256":  "1b5225594453d02e0e0c5b00a7cd3b95fd013a3450a20ae9165660873f6ffa05"
+    },
+    {
+        "path":  "solution-vertical-transport-eskalatory-i-travolatory.html",
+        "bytes":  715991,
+        "sha256":  "f98204355e840f07e22af265253ad9088b5c6d03d84b02665ad108eaa3fc328d"
+    },
+    {
+        "path":  "solution-vertical-transport-lifty.html",
+        "bytes":  715735,
+        "sha256":  "ad8d5df50c193cf003f323bdcc9e728088452e2d8383b90515d0fbed3e82b73b"
+    },
+    {
+        "path":  "solution-vertical-transport-vertical-lifters.html",
+        "bytes":  715860,
+        "sha256":  "dc40f43180fcbc152eb3dce7478aae0e96018523dfd87905bff63a6890831c01"
+    },
+    {
+        "path":  "solution-water.html",
+        "bytes":  718538,
+        "sha256":  "d5ec08aa1217a23e33cd3cc7639c16ebb6ccc3b8df30a98084a31947fb4e75c5"
+    },
+    {
+        "path":  "solution-water-external-water-and-sewer-networks.html",
+        "bytes":  716226,
+        "sha256":  "860d5919921b263599c2dc238b9e48ee921ae50dc5408fc657bc33d359a6a018"
+    },
+    {
+        "path":  "solution-water-sanitary-equipment.html",
+        "bytes":  716062,
+        "sha256":  "254617b3cce41109680bfecea6ca7264c6a9232faa52089d0eb132e21f02e16c"
+    },
+    {
+        "path":  "solution-water-stormwater-treatment-facilities.html",
+        "bytes":  716121,
+        "sha256":  "bc8ea6582607641a8a9d512af2d386eb47acbec6d529f4f578511f25a662dc8b"
+    },
+    {
+        "path":  "solution-water-wastewater-and-drainage.html",
+        "bytes":  715952,
+        "sha256":  "40c1be4457fd17e713696b8b7c7a7aee8c1b14f401dc5be927682fdf473e6275"
+    },
+    {
+        "path":  "solution-water-water-supply.html",
+        "bytes":  715897,
+        "sha256":  "6539e57a521ab6ae5b07aea67cd11159e7b18bed6ec8dbab058f8aaaa5f77319"
+    },
+    {
+        "path":  "solution-water-water-treatment.html",
+        "bytes":  715920,
+        "sha256":  "fbfe5bfad81e8e8ca4ccc7e216a7ecd4a78164f1af97bed941358a464729615a"
+    },
+    {
+        "path":  "tools/build-catalog-vendor-map.py",
+        "bytes":  41593,
+        "sha256":  "081acbdb78763f87bc5ee97e44c8b56d368644387328d5225fd2df68edeace9a"
+    }
+]

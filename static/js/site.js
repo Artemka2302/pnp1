@@ -21,13 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const storageKey = "pnp_catalog_request_items";
-  const output = document.querySelector("[data-request-output]");
-  const hiddenItems = document.querySelector("[data-request-items]");
-  const clear = document.querySelector("[data-request-clear]");
-  const miniForm = document.querySelector("[data-mini-request-form]");
-  const requestStatus = document.querySelector("[data-request-status]");
-  const requestSubmit = document.querySelector("[data-request-submit]");
-  const recentLists = document.querySelectorAll("[data-catalog-recent-list]");
 
   const readItems = () => {
     try {
@@ -38,7 +31,76 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const writeItems = items => {
-    localStorage.setItem(storageKey, JSON.stringify(items));
+    const normalized = Array.from(new Set((items || []).filter(Boolean)));
+    localStorage.setItem(storageKey, JSON.stringify(normalized));
+    document.dispatchEvent(new CustomEvent("pnp:request-items-changed", {
+      detail: { items: normalized },
+    }));
+  };
+
+  const requestItemParts = item => {
+    const [system = "", group = "", type = ""] = String(item || "")
+      .split("|")
+      .map(part => part.trim());
+    return { system, group, type };
+  };
+
+  const groupedRequestItems = items => {
+    const groups = new Map();
+    items.forEach(item => {
+      const { system, group, type } = requestItemParts(item);
+      const key = system || "Позиции каталога";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push({ raw: item, group, type });
+    });
+    return groups;
+  };
+
+  const formatRequestItems = items => {
+    if (!items.length) return "";
+    const lines = ["Заявка из каталога:"];
+    for (const [system, rows] of groupedRequestItems(items)) {
+      lines.push(`${system}:`);
+      rows.forEach(row => {
+        const title = row.type && row.type !== row.group
+          ? `${row.group} — ${row.type}`
+          : row.group || row.type;
+        lines.push(`- ${title}`);
+      });
+    }
+    return lines.join("\n");
+  };
+
+  const renderRequestList = (list, items) => {
+    if (!list) return;
+    list.innerHTML = "";
+    if (!items.length) {
+      list.textContent = "Выберите тип продукции — здесь появится структура заявки из каталога.";
+      return;
+    }
+
+    for (const [system, rows] of groupedRequestItems(items)) {
+      const section = document.createElement("section");
+      const title = document.createElement("b");
+      title.textContent = system;
+      section.append(title);
+      rows.forEach(row => {
+        const line = document.createElement("span");
+        const text = document.createElement("em");
+        text.textContent = row.type && row.type !== row.group
+          ? `${row.group} — ${row.type}`
+          : row.group || row.type;
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "request-item-remove";
+        remove.dataset.requestRemove = row.raw;
+        remove.setAttribute("aria-label", "Убрать позицию из заявки");
+        remove.textContent = "−";
+        line.append(text, remove);
+        section.append(line);
+      });
+      list.append(section);
+    }
   };
 
   const setStatus = (element, message, isError = false) => {
@@ -47,122 +109,81 @@ document.addEventListener("DOMContentLoaded", () => {
     element.classList.toggle("is-error", isError);
   };
 
+  const getCookie = name => {
+    const cookies = document.cookie ? document.cookie.split(";") : [];
+    for (const cookie of cookies) {
+      const [rawKey, ...rawValue] = cookie.trim().split("=");
+      if (rawKey === name) return decodeURIComponent(rawValue.join("="));
+    }
+    return "";
+  };
+
+  const getComplianceVersions = () => ({
+    consentVersion: document.body.dataset.consentVersion || "",
+    privacyVersion: document.body.dataset.privacyVersion || "",
+    cookieVersion: document.body.dataset.cookieVersion || "",
+  });
+
   const syncButtons = items => {
-    document.querySelectorAll("[data-request-item]").forEach(button => {
-      const selected = items.includes(button.dataset.requestItem);
-      button.classList.toggle("is-selected", selected);
-      if (button.classList.contains("catalog-search-add")) {
-        button.textContent = selected ? "В заявке" : "Добавить в заявку";
-      }
-      if (button.classList.contains("catalog-level-type-row")) {
-        const action = button.querySelector("[data-catalog-type-action]");
-        if (action) action.textContent = selected ? "В заявке" : "Добавить";
-      }
-    });
-  };
-
-  const requestItemParts = item => {
-    const [system = "", group = "", type = ""] = String(item || "").split("|");
-    return { system, group, type };
-  };
-
-  const formatRequestItems = items => {
-    if (!items.length) return "";
-    const groups = new Map();
-    for (const item of items) {
-      const { system, group, type } = requestItemParts(item);
-      const key = [system, group].filter(Boolean).join(": ");
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(type || group);
-    }
-    const lines = ["Заявка из каталога:"];
-    for (const [group, types] of groups) {
-      lines.push(`${group}:`);
-      for (const type of types) lines.push(`- ${type}`);
-    }
-    return lines.join("\n");
-  };
-
-  const renderRecentItems = () => {
-    const items = readItems();
-    recentLists.forEach(list => {
-      list.innerHTML = "";
-      if (!items.length) {
-        const empty = document.createElement("p");
-        empty.className = "catalog-recent-empty";
-        empty.textContent = "Позиции пока не выбраны.";
-        list.append(empty);
-        return;
-      }
-      items.slice(-6).reverse().forEach(item => {
-        const { system, group, type } = requestItemParts(item);
-        const row = document.createElement("div");
-        row.className = "catalog-recent-item";
-
-        const text = document.createElement("span");
-        const title = document.createElement("b");
-        title.textContent = type || group;
-        const path = document.createElement("small");
-        path.textContent = [system, group].filter(Boolean).join(" / ");
-        text.append(title, path);
-
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.dataset.catalogRecentRemove = item;
-        remove.setAttribute("aria-label", "Убрать позицию");
-        remove.textContent = "×";
-
-        row.append(text, remove);
-        list.append(row);
-      });
+    const buttons = document.querySelectorAll("[data-request-item]");
+    buttons.forEach(button => {
+      button.classList.toggle("is-selected", items.includes(button.dataset.requestItem));
+      const sign = button.querySelector("i");
+      if (sign) sign.textContent = items.includes(button.dataset.requestItem) ? "−" : "+";
     });
   };
 
   const renderRequest = () => {
     const items = readItems();
-    if (hiddenItems) hiddenItems.value = JSON.stringify(items);
+    const text = formatRequestItems(items);
+    document.querySelectorAll("[data-request-output]").forEach(output => {
+      output.value = text;
+    });
+    document.querySelectorAll("[data-request-items]").forEach(hiddenItems => {
+      hiddenItems.value = JSON.stringify(items);
+    });
+    document.querySelectorAll("[data-request-count]").forEach(count => {
+      count.textContent = String(items.length);
+    });
+    document.querySelectorAll("[data-request-list]").forEach(list => {
+      renderRequestList(list, items);
+    });
+    document.querySelectorAll("[data-contact-request-items]").forEach(panel => {
+      panel.hidden = !items.length;
+    });
     syncButtons(items);
-    renderRecentItems();
-    const requestText = formatRequestItems(items);
-    if (output) output.value = requestText;
-    document.dispatchEvent(new CustomEvent("pnp:request-items-changed", { detail: { items, requestText } }));
-  };
-
-  const toggleRequestItem = value => {
-    if (!value) return;
-    const items = readItems();
-    if (items.includes(value)) {
-      writeItems(items.filter(item => item !== value));
-    } else {
-      items.push(value);
-      writeItems(items);
-    }
-    setStatus(requestStatus, "");
-    renderRequest();
   };
 
   document.addEventListener("click", event => {
-    const requestButton = event.target.closest("[data-request-item]");
-    if (requestButton) {
+    const removeItem = event.target.closest("[data-request-remove]");
+    if (removeItem) {
       event.preventDefault();
-      toggleRequestItem(requestButton.dataset.requestItem);
+      writeItems(readItems().filter(item => item !== removeItem.dataset.requestRemove));
+      setStatus(document.querySelector("[data-request-status]"), "");
+      renderRequest();
       return;
     }
 
-    const removeRecent = event.target.closest("[data-catalog-recent-remove]");
-    if (!removeRecent) return;
-    event.preventDefault();
-    writeItems(readItems().filter(item => item !== removeRecent.dataset.catalogRecentRemove));
-    renderRequest();
-  });
-
-  if (clear) {
-    clear.addEventListener("click", () => {
-      writeItems([]);
-      setStatus(requestStatus, "");
+    const button = event.target.closest("[data-request-item]");
+    if (button) {
+      event.preventDefault();
+      const value = button.dataset.requestItem;
+      const items = readItems();
+      if (items.includes(value)) writeItems(items.filter(item => item !== value));
+      else writeItems([...items, value]);
+      setStatus(document.querySelector("[data-request-status]"), "");
       renderRequest();
-    });
-  }
+      return;
+    }
+
+    const clear = event.target.closest("[data-request-clear]");
+    if (clear) {
+      event.preventDefault();
+      writeItems([]);
+      setStatus(document.querySelector("[data-request-status]"), "");
+      renderRequest();
+    }
+  });
 
   const initCatalogSearch = () => {
     const root = document.querySelector("[data-catalog-search]");
@@ -517,7 +538,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const createManufacturerCard = manufacturer => {
       const link = document.createElement("a");
       link.className = "catalog-level-manufacturer";
-      link.href = manufacturer.url || manufacturer.site || "#";
+      link.href = manufacturer.slug
+        ? `/vendors/?vendors=${encodeURIComponent(manufacturer.slug)}#allManufacturers`
+        : `/vendors/?q=${encodeURIComponent(manufacturer.name || "")}#allManufacturers`;
       if (manufacturer.logo) {
         const image = document.createElement("img");
         image.src = manufacturer.logo;
@@ -623,7 +646,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const path = document.createElement("small");
         path.textContent = [system, group].filter(Boolean).join(" / ");
         copy.append(name, path);
-        const remove = button("catalog-level-selection-remove", "×");
+        const remove = button("catalog-level-selection-remove", "Г—");
         remove.dataset.catalogSelectionRemove = item;
         remove.setAttribute("aria-label", "Убрать позицию");
         row.append(copy, remove);
@@ -711,6 +734,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (options.items) formData.set("items", JSON.stringify(options.items));
     if (options.requestText !== undefined) formData.set("request_text", options.requestText);
     if (!formData.get("source")) formData.set("source", "catalog_request");
+    const versions = getComplianceVersions();
+    formData.set("page_url", window.location.href);
+    formData.set("consent_version", versions.consentVersion);
+    formData.set("privacy_version", versions.privacyVersion);
 
     if (submitButton) submitButton.disabled = true;
     setStatus(statusElement, "Отправляем заявку...");
@@ -727,6 +754,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       setStatus(statusElement, `Заявка #${data.lead_id} сохранена.`);
       form.reset();
+      if (form.matches("[data-lead-form]") || form.querySelector("[data-request-items]")) {
+        writeItems([]);
+        renderRequest();
+      }
       return data;
     } catch (error) {
       setStatus(statusElement, error.message || "Не удалось отправить заявку.", true);
@@ -736,25 +767,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  if (miniForm) {
-    miniForm.addEventListener("submit", async event => {
-      event.preventDefault();
-      const items = readItems();
-      if (!items.length && !output.value.trim()) {
-        setStatus(requestStatus, "Добавьте позицию из каталога.", true);
-        return;
-      }
-      const data = await submitForm(miniForm, requestStatus, requestSubmit, {
-        items,
-        requestText: output.value.trim(),
-      });
-      if (data) {
-        writeItems([]);
-        renderRequest();
-        if (hiddenItems) hiddenItems.value = "[]";
-      }
+  document.addEventListener("submit", async event => {
+    const miniForm = event.target.closest("[data-mini-request-form]");
+    if (!miniForm) return;
+    event.preventDefault();
+    const items = readItems();
+    const output = miniForm.querySelector("[data-request-output]");
+    const requestStatus = miniForm.querySelector("[data-request-status]");
+    const requestSubmit = miniForm.querySelector("[data-request-submit]");
+    const hiddenItems = miniForm.querySelector("[data-request-items]");
+    if (!items.length && !output?.value.trim()) {
+      setStatus(requestStatus, "Добавьте позицию из каталога.", true);
+      return;
+    }
+    const data = await submitForm(miniForm, requestStatus, requestSubmit, {
+      items,
+      requestText: output?.value.trim() || "",
     });
-  }
+    if (data) {
+      writeItems([]);
+      renderRequest();
+      if (hiddenItems) hiddenItems.value = "[]";
+    }
+  });
 
   const transferMetaKey = "pnp_home_request_transfer";
   const transferDbName = "pnp_home_request_files";
@@ -822,14 +857,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const meta = document.createElement("span");
         meta.className = "file-list-meta";
-        meta.textContent = `${file.name} · ${formatFileSize(file.size)}`;
+        meta.textContent = `${file.name} В· ${formatFileSize(file.size)}`;
 
         const remove = document.createElement("button");
         remove.type = "button";
         remove.className = "file-list-remove";
         remove.dataset.fileRemove = String(index);
         remove.setAttribute("aria-label", `Удалить ${file.name}`);
-        remove.textContent = "×";
+        remove.textContent = "Г—";
 
         item.append(meta, remove);
         fileList.append(item);
@@ -947,6 +982,79 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const initCookieConsent = () => {
+    const banner = document.querySelector("[data-cookie-consent]");
+    if (!banner) return;
+    const accept = banner.querySelector("[data-cookie-accept]");
+    const reject = banner.querySelector("[data-cookie-reject]");
+    const endpoint = banner.dataset.endpoint;
+    const versions = getComplianceVersions();
+    const storageKeyCookie = "pnp_cookie_consent";
+
+    const readStored = () => {
+      try {
+        return JSON.parse(localStorage.getItem(storageKeyCookie) || "null");
+      } catch {
+        return null;
+      }
+    };
+
+    const stored = readStored();
+    const isCurrent = stored
+      && stored.consent_version === versions.consentVersion
+      && stored.privacy_version === versions.privacyVersion
+      && stored.cookie_text_version === versions.cookieVersion
+      && ["accepted", "rejected"].includes(stored.choice);
+
+    if (!isCurrent) banner.hidden = false;
+
+    const saveChoice = async choice => {
+      const payload = {
+        choice,
+        consent_version: versions.consentVersion,
+        privacy_version: versions.privacyVersion,
+        cookie_text_version: versions.cookieVersion,
+        page_url: window.location.href,
+      };
+      const localRecord = {
+        ...payload,
+        consent_id: window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+        timestamp: new Date().toISOString(),
+      };
+      localStorage.setItem(storageKeyCookie, JSON.stringify(localRecord));
+      banner.hidden = true;
+
+      if (!endpoint) return;
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken") || banner.querySelector("[name='csrfmiddlewaretoken']")?.value || "",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (response.ok && data.ok) {
+          localStorage.setItem(storageKeyCookie, JSON.stringify({
+            ...payload,
+            consent_id: data.consent_id,
+            timestamp: data.timestamp,
+          }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      window.dispatchEvent(new CustomEvent("pnp:cookie-consent", { detail: { choice } }));
+    };
+
+    accept?.addEventListener("click", () => saveChoice("accepted"));
+    reject?.addEventListener("click", () => saveChoice("rejected"));
+  };
+
   document.querySelectorAll("[data-lead-form]").forEach(form => {
     const status = form.querySelector("[data-form-status]");
     const submit = form.querySelector("[type='submit']");
@@ -955,6 +1063,10 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       await submitForm(form, status, submit);
     });
+  });
+
+  document.querySelectorAll("[data-mini-request-form]").forEach(form => {
+    initFilePicker(form);
   });
 
   const initContactRequestTransfer = async () => {
@@ -993,13 +1105,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const initContactCatalogItems = () => {
     const form = document.querySelector("[data-lead-form]");
     if (!form) return;
-    const message = form.querySelector("textarea[name='message']");
+    const hiddenItems = form.querySelector("[data-request-items]");
+    const panel = form.querySelector("[data-contact-request-items]");
 
     const syncContactItems = () => {
       const items = readItems();
       if (hiddenItems) hiddenItems.value = JSON.stringify(items);
-      if (!message || !items.length || message.value.trim()) return;
-      message.value = formatRequestItems(items);
+      if (panel) panel.hidden = !items.length;
     };
 
     syncContactItems();
@@ -1475,6 +1587,392 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const initCatalogNavigation = () => {
+    const tree = document.querySelector("[data-catalog-tree]");
+    const searchInput = document.querySelector("[data-catalog-search]");
+    const searchResults = document.querySelector("[data-catalog-search-results]");
+    const searchClear = document.querySelector("[data-catalog-search-clear]");
+    const searchDataNode = document.querySelector("#catalogSearchData");
+    const interactiveDataNode = document.querySelector("#catalogInteractiveData");
+    const stage = document.querySelector("[data-catalog-stage]");
+    const grid = document.querySelector("[data-catalog-card-grid]");
+    const stageTitle = document.querySelector("[data-catalog-stage-title]");
+    const breadcrumbs = document.querySelector("[data-catalog-breadcrumbs]");
+    const layout = document.querySelector(".catalog-layout");
+
+    let catalogData = null;
+    try {
+      catalogData = interactiveDataNode ? JSON.parse(interactiveDataNode.textContent || "null") : null;
+    } catch {
+      catalogData = null;
+    }
+
+    const escapeHtml = value =>
+      String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    const nodes = catalogData?.nodes || {};
+    const root = catalogData?.root || null;
+    const urlToTarget = new Map();
+    Object.values(nodes).forEach(node => {
+      if (node.url) urlToTarget.set(new URL(node.url, window.location.origin).pathname, node.id);
+    });
+
+    const nodeByTarget = target => (target === "root" ? root : nodes[target]);
+
+    const findTarget = element => {
+      const explicit = element?.dataset?.catalogTarget;
+      if (explicit && nodeByTarget(explicit)) return explicit;
+      if (!element?.href) return "";
+      return urlToTarget.get(new URL(element.href, window.location.origin).pathname) || "";
+    };
+
+    const renderBreadcrumbs = node => {
+      if (!breadcrumbs || !node) return;
+      const rows = node.breadcrumbs || root?.breadcrumbs || [];
+      const links = rows.map((item, index) => {
+        const last = index === rows.length - 1;
+        if (last) return `<span>${escapeHtml(item.title)}</span>`;
+        return `<button type="button" data-catalog-link data-catalog-target="${escapeHtml(item.target)}">${escapeHtml(item.title)}</button>`;
+      }).join("");
+      breadcrumbs.innerHTML = `<nav class="catalog-breadcrumbs" aria-label="Навигация каталога">${links}</nav>`;
+    };
+
+    const renderStats = stats =>
+      (stats || [])
+        .filter(item => Number(item.value) > 0)
+        .map(item => `<span>${escapeHtml(item.value)} ${escapeHtml(item.label)}</span>`)
+        .join("");
+
+    const renderChips = chips =>
+      (chips || [])
+        .filter(Boolean)
+        .slice(0, 5)
+        .map(chip => `<span>${escapeHtml(chip)}</span>`)
+        .join("");
+
+    const vendorFilterUrl = vendor => {
+      if (vendor?.slug) return `/vendors/?vendors=${encodeURIComponent(vendor.slug)}#allManufacturers`;
+      return `/vendors/?q=${encodeURIComponent(vendor?.name || "")}#allManufacturers`;
+    };
+
+    const currentCardHtml = node => {
+      if (!node || node.kind === "root") return "";
+      return `
+        <article class="catalog-stage-current-card" style="--stage-image:url('${escapeHtml(node.image)}')">
+          <span class="soft-label">${escapeHtml(node.level)}</span>
+          <h2>${escapeHtml(node.title)}</h2>
+          <p>${escapeHtml(node.summary || "Откройте следующий уровень каталога.")}</p>
+          <div class="catalog-hero-meta">${renderStats(node.stats)}</div>
+        </article>`;
+    };
+
+    const cardHtml = (node, index, compact = false) => `
+      <a class="catalog-level-card${compact ? " catalog-level-card-compact" : ""}" href="${escapeHtml(node.url || "#")}" data-catalog-link data-catalog-target="${escapeHtml(node.id)}">
+        <div class="catalog-level-media">
+          <img src="${escapeHtml(node.image)}" alt="${escapeHtml(node.title)}">
+        </div>
+        <div class="catalog-level-body">
+          <div class="catalog-level-kicker">
+            <span>${escapeHtml(node.level)}</span>
+            <b>${String(index + 1).padStart(2, "0")}</b>
+          </div>
+          <h3>${escapeHtml(node.title)}</h3>
+          <p>${escapeHtml(node.summary || "Откройте следующий уровень каталога.")}</p>
+          <div class="catalog-level-stats">${renderStats(node.stats)}</div>
+          <div class="catalog-level-chips">${renderChips(node.chips)}</div>
+        </div>
+      </a>`;
+
+    const renderLevel = target => {
+      if (!catalogData || !stage) return false;
+      const node = nodeByTarget(target) || root;
+      if (!node) return false;
+      layout?.classList.remove("is-product-mode");
+      renderBreadcrumbs(node);
+      const childIds = node.children || [];
+      const cards = childIds
+        .map((id, index) => nodes[id] ? cardHtml(nodes[id], index, node.kind !== "root") : "")
+        .join("");
+      const gridClass = childIds.length === root?.children?.length
+        ? "catalog-level-grid catalog-block-grid"
+        : "catalog-level-grid catalog-next-grid";
+      const title = node.kind === "root" ? "Глобальные блоки" : "Следующий уровень";
+      stage.innerHTML = `
+        ${currentCardHtml(node)}
+        <div class="section-head" data-catalog-stage-head>
+          <div>
+            <span class="soft-label">Следующий уровень</span>
+            <h2 data-catalog-stage-title>${escapeHtml(title)}</h2>
+          </div>
+          <a class="link-more" href="/contacts/#request-form">Отправить спецификацию →</a>
+        </div>
+        <div class="${gridClass}" data-catalog-card-grid>${cards}</div>`;
+      if (!childIds.length) {
+        stage.querySelector("[data-catalog-card-grid]").innerHTML = `
+          <article class="glass catalog-empty-state">
+            <h3>На этом уровне пока нет элементов</h3>
+            <p>Структура сохранена в базе. Следующий уровень можно добавить через импорт или ORM.</p>
+          </article>`;
+      }
+      syncTree(target);
+      return true;
+    };
+
+    const renderGroup = target => {
+      if (!catalogData || !stage) return false;
+      const group = nodes[target];
+      if (!group || group.kind !== "group") return false;
+      layout?.classList.add("is-product-mode");
+      renderBreadcrumbs(group);
+      const groupTypes = (group.types || []).length ? group.types : [{ title: group.title }];
+      const typeRows = groupTypes.map(type => {
+        const requestItem = `${group.systemTitle}|${group.title}|${type.title}`;
+        return `
+          <button class="catalog-product-type-row" type="button" data-request-item="${escapeHtml(requestItem)}">
+            <span>
+              <b>${escapeHtml(type.title)}</b>
+              <small>Добавить этот тип в заявку</small>
+            </span>
+            <i aria-hidden="true">+</i>
+          </button>`;
+      }).join("");
+      const brandRows = (group.vendors || []).length
+        ? group.vendors.map(vendor => `
+            <a class="logo-tile" href="${escapeHtml(vendorFilterUrl(vendor))}" title="${escapeHtml(vendor.name)}">
+              ${vendor.logo ? `<img src="${escapeHtml(vendor.logo)}" alt="${escapeHtml(vendor.name)}">` : `<span>${escapeHtml(vendor.name)}</span>`}
+            </a>`).join("")
+        : `<div class="catalog-product-empty-note">Производители уточняются снабжением.</div>`;
+
+      stage.innerHTML = `
+        <article class="catalog-product-hero-card" style="--catalog-hero-image:url('${escapeHtml(group.image)}')">
+          <span class="soft-label">Товарная группа</span>
+          <h1>${escapeHtml(group.title)}</h1>
+          <p>${escapeHtml(group.summary)}</p>
+          <div class="catalog-hero-meta">${renderStats(group.stats)}</div>
+        </article>
+
+        <div class="catalog-product-title-row">
+          <div>
+            <h2>Подбор по товарной группе</h2>
+            <p>Выберите тип продукции или сразу отправьте позицию в заявку.</p>
+          </div>
+        </div>
+
+        <article class="glass catalog-product-passport-card">
+          <span class="soft-label">Паспорт товарной группы</span>
+          <h2>${escapeHtml(group.title)}</h2>
+          <p>${escapeHtml(group.summary)}</p>
+          <div class="catalog-product-passport-grid">
+            <section class="catalog-product-type-panel">
+              <h3>Типы продукции</h3>
+              <div class="catalog-product-type-list">${typeRows}</div>
+            </section>
+            <section class="catalog-product-brand-panel">
+              <h3>Бренды / производители</h3>
+              <div class="catalog-product-brand-grid">${brandRows}</div>
+            </section>
+          </div>
+        </article>
+
+        <section class="glass catalog-mini-request catalog-mini-request-compact" data-catalog-request-panel>
+          <input type="hidden" name="items" data-request-items>
+          <textarea class="mini-request-raw" name="request_text" data-request-output aria-label="Комментарий к заявке"></textarea>
+          <div class="mini-request-head">
+            <div>
+              <span class="soft-label">Мини-заявка <b data-request-count>0</b></span>
+              <h3>Выбранные позиции</h3>
+            </div>
+            <button class="btn ghost small" type="button" data-request-clear>Очистить</button>
+          </div>
+          <div class="mini-request-selected-list" data-request-list>Выберите тип продукции — здесь появится структура заявки из каталога.</div>
+          <div class="mini-request-actions">
+            <a class="btn light" href="/contacts/#request-form">Перейти к заявке</a>
+          </div>
+        </section>`;
+      syncTree(target);
+      renderRequest();
+      return true;
+    };
+
+    const syncTree = target => {
+      if (!tree) return;
+      tree.querySelectorAll("[data-catalog-link]").forEach(link => {
+        link.classList.toggle("is-active", link.dataset.catalogTarget === target);
+      });
+      tree.querySelectorAll("[data-catalog-node]").forEach(node => {
+        node.classList.remove("is-current-branch");
+      });
+      const active = tree.querySelector(`[data-catalog-target="${CSS.escape(target)}"]`);
+      if (!active) return;
+      let current = active.closest("[data-catalog-node]");
+      while (current) {
+        current.classList.add("is-open", "is-current-branch");
+        const toggle = current.querySelector(":scope > .catalog-tree-row [data-catalog-toggle]");
+        if (toggle) toggle.setAttribute("aria-expanded", "true");
+        current = current.parentElement?.closest("[data-catalog-node]");
+      }
+    };
+
+    const selectTarget = target => {
+      const node = nodeByTarget(target);
+      if (!node) return false;
+      const rendered = node.kind === "group" ? renderGroup(target) : renderLevel(target);
+      if (rendered && stage) {
+        const topbar = document.querySelector(".topbar");
+        const offset = (topbar ? topbar.getBoundingClientRect().height : 76) + 18;
+        const top = Math.max(0, stage.getBoundingClientRect().top + window.pageYOffset - offset);
+        window.scrollTo({ top, behavior: "auto" });
+      }
+      return rendered;
+    };
+
+    if (tree) {
+      tree.addEventListener("click", event => {
+        const toggle = event.target.closest("[data-catalog-toggle]");
+        if (!toggle) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const node = toggle.closest("[data-catalog-node]");
+        if (!node) return;
+        const nextState = !node.classList.contains("is-open");
+        node.classList.toggle("is-open", nextState);
+        toggle.setAttribute("aria-expanded", String(nextState));
+      });
+    }
+
+    document.addEventListener("click", event => {
+      const link = event.target.closest("[data-catalog-link]");
+      if (!link) return;
+      const target = findTarget(link);
+      if (!target || !catalogData) return;
+      event.preventDefault();
+      searchResults && (searchResults.hidden = true);
+      selectTarget(target);
+    });
+
+    if (!searchInput || !searchResults || !searchDataNode) return;
+
+    let searchItems = [];
+    try {
+      searchItems = JSON.parse(searchDataNode.textContent || "[]");
+    } catch {
+      searchItems = [];
+    }
+
+    const normalize = value =>
+      String(value || "")
+        .toLowerCase()
+        .replaceAll("ё", "е")
+        .replace(/[^\p{L}\p{N}\s-]+/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const escapeRegExp = value => String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const tokenize = value => normalize(value).split(" ").filter(Boolean);
+
+    const scoreItem = (item, query) => {
+      const normalizedQuery = normalize(query);
+      if (!normalizedQuery) return 0;
+
+      const title = normalize(item.title);
+      const path = normalize(item.path);
+      const aliases = (item.aliases || []).map(normalize).filter(Boolean);
+      const haystack = [title, path, ...aliases].join(" ");
+      const words = tokenize(title);
+      const acronymQuery = String(query || "").trim().toUpperCase();
+      const hasAcronymAtStart = acronymQuery
+        ? new RegExp(`^${escapeRegExp(acronymQuery)}([^\\p{L}\\p{N}]|$)`, "u").test(String(item.title || ""))
+        : false;
+      const hasAcronymWord = acronymQuery
+        ? new RegExp(`(^|[^\\p{L}\\p{N}])${escapeRegExp(acronymQuery)}([^\\p{L}\\p{N}]|$)`, "u").test(String(item.title || ""))
+        : false;
+
+      if (title === normalizedQuery) return 140;
+      if (normalizedQuery.length <= 2) {
+        if (hasAcronymAtStart) return 132;
+        if (hasAcronymWord) return 124;
+        if (aliases.includes(normalizedQuery)) return 112;
+        return 0;
+      }
+
+      if (title.startsWith(normalizedQuery)) return 132;
+      if (words.includes(normalizedQuery)) return 124;
+      if (aliases.includes(normalizedQuery)) return 112;
+
+      if (haystack.includes(normalizedQuery)) return 42;
+
+      const queryWords = tokenize(normalizedQuery);
+      if (queryWords.length && queryWords.every(word => haystack.includes(word))) return 30;
+      return 0;
+    };
+
+    const renderSearch = () => {
+      const query = searchInput.value.trim();
+      searchResults.innerHTML = "";
+      if (!query) {
+        searchResults.hidden = true;
+        return;
+      }
+
+      const matches = searchItems
+        .map(item => ({ ...item, score: scoreItem(item, query) }))
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title, "ru"))
+        .slice(0, 12);
+
+      if (!matches.length) {
+        const empty = document.createElement("p");
+        empty.textContent = "Ничего не найдено. Попробуйте название материала, системы или производителя.";
+        searchResults.append(empty);
+        searchResults.hidden = false;
+        return;
+      }
+
+      matches.forEach(item => {
+        const link = document.createElement("a");
+        link.href = item.url;
+        if (item.target) link.dataset.catalogTarget = item.target;
+        link.dataset.catalogLink = "";
+        link.className = "catalog-search-result";
+        const title = document.createElement("b");
+        const level = document.createElement("span");
+        const path = document.createElement("small");
+        title.textContent = item.title;
+        level.textContent = item.level;
+        path.textContent = item.path;
+        link.append(title, level, path);
+        searchResults.append(link);
+      });
+      searchResults.hidden = false;
+    };
+
+    searchInput.addEventListener("input", renderSearch);
+    searchInput.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      const first = searchResults.querySelector("a");
+      if (!first) return;
+      event.preventDefault();
+      first.focus();
+    });
+    searchClear?.addEventListener("click", () => {
+      searchInput.value = "";
+      searchResults.innerHTML = "";
+      searchResults.hidden = true;
+      searchInput.focus();
+    });
+    document.addEventListener("click", event => {
+      if (event.target.closest(".catalog-search-box")) return;
+      searchResults.hidden = true;
+    });
+  };
+
+  initCatalogNavigation();
   initVendorFilters();
   initPartnersFilter();
   initCatalogSearch();
@@ -1483,5 +1981,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initHomeRequestTransfer();
   initContactRequestTransfer();
   initContactCatalogItems();
+  initCookieConsent();
   renderRequest();
 });
