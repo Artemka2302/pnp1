@@ -6,20 +6,17 @@
 
 {% block content %}
 {{ catalog_interactive_data|json_script:"catalogInteractiveData" }}
-<section class="catalog-hero">
+<section class="hero hero-small catalog-hero">
   <div class="vertical-accent"></div>
   <div class="container">
-    <div data-catalog-breadcrumbs>
-      {% include "main/partials/catalog_breadcrumbs.html" %}
-    </div>
-    <span class="soft-label">Каталог</span>
-    <h1>Основные направления поставки</h1>
-    <p>Каталог построен по разделам проекта: от глобального блока до товарной группы, типа продукции и производителей.</p>
-    <div class="catalog-hero-meta">
-      <span>{{ stats.blocks }} блоков</span>
-      <span>{{ stats.directions }} направлений</span>
-      <span>{{ stats.systems }} систем</span>
-      <span>{{ stats.groups }} групп</span>
+    <div class="eyebrow">Каталог</div>
+    <h1>Каталог <span class="accent-word">поставки по разделам проекта</span></h1>
+    <p class="hero-subtitle">Каталог построен по уровням: от глобального блока до направления, системы, товарной группы, типа продукции и производителей.</p>
+    <div class="hero-features catalog-hero-features">
+      <div class="feature-mini"><i aria-hidden="true">01</i><span>{{ stats.blocks }} блоков<br>глобальной поставки</span></div>
+      <div class="feature-mini"><i aria-hidden="true">02</i><span>{{ stats.directions }} направлений<br>по разделам проекта</span></div>
+      <div class="feature-mini"><i aria-hidden="true">03</i><span>{{ stats.systems }} систем<br>для быстрого выбора</span></div>
+      <div class="feature-mini"><i aria-hidden="true">04</i><span>{{ stats.groups }} групп<br>с привязкой к брендам</span></div>
     </div>
   </div>
 </section>

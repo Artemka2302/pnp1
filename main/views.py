@@ -1196,6 +1196,43 @@ def partner_parent_category_filter(category):
     )
 
 
+def normalize_partner_vendor_key(value):
+    return "".join(char for char in (value or "").casefold().replace("ё", "е") if char.isalnum())
+
+
+def attach_partner_vendor_urls(partners):
+    partner_list = list(partners)
+    if not partner_list:
+        return partner_list
+
+    vendors = list(
+        Vendor.objects
+        .filter(vendorproductgroup__show_in_vendors=True)
+        .distinct()
+        .only("slug", "name")
+    )
+    vendors_by_slug = {vendor.slug: vendor for vendor in vendors}
+    vendors_by_name = {}
+    for vendor in vendors:
+        key = normalize_partner_vendor_key(vendor.name)
+        if key and key not in vendors_by_name:
+            vendors_by_name[key] = vendor
+
+    vendors_url = reverse("vendors")
+    for partner in partner_list:
+        vendor = (
+            vendors_by_slug.get(partner.slug)
+            or vendors_by_name.get(normalize_partner_vendor_key(partner.name))
+        )
+        if vendor:
+            partner.vendor_filter_url = f"{vendors_url}?{urlencode({'vendors': vendor.slug})}#allManufacturers"
+            partner.vendor_filter_match = vendor.name
+        else:
+            partner.vendor_filter_url = f"{vendors_url}?{urlencode({'q': partner.name})}#allManufacturers"
+            partner.vendor_filter_match = ""
+    return partner_list
+
+
 def partners(request):
     query = request.GET.get("q", "").strip()
     categories = [
@@ -1257,7 +1294,7 @@ def partners(request):
             )
 
     context = {
-        "partners": page_obj.object_list,
+        "partners": attach_partner_vendor_urls(page_obj.object_list),
         "page_obj": page_obj,
         "pagination": {
             "has_pages": page_obj.has_other_pages(),
