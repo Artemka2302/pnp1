@@ -1,4 +1,8 @@
+import uuid
+
 from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):
@@ -27,6 +31,9 @@ class CatalogBlock(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("catalog_block", kwargs={"block_slug": self.slug})
+
 
 class Direction(TimeStampedModel):
     block = models.ForeignKey(CatalogBlock, on_delete=models.CASCADE, related_name="directions")
@@ -42,6 +49,12 @@ class Direction(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse(
+            "catalog_direction",
+            kwargs={"block_slug": self.block.slug, "direction_slug": self.slug},
+        )
+
 
 class CatalogSystem(TimeStampedModel):
     direction = models.ForeignKey(Direction, on_delete=models.CASCADE, related_name="systems")
@@ -55,6 +68,16 @@ class CatalogSystem(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse(
+            "catalog_system",
+            kwargs={
+                "block_slug": self.direction.block.slug,
+                "direction_slug": self.direction.slug,
+                "system_slug": self.slug,
+            },
+        )
 
 
 class ProductGroup(TimeStampedModel):
@@ -73,6 +96,17 @@ class ProductGroup(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse(
+            "product_group",
+            kwargs={
+                "block_slug": self.system.direction.block.slug,
+                "direction_slug": self.system.direction.slug,
+                "system_slug": self.system.slug,
+                "group_slug": self.slug,
+            },
+        )
 
     @property
     def catalog_path(self):
@@ -271,3 +305,44 @@ class UploadedFile(TimeStampedModel):
 
     def __str__(self):
         return self.original_name
+
+
+class ConsentLog(TimeStampedModel):
+    consent_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    lead = models.ForeignKey(Lead, on_delete=models.SET_NULL, related_name="consent_logs", blank=True, null=True)
+    request_id = models.CharField(max_length=120, blank=True)
+    form_type = models.CharField(max_length=80)
+    consent_version = models.CharField(max_length=80)
+    privacy_version = models.CharField(max_length=80)
+    timestamp = models.DateTimeField(default=timezone.now)
+    page_url = models.URLField(max_length=1200, blank=True)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.CharField(max_length=500, blank=True)
+    checkbox_value = models.BooleanField(default=False)
+    file_upload_fact = models.BooleanField(default=False)
+    submitted_fields_hash = models.CharField(max_length=64, blank=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        return f"{self.form_type}: {self.consent_id}"
+
+
+class CookieConsentLog(TimeStampedModel):
+    consent_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    consent_version = models.CharField(max_length=80)
+    privacy_version = models.CharField(max_length=80)
+    cookie_text_version = models.CharField(max_length=80)
+    choice = models.CharField(max_length=40)
+    timestamp = models.DateTimeField(default=timezone.now)
+    page_url = models.URLField(max_length=1200, blank=True)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.CharField(max_length=500, blank=True)
+    raw_payload = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        return f"{self.choice}: {self.consent_id}"

@@ -1,70 +1,47 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Каталог решений — ПНП{% endblock %}
-{% block body_class %}catalog-master-site-preview catalog-master-public{% endblock %}
+{% block title %}Каталог поставки — ПНП{% endblock %}
+{% block body_class %}catalog-page catalog-master-site-preview catalog-master-public{% endblock %}
 
 {% block content %}
-<section class="hero hero-small catalog-master-preview-hero" style="--master-preview-hero-image:url('{% static 'assets/img/hero-cover.webp' %}')">
+{{ catalog_interactive_data|json_script:"catalogInteractiveData" }}
+<section class="catalog-hero">
   <div class="vertical-accent"></div>
   <div class="container">
-    <div class="eyebrow">Каталог</div>
-    <h1>Каталог <span class="accent-word">решений</span> ПНП</h1>
-    <p class="hero-subtitle">Структура каталога хранится в базе: блоки, направления, системы, товарные группы, типы продукции и производители.</p>
-    <div class="catalog-master-preview-meta">
-      <article><b>{{ stats.blocks }}</b><span>глобальных блоков</span></article>
-      <article><b>{{ stats.directions }}</b><span>направлений</span></article>
-      <article><b>{{ stats.groups }}</b><span>товарных групп</span></article>
+    <div data-catalog-breadcrumbs>
+      {% include "main/partials/catalog_breadcrumbs.html" %}
+    </div>
+    <span class="soft-label">Каталог</span>
+    <h1>Основные направления поставки</h1>
+    <p>Каталог построен по разделам проекта: от глобального блока до товарной группы, типа продукции и производителей.</p>
+    <div class="catalog-hero-meta">
+      <span>{{ stats.blocks }} блоков</span>
+      <span>{{ stats.directions }} направлений</span>
+      <span>{{ stats.systems }} систем</span>
+      <span>{{ stats.groups }} групп</span>
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <span class="soft-label">База комплектации</span>
-        <h2>Основные блоки поставки</h2>
+<section class="section catalog-section">
+  <div class="container catalog-layout">
+    {% include "main/partials/catalog_nav.html" %}
+
+    <div class="catalog-main" data-catalog-stage>
+      <div class="section-head" data-catalog-stage-head>
+        <div>
+          <span class="soft-label">Следующий уровень</span>
+          <h2 data-catalog-stage-title>Глобальные блоки</h2>
+        </div>
+        <a class="link-more" href="{% url 'contacts' %}#request-form">Отправить спецификацию →</a>
       </div>
-      <a class="btn ghost" href="{% url 'contacts' %}#request-form">Отправить спецификацию →</a>
-    </div>
 
-    <div class="solutions-grid-v11 catalog-master-block-preview">
-      {% for block in blocks %}
-        <a class="solution-card-v11" href="{% url 'catalog_block' block.slug %}">
-          <div class="solution-media">
-            {% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}
-          </div>
-          <div class="solution-body">
-            <div class="solution-kicker">Блок <span>{{ forloop.counter|stringformat:"02d" }}</span></div>
-            <h3>{{ block.title }}</h3>
-            <p>{{ block.summary }}</p>
-            <div class="solution-tags">
-              <span>{{ block.direction_count }} направлений</span>
-              <span>{{ block.system_count }} систем</span>
-              <span>{{ block.group_count }} групп</span>
-            </div>
-            <div class="catalog-master-system-block">
-              <b class="catalog-master-card-chip-title">Направления</b>
-              <div class="catalog-master-chip-row">
-                {% for direction in block.directions.all|slice:":5" %}
-                  <span class="catalog-master-chip">{{ direction.title }}</span>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-        </a>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<section class="section compact">
-  <div class="container service-band">
-    <div class="left">
-      <h2>Есть спецификация или список позиций?</h2>
-      <p>Пришлите файл или опишите задачу. Сохраним заявку в Django и подготовим подбор по каталогу.</p>
-      <a class="btn light" href="{% url 'contacts' %}#request-form">Отправить запрос →</a>
+      <div class="catalog-level-grid catalog-block-grid" data-catalog-card-grid>
+        {% for item in blocks %}
+          {% include "main/partials/catalog_card.html" with card_level="Блок" %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>

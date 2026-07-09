@@ -6,11 +6,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{% block title %}ПНП — единый центр комплектации строительных объектов{% endblock %}</title>
   <meta name="description" content="{% block description %}Комплектация строительных объектов по разделам проекта: материалы, оборудование, производители и аналоги под спецификацию, сроки и бюджет.{% endblock %}">
+  <link rel="icon" type="image/png" href="{% static 'assets/img/brand/pnp-logo-exact-symbol-clean.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
   {% block extra_head %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}">
   <div class="page">
     <header class="topbar">
       <div class="container topbar-inner">
@@ -62,7 +63,7 @@
     <footer class="footer">
       <div class="container footer-inner">
         <span>© ПНП. Инженерные решения и комплектация объектов.</span>
-        <span><a href="tel:+79214370438">+7 921 437 04 38</a> · <a href="mailto:info@pnp1.ru">info@pnp1.ru</a></span>
+        <span><a href="tel:+79214370438">+7 921 437 04 38</a> · <a href="mailto:info@pnp1.ru">info@pnp1.ru</a> · <a href="{% url 'privacy' %}">Политика</a> · <a href="{% url 'consent' %}">Согласие</a></span>
       </div>
     </footer>
 
@@ -70,6 +71,18 @@
       <a class="btn" href="tel:+79214370438">Позвонить: <span>+7 921 437 04 38</span></a>
     </div>
   </div>
+  <section class="cookie-banner" data-cookie-consent data-endpoint="{% url 'api_cookie_consent' %}" hidden aria-label="Настройки cookie">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <div>
+      <b>Cookie и технические данные</b>
+      <p>Мы используем необходимые cookie для работы сайта. Аналитика и маркетинг включаются только после вашего согласия.</p>
+      <a href="{% url 'privacy' %}#cookies">Подробнее в политике</a>
+    </div>
+    <div class="cookie-banner-actions">
+      <button class="btn small" type="button" data-cookie-accept>Принять</button>
+      <button class="btn ghost small" type="button" data-cookie-reject>Отклонить необязательные</button>
+    </div>
+  </section>
   <script src="{% static 'js/site.js' %}"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
