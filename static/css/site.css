@@ -4035,7 +4035,7 @@ a[href*="wa.me"] {
 /* PNP vertical brand line: continues the burgundy axis from the header logo into page content. */
 :root {
   --pnp-spine-width: 26px;
-  --pnp-spine-left: max(19px, calc((100vw - var(--max)) / 2 + 12px));
+  --pnp-spine-left: var(--pnp-site-rail-left, max(18px, calc((100vw - var(--max)) / 2)));
 }
 
 .brand-spine {
