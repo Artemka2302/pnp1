@@ -1269,6 +1269,36 @@ button.partner-category-chip {
   margin-top: 22px;
 }
 
+.partner-card-link {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.partner-card-link .logo-tile {
+  width: 100%;
+}
+
+.partner-card-action {
+  display: inline-flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 16px;
+  color: #d6a8b9;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.2;
+  transition: color .18s ease, transform .18s ease;
+}
+
+.partner-card-link:hover .partner-card-action,
+.partner-card-link:focus-visible .partner-card-action {
+  color: #fff;
+  transform: translateX(3px);
+}
+
 .partners-pagination {
   display: flex;
   flex-wrap: wrap;
@@ -2753,9 +2783,12 @@ a[href*="wa.me"] {
 .catalog-page .catalog-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(74px, 9vw, 128px) 0 clamp(42px, 6vw, 72px);
+  min-height: 590px;
+  display: grid;
+  align-items: center;
+  padding: 76px 0 42px;
   background:
-    linear-gradient(90deg, rgba(8, 21, 39, .98), rgba(14, 25, 48, .92) 45%, rgba(14, 25, 48, .74)),
+    linear-gradient(90deg, rgba(8, 21, 39, .98) 0%, rgba(8, 21, 39, .91) 28%, rgba(32, 44, 71, .55) 58%, rgba(32, 44, 71, .30) 100%),
     var(--catalog-hero-image, url("../assets/img/hero-cover.webp")) center right / cover no-repeat;
 }
 
@@ -2776,20 +2809,24 @@ a[href*="wa.me"] {
 }
 
 .catalog-page .catalog-hero h1 {
-  max-width: 1040px;
-  margin: 12px 0 14px;
+  max-width: 980px;
+  margin: 0;
   color: #f6f8fc;
-  font-size: clamp(42px, 5.4vw, 78px);
-  line-height: .96;
-  letter-spacing: 0;
+  font-size: clamp(46px, 6.9vw, 82px);
+  line-height: 1.02;
+  letter-spacing: -.055em;
 }
 
 .catalog-page .catalog-hero p {
   max-width: 760px;
-  margin: 0;
+  margin: 24px 0 0;
   color: #d6e0ed;
   font-size: clamp(16px, 1.5vw, 20px);
   line-height: 1.56;
+}
+
+.catalog-page .catalog-hero .catalog-hero-features {
+  max-width: 1120px;
 }
 
 .catalog-breadcrumbs {
@@ -2859,7 +2896,6 @@ a[href*="wa.me"] {
   padding-top: clamp(38px, 5vw, 64px);
 }
 
-.catalog-page .catalog-hero > .container,
 .catalog-page .catalog-section > .container {
   padding-left: calc(var(--pnp-spine-width) + 52px);
 }
@@ -3110,6 +3146,7 @@ a[href*="wa.me"] {
 
 .catalog-level-card {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 190px 1fr;
   min-height: 430px;
   overflow: hidden;
@@ -3122,6 +3159,52 @@ a[href*="wa.me"] {
   color: inherit;
   text-decoration: none;
   transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) {
+  min-height: 620px;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-media {
+  min-height: 180px;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-body {
+  padding: 18px;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-kicker {
+  margin-bottom: 12px;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-kicker b {
+  width: 34px;
+  height: 34px;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-body h3 {
+  font-size: clamp(22px, 1.55vw, 26px);
+  line-height: 1.08;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-body p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  font-size: 13px;
+  line-height: 1.46;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-stats span,
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-chips span {
+  min-height: 28px;
+  padding: 6px 9px;
+  font-size: 11px;
+}
+
+.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-chips span:nth-child(n + 4) {
+  display: none;
 }
 
 .catalog-level-card-compact {
@@ -3952,7 +4035,7 @@ a[href*="wa.me"] {
 /* PNP vertical brand line: continues the burgundy axis from the header logo into page content. */
 :root {
   --pnp-spine-width: 26px;
-  --pnp-spine-left: max(19px, calc((100vw - var(--max)) / 2 + 12px));
+  --pnp-spine-left: var(--pnp-site-rail-left, max(18px, calc((100vw - var(--max)) / 2)));
 }
 
 .brand-spine {
