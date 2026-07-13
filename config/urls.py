@@ -19,4 +19,5 @@ from django.urls import include
 
 urlpatterns = [
     path("", include("main.urls")),
+    path("cabinet/", include('cabinet.urls')),
 ]

@@ -1,0 +1,119 @@
+{% extends 'cabinet/base_cabinet.html' %}
+{% load static %}
+
+{% block title %}Мои заявки | ПНП Кабинет{% endblock %}
+
+{% block cabinet_content %}
+<div class="cabinet-page-head">
+    <div>
+        <span class="cabinet-eyebrow">Заявки</span>
+        <h2>Мои заявки</h2>
+        <p>Здесь отображаются заявки, отправленные из авторизованной сессии.</p>
+    </div>
+    <a href="{% url 'contacts' %}#request-form" class="cabinet-btn cabinet-btn-primary">
+        <span aria-hidden="true">+</span>
+        Новая заявка
+    </a>
+</div>
+
+<div class="cabinet-requests-list">
+{% for lead in leads %}
+    <div class="cabinet-request-item">
+        <div class="cabinet-request-header">
+            <div>
+                <span class="cabinet-request-id">Заявка №{{ lead.id }}</span>
+                <span class="cabinet-request-source">{{ lead.get_source_display }}</span>
+            </div>
+            <span class="cabinet-request-status status-{{ lead.status }}">{{ lead.get_status_display }}</span>
+        </div>
+
+        <div class="cabinet-request-body">
+            <div class="cabinet-request-summary">
+                <h3>
+                    {% if lead.product_group %}
+                        {{ lead.product_group.title }}
+                    {% elif lead.category %}
+                        {{ lead.category }}
+                    {% elif lead.object_name %}
+                        {{ lead.object_name }}
+                    {% else %}
+                        Заявка на комплектацию
+                    {% endif %}
+                </h3>
+                {% if lead.message %}
+                    <p>{{ lead.message|linebreaksbr }}</p>
+                {% elif lead.request_text %}
+                    <p>{{ lead.request_text|truncatechars:180 }}</p>
+                {% else %}
+                    <p>Менеджер уточнит состав и параметры заявки.</p>
+                {% endif %}
+            </div>
+
+            <dl class="cabinet-request-details">
+                <div>
+                    <dt>Дата</dt>
+                    <dd>{{ lead.created_at|date:"d.m.Y H:i" }}</dd>
+                </div>
+                {% if lead.object_name %}
+                <div>
+                    <dt>Объект</dt>
+                    <dd>{{ lead.object_name }}</dd>
+                </div>
+                {% endif %}
+                {% if lead.category %}
+                <div>
+                    <dt>Направление</dt>
+                    <dd>{{ lead.category }}</dd>
+                </div>
+                {% endif %}
+            </dl>
+        </div>
+
+        {% with catalog_items=lead.items.all %}
+        {% if catalog_items %}
+            <section class="cabinet-request-catalog">
+                <div class="cabinet-request-catalog-head">
+                    <span>Позиции из каталога</span>
+                    <b>{{ catalog_items|length }} поз.</b>
+                </div>
+                <div class="cabinet-request-catalog-list">
+                    {% for item in catalog_items %}
+                        <article class="cabinet-request-catalog-item">
+                            <div>
+                                <span>{{ item.system_title|default:"Каталог ПНП" }}</span>
+                                <h4>{{ item.product_group_title }}</h4>
+                                {% if item.product_type_title %}
+                                    <p>{{ item.product_type_title }}</p>
+                                {% endif %}
+                            </div>
+                            {% if item.quantity or item.comment %}
+                                <small>
+                                    {% if item.quantity %}{{ item.quantity }}{% endif %}
+                                    {% if item.quantity and item.comment %} · {% endif %}
+                                    {% if item.comment %}{{ item.comment }}{% endif %}
+                                </small>
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+        {% endwith %}
+
+        <div class="cabinet-request-footer">
+            <span>Контакт: {{ lead.contact_name|default:lead.phone|default:lead.email|default:"не указан" }}</span>
+            {% if lead.bitrix_lead_id %}
+                <span>Bitrix ID: {{ lead.bitrix_lead_id }}</span>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <section class="cabinet-empty-state">
+        <span aria-hidden="true">+</span>
+        <h3>Заявок пока нет</h3>
+        <p>Отправьте первую заявку через форму, и она появится в личном кабинете после привязки к аккаунту.</p>
+        <a href="{% url 'contacts' %}#request-form" class="cabinet-btn cabinet-btn-primary">Создать заявку</a>
+    </section>
+{% endfor %}
+</div>
+{% endblock %}

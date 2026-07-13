@@ -424,7 +424,7 @@ def about(request):
             "directions": Direction.objects.count(),
             "systems": CatalogSystem.objects.count(),
             "groups": ProductGroup.objects.count(),
-            "vendors": Vendor.objects.count(),
+            "vendors": Vendor.objects.count(), 
         },
         "blocks": CatalogBlock.objects.all(),
     }
@@ -1533,6 +1533,8 @@ def catalog_request_api(request):
             phone=phone,
             email=email,
             company=company,
+            category=category,
+            object_name=object_name,
             message=message,
             request_text=request_text,
             consent=consent_value,
@@ -1541,6 +1543,7 @@ def catalog_request_api(request):
             raw_payload=raw_payload,
             user_agent=request.META.get("HTTP_USER_AGENT", "")[:500],
             ip_address=client_ip(request),
+            user=request.user if request.user.is_authenticated else None,
         )
 
         created_items = 0

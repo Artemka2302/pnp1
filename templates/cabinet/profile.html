@@ -1,0 +1,61 @@
+{% extends 'cabinet/base_cabinet.html' %}
+{% load static %}
+
+{% block title %}Профиль | ПНП Кабинет{% endblock %}
+
+{% block cabinet_content %}
+<div class="cabinet-page-head">
+    <div>
+        <span class="cabinet-eyebrow">Профиль</span>
+        <h2>Данные аккаунта</h2>
+        <p>Контактная информация, которая используется для работы с заявками.</p>
+    </div>
+    <a class="cabinet-btn cabinet-btn-primary" href="{% url 'contacts' %}#request-form">
+        <span aria-hidden="true">+</span>
+        Новая заявка
+    </a>
+</div>
+
+<div class="cabinet-profile-grid">
+    <section class="cabinet-card cabinet-profile-card">
+        <div class="cabinet-avatar" aria-hidden="true">
+            {{ user.get_full_name|default:user.username|first|upper }}
+        </div>
+        <div class="cabinet-profile-title">
+            <h3>{{ user.get_full_name|default:user.username }}</h3>
+            <span>{{ user.username }}</span>
+        </div>
+        <div class="cabinet-profile-meta">
+            <span>Клиент ПНП</span>
+            <span>Заявок: {{ user.leads.count }}</span>
+        </div>
+    </section>
+
+    <section class="cabinet-card">
+        <div class="cabinet-card-head">
+            <div>
+                <span class="cabinet-eyebrow">Контакты</span>
+                <h3>Основная информация</h3>
+            </div>
+        </div>
+        <div class="cabinet-info-list">
+            <div class="cabinet-info-row">
+                <span>Имя пользователя</span>
+                <b>{{ user.username }}</b>
+            </div>
+            <div class="cabinet-info-row">
+                <span>Полное имя</span>
+                <b>{{ user.get_full_name|default:"Не указано" }}</b>
+            </div>
+            <div class="cabinet-info-row">
+                <span>Email</span>
+                <b>{{ user.email|default:"Не указан" }}</b>
+            </div>
+            <div class="cabinet-info-row">
+                <span>Дата регистрации</span>
+                <b>{{ user.date_joined|date:"d.m.Y" }}</b>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
