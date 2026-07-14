@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "main",
+    'cabinet',
 ]
 
 MIDDLEWARE = [
@@ -185,3 +186,8 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+LOGIN_URL = 'cabinet:login'          # куда редиректить если не авторизован
+LOGIN_REDIRECT_URL = 'cabinet:profile'      # куда после входа
+LOGOUT_REDIRECT_URL = 'cabinet:login'    # куда после выхода

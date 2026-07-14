@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-
+from django.conf import settings
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -229,7 +229,14 @@ class Lead(TimeStampedModel):
         (STATUS_FAILED, "Ошибка передачи"),
         (STATUS_CLOSED, "Закрыта"),
     ]
-
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='leads',
+        verbose_name='Пользователь'
+    )
     source = models.CharField(max_length=40, choices=SOURCE_CHOICES, default=SOURCE_CATALOG_MINI)
     status = models.CharField(max_length=40, choices=STATUS_CHOICES, default=STATUS_NEW)
     contact_name = models.CharField(max_length=220, blank=True)
@@ -251,6 +258,9 @@ class Lead(TimeStampedModel):
     raw_payload = models.JSONField(default=dict, blank=True)
     user_agent = models.CharField(max_length=500, blank=True)
     ip_address = models.GenericIPAddressField(blank=True, null=True)
+    direction = models.CharField(max_length=220, blank=True)  # направление
+    object_name = models.CharField(max_length=220, blank=True)  # объект
+    category = models.CharField(max_length=220, blank=True)  # категория (если нужно)
 
     class Meta:
         ordering = ["-created_at"]

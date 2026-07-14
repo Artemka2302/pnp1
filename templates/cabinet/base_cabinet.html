@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ПНП Кабинет{% endblock %}
+
+{% block body_class %}cabinet-page{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/cabinet.css' %}?v=20260713-cabinet-ui">
+{% endblock %}
+
+{% block content %}
+<section class="cabinet-shell">
+  <div class="container cabinet-container">
+    <aside class="cabinet-sidebar">
+        <div class="cabinet-sidebar-header">
+            <span class="cabinet-logo-icon" aria-hidden="true">П</span>
+            <div>
+                <span class="cabinet-logo-text">Личный кабинет</span>
+                <small>ПНП</small>
+            </div>
+        </div>
+
+        {% with route=request.resolver_match.url_name %}
+        <nav class="cabinet-nav">
+            <ul>
+                <li>
+                    <a href="{% url 'cabinet:profile' %}" class="cabinet-nav-link {% if route == 'profile' or route == 'index' %}active{% endif %}">
+                        <span class="cabinet-nav-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 12.2a4.2 4.2 0 1 0 0-8.4 4.2 4.2 0 0 0 0 8.4Zm0 2c-4.4 0-7.8 2.2-7.8 5v.7h15.6v-.7c0-2.8-3.4-5-7.8-5Z"/></svg>
+                        </span>
+                        <span>Профиль</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'cabinet:requests' %}" class="cabinet-nav-link {% if route == 'requests' %}active{% endif %}">
+                        <span class="cabinet-nav-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M6 3h8.6L19 7.4V21H6V3Zm8 1.8V8h3.2L14 4.8ZM8.2 11h8v1.7h-8V11Zm0 3.4h8v1.7h-8v-1.7Z"/></svg>
+                        </span>
+                        <span>Мои заявки</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="cabinet-nav-link cabinet-nav-link-disabled" aria-disabled="true">
+                        <span class="cabinet-nav-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M4 5.5C4 4.1 5.1 3 6.5 3h11C18.9 3 20 4.1 20 5.5v7c0 1.4-1.1 2.5-2.5 2.5H10l-4.5 4v-4A2.5 2.5 0 0 1 3 12.5v-7h1Zm2.5-.7a.7.7 0 0 0-.7.7v7c0 .4.3.7.7.7h.8v1.9l2-1.9h8.2c.4 0 .7-.3.7-.7v-7a.7.7 0 0 0-.7-.7h-11Z"/></svg>
+                        </span>
+                        <span>Чат с менеджером</span>
+                        <small>Скоро</small>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        {% endwith %}
+
+        <div class="cabinet-sidebar-footer">
+            <a href="{% url 'cabinet:logout' %}" class="cabinet-logout-link">
+                <span class="cabinet-nav-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 4h8v2H7v12h6v2H5V4Zm10.7 4 4 4-4 4-1.4-1.4 1.6-1.6H10v-2h5.9l-1.6-1.6L15.7 8Z"/></svg>
+                </span>
+                <span>Выйти</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="cabinet-main">
+        <header class="cabinet-top-header">
+            <div>
+                <span class="cabinet-eyebrow">Клиентская зона</span>
+                <h1>ПНП Кабинет</h1>
+            </div>
+            <div class="cabinet-user-info">
+                <span class="cabinet-user-name">{{ user.get_full_name|default:user.username }}</span>
+                <span class="cabinet-user-role">Клиент</span>
+            </div>
+        </header>
+
+        <section class="cabinet-content">
+            {% block cabinet_content %}
+            <!-- Сюда будет подставляться контент страниц кабинета -->
+            {% endblock %}
+        </section>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+{{ block.super }}
+{% endblock %}
