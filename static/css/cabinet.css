@@ -259,6 +259,30 @@
   font-weight: 850;
 }
 
+.cabinet-role-supplier {
+  border-color: rgba(56,189,248,.35);
+  background: rgba(56,189,248,.11);
+  color: #bae6fd;
+}
+
+.cabinet-role-client_company {
+  border-color: rgba(74,222,128,.32);
+  background: rgba(74,222,128,.10);
+  color: #bbf7d0;
+}
+
+.cabinet-role-client_person {
+  border-color: rgba(214,168,185,.32);
+  background: rgba(109,32,57,.16);
+  color: #f5c2d3;
+}
+
+.cabinet-role-client {
+  border-color: rgba(214,168,185,.22);
+  background: rgba(255,255,255,.06);
+  color: #d9e3f1;
+}
+
 .cabinet-content {
   display: grid;
   gap: 18px;
@@ -348,6 +372,27 @@
   align-content: start;
   gap: 18px;
   background:
+    linear-gradient(145deg, rgba(143,33,71,.42), rgba(255,255,255,.055)),
+    rgba(10,24,43,.72);
+}
+
+.cabinet-role-card-supplier {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(56,189,248,.18), transparent 34%),
+    linear-gradient(145deg, rgba(14,116,144,.34), rgba(255,255,255,.055)),
+    rgba(10,24,43,.72);
+}
+
+.cabinet-role-card-client_company {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(74,222,128,.15), transparent 34%),
+    linear-gradient(145deg, rgba(21,128,61,.28), rgba(255,255,255,.055)),
+    rgba(10,24,43,.72);
+}
+
+.cabinet-role-card-client_person {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(196,58,103,.18), transparent 34%),
     linear-gradient(145deg, rgba(143,33,71,.42), rgba(255,255,255,.055)),
     rgba(10,24,43,.72);
 }

@@ -65,16 +65,18 @@
     </aside>
 
     <div class="cabinet-main">
+        {% with account_type=cabinet_account_type|default:"client" account_label=cabinet_account_label|default:"Клиент" zone_label=cabinet_zone_label|default:"Клиентская зона" %}
         <header class="cabinet-top-header">
             <div>
-                <span class="cabinet-eyebrow">Клиентская зона</span>
+                <span class="cabinet-eyebrow">{{ zone_label }}</span>
                 <h1>ПНП Кабинет</h1>
             </div>
             <div class="cabinet-user-info">
                 <span class="cabinet-user-name">{{ user.get_full_name|default:user.username }}</span>
-                <span class="cabinet-user-role">Клиент</span>
+                <span class="cabinet-user-role cabinet-role-{{ account_type }}">{{ account_label }}</span>
             </div>
         </header>
+        {% endwith %}
 
         <section class="cabinet-content">
             {% block cabinet_content %}

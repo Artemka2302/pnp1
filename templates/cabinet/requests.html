@@ -4,15 +4,16 @@
 {% block title %}Мои заявки | ПНП Кабинет{% endblock %}
 
 {% block cabinet_content %}
+{% with account_type=cabinet_account_type|default:"client" %}
 <div class="cabinet-page-head">
     <div>
-        <span class="cabinet-eyebrow">Заявки</span>
-        <h2>Мои заявки</h2>
-        <p>Здесь отображаются заявки, отправленные из авторизованной сессии.</p>
+        <span class="cabinet-eyebrow">{% if account_type == "supplier" %}Запросы{% else %}Заявки{% endif %}</span>
+        <h2>{% if account_type == "supplier" %}Запросы клиентов{% elif account_type == "client_company" %}Заявки компании{% else %}Мои заявки{% endif %}</h2>
+        <p>{% if account_type == "supplier" %}Здесь будут отображаться запросы, связанные с направлениями поставщика.{% elif account_type == "client_company" %}Здесь отображаются заявки, отправленные от имени компании.{% else %}Здесь отображаются заявки, отправленные из авторизованной сессии.{% endif %}</p>
     </div>
     <a href="{% url 'contacts' %}#request-form" class="cabinet-btn cabinet-btn-primary">
         <span aria-hidden="true">+</span>
-        Новая заявка
+        {% if account_type == "supplier" %}Связаться с ПНП{% else %}Новая заявка{% endif %}
     </a>
 </div>
 
@@ -116,4 +117,5 @@
     </section>
 {% endfor %}
 </div>
+{% endwith %}
 {% endblock %}

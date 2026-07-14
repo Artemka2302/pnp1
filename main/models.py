@@ -356,3 +356,21 @@ class CookieConsentLog(TimeStampedModel):
 
     def __str__(self):
         return f"{self.choice}: {self.consent_id}"
+
+
+#Делаю кастомного User для добавленеи ролей
+from django.contrib.auth.models import User
+
+class Profile(models.Model):
+    ROLE_CHOICES = ['supplier', 'client_person', 'client_company']
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    account_type = models.CharField(
+        max_length=20,
+        choices=[(value, value) for value in ROLE_CHOICES],  
+        default='client_person',
+        verbose_name='Тип_аккаунта'
+    )
+
+    def __str__(self):
+        return f"Profile of {self.user.username}"

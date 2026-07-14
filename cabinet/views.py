@@ -4,15 +4,55 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
+#Функция для определение роли пользователя
+def get_cabinet_context(user):
+    if hasattr(user, 'profile'):
+
+        account_type = user.profile.account_type
+    else:
+        account_type = 'client_person'
+    
+    if account_type == 'supplier':
+        label = 'Поставщик'
+        zone = 'Зона поставщика'
+    elif account_type == 'client_person':
+        label = 'Физическое лицо'
+        zone = 'Клиентская зона'
+    elif account_type == 'client_company':
+        label = 'Компания'
+        zone = 'Клиентская зона'
+    else:
+        label = 'Физическое лицо'
+        zone = 'Клиентская зона'
+
+    
+    return {
+        'cabinet_account_type': account_type,
+        'label': label,
+        'zone': zone,
+    }
 
 @login_required
 def profile(request):
-    return render(request, 'cabinet/profile.html', {'user': request.user})
+    account_type = get_cabinet_context(request.user)
+
+    return render(request, 'cabinet/profile.html', {
+        'user': request.user,
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+        })
 
 @login_required
 def requests(request):
     leads = request.user.leads.all().order_by('-created_at')
-    return render(request, 'cabinet/requests.html', {'leads': leads})
+    account_type = get_cabinet_context(request.user)
+    return render(request, 'cabinet/requests.html', {
+        'leads': leads,
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+        })
 
 def login_view(request):
     if request.method == 'POST':
