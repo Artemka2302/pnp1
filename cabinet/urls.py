@@ -1,5 +1,5 @@
 from django.urls import path
-from cabinet.views import profile, requests, login_view, logout_view
+from cabinet.views import profile, requests, login_view, logout_view, register
 
 
 app_name = 'cabinet'
@@ -10,4 +10,5 @@ urlpatterns = [
     path('', profile, name='index'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('register/',register ,name='register'),
     ]

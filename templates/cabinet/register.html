@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация | ПНП{% endblock %}
+{% block body_class %}cabinet-login-page cabinet-register-page{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/cabinet.css' %}?v=20260715-register-company-toggle">
+{% endblock %}
+
+{% block content %}
+<section class="cabinet-login-shell cabinet-register-shell">
+    <div class="container cabinet-login-container cabinet-register-container">
+        <div class="cabinet-login-copy">
+            <span class="cabinet-eyebrow">Регистрация</span>
+            <h1>Создать личный кабинет ПНП</h1>
+            <p>Выберите тип аккаунта, оставьте контактные данные и получите доступ к заявкам и рабочей коммуникации.</p>
+        </div>
+
+        <form class="cabinet-login-card cabinet-register-card" method="post">
+            {% csrf_token %}
+            <div class="cabinet-card-head">
+                <div>
+                    <span class="cabinet-eyebrow">Новый аккаунт</span>
+                    <h2>Регистрация</h2>
+                </div>
+            </div>
+
+            {% if messages %}
+                <div class="cabinet-form-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <fieldset class="cabinet-account-type-field">
+                <legend>Тип аккаунта</legend>
+                <label class="cabinet-account-option">
+                    <input type="radio" name="account_type" value="client_person" checked>
+                    <span>
+                        <b>Физическое лицо</b>
+                        <small>Заявки от частного клиента</small>
+                    </span>
+                </label>
+                <label class="cabinet-account-option">
+                    <input type="radio" name="account_type" value="client_company">
+                    <span>
+                        <b>Компания</b>
+                        <small>Заявки от организации</small>
+                    </span>
+                </label>
+                <label class="cabinet-account-option">
+                    <input type="radio" name="account_type" value="supplier">
+                    <span>
+                        <b>Поставщик</b>
+                        <small>Партнёрство и поставки</small>
+                    </span>
+                </label>
+            </fieldset>
+
+            <div class="cabinet-register-grid">
+                <label class="cabinet-field">
+                    <span>Имя</span>
+                    <input type="text" name="first_name" autocomplete="given-name" required>
+                </label>
+
+                <label class="cabinet-field">
+                    <span>Фамилия</span>
+                    <input type="text" name="last_name" autocomplete="family-name">
+                </label>
+            </div>
+
+            <label class="cabinet-field">
+                <span>Email</span>
+                <input type="email" name="email" autocomplete="email" required>
+            </label>
+
+            <label class="cabinet-field">
+                <span>Телефон</span>
+                <input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="18" placeholder="+7 (___) ___-__-__" data-phone-input required>
+            </label>
+
+            <label class="cabinet-field cabinet-company-field is-hidden" data-company-field style="display: none;">
+                <span>Компания</span>
+                <input type="text" name="company_name" autocomplete="organization" placeholder="Для компании или поставщика" disabled>
+            </label>
+
+            <div class="cabinet-register-grid">
+                <label class="cabinet-field">
+                    <span>Пароль</span>
+                    <input type="password" name="password1" autocomplete="new-password" required>
+                </label>
+
+                <label class="cabinet-field">
+                    <span>Повтор пароля</span>
+                    <input type="password" name="password2" autocomplete="new-password" required>
+                </label>
+            </div>
+
+            <label class="cabinet-consent-check">
+                <input type="checkbox" name="consent" value="1" required>
+                <span>Согласен на обработку персональных данных и создание личного кабинета.</span>
+            </label>
+
+            <button class="cabinet-btn cabinet-btn-primary cabinet-login-submit" type="submit">Создать аккаунт</button>
+
+            <div class="cabinet-auth-switch">
+                <span>Уже есть аккаунт?</span>
+                <a href="{% url 'cabinet:login' %}">Войти</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const companyField = document.querySelector('[data-company-field]');
+    const companyInput = companyField ? companyField.querySelector('input') : null;
+    const accountInputs = document.querySelectorAll('input[name="account_type"]');
+
+    if (!companyField || !companyInput || !accountInputs.length) {
+        return;
+    }
+
+    function syncCompanyField() {
+        const selected = document.querySelector('input[name="account_type"]:checked');
+        const needsCompany = selected && selected.value !== 'client_person';
+
+        companyField.classList.toggle('is-hidden', !needsCompany);
+        companyField.style.display = needsCompany ? '' : 'none';
+        companyInput.disabled = !needsCompany;
+        companyInput.required = Boolean(needsCompany);
+
+        if (!needsCompany) {
+            companyInput.value = '';
+        }
+    }
+
+    accountInputs.forEach(function (input) {
+        input.addEventListener('change', syncCompanyField);
+    });
+
+    syncCompanyField();
+});
+</script>
+{% endblock %}

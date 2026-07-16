@@ -372,5 +372,19 @@ class Profile(models.Model):
         verbose_name='Тип_аккаунта'
     )
 
+    phone = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        verbose_name='Телефон'
+    )
+
+    company_name = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name='Название компании'
+    )
+
     def __str__(self):
         return f"Profile of {self.user.username}"
