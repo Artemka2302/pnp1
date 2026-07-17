@@ -2515,8 +2515,8 @@ button.vendor-chip.is-selected:focus-visible {
   border-radius: 12px !important;
   border-color: rgba(118, 143, 176, .38) !important;
   background:
-    linear-gradient(90deg, rgba(4, 13, 24, .94) 0%, rgba(7, 18, 35, .86) 44%, rgba(7, 18, 35, .48) 100%),
-    linear-gradient(180deg, rgba(6, 16, 31, .18), rgba(6, 16, 31, .90)),
+    linear-gradient(90deg, rgba(4, 13, 24, .78) 0%, rgba(7, 18, 35, .62) 48%, rgba(7, 18, 35, .28) 100%),
+    linear-gradient(180deg, rgba(6, 16, 31, .05) 0%, rgba(6, 16, 31, .68) 100%),
     var(--direction-photo, url("../assets/img/hero-cover.webp")) center / cover no-repeat !important;
   box-shadow: 0 18px 48px rgba(0, 0, 0, .24) !important;
 }
@@ -2538,8 +2538,8 @@ button.vendor-chip.is-selected:focus-visible {
   inset: 0;
   z-index: -1;
   background:
-    linear-gradient(180deg, rgba(7, 17, 31, .06), rgba(7, 17, 31, .55) 72%, rgba(7, 17, 31, .78)),
-    linear-gradient(90deg, rgba(8, 18, 34, .18), rgba(8, 18, 34, .50));
+    linear-gradient(180deg, rgba(7, 17, 31, .02) 0%, rgba(7, 17, 31, .20) 55%, rgba(7, 17, 31, .58) 100%),
+    linear-gradient(90deg, rgba(8, 18, 34, .08), rgba(8, 18, 34, .20));
   pointer-events: none;
 }
 
@@ -2550,7 +2550,7 @@ button.vendor-chip.is-selected:focus-visible {
 
 .vendor-direction-top {
   display: grid !important;
-  grid-template-columns: 46px minmax(0, 1fr) !important;
+  grid-template-columns: 50px minmax(0, 1fr) !important;
   gap: 12px !important;
   align-items: start !important;
 }
@@ -2558,8 +2558,8 @@ button.vendor-chip.is-selected:focus-visible {
 .vendor-direction-top i {
   display: grid !important;
   place-items: center;
-  width: 46px !important;
-  height: 46px !important;
+  width: 50px !important;
+  height: 50px !important;
   overflow: hidden !important;
   border-radius: 11px !important;
   border: 1px solid rgba(212, 122, 152, .34) !important;
@@ -2571,6 +2571,7 @@ button.vendor-chip.is-selected:focus-visible {
   width: 100% !important;
   height: 100% !important;
   object-fit: contain !important;
+  transform: scale(1.08);
   filter: none !important;
 }
 
@@ -2661,30 +2662,31 @@ button.vendor-chip.is-selected:focus-visible {
 }
 
 .vendor-direction-card .vendor-direction-logo-strip .vendor-chip.vendor-chip-logo {
-  display: grid !important;
-  grid-template-rows: minmax(0, 1fr) auto !important;
-  place-items: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   min-width: 0 !important;
   width: 112px !important;
   max-width: 112px !important;
   height: 48px !important;
-  padding: 6px 9px 5px !important;
+  padding: 6px 9px !important;
 }
 
 .vendor-direction-card .vendor-direction-logo-strip .vendor-chip.vendor-chip-logo img {
   display: block !important;
-  width: auto !important;
-  height: auto !important;
+  width: 100% !important;
+  height: 100% !important;
   max-width: 96px !important;
-  max-height: 24px !important;
+  max-height: 26px !important;
   object-fit: contain !important;
+  object-position: center !important;
   opacity: 1 !important;
   visibility: visible !important;
   filter: none !important;
 }
 
 .vendor-direction-card .vendor-direction-logo-strip .vendor-chip.vendor-chip-logo b.vendor-logo-fallback {
-  display: block !important;
+  display: none !important;
   width: 100%;
   max-width: 100%;
   margin-top: 2px;
@@ -2744,7 +2746,7 @@ button.vendor-chip.is-selected:focus-visible {
   }
 
   .vendor-direction-top {
-    grid-template-columns: 46px 1fr !important;
+    grid-template-columns: 50px 1fr !important;
     align-items: start !important;
   }
 

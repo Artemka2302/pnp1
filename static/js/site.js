@@ -729,7 +729,69 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAll();
   };
 
+  const phoneInputSelector = "[data-phone-input]";
+
+  const phoneDigits = value => String(value || "").replace(/\D/g, "");
+
+  const russianPhoneDigits = value => {
+    let digits = phoneDigits(value);
+    if (!digits) return "";
+    if (digits.startsWith("8")) digits = `7${digits.slice(1)}`;
+    else if (digits.startsWith("9")) digits = `7${digits}`;
+    else if (!digits.startsWith("7")) digits = `7${digits}`;
+    return digits.slice(0, 11);
+  };
+
+  const formatRussianPhone = value => {
+    const digits = russianPhoneDigits(value);
+    if (!digits) return "";
+
+    const local = digits.startsWith("7") ? digits.slice(1) : digits;
+    const parts = [];
+    if (local.length > 0) parts.push(` (${local.slice(0, 3)}`);
+    if (local.length >= 3) parts[0] += ")";
+    if (local.length > 3) parts.push(` ${local.slice(3, 6)}`);
+    if (local.length > 6) parts.push(`-${local.slice(6, 8)}`);
+    if (local.length > 8) parts.push(`-${local.slice(8, 10)}`);
+    return `+7${parts.join("")}`;
+  };
+
+  const normalizeRussianPhone = value => {
+    const digits = russianPhoneDigits(value);
+    return digits.length === 11 ? `+${digits}` : formatRussianPhone(value).trim();
+  };
+
+  const normalizePhoneInputs = root => {
+    root.querySelectorAll(phoneInputSelector).forEach(input => {
+      input.value = normalizeRussianPhone(input.value);
+    });
+  };
+
+  const initPhoneInputs = () => {
+    document.querySelectorAll(phoneInputSelector).forEach(input => {
+      input.value = formatRussianPhone(input.value);
+
+      input.addEventListener("focus", () => {
+        if (!input.value.trim()) input.value = "+7 ";
+      });
+
+      input.addEventListener("input", () => {
+        input.value = formatRussianPhone(input.value);
+      });
+
+      input.addEventListener("blur", () => {
+        if (phoneDigits(input.value).length <= 1) input.value = "";
+      });
+    });
+
+    document.querySelectorAll("form").forEach(form => {
+      if (!form.querySelector(phoneInputSelector)) return;
+      form.addEventListener("submit", () => normalizePhoneInputs(form), { capture: true });
+    });
+  };
+
   const submitForm = async (form, statusElement, submitButton, options = {}) => {
+    normalizePhoneInputs(form);
     const formData = new FormData(form);
     if (options.items) formData.set("items", JSON.stringify(options.items));
     if (options.requestText !== undefined) formData.set("request_text", options.requestText);
@@ -1981,6 +2043,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHomeRequestTransfer();
   initContactRequestTransfer();
   initContactCatalogItems();
+  initPhoneInputs();
   initCookieConsent();
   renderRequest();
 });

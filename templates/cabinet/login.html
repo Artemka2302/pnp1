@@ -14,8 +14,8 @@
     <div class="container cabinet-login-container">
         <div class="cabinet-login-copy">
             <span class="cabinet-eyebrow">Личный кабинет</span>
-            <h1>Вход для клиентов ПНП</h1>
-            <p>Доступ к отправленным заявкам и рабочей переписке по комплектации объекта.</p>
+            <h1>Вход в личный кабинет ПНП</h1>
+            <p>Доступ к отправленным заявкам, профилю и рабочей коммуникации по комплектации объекта.</p>
         </div>
 
         <form class="cabinet-login-card" method="post">
@@ -36,7 +36,7 @@
             {% endif %}
 
             <label class="cabinet-field">
-                <span>Логин</span>
+                <span>Email или логин</span>
                 <input type="text" name="username" autocomplete="username" required>
             </label>
 
@@ -46,6 +46,11 @@
             </label>
 
             <button class="cabinet-btn cabinet-btn-primary cabinet-login-submit" type="submit">Войти</button>
+
+            <div class="cabinet-auth-switch">
+                <span>Нет аккаунта?</span>
+                <a href="/cabinet/register/">Зарегистрироваться</a>
+            </div>
         </form>
     </div>
 </section>

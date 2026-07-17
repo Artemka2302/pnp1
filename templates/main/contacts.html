@@ -20,14 +20,15 @@
         {% csrf_token %}
         <input type="hidden" name="source" value="contact">
         <input type="hidden" name="items" data-request-items>
+        <input type="hidden" name="company" value="{% if user.is_authenticated %}{% if user.profile.account_type == 'client_company' or user.profile.account_type == 'supplier' %}{{ user.profile.company_name|default:'' }}{% endif %}{% endif %}">
 
         <div class="form-row">
-          <div class="field"><label for="name">Имя / компания</label><input id="name" name="name" placeholder="Например: ООО СтройПроект" autocomplete="organization" required></div>
-          <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 ..." autocomplete="tel" required></div>
+          <div class="field"><label for="name">Имя / компания</label><input id="name" name="name" placeholder="Например: ООО СтройПроект" autocomplete="organization" value="{% if user.is_authenticated %}{% if user.profile.account_type == 'client_company' or user.profile.account_type == 'supplier' %}{{ user.profile.company_name|default:user.get_full_name }}{% else %}{{ user.get_full_name|default:user.email }}{% endif %}{% endif %}" required></div>
+          <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input value="{% if user.is_authenticated %}{{ user.profile.phone|default:'' }}{% endif %}" required></div>
         </div>
 
         <div class="form-row">
-          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="name@company.ru" autocomplete="email"></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="name@company.ru" autocomplete="email" value="{% if user.is_authenticated %}{{ user.email|default:'' }}{% endif %}"></div>
           <div class="field">
             <label for="category">Направление</label>
             <select id="category" name="category">

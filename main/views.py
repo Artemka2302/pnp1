@@ -1481,6 +1481,7 @@ def request_files(request):
         files.extend(request.FILES.getlist(field_name))
     return files
 
+from cabinet.views import check_phone
 
 @require_POST
 def catalog_request_api(request):
@@ -1522,9 +1523,17 @@ def catalog_request_api(request):
         return JsonResponse({"ok": False, "error": "Укажите телефон или email."}, status=400)
     if not items and not request_text and not message and not uploaded_files:
         return JsonResponse({"ok": False, "error": "Добавьте позицию или комментарий к заявке."}, status=400)
+    if len(phone) > 0:
+        if check_phone(phone) == False:
+            return JsonResponse({"ok": False, "error": "Номер телефона введен неверно"}, status=400)
+        else:
+            phone = check_phone(phone)
+
+        
 
     product_group = resolve_product_group(product_group_slug, product_group_title)
     raw_payload = payload_to_dict(payload)
+    
 
     with transaction.atomic():
         lead = Lead.objects.create(

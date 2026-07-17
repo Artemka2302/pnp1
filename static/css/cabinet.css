@@ -746,6 +746,24 @@
   padding: clamp(22px, 3vw, 32px);
 }
 
+.cabinet-register-container {
+  grid-template-columns: minmax(0, .78fr) minmax(420px, 560px);
+}
+
+.cabinet-register-card {
+  align-self: start;
+}
+
+.cabinet-register-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cabinet-company-field.is-hidden {
+  display: none;
+}
+
 .cabinet-field {
   display: grid;
   gap: 8px;
@@ -778,6 +796,102 @@
 .cabinet-login-submit {
   width: 100%;
   margin-top: 4px;
+}
+
+.cabinet-auth-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #b6c4d8;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.cabinet-auth-switch a {
+  color: #f0adc4;
+  font-weight: 950;
+}
+
+.cabinet-account-type-field {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cabinet-account-type-field legend {
+  grid-column: 1 / -1;
+  margin-bottom: 2px;
+  color: #b6c4d8;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.cabinet-account-option {
+  position: relative;
+  min-width: 0;
+}
+
+.cabinet-account-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cabinet-account-option span {
+  display: grid;
+  gap: 5px;
+  min-height: 94px;
+  border: 1px solid rgba(225,236,249,.13);
+  border-radius: 12px;
+  background: rgba(255,255,255,.055);
+  color: #c9d5e5;
+  cursor: pointer;
+  padding: 13px;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.cabinet-account-option b {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.18;
+}
+
+.cabinet-account-option small {
+  color: #8fa1bb;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.cabinet-account-option input:checked + span {
+  border-color: rgba(214,168,185,.68);
+  background:
+    radial-gradient(circle at 0 0, rgba(196,58,103,.22), transparent 38%),
+    rgba(109,32,57,.20);
+  transform: translateY(-1px);
+}
+
+.cabinet-consent-check {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  color: #c9d5e5;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.cabinet-consent-check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  accent-color: #c43a67;
 }
 
 .cabinet-form-messages {
@@ -829,7 +943,8 @@
   }
 
   .cabinet-container,
-  .cabinet-login-container {
+  .cabinet-login-container,
+  .cabinet-register-container {
     gap: 14px;
   }
 
@@ -886,5 +1001,14 @@
 
   .cabinet-login-copy {
     padding-left: 0;
+  }
+
+  .cabinet-register-grid,
+  .cabinet-account-type-field {
+    grid-template-columns: 1fr;
+  }
+
+  .cabinet-account-option span {
+    min-height: auto;
   }
 }

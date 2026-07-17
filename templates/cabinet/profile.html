@@ -20,11 +20,11 @@
 <div class="cabinet-profile-grid">
     <section class="cabinet-card cabinet-profile-card cabinet-role-card cabinet-role-card-{{ account_type }}">
         <div class="cabinet-avatar" aria-hidden="true">
-            {{ user.get_full_name|default:user.username|first|upper }}
+            {{ user.get_full_name|default:user.email|default:user.username|first|upper }}
         </div>
         <div class="cabinet-profile-title">
-            <h3>{{ user.get_full_name|default:user.username }}</h3>
-            <span>{{ user.username }}</span>
+            <h3>{{ user.get_full_name|default:user.email|default:user.username }}</h3>
+            <span>{{ user.email|default:"Email не указан" }}</span>
         </div>
         <div class="cabinet-profile-meta">
             <span class="cabinet-role-{{ account_type }}">{{ account_label }}</span>
@@ -43,10 +43,13 @@
             <div class="cabinet-info-row">
                 <span>Тип аккаунта</span>
                 <b>{{ account_label }}</b>
+<<<<<<< HEAD
             </div>
             <div class="cabinet-info-row">
                 <span>Имя пользователя</span>
                 <b>{{ user.username }}</b>
+=======
+>>>>>>> origin/develop
             </div>
             <div class="cabinet-info-row">
                 <span>Полное имя</span>
