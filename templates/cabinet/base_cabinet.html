@@ -7,7 +7,7 @@
 
 {% block extra_head %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'css/cabinet.css' %}?v=20260713-cabinet-ui">
+<link rel="stylesheet" href="{% static 'css/cabinet.css' %}?v=20260720-profile-edit">
 {% endblock %}
 
 {% block content %}
@@ -41,6 +41,17 @@
                         <span>Мои заявки</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="{% url 'cabinet:edit' %}" class="cabinet-nav-link {% if route == 'edit' %}active{% endif %}">
+                        <span class="cabinet-nav-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M6 3h8.6L19 7.4V21H6V3Zm8 1.8V8h3.2L14 4.8ZM8.2 11h8v1.7h-8V11Zm0 3.4h8v1.7h-8v-1.7Z"/></svg>
+                        </span>
+                        <span>Редактирование профиля</span>
+                    </a>
+                </li>
+
+
                 <li>
                     <a class="cabinet-nav-link cabinet-nav-link-disabled" aria-disabled="true">
                         <span class="cabinet-nav-icon" aria-hidden="true">

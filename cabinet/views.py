@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import User 
 from main.models import Profile
+from django.contrib.auth import update_session_auth_hash
 
 #Функция для определение роли пользователя
 def get_cabinet_context(user):
@@ -185,6 +186,134 @@ def register(request):
 def logout_view(request):
     logout(request)
     return redirect('cabinet:login')
+
+
+
+
+#Функция редактирвоания личного кабинета 
+@login_required
+def edit(request):
+
+    if request.method == 'POST':
+        user = request.user
+        account_type = get_cabinet_context(request.user)
+
+
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        current_password = request.POST.get('current_password')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if first_name == None or first_name.strip() == "":
+            messages.error(request, 'Поле заполнено не верно')
+            return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+        
+        if email == None:
+            messages.error(request, 'email введен не правильно ')
+            return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+        email = email.strip()
+
+
+        if email == "" or check_email(email) == False:
+            messages.error(request, 'Поле введено не верно')
+            return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+        
+        if User.objects.filter(email=email).exclude(id=request.user.id).exists() or User.objects.filter(username=email).exclude(id=request.user.id).exists():
+            messages.error(request, 'Email занят другим пользователем')
+            return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+        
+        if phone == None or phone.strip() == '' or check_phone(phone) == False:
+            messages.error(request, 'Поле введено не верно')
+            return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+        if last_name == None:
+            last_name = ""
+        
+        #Отдельный блок для проверки на смену пароля
+        current_password_req = current_password or password1 or password2
+        if current_password_req:
+            if not current_password:
+                messages.error(request, 'Введите текущий пароль')
+                return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+            elif not request.user.check_password(current_password):
+                messages.error(request, "Текущий пароль неверный")
+                return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+            
+            if not password1:
+                messages.error(request, "Введите новый пароль")
+                return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+            if not password2:
+                messages.error(request, "Повторите новый пароль") 
+                return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+
+            if password1 and password2 and password1 != password2:
+                messages.error(request, "Пароли не совпадают")
+                return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
+            user = request.user
+            user.set_password(password1)
+            update_session_auth_hash(request, user)
+        profile, created = Profile.objects.get_or_create(user=user)
+        
+        user.first_name = first_name.strip()
+        user.last_name = last_name.strip()
+        user.email = email
+        profile.phone = check_phone(phone)
+        user.username = email
+        user.save()
+        profile.save()
+        return redirect('cabinet:profile')
+
+
+
+        
+    account_type = get_cabinet_context(request.user)
+    return render(request, 'cabinet/edit.html', {
+        'cabinet_account_type': account_type['cabinet_account_type'],
+        'cabinet_account_label': account_type['label'],
+        'cabinet_zone_label': account_type['zone']
+    })
 
 
 

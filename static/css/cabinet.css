@@ -296,6 +296,14 @@
   gap: 18px;
 }
 
+.cabinet-page-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .cabinet-page-head h2 {
   margin-top: 8px;
   font-size: clamp(30px, 3vw, 44px);
@@ -341,6 +349,16 @@
   box-shadow: 0 24px 54px rgba(143,33,71,.42);
 }
 
+.cabinet-btn-ghost {
+  border: 1px solid rgba(225,236,249,.16);
+  background: rgba(255,255,255,.07);
+  color: #e7eef8;
+}
+
+.cabinet-btn-ghost:hover {
+  background: rgba(255,255,255,.11);
+}
+
 .cabinet-card {
   min-width: 0;
   border-radius: 16px;
@@ -365,6 +383,56 @@
   display: grid;
   grid-template-columns: minmax(240px, .78fr) minmax(0, 1.22fr);
   gap: 18px;
+}
+
+.cabinet-edit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+  align-items: start;
+  gap: 18px;
+}
+
+.cabinet-edit-main,
+.cabinet-edit-side {
+  display: grid;
+  gap: 16px;
+}
+
+.cabinet-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cabinet-edit-note {
+  display: grid;
+  gap: 5px;
+  border: 1px solid rgba(214,168,185,.22);
+  border-radius: 12px;
+  background: rgba(143,33,71,.14);
+  color: #d8e3f2;
+  padding: 14px 16px;
+}
+
+.cabinet-edit-note b {
+  color: #fff;
+}
+
+.cabinet-edit-note span,
+.cabinet-field-hint {
+  color: #b9c7da;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.cabinet-field-hint {
+  margin: -2px 0 0;
+}
+
+.cabinet-form-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 2px;
 }
 
 .cabinet-profile-card {
@@ -913,6 +981,7 @@
 @media (max-width: 1020px) {
   .cabinet-container,
   .cabinet-profile-grid,
+  .cabinet-edit-layout,
   .cabinet-login-container {
     grid-template-columns: 1fr;
   }
@@ -965,6 +1034,11 @@
     justify-content: space-between;
   }
 
+  .cabinet-page-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
   .cabinet-nav ul {
     grid-template-columns: 1fr;
   }
@@ -1004,6 +1078,7 @@
   }
 
   .cabinet-register-grid,
+  .cabinet-edit-grid,
   .cabinet-account-type-field {
     grid-template-columns: 1fr;
   }
