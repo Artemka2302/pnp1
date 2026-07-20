@@ -1431,7 +1431,7 @@
               "title": "Кровельные системы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-architecture-roofing-systems.webp",
               "product_groups": [
                 {
                   "id": "krovelnye-sistemy",
@@ -2259,7 +2259,7 @@
               "title": "Древесно-плитные материалы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-wood-based-panel-materials.webp",
               "product_groups": [
                 {
                   "id": "plywood",
@@ -2830,7 +2830,7 @@
               "title": "Инертные и сыпучие материалы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-inertnye-i-sypuchie-materialy.webp",
               "product_groups": [
                 {
                   "id": "scheben",
@@ -2880,7 +2880,7 @@
               "title": "Инертные и вяжущие материалы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-inertnye-i-vyazhuschie-materialy.webp",
               "product_groups": [
                 {
                   "id": "tsement",
@@ -2971,7 +2971,7 @@
               "title": "Металл",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-metall.webp",
               "product_groups": [
                 {
                   "id": "mufty-obzhimnye-dlya-armatury",
@@ -3145,7 +3145,7 @@
               "title": "Фундаменты и сваи",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-fundamenty-i-svai.webp",
               "product_groups": [
                 {
                   "id": "svai",
@@ -3194,7 +3194,7 @@
               "title": "Крепеж",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-krepezh.webp",
               "product_groups": [
                 {
                   "id": "krepezh",
@@ -3258,7 +3258,7 @@
               "title": "Геосинтетические материалы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-constructive-geosynthetic-materials.webp",
               "product_groups": [
                 {
                   "id": "geotekstil",
@@ -3314,14 +3314,14 @@
           "status": "draft",
           "publication_status": "draft",
           "purpose": "Подготовка решений для благоустройства территории: МАФ, покрытия, озеленение, наружные элементы и комплектация участка.",
-          "image": "assets/img/catalog/empty-photo-placeholder.svg",
+          "image": "assets/img/catalog/generated/direction-landscaping-and-site-improvement.webp",
           "systems": [
             {
               "id": "malye-arhitekturnye-formy-maf",
               "title": "Малые архитектурные формы (МАФ)",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-landscaping-and-site-improvement-malye-arhitekturnye-formy-maf.webp",
               "product_groups": [
                 {
                   "id": "sadovaya-mebel",
@@ -3370,7 +3370,7 @@
               "title": "Покрытия",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-landscaping-and-site-improvement-pokrytiya.webp",
               "product_groups": [
                 {
                   "id": "paving-slabs-and-pavers",
@@ -3429,7 +3429,7 @@
               "title": "Освещение территории",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-landscaping-and-site-improvement-osveschenie-territorii.webp",
               "product_groups": [
                 {
                   "id": "opory-osvescheniya",
@@ -3476,7 +3476,7 @@
               "title": "Ограждения и зонирование",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-landscaping-and-site-improvement-ograzhdeniya-i-zonirovanie.webp",
               "product_groups": [
                 {
                   "id": "zabory",
@@ -3524,7 +3524,7 @@
               "title": "Дорожные плиты",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-landscaping-and-site-improvement-dorozhnye-plity.webp",
               "product_groups": [
                 {
                   "id": "pag",
@@ -4588,7 +4588,7 @@
               "title": "Наружные сети водоснабжения и канализации",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-water-external-water-and-sewer-networks.webp",
               "product_groups": [
                 {
                   "id": "naruzhnye-seti-vodosnabzheniya-i-kanalizatsii",
@@ -5144,7 +5144,7 @@
               "title": "Тепловые завесы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-hvac-teplovye-zavesy.webp",
               "product_groups": [
                 {
                   "id": "teplovye-zavesy",
@@ -5193,7 +5193,7 @@
               "title": "Тепловые сети",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-hvac-teplovye-seti.webp",
               "product_groups": [
                 {
                   "id": "truba-v-ppu",
@@ -6684,7 +6684,7 @@
               "title": "Системы связи и диспетчеризации",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-low-current-sistemy-svyazi-i-dispetcherizatsii.webp",
               "product_groups": [
                 {
                   "id": "telefoniya",
@@ -7067,7 +7067,7 @@
               "title": "Лифты",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-vertical-transport-lifty.webp",
               "product_groups": [
                 {
                   "id": "lifty",
@@ -7118,7 +7118,7 @@
               "title": "Эскалаторы и траволаторы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-vertical-transport-eskalatory-i-travolatory.webp",
               "product_groups": [
                 {
                   "id": "eskalatory-i-travolatory",
@@ -7385,7 +7385,7 @@
               "title": "Пути движения по территории",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-accessibility-puti-dvizheniya-po-territorii.webp",
               "product_groups": [
                 {
                   "id": "taktilnaya-plitka",
@@ -7432,7 +7432,7 @@
               "title": "Входная группа",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-accessibility-vhodnaya-gruppa.webp",
               "product_groups": [
                 {
                   "id": "pandusy",
@@ -7483,7 +7483,7 @@
               "title": "Парковочные места",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-accessibility-parkovochnye-mesta.webp",
               "product_groups": [
                 {
                   "id": "dorozhnye-znaki",
@@ -7530,7 +7530,7 @@
               "title": "Вертикальное перемещение",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-accessibility-vertikalnoe-peremeschenie.webp",
               "product_groups": [
                 {
                   "id": "podemnye-platformy",
@@ -7580,7 +7580,7 @@
               "title": "Информационное обеспечение",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-accessibility-informatsionnoe-obespechenie.webp",
               "product_groups": [
                 {
                   "id": "informatsionnoe-obespechenie",
@@ -8722,7 +8722,7 @@
               "title": "Кабеленесущие системы",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-eom-kabelenesuschie-sistemy.webp",
               "product_groups": [
                 {
                   "id": "cable-support-systems",
@@ -8789,14 +8789,14 @@
           "status": "draft",
           "publication_status": "draft",
           "purpose": "Подбор зарядной инфраструктуры для объектов: станции, параметры подключения, проектные требования и комплектация под эксплуатацию.",
-          "image": "assets/img/catalog/empty-photo-placeholder.svg",
+          "image": "assets/img/catalog/generated/direction-ev-charging-infrastructure.webp",
           "systems": [
             {
               "id": "ev-charging-stations",
               "title": "Зарядочные станции для электромобилей",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-ev-charging-infrastructure-ev-charging-stations.webp",
               "product_groups": [
                 {
                   "id": "zaryadochnye-stantsii-dlya-elektromobiley",
@@ -9751,7 +9751,7 @@
               "title": "Информационная безопасность",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-it-infrastructure-informatsionnaya-bezopasnost.webp",
               "product_groups": [
                 {
                   "id": "informatsionnaya-bezopasnost",
@@ -10480,7 +10480,7 @@
               "title": "Мебель",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-mebel.webp",
               "product_groups": [
                 {
                   "id": "mebel",
@@ -10569,7 +10569,7 @@
               "title": "Спортивное оборудование",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-sportivnoe-oborudovanie.webp",
               "product_groups": [
                 {
                   "id": "sportivnoe-oborudovanie",
@@ -10616,7 +10616,7 @@
               "title": "Стеллажи",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-stellazhi.webp",
               "product_groups": [
                 {
                   "id": "stellazhi",
@@ -10665,7 +10665,7 @@
               "title": "Актовый зал",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-aktovyy-zal.webp",
               "product_groups": [
                 {
                   "id": "aktovyy-zal",
@@ -10715,7 +10715,7 @@
               "title": "Оборудование столовой и пищеблока",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-oborudovanie-stolovoy-i-pischebloka.webp",
               "product_groups": [
                 {
                   "id": "oborudovanie-stolovoy",
@@ -10800,7 +10800,7 @@
               "title": "Хозяйственное оборудование",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-hozyaystvennoe-oborudovanie.webp",
               "product_groups": [
                 {
                   "id": "hozyaystvennoe-oborudovanie",
@@ -10847,7 +10847,7 @@
               "title": "Оборудование санузлов",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-oborudovanie-sanuzlov.webp",
               "product_groups": [
                 {
                   "id": "oborudovanie-sanuzlov",
@@ -10894,7 +10894,7 @@
               "title": "Оборудование гардероба",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-oborudovanie-garderoba.webp",
               "product_groups": [
                 {
                   "id": "oborudovanie-garderoba",
@@ -10941,7 +10941,7 @@
               "title": "Библиотечное оборудование",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-bibliotechnoe-oborudovanie.webp",
               "product_groups": [
                 {
                   "id": "bibliotechnoe-oborudovanie",
@@ -10988,7 +10988,7 @@
               "title": "Лабораторное оборудование",
               "status": "draft",
               "publication_status": "draft",
-              "image": "assets/img/catalog/empty-photo-placeholder.svg",
+              "image": "assets/img/catalog/generated/system-tech-equipment-laboratornoe-oborudovanie.webp",
               "product_groups": [
                 {
                   "id": "laboratornoe-oborudovanie",
