@@ -83,7 +83,11 @@
                 <h1>ПНП Кабинет</h1>
             </div>
             <div class="cabinet-user-info">
+<<<<<<< HEAD
+                <span class="cabinet-user-name">{{ user.get_full_name|default:user.username }}</span>
+=======
                 <span class="cabinet-user-name">{{ user.get_full_name|default:user.email|default:user.username }}</span>
+>>>>>>> origin/develop
                 <span class="cabinet-user-role cabinet-role-{{ account_type }}">{{ account_label }}</span>
             </div>
         </header>
