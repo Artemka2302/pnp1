@@ -372,8 +372,6 @@ class Profile(models.Model):
         verbose_name='Тип_аккаунта'
     )
 
-<<<<<<< HEAD
-=======
     phone = models.CharField(
         max_length=20,
         blank=True,
@@ -388,6 +386,5 @@ class Profile(models.Model):
         verbose_name='Название компании'
     )
 
->>>>>>> origin/develop
     def __str__(self):
         return f"Profile of {self.user.username}"
