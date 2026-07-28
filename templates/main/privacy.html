@@ -36,8 +36,8 @@
       <div class="legal-table">
         <div><b>Сайт и база</b><span>Django, ORM, SQLite/PostgreSQL по настройке окружения.</span></div>
         <div><b>Файловое хранение</b><span>Локальное хранилище Django: <code>media/lead_uploads</code>.</span></div>
-        <div><b>CRM / Bitrix</b><span>В текущем Django-коде передача в Bitrix не реализована; поле <code>bitrix_lead_id</code> подготовлено для будущей интеграции.</span></div>
-        <div><b>AI / OCR</b><span>В текущем Django-коде активных вызовов AI/OCR не найдено.</span></div>
+        <div><b>CRM / Bitrix</b><span>Заявки и приложенные файлы передаются в Bitrix24 через серверную интеграцию, если в окружении настроен <code>BITRIX_WEBHOOK_URL</code>. На сайте публичный webhook не раскрывается.</span></div>
+        <div><b>AI / OCR</b><span>В текущем Django-коде внешние AI/OCR-сервисы не вызываются. AI-помощник на сайте работает как интерфейс сбора заявки и отправляет данные через общий серверный endpoint заявок.</span></div>
         <div><b>Telegram</b><span>В текущем Django-коде отправка персональных данных в Telegram не найдена.</span></div>
         <div><b>Веб-аналитика</b><span>Активных счётчиков в текущих Django-шаблонах не найдено. Подключать только после согласия.</span></div>
       </div>

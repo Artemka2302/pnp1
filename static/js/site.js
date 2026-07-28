@@ -800,6 +800,12 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.set("page_url", window.location.href);
     formData.set("consent_version", versions.consentVersion);
     formData.set("privacy_version", versions.privacyVersion);
+    const csrfToken = form.querySelector("[name='csrfmiddlewaretoken']")?.value
+      || getCookie("csrftoken")
+      || document.querySelector("[name='csrfmiddlewaretoken']")?.value
+      || "";
+    const headers = { "X-Requested-With": "XMLHttpRequest" };
+    if (csrfToken) headers["X-CSRFToken"] = csrfToken;
 
     if (submitButton) submitButton.disabled = true;
     setStatus(statusElement, "Отправляем заявку...");
@@ -808,7 +814,7 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         body: formData,
         credentials: "same-origin",
-        headers: { "X-Requested-With": "XMLHttpRequest" },
+        headers,
       });
       const data = await response.json();
       if (!response.ok || !data.ok) {
@@ -985,6 +991,187 @@ document.addEventListener("DOMContentLoaded", () => {
       fileList.innerHTML = "";
       fileList.hidden = true;
     }
+  };
+
+  const initSupportChatWidget = () => {
+    const endpoint = document.body.dataset.leadEndpoint || "/api/catalog-request/";
+    const privacyUrl = document.body.dataset.privacyUrl || "/privacy/";
+    const consentUrl = document.body.dataset.consentUrl || "/consent/";
+    const csrfToken = getCookie("csrftoken") || document.querySelector("[name='csrfmiddlewaretoken']")?.value || "";
+    const modes = {
+      ai: {
+        source: "ai_chat",
+        label: "AI-помощник",
+        title: "Соберём вводные для заявки",
+        intro: "Напишите, что нужно подобрать. Помощник соберёт задачу в заявку, а менеджер увидит её в Bitrix.",
+        placeholder: "Например: нужны минеральные потолочные панели, объект в Москве, нужен аналог по бюджету...",
+        submit: "Отправить AI-запрос",
+        message: "Я помогу упаковать задачу: что подобрать, где объект, какие сроки и есть ли спецификация.",
+      },
+      manager: {
+        source: "contact",
+        label: "Менеджер",
+        title: "Передать вопрос менеджеру",
+        intro: "Опишите вопрос или прикрепите спецификацию. Заявка уйдет тем же способом, что и обычная форма на сайте.",
+        placeholder: "Что нужно подобрать? Укажите объект, город, сроки или приложите файл.",
+        submit: "Написать менеджеру",
+        message: "Передадим вопрос специалисту. Достаточно оставить телефон и короткое описание задачи.",
+      },
+    };
+
+    const root = document.createElement("section");
+    root.className = "support-chat-widget";
+    root.dataset.supportChat = "";
+    root.innerHTML = `
+      <button class="support-chat-toggle" type="button" data-support-toggle aria-expanded="false" aria-controls="supportChatPanel">
+        <span>Помощь</span>
+      </button>
+      <div class="support-chat-panel" id="supportChatPanel" data-support-panel hidden role="dialog" aria-label="Быстрая помощь">
+        <header class="support-chat-head">
+          <div>
+            <span class="support-chat-eyebrow" data-support-eyebrow>Быстрая помощь</span>
+            <h2 data-support-title>Передать вопрос менеджеру</h2>
+          </div>
+          <button class="support-chat-close" type="button" data-support-close aria-label="Закрыть">×</button>
+        </header>
+        <div class="support-chat-modes" role="tablist" aria-label="Тип помощи">
+          <button class="support-chat-mode is-active" type="button" data-support-mode-option="ai">AI-помощник</button>
+          <button class="support-chat-mode" type="button" data-support-mode-option="manager">Менеджер</button>
+        </div>
+        <div class="support-chat-stream" aria-live="polite">
+          <p class="support-chat-bubble" data-support-message></p>
+          <p class="support-chat-note" data-support-intro></p>
+        </div>
+        <form class="support-chat-form" method="post" action="${endpoint}" data-lead-form data-lead-url="${endpoint}" enctype="multipart/form-data" novalidate>
+          <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+          <input type="hidden" name="source" value="contact">
+          <input type="hidden" name="direction" value="Быстрая помощь">
+          <input type="hidden" name="category" value="Чат с менеджером">
+          <input type="hidden" name="items" data-request-items value="[]">
+          <div class="support-chat-fields">
+            <label class="support-chat-field">
+              <span>Имя / компания</span>
+              <input name="name" autocomplete="name" placeholder="Как к вам обращаться">
+            </label>
+            <label class="support-chat-field">
+              <span>Телефон</span>
+              <input name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input autocomplete="tel" placeholder="+7 ___ ___-__-__" required>
+            </label>
+          </div>
+          <label class="support-chat-field">
+            <span>Сообщение</span>
+            <textarea name="message" data-support-textarea required></textarea>
+          </label>
+          <div class="support-chat-prompts" aria-label="Быстрые подсказки">
+            <button type="button" data-support-prompt="Нужно подобрать аналоги по спецификации.">Подобрать аналоги</button>
+            <button type="button" data-support-prompt="Нужно проверить спецификацию и собрать КП.">Проверить спецификацию</button>
+            <button type="button" data-support-prompt="Нужно уточнить сроки поставки и наличие.">Сроки и наличие</button>
+          </div>
+          <div class="support-chat-selected" data-contact-request-items hidden>
+            <div class="support-chat-selected-head">
+              <b>Выбрано из каталога: <span data-request-count>0</span></b>
+              <button type="button" data-request-clear>Очистить</button>
+            </div>
+            <div class="support-chat-selected-list" data-request-list></div>
+          </div>
+          <div class="support-chat-file file-field">
+            <label class="support-chat-upload" for="supportChatFile">
+              <span data-file-label>Прикрепить файл / спецификацию</span>
+              <small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small>
+            </label>
+            <input class="file-input" id="supportChatFile" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
+            <div class="file-list" data-file-list hidden></div>
+          </div>
+          <label class="support-chat-consent form-consent-check">
+            <input type="checkbox" name="consent" value="1" required>
+            <span>Согласен на обработку персональных данных. <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="${consentUrl}" target="_blank" rel="noopener noreferrer">Согласие</a></span>
+          </label>
+          <button class="support-chat-submit" type="submit" data-support-submit>Написать менеджеру</button>
+          <p class="form-status support-chat-status" data-form-status role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    `;
+    document.body.append(root);
+
+    const toggle = root.querySelector("[data-support-toggle]");
+    const panel = root.querySelector("[data-support-panel]");
+    const closeButton = root.querySelector("[data-support-close]");
+    const title = root.querySelector("[data-support-title]");
+    const eyebrow = root.querySelector("[data-support-eyebrow]");
+    const intro = root.querySelector("[data-support-intro]");
+    const message = root.querySelector("[data-support-message]");
+    const form = root.querySelector("form");
+    const textarea = root.querySelector("[data-support-textarea]");
+    const status = root.querySelector("[data-form-status]");
+    const submit = root.querySelector("[data-support-submit]");
+    const sourceInput = form.elements.source;
+    const categoryInput = form.elements.category;
+    let currentMode = "manager";
+
+    const setMode = mode => {
+      currentMode = modes[mode] ? mode : "manager";
+      const meta = modes[currentMode];
+      sourceInput.value = meta.source;
+      categoryInput.value = meta.label;
+      title.textContent = meta.title;
+      eyebrow.textContent = meta.label;
+      intro.textContent = meta.intro;
+      message.textContent = meta.message;
+      textarea.placeholder = meta.placeholder;
+      submit.textContent = meta.submit;
+      root.querySelectorAll("[data-support-mode-option]").forEach(button => {
+        const active = button.dataset.supportModeOption === currentMode;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-selected", String(active));
+      });
+    };
+
+    const setOpen = isOpen => {
+      panel.hidden = !isOpen;
+      root.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      if (isOpen) setTimeout(() => textarea.focus(), 60);
+    };
+
+    toggle.addEventListener("click", () => setOpen(panel.hidden));
+    closeButton.addEventListener("click", () => setOpen(false));
+    root.querySelectorAll("[data-support-mode-option]").forEach(button => {
+      button.addEventListener("click", () => setMode(button.dataset.supportModeOption));
+    });
+    root.querySelectorAll("[data-support-prompt]").forEach(button => {
+      button.addEventListener("click", () => {
+        const current = textarea.value.trim();
+        textarea.value = current ? `${current}\n${button.dataset.supportPrompt}` : button.dataset.supportPrompt;
+        textarea.focus();
+      });
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && !panel.hidden) setOpen(false);
+    });
+    document.querySelectorAll("[data-footer-ai-button]").forEach(button => {
+      button.addEventListener("click", () => {
+        setMode(button.dataset.footerAiMode);
+        setOpen(true);
+      });
+    });
+
+    initFilePicker(form);
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      const items = readItems();
+      const modeLabel = modes[currentMode].label;
+      const requestText = [
+        `Канал обращения: ${modeLabel}`,
+        formatRequestItems(items),
+      ].filter(Boolean).join("\n\n");
+      const data = await submitForm(form, status, submit, { items, requestText });
+      if (data) {
+        setMode(currentMode);
+        message.textContent = `Заявка #${data.lead_id} отправлена. Менеджер увидит запрос и прикрепленные файлы в Bitrix.`;
+      }
+    });
+
+    setMode(currentMode);
   };
 
   const openTransferDb = () =>
@@ -2173,6 +2360,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHomeRequestTransfer();
   initContactRequestTransfer();
   initContactCatalogItems();
+  initSupportChatWidget();
   initPhoneInputs();
   initCookieConsent();
   renderRequest();

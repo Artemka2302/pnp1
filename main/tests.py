@@ -1,8 +1,14 @@
 import json
+import shutil
+import tempfile
+from unittest.mock import patch
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 
+from . import views as main_views
+from .bitrix import build_bitrix_comment, build_bitrix_payload
 from .models import (
     CatalogBlock,
     CatalogSystem,
@@ -110,7 +116,19 @@ class PublicRouteSmokeTests(TestCase):
 
 class MiniRequestApiTests(TestCase):
     def setUp(self):
+        main_views.LEAD_RATE_BUCKET.clear()
         self.client = Client(HTTP_HOST="testserver")
+        self.media_root = tempfile.mkdtemp()
+        self.media_override = override_settings(MEDIA_ROOT=self.media_root)
+        self.media_override.enable()
+        self.addCleanup(self.media_override.disable)
+        self.addCleanup(shutil.rmtree, self.media_root, ignore_errors=True)
+        self.bitrix_patcher = patch(
+            "main.views.send_lead_to_bitrix",
+            return_value={"configured": False, "sent": False},
+        )
+        self.bitrix_patcher.start()
+        self.addCleanup(self.bitrix_patcher.stop)
         block = CatalogBlock.objects.create(slug="building-materials", title="Строительные материалы")
         direction = Direction.objects.create(block=block, slug="constructive", title="Конструктив")
         system = CatalogSystem.objects.create(
@@ -159,6 +177,73 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(Lead.objects.count(), 0)
         self.assertEqual(ConsentLog.objects.count(), 0)
 
+    def test_api_rejects_invalid_email(self):
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "catalog_mini",
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "email": "bad-email",
+                "consent": "1",
+                "request_text": "Нужна фанера",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Lead.objects.count(), 0)
+
+    def test_api_rejects_disallowed_upload_extension(self):
+        bad_file = SimpleUploadedFile(
+            "payload.exe",
+            b"MZ fake executable",
+            content_type="application/x-msdownload",
+        )
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "catalog_mini",
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "consent": "1",
+                "request_text": "Проверьте файл",
+                "specification": bad_file,
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Lead.objects.count(), 0)
+
+    def test_api_accepts_pdf_upload_and_randomizes_storage_name(self):
+        pdf_file = SimpleUploadedFile(
+            "specification.pdf",
+            b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF",
+            content_type="application/pdf",
+        )
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "ai_chat",
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "direction": "Быстрая помощь",
+                "category": "AI-помощник",
+                "consent": "1",
+                "request_text": "Проверьте спецификацию",
+                "specification": pdf_file,
+            },
+        )
+
+        self.assertEqual(response.status_code, 201)
+        lead = Lead.objects.get()
+        upload = lead.uploads.get()
+        self.assertEqual(lead.source, Lead.SOURCE_AI_CHAT)
+        self.assertEqual(lead.direction, "Быстрая помощь")
+        self.assertEqual(upload.original_name, "specification.pdf")
+        self.assertTrue(upload.file.name.startswith(f"lead_uploads/{lead.pk}/"))
+        self.assertTrue(upload.file.name.endswith(".pdf"))
+        self.assertNotIn("specification.pdf", upload.file.name)
+
     def test_api_requires_contact(self):
         response = self.client.post(
             "/api/mini-request/",
@@ -182,3 +267,24 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(CookieConsentLog.objects.count(), 1)
         self.assertEqual(CookieConsentLog.objects.get().choice, "rejected")
+
+
+class BitrixPayloadTests(TestCase):
+    def test_comment_does_not_duplicate_contact_fields_or_file_paths(self):
+        lead = Lead.objects.create(
+            contact_name="Test User",
+            phone="+79000000000",
+            direction="Быстрая помощь",
+            message="Нужно подобрать панели",
+        )
+
+        comment = build_bitrix_comment(lead)
+        payload = build_bitrix_payload(lead)
+
+        self.assertIn("Направление: Быстрая помощь", comment)
+        self.assertIn("Нужно подобрать панели", comment)
+        self.assertNotIn("Test User", comment)
+        self.assertNotIn("+79000000000", comment)
+        self.assertNotIn("lead_uploads/", comment)
+        self.assertEqual(payload["fields"]["NAME"], "Test User")
+        self.assertEqual(payload["fields"]["PHONE"][0]["VALUE"], "+79000000000")

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-shared-header">
   {% block extra_head %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}">
+<body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-privacy-url="{% url 'privacy' %}" data-consent-url="{% url 'consent' %}">
   <div class="page">
     <header class="topbar">
       <div class="container topbar-inner">
@@ -159,7 +159,7 @@
       <button class="btn ghost small" type="button" data-cookie-reject>Отклонить необязательные</button>
     </div>
   </section>
-  <script src="{% static 'js/site.js' %}?v=20260727-home-desktop"></script>
+  <script src="{% static 'js/site.js' %}?v=20260728-support-widget"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

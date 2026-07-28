@@ -1,4 +1,5 @@
 import uuid
+from pathlib import Path
 
 from django.db import models
 from django.urls import reverse
@@ -14,7 +15,8 @@ class TimeStampedModel(models.Model):
 
 def lead_upload_path(instance, filename):
     lead_id = instance.lead_id or "pending"
-    return f"lead_uploads/{lead_id}/{filename}"
+    suffix = Path(filename or "").suffix.lower()[:20]
+    return f"lead_uploads/{lead_id}/{uuid.uuid4().hex}{suffix}"
 
 
 class CatalogBlock(TimeStampedModel):
