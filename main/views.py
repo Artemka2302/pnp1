@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 from urllib.parse import urlencode
 
 from django.contrib.staticfiles import finders
@@ -27,6 +28,7 @@ from .models import (
     UploadedFile,
     Vendor,
 )
+from .bitrix import send_lead_to_bitrix
 from .compliance import (
     CONSENT_VERSION,
     COOKIE_CHOICES,
@@ -1481,7 +1483,18 @@ def request_files(request):
         files.extend(request.FILES.getlist(field_name))
     return files
 
-from cabinet.views import check_phone
+
+def check_phone(phone):
+    phone_clean = re.sub(r"\D", "", phone)
+    if phone_clean == "":
+        return False
+    if phone_clean[0] == "8" and len(phone_clean) == 11:
+        phone_clean = "7" + phone_clean[1:]
+    if phone_clean[0] == "9" and len(phone_clean) == 10:
+        phone_clean = "7" + phone_clean
+    if len(phone_clean) == 11 and phone_clean[0] == "7":
+        return "+" + phone_clean
+    return False
 
 @require_POST
 def catalog_request_api(request):
@@ -1552,7 +1565,6 @@ def catalog_request_api(request):
             raw_payload=raw_payload,
             user_agent=request.META.get("HTTP_USER_AGENT", "")[:500],
             ip_address=client_ip(request),
-            user=request.user if request.user.is_authenticated else None,
         )
 
         created_items = 0
@@ -1612,6 +1624,8 @@ def catalog_request_api(request):
             submitted_fields_hash=submitted_fields_hash(payload, uploaded_files),
         )
 
+    bitrix_result = send_lead_to_bitrix(lead)
+
     return JsonResponse(
         {
             "ok": True,
@@ -1619,6 +1633,10 @@ def catalog_request_api(request):
             "status": lead.status,
             "items_count": created_items,
             "uploaded_files_count": uploaded_count,
+            "bitrix_configured": bitrix_result["configured"],
+            "bitrix_sent": bitrix_result["sent"],
+            "bitrix_files_sent": bitrix_result.get("files_sent", False),
+            "bitrix_files_count": bitrix_result.get("files_count", 0),
         },
         status=201,
     )

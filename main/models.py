@@ -3,7 +3,6 @@ import uuid
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.conf import settings
 
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -229,14 +228,6 @@ class Lead(TimeStampedModel):
         (STATUS_FAILED, "Ошибка передачи"),
         (STATUS_CLOSED, "Закрыта"),
     ]
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='leads',
-        verbose_name='Пользователь'
-    )
     source = models.CharField(max_length=40, choices=SOURCE_CHOICES, default=SOURCE_CATALOG_MINI)
     status = models.CharField(max_length=40, choices=STATUS_CHOICES, default=STATUS_NEW)
     contact_name = models.CharField(max_length=220, blank=True)
@@ -356,35 +347,3 @@ class CookieConsentLog(TimeStampedModel):
 
     def __str__(self):
         return f"{self.choice}: {self.consent_id}"
-
-
-#Делаю кастомного User для добавленеи ролей
-from django.contrib.auth.models import User
-
-class Profile(models.Model):
-    ROLE_CHOICES = ['supplier', 'client_person', 'client_company']
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    account_type = models.CharField(
-        max_length=20,
-        choices=[(value, value) for value in ROLE_CHOICES],  
-        default='client_person',
-        verbose_name='Тип_аккаунта'
-    )
-
-    phone = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True,
-        verbose_name='Телефон'
-    )
-
-    company_name = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-        verbose_name='Название компании'
-    )
-
-    def __str__(self):
-        return f"Profile of {self.user.username}"

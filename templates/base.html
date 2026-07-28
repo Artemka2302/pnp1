@@ -26,7 +26,6 @@
           <a href="{% url 'vendors' %}" data-nav="vendors" class="{% if route == 'vendors' %}active{% endif %}">Производители</a>
           <a href="{% url 'partners' %}" data-nav="partners" class="{% if route == 'partners' %}active{% endif %}">Партнёры</a>
           <a href="{% url 'contacts' %}" data-nav="contacts" class="{% if route == 'contacts' %}active{% endif %}">Контакты</a>
-          <a href="{% url 'cabinet:profile' %}" data-nav="cabinet" class="{% if request.resolver_match.namespace == 'cabinet' %}active{% endif %} {% if route == 'index' %}home-mobile-only{% endif %}">Кабинет</a>
         </nav>
         {% endwith %}
 
