@@ -1,0 +1,173 @@
+@media (min-width: 1081px) {
+  body.pnp-live-home .header-actions.header-contact-actions.home-mobile-only,
+  body.pnp-live-home .main-nav > a.home-mobile-only {
+    display: none !important;
+  }
+
+  body.pnp-live-home .home-request-route,
+  body.pnp-live-home .home-request-route-copy {
+    min-width: 0;
+  }
+
+  body.pnp-live-home .home-request-route-copy strong,
+  body.pnp-live-home .home-request-route-copy small {
+    overflow-wrap: anywhere;
+  }
+
+  body.pnp-live-home .home-request-section {
+    border-top: 0 !important;
+    background: radial-gradient(circle at 50% 0, rgba(164, 43, 84, 0.12), transparent 42%) !important;
+  }
+
+  body.pnp-live-home .home-request-workflow {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  body.pnp-live-home .home-request-workflow-panel {
+    min-height: 138px !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  body.pnp-live-home .home-partner-logo-carousel .partner-logo-showcase {
+    grid-template-rows: repeat(2, 72px) !important;
+    grid-auto-columns: 170px !important;
+    gap: 10px !important;
+    padding: 14px 54px !important;
+  }
+
+  body.pnp-live-home #featuredPartnersHome,
+  body.pnp-live-home #featuredPartnersHome .partner-logo-carousel {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  body.pnp-live-home .home-partner-logo-carousel .partner-showcase-logo {
+    height: 72px !important;
+    min-height: 72px !important;
+    padding: 11px 15px !important;
+  }
+
+  body.pnp-live-home .home-partner-logo-carousel .partner-showcase-logo img {
+    max-width: 92% !important;
+    max-height: 46px !important;
+  }
+
+  body.pnp-live-home .home-partner-logo-carousel .partner-showcase-logo-text {
+    color: #142238;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  /* Keep the desktop supply matrix identical to the approved pnp1.ru layout. */
+  body.pnp-live-home .home-supply-map {
+    gap: 18px !important;
+  }
+
+  body.pnp-live-home .home-supply-sphere {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    padding: 16px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(150, 174, 207, 0.28) !important;
+    border-top: 3px solid rgba(218, 58, 111, 0.76) !important;
+    border-radius: 12px !important;
+    background: linear-gradient(165deg, rgba(28, 47, 77, 0.94), rgba(11, 25, 45, 0.97)) !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.16) !important;
+  }
+
+  body.pnp-live-home .home-supply-sphere:nth-child(2) {
+    border-top-color: rgba(232, 75, 125, 0.94) !important;
+  }
+
+  body.pnp-live-home .home-supply-sphere:nth-child(3) {
+    border-top-color: rgba(214, 53, 104, 0.82) !important;
+  }
+
+  body.pnp-live-home .home-supply-sphere:nth-child(4) {
+    border-top-color: rgba(182, 49, 92, 0.72) !important;
+  }
+
+  body.pnp-live-home .home-supply-sphere:nth-child(5) {
+    border-top-color: rgba(204, 68, 111, 0.74) !important;
+  }
+
+  body.pnp-live-home .home-supply-direction {
+    display: grid !important;
+    grid-template-columns: 26px minmax(0, 1fr) 14px !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 50px !important;
+    padding: 8px 9px !important;
+    border: 1px solid rgba(169, 188, 215, 0.26) !important;
+    border-radius: 8px !important;
+    color: #eaf0f8 !important;
+    background: rgba(8, 20, 38, 0.24) !important;
+    text-align: left !important;
+  }
+
+  body.pnp-live-home .home-supply-direction:hover {
+    border-color: rgba(244, 142, 180, 0.70) !important;
+    background: rgba(130, 30, 70, 0.22) !important;
+    transform: translateY(-1px);
+  }
+
+  body.pnp-live-home .home-supply-direction-icon {
+    display: grid !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    place-items: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    overflow: visible !important;
+    color: #ed8eb3 !important;
+  }
+
+  body.pnp-live-home .home-supply-direction-name {
+    grid-column: 2 !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    color: inherit !important;
+    font-size: 12px !important;
+    font-weight: 780 !important;
+    line-height: 1.16 !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.pnp-live-home .home-supply-direction-arrow {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    overflow: visible !important;
+    color: #ffd7e7 !important;
+    font-size: 18px !important;
+    font-style: normal !important;
+    line-height: 1 !important;
+    text-align: right !important;
+    white-space: normal !important;
+  }
+
+  body.pnp-live-home .home-request-consent a {
+    color: #ffc0d5 !important;
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    text-decoration: underline !important;
+    text-decoration-color: rgba(255, 192, 213, 0.44) !important;
+    text-decoration-thickness: 1px !important;
+    text-underline-offset: 3px !important;
+  }
+
+  body.pnp-live-home .home-request-consent a:hover,
+  body.pnp-live-home .home-request-consent a:focus-visible {
+    color: #fff !important;
+    text-decoration-color: currentColor !important;
+  }
+}

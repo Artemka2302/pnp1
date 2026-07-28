@@ -1022,25 +1022,26 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const initHomeRequestTransfer = () => {
-    const form = document.querySelector("[data-home-request-transfer]");
-    if (!form) return;
-    initFilePicker(form);
+    const forms = document.querySelectorAll("[data-home-request-transfer]");
+    forms.forEach(form => {
+      initFilePicker(form);
 
-    form.addEventListener("submit", async event => {
-      event.preventDefault();
-      const fileInput = form.querySelector("input[type='file']");
-      const payload = {
-        name: form.elements.name?.value || "",
-        phone: form.elements.phone?.value || "",
-        message: form.elements.message?.value || "",
-      };
-      sessionStorage.setItem(transferMetaKey, JSON.stringify(payload));
-      try {
-        await writeTransferFiles(fileInput?.files || []);
-      } catch (error) {
-        console.error(error);
-      }
-      window.location.href = form.dataset.contactUrl || form.action;
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        const fileInput = form.querySelector("input[type='file']");
+        const payload = {
+          name: form.elements.name?.value || "",
+          phone: form.elements.phone?.value || "",
+          message: form.elements.message?.value || "",
+        };
+        sessionStorage.setItem(transferMetaKey, JSON.stringify(payload));
+        try {
+          await writeTransferFiles(fileInput?.files || []);
+        } catch (error) {
+          console.error(error);
+        }
+        window.location.href = form.dataset.contactUrl || form.action;
+      });
     });
   };
 
@@ -2034,12 +2035,108 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const initHomeDesktopExperience = () => {
+    if (!document.body.classList.contains("home-page")) return;
+
+    const whyRoot = document.querySelector("[data-home-why]");
+    if (whyRoot) {
+      const cards = [...whyRoot.querySelectorAll("[data-home-why-card]")];
+      const index = whyRoot.querySelector("[data-home-why-index]");
+      const label = whyRoot.querySelector("[data-home-why-label]");
+      const title = whyRoot.querySelector("[data-home-why-title]");
+      const detail = whyRoot.querySelector("[data-home-why-detail]");
+
+      const selectWhyCard = card => {
+        cards.forEach(item => item.classList.toggle("is-active", item === card));
+        if (index) index.textContent = card.dataset.index || "";
+        if (label) label.textContent = card.dataset.label || "";
+        if (title) title.textContent = card.dataset.title || "";
+        if (detail) detail.textContent = card.dataset.detail || "";
+      };
+
+      cards.forEach(card => {
+        card.addEventListener("click", () => selectWhyCard(card));
+        card.addEventListener("keydown", event => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          selectWhyCard(card);
+        });
+      });
+    }
+
+    const supplyRoot = document.querySelector("[data-home-supply]");
+    if (supplyRoot) {
+      const spheres = [...supplyRoot.querySelectorAll("[data-home-supply-sphere]")];
+      const directions = [...supplyRoot.querySelectorAll("[data-home-supply-direction]")];
+      const previewImage = supplyRoot.querySelector("[data-home-supply-image]");
+      const previewTitle = supplyRoot.querySelector("[data-home-supply-title]");
+      const previewDescription = supplyRoot.querySelector("[data-home-supply-description]");
+      const previewLink = supplyRoot.querySelector("[data-home-supply-link]");
+
+      const selectDirection = direction => {
+        directions.forEach(item => item.classList.toggle("is-active", item === direction));
+        if (previewTitle) previewTitle.textContent = direction.dataset.title || "";
+        if (previewDescription) previewDescription.textContent = direction.dataset.description || "";
+        if (previewLink && direction.dataset.url) previewLink.href = direction.dataset.url;
+        if (previewImage && direction.dataset.image) {
+          previewImage.src = direction.dataset.image;
+          previewImage.alt = direction.dataset.title || "";
+          previewImage.hidden = false;
+        }
+      };
+
+      const openSphere = sphere => {
+        spheres.forEach(item => {
+          const active = item === sphere;
+          item.classList.toggle("is-active", active);
+          item.querySelector("[data-home-supply-block]")?.setAttribute("aria-expanded", String(active));
+        });
+        const firstDirection = sphere.querySelector("[data-home-supply-direction]");
+        if (firstDirection) selectDirection(firstDirection);
+      };
+
+      spheres.forEach(sphere => {
+        sphere.querySelector("[data-home-supply-block]")?.addEventListener("click", () => openSphere(sphere));
+      });
+      directions.forEach(direction => {
+        direction.addEventListener("click", () => selectDirection(direction));
+      });
+    }
+
+    const workflow = document.querySelector("[data-home-request-workflow]");
+    if (workflow) {
+      const steps = [...workflow.querySelectorAll("[data-home-request-step]")];
+      const image = workflow.querySelector("[data-home-request-image]");
+      const index = workflow.querySelector("[data-home-request-index]");
+      const title = workflow.querySelector("[data-home-request-title]");
+      const detail = workflow.querySelector("[data-home-request-detail]");
+
+      const selectStep = step => {
+        steps.forEach(item => {
+          const active = item === step;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-selected", String(active));
+        });
+        if (index) index.textContent = `${step.dataset.index || ""} / ${step.dataset.label || ""}`;
+        if (title) title.textContent = step.dataset.title || "";
+        if (detail) detail.textContent = step.dataset.detail || "";
+        if (image && step.dataset.image) {
+          image.src = step.dataset.image;
+          image.alt = step.dataset.title || "";
+        }
+      };
+
+      steps.forEach(step => step.addEventListener("click", () => selectStep(step)));
+    }
+  };
+
   initCatalogNavigation();
   initVendorFilters();
   initPartnersFilter();
   initCatalogSearch();
   initCatalogLevelNavigator();
   initHomeBrandCarousel();
+  initHomeDesktopExperience();
   initHomeRequestTransfer();
   initContactRequestTransfer();
   initContactCatalogItems();

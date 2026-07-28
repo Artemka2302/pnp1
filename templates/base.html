@@ -8,7 +8,7 @@
   <meta name="description" content="{% block description %}Комплектация строительных объектов по разделам проекта: материалы, оборудование, производители и аналоги под спецификацию, сроки и бюджет.{% endblock %}">
   <link rel="icon" type="image/png" href="{% static 'assets/img/brand/pnp-logo-exact-symbol-clean.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260710-logo-axis-fix">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-shared-header">
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}">
@@ -26,11 +26,19 @@
           <a href="{% url 'vendors' %}" data-nav="vendors" class="{% if route == 'vendors' %}active{% endif %}">Производители</a>
           <a href="{% url 'partners' %}" data-nav="partners" class="{% if route == 'partners' %}active{% endif %}">Партнёры</a>
           <a href="{% url 'contacts' %}" data-nav="contacts" class="{% if route == 'contacts' %}active{% endif %}">Контакты</a>
-          <a href="{% url 'cabinet:profile' %}" data-nav="cabinet" class="{% if request.resolver_match.namespace == 'cabinet' %}active{% endif %}">Кабинет</a>
+          <a href="{% url 'cabinet:profile' %}" data-nav="cabinet" class="{% if request.resolver_match.namespace == 'cabinet' %}active{% endif %} {% if route == 'index' %}home-mobile-only{% endif %}">Кабинет</a>
         </nav>
         {% endwith %}
 
-        <div class="header-actions header-contact-actions" aria-label="Контакты">
+        <div class="header-actions header-direct-actions header-desktop-direct-actions" aria-label="Заявка и контакты отдела продаж">
+          <div class="header-direct-contact-stack" aria-label="Контакты отдела продаж">
+            <a class="header-direct-contact header-direct-contact-phone" href="tel:+74951874950">+7 (495) 187-49-50</a>
+            <a class="header-direct-contact header-direct-contact-email" href="mailto:sales@proleans.ru">sales@proleans.ru</a>
+          </div>
+          <a class="header-direct-action header-direct-action-primary" href="{% url 'contacts' %}#request-form" data-short-label="Заявка">Отправить заявку</a>
+        </div>
+
+        <div class="header-actions header-contact-actions header-mobile-contact-actions" aria-label="Контакты">
           <div class="header-contact-menu" data-header-contact>
             <button class="header-contact-toggle" type="button" data-header-contact-toggle aria-haspopup="true" aria-expanded="false">
               <span>Связаться</span>
@@ -63,7 +71,73 @@
       {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
+    {% if request.resolver_match.url_name == 'index' %}
+    <footer class="footer site-footer home-desktop-only" aria-label="Подвал сайта">
+      <div class="site-footer-container">
+        <section class="site-footer-cta" aria-labelledby="siteFooterCtaTitle">
+          <div class="site-footer-cta-copy">
+            <span class="site-footer-eyebrow">Быстрая помощь</span>
+            <h2 id="siteFooterCtaTitle" data-footer-cta-title>Нужна помощь с заявкой?</h2>
+            <p data-footer-cta-description>Продолжите с AI-помощником или сразу откройте онлайн-чат с менеджером.</p>
+            <span class="site-footer-selection" data-footer-selection hidden>В заявке <b class="site-footer-selection-count" data-footer-selection-count>0</b></span>
+          </div>
+          <div class="site-footer-cta-actions">
+            <button class="site-footer-button site-footer-button--primary" type="button" data-footer-ai-button data-footer-ai-mode="ai"><strong>Начать с AI-помощником</strong><small>Уточнить задачу и собрать запрос</small></button>
+            <button class="site-footer-button site-footer-button--secondary" type="button" data-footer-ai-button data-footer-ai-mode="manager"><strong>Чат с менеджером</strong><small>Сразу передать вопрос специалисту</small></button>
+          </div>
+        </section>
+
+        <div class="site-footer-main">
+          <nav class="site-footer-grid" aria-label="Навигация в подвале">
+            <section class="site-footer-brand" aria-label="ПНП и контакты">
+              <a class="site-footer-logo" href="{% url 'index' %}" aria-label="ПНП — на главную">
+                <img src="{% static 'assets/img/brand/pnp-logo-header-white-clean.png' %}" alt="ПНП" loading="lazy">
+              </a>
+              <p class="site-footer-tagline">Инженерные решения и комплектация объектов</p>
+              <p class="site-footer-description">Подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и задачи проекта.</p>
+              <address class="site-footer-contacts">
+                <a class="site-footer-contact-link" href="tel:+74951874950">+7 (495) 187-49-50</a>
+                <a class="site-footer-contact-link" href="mailto:info@proleans.ru">info@proleans.ru</a>
+                <span class="site-footer-address">г. Москва, ул. Подольских Курсантов, д. 3 стр. 2, помещ. 1/2</span>
+              </address>
+            </section>
+            <details class="site-footer-group" open>
+              <summary>Решения</summary>
+              <ul class="site-footer-links">
+                <li><a class="site-footer-link" href="{% url 'catalog' %}">Каталог</a></li>
+                <li><a class="site-footer-link" href="{% url 'vendors' %}">Производители</a></li>
+                <li><a class="site-footer-link" href="{% url 'partners' %}">Партнёры</a></li>
+              </ul>
+            </details>
+            <details class="site-footer-group" open>
+              <summary>Заявка</summary>
+              <ul class="site-footer-links">
+                <li><a class="site-footer-link" href="{% url 'contacts' %}#request-form">Отправить заявку</a></li>
+                <li><a class="site-footer-link" href="{% url 'contacts' %}?request_type=specification_review#request-form">Передать спецификацию</a></li>
+              </ul>
+            </details>
+            <details class="site-footer-group" open>
+              <summary>Компания</summary>
+              <ul class="site-footer-links">
+                <li><a class="site-footer-link" href="{% url 'about' %}">О компании</a></li>
+                <li><a class="site-footer-link" href="{% url 'contacts' %}">Контакты</a></li>
+              </ul>
+            </details>
+          </nav>
+        </div>
+
+        <div class="site-footer-bottom">
+          <span>© 2026 ПНП. Все права защищены.</span>
+          <div class="site-footer-legal" aria-label="Правовая информация">
+            <a href="{% url 'privacy' %}">Политика обработки данных</a>
+            <a href="{% url 'consent' %}">Согласие на обработку данных</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    {% endif %}
+
+    <footer class="footer {% if request.resolver_match.url_name == 'index' %}home-mobile-only{% endif %}">
       <div class="container footer-inner">
         <span>© ПНП. Инженерные решения и комплектация объектов.</span>
         <span><a href="tel:+79214370438">+7 921 437 04 38</a> · <a href="mailto:info@pnp1.ru">info@pnp1.ru</a> · <a href="{% url 'privacy' %}">Политика</a> · <a href="{% url 'consent' %}">Согласие</a></span>
@@ -86,7 +160,7 @@
       <button class="btn ghost small" type="button" data-cookie-reject>Отклонить необязательные</button>
     </div>
   </section>
-  <script src="{% static 'js/site.js' %}?v=20260715-phone-mask"></script>
+  <script src="{% static 'js/site.js' %}?v=20260727-home-desktop"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

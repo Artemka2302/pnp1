@@ -1,10 +1,40 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block body_class %}home-page{% endblock %}
+{% block body_class %}home-page pnp-live-home{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20260727" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260727" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260728" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260728" media="(min-width: 1081px)">
+{% endblock %}
 
 {% block content %}
-<section class="hero hero-light hero-v13" id="top">
+<section class="hero hero-light hero-v13 home-desktop-only" id="top">
+  <div class="vertical-accent"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Первый национальный поставщик</div>
+        <h1>Единый центр <span class="accent-word">комплектации</span> строительных объектов</h1>
+        <p class="hero-subtitle">Берём на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
+        <div class="hero-actions">
+          <a class="btn hero-primary-cta" href="{% url 'contacts' %}#request-form">Отправить заявку <span aria-hidden="true">→</span></a>
+          <a class="btn ghost hero-commercial-cta" href="{% url 'contacts' %}#request-form">Запросить коммерческое предложение <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-features home-hero-features">
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4 8l8 5 8-5-8-5Zm-6 8 6 4 6-4M6 15l6 4 6-4M12 8v5"></path></svg></i><span>Надёжные бренды<br>и решения</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16c3 0 3-8 6-8s3 8 6 8 3-8 4-8M5 19h14M5 5h14M8 5v3m8-3v3M8 16v3m8-3v3"></path></svg></i><span>Комплексные поставки<br>точно в срок</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 0 0-8 8v5a3 3 0 0 0 3 3h2v-7H5m14 0h-4v7h2a3 3 0 0 0 3-3v-5a8 8 0 0 0-8-8Zm-2 16h4M12 8v2m-3 1 2 2 4-4"></path></svg></i><span>Экспертная поддержка<br>на всех этапах</span></div>
+      <div class="feature-mini feature-mini-single-center"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 7v10l7 4 7-4V7l-7-4Zm0 0v18M5 7l7 4 7-4M8 15h2m4 0h2M8 11h2m4 0h2"></path></svg></i><span>Единый центр<br>комплектации объекта</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="hero hero-light hero-v13 home-mobile-only" id="top-mobile">
   <div class="vertical-accent"></div>
   <div class="container">
     <div class="hero-grid">
@@ -27,7 +57,62 @@
   </div>
 </section>
 
-<section class="section compact why-v13 home-why-v13">
+<section class="section compact role-entry-section home-desktop-only" id="clients">
+  <div class="container">
+    <div class="section-head role-entry-head">
+      <div>
+        <div class="eyebrow">С кем работаем</div>
+        <h2>Наши партнёры</h2>
+        <p>Помогаем проектировщикам, генподрядчикам и подрядным организациям подбирать решения, рассчитывать поставку и комплектовать объекты.</p>
+      </div>
+    </div>
+    <div class="role-entry-grid">
+      <article class="role-entry-card" id="client-designers" data-role-card="designer">
+        <div class="role-entry-card-top"><span class="role-entry-index">01</span><span class="role-entry-tag">Проектирование</span></div>
+        <h3>Проектировщики</h3>
+        <p>Подбираем решения по требованиям проекта, проверяем применимость и доступность материалов для спецификации.</p>
+        <ul><li>Технический подбор</li><li>Проверка аналогов</li><li>Документы производителей по запросу</li></ul>
+        <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=designer&amp;request_type=technical_selection&amp;project_stage=design#request-form">Начать технический подбор <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="role-entry-card role-entry-card-accent" id="client-contractors" data-role-card="general_contractor">
+        <div class="role-entry-card-top"><span class="role-entry-index">02</span><span class="role-entry-tag">Комплектация</span></div>
+        <h3>Генподрядчики</h3>
+        <p>Разбираем ведомость, подбираем варианты комплектации и готовим коммерческое предложение по объекту.</p>
+        <ul><li>Разбор ведомости</li><li>Подбор производителей и замен</li><li>Коммерческое предложение</li></ul>
+        <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=general_contractor&amp;request_type=specification_review#request-form">Передать ведомость на расчёт <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="role-entry-card" id="client-institutes" data-role-card="procurement">
+        <div class="role-entry-card-top"><span class="role-entry-index">03</span><span class="role-entry-tag">Снабжение участка</span></div>
+        <h3>Подрядчики</h3>
+        <p>Подбираем материалы и оборудование под работы на объекте, готовим варианты замены и расчёт для согласования.</p>
+        <ul><li>Подбор под вид работ</li><li>Замены по требованиям проекта</li><li>КП и документы для согласования</li></ul>
+        <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=procurement&amp;request_type=commercial_offer&amp;project_stage=construction#request-form">Отправить список материалов <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section compact why-v13 home-why-v13 home-why-tech home-desktop-only" id="why-pnp" data-why-variant="console">
+  <div class="container">
+    <div class="section-head why-tech-head"><div><div class="eyebrow">Преимущества ПНП</div><h2>Что ПНП берёт на себя</h2><p>От разбора спецификации и подбора решений до технических документов и сопровождения поставки — всё в контексте одной задачи по объекту.</p></div></div>
+    <div class="why-grid-v13 why-tech-grid" data-pnp-live-why>
+      <article class="why-tech-card" tabindex="0" data-label="Комплектация"><div class="why-tech-card__top"><span class="why-tech-card__index">01</span><span class="why-tech-card__pill">Комплектация</span></div><h3>Комплектуем объект по разделам</h3><div class="why-tech-card__detail"><p>Сводим архитектуру, конструктив, инженерные системы и безопасность в связанную заявку — без разрозненных обращений.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Спецификация"><div class="why-tech-card__top"><span class="why-tech-card__index">02</span><span class="why-tech-card__pill">Спецификация</span></div><h3>Разбираем спецификации и ТЗ</h3><div class="why-tech-card__detail"><p>Принимаем ведомости, PDF, Excel и проектные файлы, уточняем позиции и готовим основу для подбора и расчёта.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Аналоги"><div class="why-tech-card__top"><span class="why-tech-card__index">03</span><span class="why-tech-card__pill">Аналоги</span></div><h3>Сопоставляем бренды и замены</h3><div class="why-tech-card__detail"><p>Сравниваем решения по требованиям проекта, бюджету и условиям поставки; применимость подтверждаем после проверки специалистом.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Координация"><div class="why-tech-card__top"><span class="why-tech-card__index">04</span><span class="why-tech-card__pill">Координация</span></div><h3>Сводим запрос по объекту в один контекст</h3><div class="why-tech-card__detail"><p>Собираем позиции, уточнения и согласованные варианты вместе, чтобы клиент и менеджер работали с одной задачей.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Документы"><div class="why-tech-card__top"><span class="why-tech-card__index">05</span><span class="why-tech-card__pill">Документы</span></div><h3>Запрашиваем документы к решению</h3><div class="why-tech-card__detail"><p>По выбранным позициям запрашиваем каталоги, паспорта и сертификаты; состав комплекта уточняется для каждой позиции.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Сопровождение"><div class="why-tech-card__top"><span class="why-tech-card__index">06</span><span class="why-tech-card__pill">Сопровождение</span></div><h3>Сопровождаем согласование и поставку</h3><div class="why-tech-card__detail"><p>Фиксируем согласованные позиции, уточняем изменения и сохраняем контекст заявки от подбора до отгрузки.</p></div></article>
+      <aside class="why-tech-console" aria-live="polite">
+        <div class="why-tech-console__head"><span class="why-tech-console__kicker">Активное преимущество</span><span class="why-tech-console__pill" data-live-why-label>Комплектация</span></div>
+        <strong class="why-tech-console__title" data-live-why-title>Комплектуем объект по разделам</strong>
+        <p class="why-tech-console__text" data-live-why-text>Сводим архитектуру, конструктив, инженерные системы и безопасность в связанную заявку — без разрозненных обращений.</p>
+        <div class="why-tech-console__meta"><span>Один запрос</span><span>Единый контекст</span><span>Сопровождение</span></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="section compact why-v13 home-why-v13 home-mobile-only">
   <div class="container">
     <div class="section-head"><div><h2>Почему мы</h2></div></div>
     <div class="why-grid-v13">
@@ -41,127 +126,130 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section home-supply-section home-directions-section home-desktop-only" aria-labelledby="homeSupplyTitle">
   <div class="container">
-    <div class="section-head">
-      <div><h2>Основные направления поставки</h2></div>
-      <a class="link-more" href="{% url 'catalog' %}">Смотреть все направления →</a>
-    </div>
-<div class="home-main-block-grid">
-  {% for block in blocks %}
-    <article class="home-main-block-card {% if forloop.counter <= 2 %}is-major{% endif %}">
-      <a class="home-main-block-media" href="{% url 'catalog_block' block.slug %}">
-        {% if block.image %}
-          <img src="{% static block.image %}" alt="{{ block.title }}">
-        {% endif %}
-      </a>
-
-      <div class="home-main-block-body">
-        <em>{{ block.system_count }} систем · {{ block.group_count }} групп</em>
-
-        <h3>{{ block.title }}</h3>
-        <p>{{ block.summary }}</p>
-
-        <div class="home-main-block-chips">
-          {% for direction in block.directions.all|slice:":3" %}
-            <span>{{ direction.title }}</span>
+    <div class="section-head home-supply-section-head"><div><div class="section-eyebrow">Сферы поставки</div><h2 id="homeSupplyTitle">Закрываем все разделы проекта</h2></div></div>
+    <div id="homeCategories">
+      <div class="home-supply-map" data-pnp-live-supply>
+        <div class="home-supply-columns">
+          {% for block in blocks %}
+            <article class="home-supply-sphere {% if forloop.first %}is-mobile-expanded{% endif %}" data-home-supply-sphere="{{ block.slug }}">
+              <div class="home-supply-sphere-head">
+                <span class="home-supply-sphere-index">{{ forloop.counter|stringformat:"02d" }}</span>
+                <h3>{{ block.title }}</h3>
+                <button class="home-supply-sphere-mobile-toggle" type="button" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Показать направления: {{ block.title }}"><span></span></button>
+              </div>
+              <div class="home-supply-direction-list" aria-label="{{ block.title }}">
+                {% for direction in block.directions.all %}
+                  <a class="home-supply-direction" href="{{ direction.get_absolute_url }}"
+                    data-live-supply-direction="{{ direction.slug }}"
+                    aria-label="Открыть направление: {{ direction.title }}">
+                    <span class="home-supply-direction-icon" data-live-supply-icon></span>
+                    <span class="home-supply-direction-name">{{ direction.title }}</span>
+                    <span class="home-supply-direction-arrow" aria-hidden="true">→</span>
+                  </a>
+                {% empty %}
+                  <a class="home-supply-direction" href="{% url 'catalog_block' block.slug %}"><span class="home-supply-direction-name">Открыть блок</span><span class="home-supply-direction-arrow">→</span></a>
+                {% endfor %}
+              </div>
+            </article>
           {% endfor %}
-          {% if block.directions.count > 3 %}
-            <span>+{{ block.directions.count|add:"-3" }}</span>
-          {% endif %}
-        </div>
-
-        <div class="category-actions">
-          <a class="btn small" href="{% url 'catalog_block' block.slug %}">Открыть блок →</a>
-          <a class="btn ghost small" href="{% url 'contacts' %}#request-form">Запросить КП</a>
         </div>
       </div>
-    </article>
-  {% endfor %}
-</div>
+    </div>
   </div>
 </section>
 
-<section class="section compact">
+<section class="section home-mobile-only">
   <div class="container">
-    <div class="section-head">
-      <div><h2>Популярные бренды</h2></div>
-      <div style="display:flex;gap:18px;flex-wrap:wrap">
-        <a class="link-more" href="{% url 'partners' %}">Ключевые партнёры →</a>
-        <a class="link-more" href="{% url 'vendors' %}">Справочник производителей →</a>
-      </div>
-    </div>
-    <div data-home-brand-content>
-      {% include "main/partials/home_popular_brands.html" %}
+    <div class="section-head"><div><h2>Основные направления поставки</h2></div><a class="link-more" href="{% url 'catalog' %}">Смотреть все направления →</a></div>
+    <div class="home-main-block-grid">
+      {% for block in blocks %}
+        <article class="home-main-block-card {% if forloop.counter <= 2 %}is-major{% endif %}">
+          <a class="home-main-block-media" href="{% url 'catalog_block' block.slug %}">{% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}</a>
+          <div class="home-main-block-body"><em>{{ block.system_count }} систем · {{ block.group_count }} групп</em><h3>{{ block.title }}</h3><p>{{ block.summary }}</p><div class="home-main-block-chips">{% for direction in block.directions.all|slice:":3" %}<span>{{ direction.title }}</span>{% endfor %}{% if block.directions.count > 3 %}<span>+{{ block.directions.count|add:"-3" }}</span>{% endif %}</div><div class="category-actions"><a class="btn small" href="{% url 'catalog_block' block.slug %}">Открыть блок →</a><a class="btn ghost small" href="{% url 'contacts' %}#request-form">Запросить КП</a></div></div>
+        </article>
+      {% endfor %}
     </div>
   </div>
 </section>
 
-<section class="section compact">
+<section class="section compact home-brands-section home-desktop-only">
   <div class="container">
-    <div class="glass vendor-home-card">
-      <div class="section-head">
-        <div><h2>Комплексная комплектация объекта</h2></div>
-        <a class="btn ghost" href="{% url 'vendors' %}">Открыть справочник производителей →</a>
-      </div>
-      <div class="vendor-stats">
-        <div class="stat"><strong>{{ stats.blocks }}</strong><span>блоков поставки</span></div>
-        <div class="stat"><strong>{{ stats.directions }}</strong><span>направлений каталога</span></div>
-        <div class="stat"><strong>{{ stats.groups }}</strong><span>товарных групп</span></div>
-        <div class="stat"><strong>{{ stats.vendors }}</strong><span>производителей в базе</span></div>
+    <div class="section-head"><div><div class="eyebrow home-desktop-eyebrow">Проверенные производители</div><h2>Популярные бренды</h2></div><div style="display:flex;gap:18px;flex-wrap:wrap"><a class="link-more" href="{% url 'vendors' %}">Все бренды →</a></div></div>
+    <div class="partners-preview popular-logo-grid" id="featuredPartnersHome">
+      <div class="partner-logo-carousel home-partner-logo-carousel is-at-start" data-partner-logo-carousel aria-label="Популярные бренды и партнёры">
+        <button class="partner-logo-nav partner-logo-nav-prev" type="button" aria-label="Листать логотипы назад" data-partner-logo-prev>‹</button>
+        <div class="partner-logo-showcase home-partner-logo-showcase" tabindex="0" aria-label="Логотипы производителей">
+          {% for partner in featured_partners %}
+            <a class="mega-logo-card mega-partner-logo-card partner-showcase-logo {% if not partner.logo %}partner-showcase-logo-text{% endif %}" href="{% url 'vendors' %}?vendors={{ partner.slug }}" aria-label="{{ partner.name }}">
+              {% if partner.logo %}<img src="{% static partner.logo %}" alt="{{ partner.name }}" loading="lazy" decoding="async">{% else %}<span>{{ partner.name }}</span>{% endif %}
+            </a>
+          {% empty %}<p class="partner-empty-state">Бренды не найдены</p>{% endfor %}
+        </div>
+        <button class="partner-logo-nav partner-logo-nav-next" type="button" aria-label="Листать логотипы вперёд" data-partner-logo-next>›</button>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section compact">
-  <div class="container home-bottom">
-    <article class="glass home-about-sales">
-      <h2>О компании</h2>
-      <p>ПНП объединяет подбор оборудования, работу с производителями и сопровождение заявок для строительных объектов.</p>
-      <p class="sales-trigger">Вместо разрозненных прайсов клиент получает рабочий комплект под объект: позиции, аналоги, сроки поставки и понятные точки риска.</p>
-      <div class="about-sales-points"><span><b>Проверяем</b><small>спецификацию</small></span><span><b>Подбираем</b><small>аналоги</small></span><span><b>Готовим КП</b><small>под задачу</small></span></div>
-    </article>
-    <article class="glass request-panel">
-      <h2>Запросить <span class="accent-word">коммерческое предложение</span></h2>
-      <p>Отправьте спецификацию или опишите задачу — подготовим оптимальное предложение в кратчайшие сроки.</p>
-      <form class="home-request-form" action="{% url 'contacts' %}#request-form" data-home-request-transfer data-contact-url="{% url 'contacts' %}#request-form" enctype="multipart/form-data">
-        <div class="form-row">
-          <div class="field">
-            <label for="homeRequestName">Имя / компания</label>
-            <input id="homeRequestName" name="name" placeholder="ООО СтройПроект" autocomplete="organization">
-          </div>
-          <div class="field">
-            <label for="homeRequestContact">Телефон или email</label>
-            <input id="homeRequestContact" name="phone" placeholder="+7 ... / email" autocomplete="tel">
-          </div>
-        </div>
+<section class="section compact home-brands-section home-mobile-only">
+  <div class="container"><div class="section-head"><div><h2>Популярные бренды</h2></div><div class="home-brand-links"><a class="link-more" href="{% url 'partners' %}">Ключевые партнёры →</a><a class="link-more" href="{% url 'vendors' %}">Справочник производителей →</a></div></div><div data-home-brand-content>{% include "main/partials/home_popular_brands.html" %}</div></div>
+</section>
 
-        <div class="field">
-          <label for="homeRequestMessage">Комментарий</label>
-          <textarea id="homeRequestMessage" name="message" placeholder="Опишите задачу или добавьте список позиций"></textarea>
+<section class="section compact home-request-section home-desktop-only" id="homeRequest">
+  <div class="container">
+    <div class="eyebrow home-desktop-eyebrow home-desktop-eyebrow-router">Комплектация ПНП</div>
+    <section class="home-request-router" aria-labelledby="homeRequestRouterTitle" data-pnp-live-workflow data-default-step="project">
+      <header class="home-request-router-head"><span class="home-request-router-kicker">Комплектация ПНП</span><h2 id="homeRequestRouterTitle">Как проходит комплектация объекта</h2></header>
+      <div class="home-request-workflow" data-home-request-process>
+        <div class="home-request-stage-tabs" role="tablist" aria-label="Этапы комплектации объекта">
+          <span class="home-request-stage-rail" aria-hidden="true"><span class="home-request-stage-rail-fill" data-home-request-track-fill></span><span class="home-request-stage-runner" data-home-request-runner></span></span>
+          <button class="home-request-stage is-active" id="homeRequestStageProject" type="button" role="tab" aria-selected="true" aria-controls="homeRequestPanel" tabindex="0" data-home-request-step="project"><span class="home-request-stage-node" aria-hidden="true">01</span><span class="home-request-stage-copy"><strong>Проект</strong><small>Разбираем разделы проекта</small></span></button>
+          <button class="home-request-stage" id="homeRequestStageAnalogs" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="analogs"><span class="home-request-stage-node" aria-hidden="true">02</span><span class="home-request-stage-copy"><strong>Аналоги</strong><small>Подбираем замены</small></span></button>
+          <button class="home-request-stage" id="homeRequestStageControl" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="control"><span class="home-request-stage-node" aria-hidden="true">03</span><span class="home-request-stage-copy"><strong>Контроль</strong><small>Сверяем позиции и сроки</small></span></button>
+          <button class="home-request-stage" id="homeRequestStageDelivery" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="delivery"><span class="home-request-stage-node" aria-hidden="true">04</span><span class="home-request-stage-copy"><strong>Поставка</strong><small>Готовим документы и логистику</small></span></button>
         </div>
-
-        <div class="field file-field">
-          <label class="upload-box" for="homeSpecification">
-            <span data-file-label>Прикрепить файл / спецификацию</span>
-            <small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small>
-          </label>
-          <input class="file-input" id="homeSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
-          <div class="file-list" data-file-list hidden></div>
-          <p class="file-warning">Не загружайте паспорта, медицинские данные, биометрию и чужие персональные данные без законного основания.</p>
+        <div class="home-request-workflow-details" aria-live="off" data-home-request-details>
+          <span class="home-request-workflow-bg is-active" aria-hidden="true" data-home-request-bg-layer></span><span class="home-request-workflow-bg" aria-hidden="true" data-home-request-bg-layer></span>
+          <article class="home-request-workflow-panel is-active" id="homeRequestPanel" role="tabpanel" aria-labelledby="homeRequestStageProject" aria-hidden="false" data-home-request-panel="project">
+            <span class="home-request-workflow-code" data-home-request-eyebrow>01 · Проект</span><h3 data-home-request-title>Разбираем проектную задачу</h3><p data-home-request-description>Изучаем спецификацию, раздел проекта и данные об объекте, чтобы зафиксировать требования для подбора.</p><ul data-home-request-tags><li>Раздел проекта</li><li>Позиции и количество</li><li>Объект и город поставки</li></ul>
+          </article>
         </div>
-
-        <button class="btn light" type="submit">Отправить запрос →</button>
-        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+      </div>
+      <nav class="home-request-route-grid" aria-label="Перейти к подбору решений">
+        <a class="home-request-route home-request-route-catalog" href="{% url 'catalog' %}" data-home-pre-request-route="catalog"><span class="home-request-route-node home-request-route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"></rect><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"></rect><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"></rect><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"></rect></svg></span><span class="home-request-route-copy"><small>Каталог</small><strong>Разделы и группы</strong></span><span class="home-request-route-action" aria-hidden="true">→</span></a>
+        <a class="home-request-route home-request-route-vendors" href="{% url 'vendors' %}" data-home-pre-request-route="vendors"><span class="home-request-route-node home-request-route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3.5 20.5V9.8l5-2.6v3.4l5-2.6v3.5l3-1.6V4.5h3v16M3.5 20.5h17M7 15h2m3 0h2m3 0h2M7 18h2m3 0h2m3 0h2"></path></svg></span><span class="home-request-route-copy"><small>Производители</small><strong>Бренды и аналоги</strong></span><span class="home-request-route-action" aria-hidden="true">→</span></a>
+      </nav>
+    </section>
+    <div class="eyebrow home-desktop-eyebrow home-desktop-eyebrow-form">Быстрая заявка</div>
+    <article class="glass request-panel home-request-card">
+      <header class="home-request-head"><span class="home-request-kicker">Быстрая заявка</span><h2>Оставить заявку</h2></header>
+      <form class="form sym-request-home-form home-direct-request" action="{% url 'contacts' %}#request-form" data-home-request-transfer data-contact-url="{% url 'contacts' %}#request-form" enctype="multipart/form-data">
+        <div class="field"><label for="homeLiveName">Имя</label><input id="homeLiveName" name="name" autocomplete="name" placeholder="Как к вам обращаться" required></div>
+        <div class="field"><label for="homeLivePhone">Телефон</label><input id="homeLivePhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 ___ ___-__-__" required></div>
+        <div class="field file-field sym-request-upload-field"><span class="field-label">Спецификация или файл</span><label class="upload-box" for="homeLiveSpecification"><svg class="upload-box-icon" viewBox="0 0 24 24"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeLiveSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div></div>
+        <div class="field sym-request-message-field"><label for="homeLiveMessage">Комментарий</label><textarea id="homeLiveMessage" name="message" placeholder="Что нужно подобрать? Укажите объект, город или сроки."></textarea></div>
+        <label class="form-consent form-consent-check home-request-consent"><input type="checkbox" name="privacy_consent" value="yes" required><span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener noreferrer">Согласие</a></span></label>
+        <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn" type="submit">Отправить заявку →</button><small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small></div>
       </form>
     </article>
-    <aside class="contact-mini">
-      <h3>Контакты</h3>
-      <div class="contact-line"><span>Телефон</span><a href="tel:+79214370438">+7 921 437 04 38</a></div>
-      <div class="contact-line"><span>Email</span><a href="mailto:info@pnp1.ru">info@pnp1.ru</a></div>
-      <div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div>
-    </aside>
   </div>
 </section>
+
+<section class="section compact home-mobile-only">
+  <div class="container"><div class="glass vendor-home-card"><div class="section-head"><div><h2>Комплексная комплектация объекта</h2></div><a class="btn ghost" href="{% url 'vendors' %}">Открыть справочник производителей →</a></div><div class="vendor-stats"><div class="stat"><strong>{{ stats.blocks }}</strong><span>блоков поставки</span></div><div class="stat"><strong>{{ stats.directions }}</strong><span>направлений каталога</span></div><div class="stat"><strong>{{ stats.groups }}</strong><span>товарных групп</span></div><div class="stat"><strong>{{ stats.vendors }}</strong><span>производителей в базе</span></div></div></div></div>
+</section>
+
+<section class="section compact home-request-form-band home-mobile-only">
+  <div class="container home-bottom">
+    <article class="glass home-about-sales"><h2>О компании</h2><p>ПНП объединяет подбор оборудования, работу с производителями и сопровождение заявок для строительных объектов.</p><p class="sales-trigger">Вместо разрозненных прайсов клиент получает рабочий комплект под объект: позиции, аналоги, сроки поставки и понятные точки риска.</p><div class="about-sales-points"><span><b>Проверяем</b><small>спецификацию</small></span><span><b>Подбираем</b><small>аналоги</small></span><span><b>Готовим КП</b><small>под задачу</small></span></div></article>
+    <article class="glass request-panel"><h2>Запросить <span class="accent-word">коммерческое предложение</span></h2><p>Отправьте спецификацию или опишите задачу — подготовим оптимальное предложение в кратчайшие сроки.</p><form class="home-request-form" action="{% url 'contacts' %}#request-form" data-home-request-transfer data-contact-url="{% url 'contacts' %}#request-form" enctype="multipart/form-data"><div class="form-row"><div class="field"><label for="homeMobileName">Имя / компания</label><input id="homeMobileName" name="name" placeholder="ООО СтройПроект" autocomplete="organization"></div><div class="field"><label for="homeMobileContact">Телефон или email</label><input id="homeMobileContact" name="phone" placeholder="+7 ... / email" autocomplete="tel"></div></div><div class="field"><label for="homeMobileMessage">Комментарий</label><textarea id="homeMobileMessage" name="message" placeholder="Опишите задачу или добавьте список позиций"></textarea></div><div class="field file-field"><label class="upload-box" for="homeMobileSpecification"><span data-file-label>Прикрепить файл / спецификацию</span><small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small></label><input class="file-input" id="homeMobileSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div><p class="file-warning">Не загружайте паспорта, медицинские данные, биометрию и чужие персональные данные без законного основания.</p></div><button class="btn light" type="submit">Отправить запрос →</button><p class="form-status" data-form-status role="status" aria-live="polite"></p></form></article>
+    <aside class="contact-mini"><h3>Контакты</h3><div class="contact-line"><span>Телефон</span><a href="tel:+79214370438">+7 921 437 04 38</a></div><div class="contact-line"><span>Email</span><a href="mailto:info@pnp1.ru">info@pnp1.ru</a></div><div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div></aside>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'js/home-pnp1-live.js' %}?v=20260728-2"></script>
 {% endblock %}
