@@ -24,19 +24,10 @@ def call_bitrix_method(webhook_url, method, payload):
 
 
 def build_bitrix_comment(lead):
-    lines = [
-        f"Заявка #{lead.pk} с сайта ПНП",
-        "",
-        f"Имя: {lead.contact_name or 'не указано'}",
-        f"Телефон: {lead.phone or 'не указан'}",
-    ]
+    lines = [f"Заявка #{lead.pk} с сайта ПНП"]
 
-    if lead.email:
-        lines.append(f"Email: {lead.email}")
-    if lead.company:
-        lines.append(f"Компания: {lead.company}")
     if lead.category:
-        lines.append(f"Категория: {lead.category}")
+        lines.extend(["", f"Категория: {lead.category}"])
     if lead.object_name:
         lines.append(f"Объект: {lead.object_name}")
     if lead.message or lead.request_text:
@@ -55,14 +46,6 @@ def build_bitrix_comment(lead):
                 if part
             )
             lines.append(f"- {item_title or item}")
-
-    uploads = list(lead.uploads.all())
-    if uploads:
-        lines.extend(["", "Файлы:"])
-        for upload in uploads:
-            file_url = upload.file.url if upload.file else ""
-            file_text = f"{upload.original_name}: {file_url}" if file_url else upload.original_name
-            lines.append(f"- {file_text}")
 
     return "\n".join(lines)
 

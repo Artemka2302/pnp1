@@ -816,6 +816,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       setStatus(statusElement, `Заявка #${data.lead_id} сохранена.`);
       form.reset();
+      resetFilePicker(form);
       if (form.matches("[data-lead-form]") || form.querySelector("[data-request-items]")) {
         writeItems([]);
         renderRequest();
@@ -882,10 +883,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const fileSignature = file => `${file.name}|${file.size}|${file.lastModified}`;
 
-  const updateFileLabel = (fileLabel, count) => {
+  const updateFileLabel = (fileLabel, count, emptyLabel = defaultFileLabel) => {
     if (!fileLabel) return;
     if (!count) {
-      fileLabel.textContent = defaultFileLabel;
+      fileLabel.textContent = emptyLabel;
       return;
     }
     fileLabel.textContent = count === 1 ? "Выбран 1 файл" : `Выбрано файлов: ${count}`;
@@ -896,7 +897,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const fileLabel = form.querySelector("[data-file-label]");
     let fileList = form.querySelector("[data-file-list]");
     if (!fileInput) return;
-    const state = { files: Array.from(fileInput.files || []) };
+    const state = {
+      files: Array.from(fileInput.files || []),
+      initialLabel: fileLabel?.textContent || defaultFileLabel,
+      reset: null,
+    };
     filePickerState.set(fileInput, state);
 
     if (!fileList) {
@@ -909,7 +914,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const renderFiles = () => {
       const files = state.files;
-      updateFileLabel(fileLabel, files.length);
+      updateFileLabel(fileLabel, files.length, state.initialLabel);
       fileList.innerHTML = "";
       fileList.hidden = !files.length;
 
@@ -938,6 +943,11 @@ document.addEventListener("DOMContentLoaded", () => {
       renderFiles();
     };
 
+    state.reset = () => {
+      state.files = [];
+      syncFiles();
+    };
+
     fileInput.addEventListener("change", () => {
       const existing = new Set(state.files.map(fileSignature));
       Array.from(fileInput.files || []).forEach(file => {
@@ -958,6 +968,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     syncFiles();
+  };
+
+  const resetFilePicker = form => {
+    const fileInput = form.querySelector("input[type='file']");
+    if (!fileInput) return;
+    const state = filePickerState.get(fileInput);
+    if (state?.reset) {
+      state.reset();
+      return;
+    }
+    fileInput.value = "";
+    updateFileLabel(form.querySelector("[data-file-label]"), 0);
+    const fileList = form.querySelector("[data-file-list]");
+    if (fileList) {
+      fileList.innerHTML = "";
+      fileList.hidden = true;
+    }
   };
 
   const openTransferDb = () =>
