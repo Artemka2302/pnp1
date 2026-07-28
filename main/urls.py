@@ -30,6 +30,7 @@ urlpatterns = [
     path("vendors/", views.vendors, name="vendors"),
     path("partners/", views.partners, name="partners"),
     path("api/catalog-search/", views.catalog_search_api, name="api_catalog_search"),
+    path("api/ai-chat/", views.ai_chat_api, name="api_ai_chat"),
     path("api/catalog-request/", views.catalog_request_api, name="api_catalog_request"),
     path("api/mini-request/", views.catalog_request_api, name="api_mini_request"),
     path("api/cookie-consent/", views.cookie_consent_api, name="api_cookie_consent"),

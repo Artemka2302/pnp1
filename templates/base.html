@@ -8,10 +8,10 @@
   <meta name="description" content="{% block description %}Комплектация строительных объектов по разделам проекта: материалы, оборудование, производители и аналоги под спецификацию, сроки и бюджет.{% endblock %}">
   <link rel="icon" type="image/png" href="{% static 'assets/img/brand/pnp-logo-exact-symbol-clean.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-shared-header">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-deepseek-chat">
   {% block extra_head %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-privacy-url="{% url 'privacy' %}" data-consent-url="{% url 'consent' %}">
+<body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-ai-chat-endpoint="/api/ai-chat/" data-privacy-url="{% url 'privacy' %}" data-consent-url="{% url 'consent' %}">
   <div class="page">
     <header class="topbar">
       <div class="container topbar-inner">
@@ -159,7 +159,7 @@
       <button class="btn ghost small" type="button" data-cookie-reject>Отклонить необязательные</button>
     </div>
   </section>
-  <script src="{% static 'js/site.js' %}?v=20260728-support-widget"></script>
+  <script src="{% static 'js/site.js' %}?v=20260728-deepseek-chat"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

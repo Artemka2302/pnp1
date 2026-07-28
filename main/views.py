@@ -1,5 +1,6 @@
 import hashlib
 import json
+import logging
 import re
 import time
 from pathlib import Path
@@ -7,6 +8,7 @@ from urllib.parse import urlencode
 
 from django.contrib.staticfiles import finders
 from django.conf import settings
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
@@ -34,12 +36,27 @@ from .models import (
     Vendor,
 )
 from .bitrix import send_lead_to_bitrix
+from .ai import (
+    AiConfigurationError,
+    AiProviderError,
+    AiResponseError,
+    build_ai_messages,
+    call_deepseek,
+    deepseek_model_name,
+    normalize_ai_history,
+    normalize_ai_page,
+    normalize_catalog_items,
+    normalize_lead_draft,
+    parse_ai_result,
+)
 from .compliance import (
     CONSENT_VERSION,
     COOKIE_CHOICES,
     COOKIE_TEXT_VERSION,
     PRIVACY_VERSION,
 )
+
+logger = logging.getLogger(__name__)
 
 ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".doc", ".docx", ".xls", ".xlsx", ".dwg", ".jpg", ".jpeg", ".png", ".zip"}
 MAX_UPLOAD_FILES = 5
@@ -48,6 +65,9 @@ MAX_UPLOAD_TOTAL_SIZE = 60 * 1024 * 1024
 LEAD_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
 LEAD_RATE_LIMIT_MAX = 20
 LEAD_RATE_BUCKET = {}
+AI_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
+AI_RATE_LIMIT_MAX = 20
+AI_MAX_BODY_BYTES = 32 * 1024
 
 
 def first_existing_static_path(*paths):
@@ -1578,6 +1598,103 @@ def check_phone(phone):
     if len(phone_clean) == 11 and phone_clean[0] == "7":
         return "+" + phone_clean
     return False
+
+
+def ai_rate_limited(request):
+    ip = client_ip(request) or "unknown"
+    ip_hash = hashlib.sha256(ip.encode("utf-8")).hexdigest()[:24]
+    cache_key = f"pnp:ai-chat-rate:{ip_hash}"
+    if cache.add(cache_key, 1, timeout=AI_RATE_LIMIT_WINDOW_SECONDS):
+        return False
+    try:
+        request_count = cache.incr(cache_key)
+    except ValueError:
+        cache.set(cache_key, 1, timeout=AI_RATE_LIMIT_WINDOW_SECONDS)
+        request_count = 1
+    return request_count > AI_RATE_LIMIT_MAX
+
+
+def ai_error_response(error, message, status):
+    return JsonResponse(
+        {
+            "ok": False,
+            "error": error,
+            "error_message": message,
+        },
+        status=status,
+    )
+
+
+@require_POST
+def ai_chat_api(request):
+    if ai_rate_limited(request):
+        return ai_error_response(
+            "rate_limited",
+            "Слишком много сообщений подряд. Попробуйте немного позже.",
+            429,
+        )
+    if request.content_type != "application/json":
+        return ai_error_response("invalid_content_type", "Ожидается JSON-запрос.", 400)
+    if len(request.body) > AI_MAX_BODY_BYTES:
+        return ai_error_response("request_too_large", "Сообщение слишком большое.", 413)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return ai_error_response("invalid_json", "Некорректный JSON.", 400)
+    if not isinstance(payload, dict):
+        return ai_error_response("invalid_json", "JSON должен быть объектом.", 400)
+    if not payload_bool(payload, "consent"):
+        return ai_error_response(
+            "consent_required",
+            "Подтвердите согласие на обработку сообщения AI-сервисом.",
+            400,
+        )
+
+    raw_message = payload.get("message")
+    if not isinstance(raw_message, str) or not raw_message.strip():
+        return ai_error_response("empty_message", "Напишите сообщение для AI-помощника.", 400)
+    if len(raw_message.strip()) > 2000:
+        return ai_error_response("message_too_long", "Сообщение не должно превышать 2000 символов.", 400)
+
+    message = raw_message.strip()
+    history = normalize_ai_history(payload.get("history"))
+    lead_draft = normalize_lead_draft(payload.get("lead_draft") or payload.get("leadDraft"))
+    catalog_items = normalize_catalog_items(payload.get("catalog_items") or payload.get("catalogItems"))
+    page = normalize_ai_page(payload.get("page"))
+    messages = build_ai_messages(message, history, lead_draft, catalog_items, page)
+
+    try:
+        provider_content = call_deepseek(messages)
+        result = parse_ai_result(provider_content, previous_draft=lead_draft)
+    except AiConfigurationError:
+        return ai_error_response(
+            "ai_not_configured",
+            "AI-помощник пока не настроен. Можно перейти во вкладку «Менеджер».",
+            503,
+        )
+    except (AiProviderError, AiResponseError):
+        return ai_error_response(
+            "ai_unavailable",
+            "AI-помощник сейчас недоступен. Можно перейти во вкладку «Менеджер».",
+            502,
+        )
+    except Exception:
+        logger.exception("Unexpected AI chat error")
+        return ai_error_response(
+            "ai_unavailable",
+            "AI-помощник сейчас недоступен. Можно перейти во вкладку «Менеджер».",
+            502,
+        )
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "provider": "deepseek",
+            "model": deepseek_model_name(),
+            **result,
+        }
+    )
 
 @require_POST
 def catalog_request_api(request):

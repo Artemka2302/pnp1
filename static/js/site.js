@@ -994,7 +994,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const initSupportChatWidget = () => {
-    const endpoint = document.body.dataset.leadEndpoint || "/api/catalog-request/";
+    const leadEndpoint = document.body.dataset.leadEndpoint || "/api/catalog-request/";
+    const aiEndpoint = document.body.dataset.aiChatEndpoint || "/api/ai-chat/";
     const privacyUrl = document.body.dataset.privacyUrl || "/privacy/";
     const consentUrl = document.body.dataset.consentUrl || "/consent/";
     const csrfToken = getCookie("csrftoken") || document.querySelector("[name='csrfmiddlewaretoken']")?.value || "";
@@ -1002,20 +1003,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ai: {
         source: "ai_chat",
         label: "AI-помощник",
-        title: "Соберём вводные для заявки",
-        intro: "Напишите, что нужно подобрать. Помощник соберёт задачу в заявку, а менеджер увидит её в Bitrix.",
-        placeholder: "Например: нужны минеральные потолочные панели, объект в Москве, нужен аналог по бюджету...",
-        submit: "Отправить AI-запрос",
-        message: "Я помогу упаковать задачу: что подобрать, где объект, какие сроки и есть ли спецификация.",
+        title: "Собрать заявку с AI",
+        submit: "Отправить заявку",
       },
       manager: {
         source: "contact",
         label: "Менеджер",
         title: "Передать вопрос менеджеру",
-        intro: "Опишите вопрос или прикрепите спецификацию. Заявка уйдет тем же способом, что и обычная форма на сайте.",
-        placeholder: "Что нужно подобрать? Укажите объект, город, сроки или приложите файл.",
         submit: "Написать менеджеру",
-        message: "Передадим вопрос специалисту. Достаточно оставить телефон и короткое описание задачи.",
       },
     };
 
@@ -1029,65 +1024,118 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="support-chat-panel" id="supportChatPanel" data-support-panel hidden role="dialog" aria-label="Быстрая помощь">
         <header class="support-chat-head">
           <div>
-            <span class="support-chat-eyebrow" data-support-eyebrow>Быстрая помощь</span>
-            <h2 data-support-title>Передать вопрос менеджеру</h2>
+            <span class="support-chat-eyebrow" data-support-eyebrow>AI-помощник</span>
+            <h2 data-support-title>Собрать заявку с AI</h2>
           </div>
           <button class="support-chat-close" type="button" data-support-close aria-label="Закрыть">×</button>
         </header>
         <div class="support-chat-modes" role="tablist" aria-label="Тип помощи">
-          <button class="support-chat-mode is-active" type="button" data-support-mode-option="ai">AI-помощник</button>
-          <button class="support-chat-mode" type="button" data-support-mode-option="manager">Менеджер</button>
+          <button class="support-chat-mode is-active" type="button" data-support-mode-option="ai" role="tab">AI-помощник</button>
+          <button class="support-chat-mode" type="button" data-support-mode-option="manager" role="tab">Менеджер</button>
         </div>
-        <div class="support-chat-stream" aria-live="polite">
-          <p class="support-chat-bubble" data-support-message></p>
-          <p class="support-chat-note" data-support-intro></p>
-        </div>
-        <form class="support-chat-form" method="post" action="${endpoint}" data-lead-form data-lead-url="${endpoint}" enctype="multipart/form-data" novalidate>
+        <form class="support-chat-form" method="post" action="${leadEndpoint}" data-support-lead-form data-lead-url="${leadEndpoint}" enctype="multipart/form-data" novalidate>
           <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
-          <input type="hidden" name="source" value="contact">
-          <input type="hidden" name="direction" value="Быстрая помощь">
-          <input type="hidden" name="category" value="Чат с менеджером">
+          <input type="hidden" name="source" value="ai_chat">
+          <input type="hidden" name="direction" value="Комплексная заявка">
+          <input type="hidden" name="category" value="Комплексная заявка">
+          <input type="hidden" name="object" value="">
           <input type="hidden" name="items" data-request-items value="[]">
-          <div class="support-chat-fields">
-            <label class="support-chat-field">
-              <span>Имя / компания</span>
-              <input name="name" autocomplete="name" placeholder="Как к вам обращаться">
-            </label>
-            <label class="support-chat-field">
-              <span>Телефон</span>
-              <input name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input autocomplete="tel" placeholder="+7 ___ ___-__-__" required>
-            </label>
-          </div>
-          <label class="support-chat-field">
-            <span>Сообщение</span>
-            <textarea name="message" data-support-textarea required></textarea>
-          </label>
-          <div class="support-chat-prompts" aria-label="Быстрые подсказки">
-            <button type="button" data-support-prompt="Нужно подобрать аналоги по спецификации.">Подобрать аналоги</button>
-            <button type="button" data-support-prompt="Нужно проверить спецификацию и собрать КП.">Проверить спецификацию</button>
-            <button type="button" data-support-prompt="Нужно уточнить сроки поставки и наличие.">Сроки и наличие</button>
-          </div>
-          <div class="support-chat-selected" data-contact-request-items hidden>
-            <div class="support-chat-selected-head">
-              <b>Выбрано из каталога: <span data-request-count>0</span></b>
-              <button type="button" data-request-clear>Очистить</button>
+
+          <section class="support-chat-ai" data-support-ai-pane>
+            <div class="support-chat-stream" data-ai-messages aria-live="polite">
+              <article class="support-chat-message support-chat-message--assistant">
+                <span class="support-chat-avatar" aria-hidden="true">AI</span>
+                <p>Опишите задачу своими словами. Я уточню важные детали и соберу черновик заявки для менеджера.</p>
+              </article>
             </div>
-            <div class="support-chat-selected-list" data-request-list></div>
-          </div>
-          <div class="support-chat-file file-field">
-            <label class="support-chat-upload" for="supportChatFile">
-              <span data-file-label>Прикрепить файл / спецификацию</span>
-              <small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small>
+            <div class="support-chat-prompts" aria-label="Быстрые сценарии">
+              <button type="button" data-support-prompt="Нужно подобрать материалы по спецификации и предложить аналоги.">Подобрать аналоги</button>
+              <button type="button" data-support-prompt="Нужно проверить спецификацию и собрать коммерческое предложение.">Разобрать спецификацию</button>
+              <button type="button" data-support-prompt="Нужно уточнить сроки поставки и наличие материалов.">Сроки и наличие</button>
+            </div>
+            <div class="support-chat-compose">
+              <textarea data-ai-input rows="3" maxlength="2000" placeholder="Например: нужны минеральные потолочные панели на объект в Москве, около 800 м²"></textarea>
+              <button class="support-chat-send" type="button" data-ai-send>Отправить</button>
+            </div>
+            <label class="support-chat-consent support-chat-ai-consent">
+              <input type="checkbox" name="consent" value="1" data-ai-consent required>
+              <span>Согласен на обработку сообщения AI-сервисом и персональных данных. <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="${consentUrl}" target="_blank" rel="noopener noreferrer">Согласие</a></span>
             </label>
-            <input class="file-input" id="supportChatFile" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
-            <div class="file-list" data-file-list hidden></div>
-          </div>
-          <label class="support-chat-consent form-consent-check">
-            <input type="checkbox" name="consent" value="1" required>
-            <span>Согласен на обработку персональных данных. <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="${consentUrl}" target="_blank" rel="noopener noreferrer">Согласие</a></span>
-          </label>
-          <button class="support-chat-submit" type="submit" data-support-submit>Написать менеджеру</button>
-          <p class="form-status support-chat-status" data-form-status role="status" aria-live="polite"></p>
+            <p class="support-chat-ai-status" data-ai-status role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="support-chat-manager" data-support-manager-pane hidden>
+            <div class="support-chat-stream">
+              <article class="support-chat-message support-chat-message--assistant">
+                <span class="support-chat-avatar" aria-hidden="true">ПНП</span>
+                <p>Опишите вопрос или прикрепите спецификацию. Менеджер получит заявку в Bitrix и свяжется с вами.</p>
+              </article>
+            </div>
+            <label class="support-chat-field">
+              <span>Сообщение</span>
+              <textarea name="message" data-manager-message placeholder="Что нужно подобрать? Укажите объект, город, сроки или приложите файл." required disabled></textarea>
+            </label>
+          </section>
+
+          <section class="support-chat-final" data-support-final hidden>
+            <div class="support-chat-draft" data-ai-draft hidden>
+              <div class="support-chat-draft-head">
+                <div>
+                  <span>Черновик заявки</span>
+                  <strong>Проверьте перед отправкой</strong>
+                </div>
+                <span class="support-chat-draft-state">Можно редактировать</span>
+              </div>
+              <div class="support-chat-fields">
+                <label class="support-chat-field">
+                  <span>Направление</span>
+                  <input data-ai-draft-direction maxlength="220" placeholder="Комплексная заявка">
+                </label>
+                <label class="support-chat-field">
+                  <span>Объект / город</span>
+                  <input data-ai-draft-object maxlength="220" placeholder="Если известно">
+                </label>
+              </div>
+              <label class="support-chat-field">
+                <span>Суть заявки</span>
+                <textarea name="message" data-ai-draft-message maxlength="5000" required></textarea>
+              </label>
+              <p class="support-chat-draft-missing" data-ai-draft-missing hidden></p>
+            </div>
+
+            <div class="support-chat-section-label">Контакт для ответа</div>
+            <div class="support-chat-fields">
+              <label class="support-chat-field">
+                <span>Имя / компания</span>
+                <input name="name" autocomplete="name" placeholder="Как к вам обращаться">
+              </label>
+              <label class="support-chat-field">
+                <span>Телефон</span>
+                <input name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input autocomplete="tel" placeholder="+7 ___ ___-__-__" required>
+              </label>
+            </div>
+            <div class="support-chat-selected" data-contact-request-items hidden>
+              <div class="support-chat-selected-head">
+                <b>Выбрано из каталога: <span data-request-count>0</span></b>
+                <button type="button" data-request-clear>Очистить</button>
+              </div>
+              <div class="support-chat-selected-list" data-request-list></div>
+            </div>
+            <div class="support-chat-file file-field">
+              <label class="support-chat-upload" for="supportChatFile">
+                <span data-file-label>Прикрепить файл / спецификацию</span>
+                <small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small>
+              </label>
+              <input class="file-input" id="supportChatFile" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
+              <div class="file-list" data-file-list hidden></div>
+            </div>
+            <label class="support-chat-consent form-consent-check" data-manager-consent-label hidden>
+              <input type="checkbox" name="consent" value="1" data-manager-consent required disabled>
+              <span>Согласен на обработку персональных данных. <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="${consentUrl}" target="_blank" rel="noopener noreferrer">Согласие</a></span>
+            </label>
+            <button class="support-chat-submit" type="submit" data-support-submit>Отправить заявку</button>
+            <p class="form-status support-chat-status" data-form-status role="status" aria-live="polite"></p>
+          </section>
         </form>
       </div>
     `;
@@ -1098,27 +1146,175 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButton = root.querySelector("[data-support-close]");
     const title = root.querySelector("[data-support-title]");
     const eyebrow = root.querySelector("[data-support-eyebrow]");
-    const intro = root.querySelector("[data-support-intro]");
-    const message = root.querySelector("[data-support-message]");
-    const form = root.querySelector("form");
-    const textarea = root.querySelector("[data-support-textarea]");
+    const form = root.querySelector("[data-support-lead-form]");
+    const aiPane = root.querySelector("[data-support-ai-pane]");
+    const managerPane = root.querySelector("[data-support-manager-pane]");
+    const finalSection = root.querySelector("[data-support-final]");
+    const draftCard = root.querySelector("[data-ai-draft]");
+    const draftDirection = root.querySelector("[data-ai-draft-direction]");
+    const draftObject = root.querySelector("[data-ai-draft-object]");
+    const draftMessage = root.querySelector("[data-ai-draft-message]");
+    const draftMissing = root.querySelector("[data-ai-draft-missing]");
+    const managerMessage = root.querySelector("[data-manager-message]");
+    const managerConsent = root.querySelector("[data-manager-consent]");
+    const managerConsentLabel = root.querySelector("[data-manager-consent-label]");
+    const aiConsent = root.querySelector("[data-ai-consent]");
+    const aiInput = root.querySelector("[data-ai-input]");
+    const aiSend = root.querySelector("[data-ai-send]");
+    const aiMessages = root.querySelector("[data-ai-messages]");
+    const aiStatus = root.querySelector("[data-ai-status]");
     const status = root.querySelector("[data-form-status]");
     const submit = root.querySelector("[data-support-submit]");
     const sourceInput = form.elements.source;
+    const directionInput = form.elements.direction;
     const categoryInput = form.elements.category;
-    let currentMode = "manager";
+    const objectInput = form.elements.object;
+    let currentMode = "ai";
+    let aiPending = false;
+    let latestLeadDraft = null;
+    let history = [];
+
+    const cleanDraftValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
+
+    const normalizeLeadDraft = value => {
+      if (!value || typeof value !== "object") return null;
+      const messageValue = cleanDraftValue(value.message || value.summary || value.request_text, 5000);
+      const categoryValue = cleanDraftValue(value.category || value.direction, 220);
+      const objectValue = cleanDraftValue(value.object_name || value.object || value.city, 220);
+      if (!messageValue && !categoryValue && !objectValue) return null;
+      const rawMissing = Array.isArray(value.missing_fields)
+        ? value.missing_fields
+        : Array.isArray(value.missingFields) ? value.missingFields : [];
+      return {
+        direction: cleanDraftValue(value.direction || categoryValue || "Комплексная заявка", 220),
+        category: categoryValue || "Комплексная заявка",
+        object: objectValue,
+        message: messageValue,
+        missingFields: rawMissing.map(item => cleanDraftValue(item, 80)).filter(Boolean).slice(0, 6),
+      };
+    };
+
+    const addAiMessage = (content, role) => {
+      const text = cleanDraftValue(content, 2200);
+      if (!text) return;
+      const article = document.createElement("article");
+      article.className = `support-chat-message support-chat-message--${role}`;
+      const avatar = document.createElement("span");
+      avatar.className = "support-chat-avatar";
+      avatar.setAttribute("aria-hidden", "true");
+      avatar.textContent = role === "user" ? "Вы" : "AI";
+      const paragraph = document.createElement("p");
+      paragraph.textContent = text;
+      article.append(avatar, paragraph);
+      aiMessages.append(article);
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+    };
+
+    const setAiPending = pending => {
+      aiPending = pending;
+      aiSend.disabled = pending;
+      aiInput.disabled = pending;
+      aiSend.textContent = pending ? "Думаю..." : "Отправить";
+      root.classList.toggle("is-ai-pending", pending);
+    };
+
+    const renderLeadDraft = value => {
+      const normalized = normalizeLeadDraft(value);
+      if (!normalized) return;
+      latestLeadDraft = normalized;
+      draftDirection.value = normalized.direction;
+      draftObject.value = normalized.object;
+      draftMessage.value = normalized.message;
+      draftMissing.textContent = normalized.missingFields.length
+        ? `Для точного КП можно уточнить: ${normalized.missingFields.join(", ")}.`
+        : "";
+      draftMissing.hidden = !normalized.missingFields.length;
+      draftCard.hidden = false;
+      if (currentMode === "ai") finalSection.hidden = false;
+    };
+
+    const sendAiMessage = async () => {
+      const userMessage = aiInput.value.trim();
+      if (!userMessage || aiPending) return;
+      if (!aiConsent.checked) {
+        setStatus(aiStatus, "Подтвердите согласие перед отправкой сообщения.", true);
+        aiConsent.focus();
+        return;
+      }
+
+      const requestHistory = history.slice(-10);
+      addAiMessage(userMessage, "user");
+      aiInput.value = "";
+      setStatus(aiStatus, "AI анализирует задачу...");
+      setAiPending(true);
+
+      const headers = {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      };
+      if (csrfToken) headers["X-CSRFToken"] = csrfToken;
+
+      try {
+        const response = await fetch(aiEndpoint, {
+          method: "POST",
+          credentials: "same-origin",
+          headers,
+          body: JSON.stringify({
+            message: userMessage,
+            consent: aiConsent.checked,
+            history: requestHistory,
+            lead_draft: latestLeadDraft,
+            catalog_items: readItems(),
+            page: window.location.pathname,
+          }),
+        });
+        const data = await response.json().catch(() => ({}));
+        const answer = cleanDraftValue(data.answer, 2200);
+        if (answer) addAiMessage(answer, "assistant");
+        renderLeadDraft(data.lead_draft || data.leadDraft);
+        if (!response.ok) {
+          throw new Error(data.error_message || (response.status === 429
+            ? "Слишком много сообщений подряд. Попробуйте немного позже."
+            : "AI-помощник сейчас недоступен. Можно перейти во вкладку «Менеджер»."));
+        }
+        if (!answer) throw new Error("AI не вернул ответ. Попробуйте сформулировать запрос ещё раз.");
+        history = [
+          ...requestHistory,
+          { role: "user", content: userMessage },
+          { role: "assistant", content: answer },
+        ].slice(-12);
+        setStatus(aiStatus, latestLeadDraft ? "Черновик заявки обновлён." : "");
+      } catch (error) {
+        setStatus(aiStatus, error.message || "AI-помощник сейчас недоступен.", true);
+      } finally {
+        setAiPending(false);
+        aiInput.focus();
+      }
+    };
 
     const setMode = mode => {
       currentMode = modes[mode] ? mode : "manager";
       const meta = modes[currentMode];
       sourceInput.value = meta.source;
-      categoryInput.value = meta.label;
       title.textContent = meta.title;
       eyebrow.textContent = meta.label;
-      intro.textContent = meta.intro;
-      message.textContent = meta.message;
-      textarea.placeholder = meta.placeholder;
       submit.textContent = meta.submit;
+      const isAi = currentMode === "ai";
+      aiPane.hidden = !isAi;
+      managerPane.hidden = isAi;
+      managerMessage.disabled = isAi;
+      draftMessage.disabled = !isAi;
+      aiConsent.disabled = !isAi;
+      managerConsent.disabled = isAi;
+      managerConsentLabel.hidden = isAi;
+      draftCard.hidden = !isAi || !latestLeadDraft;
+      finalSection.hidden = isAi && !latestLeadDraft;
+      if (isAi && latestLeadDraft) renderLeadDraft(latestLeadDraft);
+      if (!isAi) {
+        directionInput.value = "Быстрая помощь";
+        categoryInput.value = "Менеджер";
+        objectInput.value = "";
+      }
       root.querySelectorAll("[data-support-mode-option]").forEach(button => {
         const active = button.dataset.supportModeOption === currentMode;
         button.classList.toggle("is-active", active);
@@ -1130,7 +1326,7 @@ document.addEventListener("DOMContentLoaded", () => {
       panel.hidden = !isOpen;
       root.classList.toggle("is-open", isOpen);
       toggle.setAttribute("aria-expanded", String(isOpen));
-      if (isOpen) setTimeout(() => textarea.focus(), 60);
+      if (isOpen) setTimeout(() => (currentMode === "ai" ? aiInput : managerMessage).focus(), 60);
     };
 
     toggle.addEventListener("click", () => setOpen(panel.hidden));
@@ -1140,11 +1336,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     root.querySelectorAll("[data-support-prompt]").forEach(button => {
       button.addEventListener("click", () => {
-        const current = textarea.value.trim();
-        textarea.value = current ? `${current}\n${button.dataset.supportPrompt}` : button.dataset.supportPrompt;
-        textarea.focus();
+        aiInput.value = button.dataset.supportPrompt || "";
+        aiInput.focus();
       });
     });
+    aiSend.addEventListener("click", sendAiMessage);
+    aiInput.addEventListener("keydown", event => {
+      if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+      event.preventDefault();
+      sendAiMessage();
+    });
+    aiConsent.addEventListener("change", () => setStatus(aiStatus, ""));
     document.addEventListener("keydown", event => {
       if (event.key === "Escape" && !panel.hidden) setOpen(false);
     });
@@ -1158,16 +1360,43 @@ document.addEventListener("DOMContentLoaded", () => {
     initFilePicker(form);
     form.addEventListener("submit", async event => {
       event.preventDefault();
+      if (currentMode === "ai" && !latestLeadDraft) {
+        setStatus(aiStatus, "Сначала опишите задачу, чтобы AI собрал черновик заявки.", true);
+        return;
+      }
       const items = readItems();
       const modeLabel = modes[currentMode].label;
+      if (currentMode === "ai") {
+        latestLeadDraft = normalizeLeadDraft({
+          ...latestLeadDraft,
+          direction: draftDirection.value,
+          category: draftDirection.value,
+          object: draftObject.value,
+          message: draftMessage.value,
+        });
+        directionInput.value = latestLeadDraft?.direction || "Комплексная заявка";
+        categoryInput.value = latestLeadDraft?.category || directionInput.value;
+        objectInput.value = latestLeadDraft?.object || "";
+      } else {
+        directionInput.value = "Быстрая помощь";
+        categoryInput.value = "Менеджер";
+        objectInput.value = "";
+      }
       const requestText = [
         `Канал обращения: ${modeLabel}`,
         formatRequestItems(items),
       ].filter(Boolean).join("\n\n");
       const data = await submitForm(form, status, submit, { items, requestText });
       if (data) {
+        if (currentMode === "ai") {
+          addAiMessage(`Заявка #${data.lead_id} отправлена. Менеджер получил собранный запрос и прикреплённые файлы.`, "assistant");
+          latestLeadDraft = null;
+          history = [];
+          draftCard.hidden = true;
+          finalSection.hidden = true;
+          aiConsent.checked = false;
+        }
         setMode(currentMode);
-        message.textContent = `Заявка #${data.lead_id} отправлена. Менеджер увидит запрос и прикрепленные файлы в Bitrix.`;
       }
     });
 
