@@ -1,8 +1,22 @@
 import json
+import shutil
+import tempfile
+from unittest.mock import patch
 
+from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
-from django.test import Client, TestCase
+from django.test import Client, SimpleTestCase, TestCase, override_settings
 
+from . import views as main_views
+from .ai import (
+    AiConfigurationError,
+    AiResponseError,
+    normalize_ai_history,
+    normalize_lead_draft,
+    parse_ai_result,
+)
+from .bitrix import build_bitrix_comment, build_bitrix_payload
 from .models import (
     CatalogBlock,
     CatalogSystem,
@@ -110,7 +124,19 @@ class PublicRouteSmokeTests(TestCase):
 
 class MiniRequestApiTests(TestCase):
     def setUp(self):
+        main_views.LEAD_RATE_BUCKET.clear()
         self.client = Client(HTTP_HOST="testserver")
+        self.media_root = tempfile.mkdtemp()
+        self.media_override = override_settings(MEDIA_ROOT=self.media_root)
+        self.media_override.enable()
+        self.addCleanup(self.media_override.disable)
+        self.addCleanup(shutil.rmtree, self.media_root, ignore_errors=True)
+        self.bitrix_patcher = patch(
+            "main.views.send_lead_to_bitrix",
+            return_value={"configured": False, "sent": False},
+        )
+        self.bitrix_patcher.start()
+        self.addCleanup(self.bitrix_patcher.stop)
         block = CatalogBlock.objects.create(slug="building-materials", title="Строительные материалы")
         direction = Direction.objects.create(block=block, slug="constructive", title="Конструктив")
         system = CatalogSystem.objects.create(
@@ -159,6 +185,73 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(Lead.objects.count(), 0)
         self.assertEqual(ConsentLog.objects.count(), 0)
 
+    def test_api_rejects_invalid_email(self):
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "catalog_mini",
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "email": "bad-email",
+                "consent": "1",
+                "request_text": "Нужна фанера",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Lead.objects.count(), 0)
+
+    def test_api_rejects_disallowed_upload_extension(self):
+        bad_file = SimpleUploadedFile(
+            "payload.exe",
+            b"MZ fake executable",
+            content_type="application/x-msdownload",
+        )
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "catalog_mini",
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "consent": "1",
+                "request_text": "Проверьте файл",
+                "specification": bad_file,
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Lead.objects.count(), 0)
+
+    def test_api_accepts_pdf_upload_and_randomizes_storage_name(self):
+        pdf_file = SimpleUploadedFile(
+            "specification.pdf",
+            b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF",
+            content_type="application/pdf",
+        )
+        response = self.client.post(
+            "/api/mini-request/",
+            data={
+                "source": "ai_chat",
+                "contact_name": "Test User",
+                "phone": "+7 900 000-00-00",
+                "direction": "Быстрая помощь",
+                "category": "AI-помощник",
+                "consent": "1",
+                "request_text": "Проверьте спецификацию",
+                "specification": pdf_file,
+            },
+        )
+
+        self.assertEqual(response.status_code, 201)
+        lead = Lead.objects.get()
+        upload = lead.uploads.get()
+        self.assertEqual(lead.source, Lead.SOURCE_AI_CHAT)
+        self.assertEqual(lead.direction, "Быстрая помощь")
+        self.assertEqual(upload.original_name, "specification.pdf")
+        self.assertTrue(upload.file.name.startswith(f"lead_uploads/{lead.pk}/"))
+        self.assertTrue(upload.file.name.endswith(".pdf"))
+        self.assertNotIn("specification.pdf", upload.file.name)
+
     def test_api_requires_contact(self):
         response = self.client.post(
             "/api/mini-request/",
@@ -182,3 +275,234 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(CookieConsentLog.objects.count(), 1)
         self.assertEqual(CookieConsentLog.objects.get().choice, "rejected")
+
+
+class BitrixPayloadTests(TestCase):
+    def test_comment_does_not_duplicate_contact_fields_or_file_paths(self):
+        lead = Lead.objects.create(
+            contact_name="Test User",
+            phone="+79000000000",
+            direction="Быстрая помощь",
+            message="Нужно подобрать панели",
+        )
+
+        comment = build_bitrix_comment(lead)
+        payload = build_bitrix_payload(lead)
+
+        self.assertIn("Направление: Быстрая помощь", comment)
+        self.assertIn("Нужно подобрать панели", comment)
+        self.assertNotIn("Test User", comment)
+        self.assertNotIn("+79000000000", comment)
+        self.assertNotIn("lead_uploads/", comment)
+        self.assertEqual(payload["fields"]["NAME"], "Test User")
+        self.assertEqual(payload["fields"]["PHONE"][0]["VALUE"], "+79000000000")
+
+
+class AiServiceTests(SimpleTestCase):
+    def test_normalize_history_filters_invalid_items_and_keeps_last_ten(self):
+        history = [
+            {"role": "user" if index % 2 == 0 else "assistant", "content": f" message {index} "}
+            for index in range(12)
+        ]
+        history.extend(
+            [
+                {"role": "system", "content": "ignore"},
+                {"role": "user", "content": "   "},
+                {"role": "user", "content": 123},
+                "invalid",
+            ]
+        )
+
+        normalized = normalize_ai_history(history)
+
+        self.assertEqual(len(normalized), 10)
+        self.assertEqual(normalized[0]["content"], "message 2")
+        self.assertEqual(normalized[-1]["content"], "message 11")
+        self.assertTrue(all(item["role"] in {"user", "assistant"} for item in normalized))
+
+    def test_normalize_lead_draft_accepts_frontend_aliases(self):
+        draft = normalize_lead_draft(
+            {
+                "category": "Ceiling systems",
+                "object": "Moscow warehouse",
+                "summary": "Need 800 square meters of panels",
+                "missingFields": ["deadline", "deadline", 123],
+            }
+        )
+
+        self.assertEqual(draft["direction"], "Ceiling systems")
+        self.assertEqual(draft["category"], "Ceiling systems")
+        self.assertEqual(draft["object_name"], "Moscow warehouse")
+        self.assertEqual(draft["message"], "Need 800 square meters of panels")
+        self.assertEqual(draft["missing_fields"], ["deadline"])
+
+    def test_parse_result_merges_omitted_fields_from_previous_draft(self):
+        content = json.dumps(
+            {
+                "answer": "The request is ready.",
+                "ready": True,
+                "lead_draft": {
+                    "message": "Need 1000 square meters of panels",
+                    "missing_fields": [],
+                },
+            }
+        )
+
+        result = parse_ai_result(
+            content,
+            previous_draft={
+                "direction": "Architecture",
+                "category": "Ceiling systems",
+                "object_name": "Moscow warehouse",
+                "message": "Need 800 square meters of panels",
+                "missing_fields": ["deadline"],
+            },
+        )
+
+        self.assertTrue(result["ready"])
+        self.assertEqual(result["lead_draft"]["direction"], "Architecture")
+        self.assertEqual(result["lead_draft"]["category"], "Ceiling systems")
+        self.assertEqual(result["lead_draft"]["object_name"], "Moscow warehouse")
+        self.assertEqual(result["lead_draft"]["message"], "Need 1000 square meters of panels")
+        self.assertEqual(result["lead_draft"]["missing_fields"], [])
+
+    def test_parse_result_rejects_non_json_response(self):
+        with self.assertRaises(AiResponseError):
+            parse_ai_result("not json")
+
+    def test_parse_result_keeps_empty_draft_as_null(self):
+        result = parse_ai_result(
+            json.dumps({"answer": "How can I help?", "ready": False, "lead_draft": None})
+        )
+
+        self.assertFalse(result["ready"])
+        self.assertIsNone(result["lead_draft"])
+
+
+class AiChatApiTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.client = Client(HTTP_HOST="testserver")
+
+    def tearDown(self):
+        cache.clear()
+
+    @patch("main.views.call_deepseek")
+    def test_api_returns_normalized_draft_without_creating_lead(self, mocked_call):
+        mocked_call.return_value = json.dumps(
+            {
+                "answer": "Please specify the deadline.",
+                "ready": False,
+                "lead_draft": {
+                    "direction": "Architecture",
+                    "category": "Ceiling systems",
+                    "object_name": "Moscow warehouse",
+                    "message": "Need 800 square meters of panels",
+                    "missing_fields": ["deadline"],
+                },
+            }
+        )
+
+        response = self.client.post(
+            "/api/ai-chat/",
+            data=json.dumps(
+                {
+                    "message": "We need ceiling panels.",
+                    "consent": True,
+                    "history": [],
+                    "catalog_items": ["Ceilings|Panels"],
+                    "page": "/catalog/",
+                }
+            ),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()["ok"])
+        self.assertEqual(response.json()["provider"], "deepseek")
+        self.assertEqual(response.json()["lead_draft"]["missing_fields"], ["deadline"])
+        self.assertEqual(Lead.objects.count(), 0)
+        mocked_call.assert_called_once()
+
+    def test_api_rejects_invalid_json(self):
+        response = self.client.post(
+            "/api/ai-chat/",
+            data="{invalid",
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "invalid_json")
+
+    def test_api_requires_csrf_token(self):
+        csrf_client = Client(HTTP_HOST="testserver", enforce_csrf_checks=True)
+
+        response = csrf_client.post(
+            "/api/ai-chat/",
+            data=json.dumps({"message": "Test message", "consent": True}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+    @patch("main.views.call_deepseek")
+    def test_api_requires_ai_processing_consent(self, mocked_call):
+        response = self.client.post(
+            "/api/ai-chat/",
+            data=json.dumps({"message": "Test message"}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "consent_required")
+        mocked_call.assert_not_called()
+
+    @patch("main.views.call_deepseek", side_effect=AiConfigurationError("secret diagnostic"))
+    def test_api_hides_configuration_details(self, mocked_call):
+        response = self.client.post(
+            "/api/ai-chat/",
+            data=json.dumps({"message": "Test message", "consent": True}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["error"], "ai_not_configured")
+        self.assertNotIn("secret diagnostic", response.content.decode("utf-8"))
+        mocked_call.assert_called_once()
+
+    @patch("main.views.call_deepseek", return_value="not json")
+    def test_api_returns_safe_error_for_invalid_provider_response(self, mocked_call):
+        response = self.client.post(
+            "/api/ai-chat/",
+            data=json.dumps({"message": "Test message", "consent": True}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 502)
+        self.assertEqual(response.json()["error"], "ai_unavailable")
+        mocked_call.assert_called_once()
+
+    @patch("main.views.AI_RATE_LIMIT_MAX", 1)
+    @patch("main.views.call_deepseek")
+    def test_api_rate_limits_repeated_requests(self, mocked_call):
+        mocked_call.return_value = json.dumps(
+            {"answer": "Draft updated.", "ready": False, "lead_draft": None}
+        )
+        payload = json.dumps({"message": "Test message", "consent": True})
+
+        first_response = self.client.post(
+            "/api/ai-chat/",
+            data=payload,
+            content_type="application/json",
+            REMOTE_ADDR="192.0.2.10",
+        )
+        second_response = self.client.post(
+            "/api/ai-chat/",
+            data=payload,
+            content_type="application/json",
+            REMOTE_ADDR="192.0.2.10",
+        )
+
+        self.assertEqual(first_response.status_code, 200)
+        self.assertEqual(second_response.status_code, 429)
+        self.assertEqual(mocked_call.call_count, 1)

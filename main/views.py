@@ -1,10 +1,17 @@
 import hashlib
 import json
+import logging
 import re
+import time
+from pathlib import Path
 from urllib.parse import urlencode
 
 from django.contrib.staticfiles import finders
+from django.conf import settings
+from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
+from django.core.validators import validate_email
 from django.db import transaction
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, JsonResponse
@@ -29,12 +36,38 @@ from .models import (
     Vendor,
 )
 from .bitrix import send_lead_to_bitrix
+from .ai import (
+    AiConfigurationError,
+    AiProviderError,
+    AiResponseError,
+    build_ai_messages,
+    call_deepseek,
+    deepseek_model_name,
+    normalize_ai_history,
+    normalize_ai_page,
+    normalize_catalog_items,
+    normalize_lead_draft,
+    parse_ai_result,
+)
 from .compliance import (
     CONSENT_VERSION,
     COOKIE_CHOICES,
     COOKIE_TEXT_VERSION,
     PRIVACY_VERSION,
 )
+
+logger = logging.getLogger(__name__)
+
+ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".doc", ".docx", ".xls", ".xlsx", ".dwg", ".jpg", ".jpeg", ".png", ".zip"}
+MAX_UPLOAD_FILES = 5
+MAX_UPLOAD_FILE_SIZE = 30 * 1024 * 1024
+MAX_UPLOAD_TOTAL_SIZE = 60 * 1024 * 1024
+LEAD_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
+LEAD_RATE_LIMIT_MAX = 20
+LEAD_RATE_BUCKET = {}
+AI_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
+AI_RATE_LIMIT_MAX = 20
+AI_MAX_BODY_BYTES = 32 * 1024
 
 
 def first_existing_static_path(*paths):
@@ -1321,7 +1354,7 @@ def partners(request):
     return render(request, "main/partners.html", context)
 
 
-def payload_value(payload, key, default=""):
+def payload_value(payload, key, default="", max_length=None):
     if hasattr(payload, "get"):
         value = payload.get(key, default)
     else:
@@ -1329,7 +1362,10 @@ def payload_value(payload, key, default=""):
     if value is None:
         return default
     if isinstance(value, str):
-        return value.strip()
+        value = value.strip()
+        if max_length is not None:
+            return value[:max_length]
+        return value
     return value
 
 
@@ -1405,9 +1441,9 @@ def parse_request_items(raw_items):
         return []
 
     parsed_items = []
-    for item in raw_items:
+    for item in raw_items[:30]:
         if isinstance(item, str):
-            parts = [part.strip() for part in item.split("|") if part.strip()]
+            parts = [part.strip()[:220] for part in item[:800].split("|") if part.strip()]
             system_title = parts[0] if len(parts) == 3 else ""
             group_title = parts[1] if len(parts) == 3 else parts[0] if parts else ""
             type_title = parts[2] if len(parts) == 3 else parts[1] if len(parts) > 1 else ""
@@ -1424,17 +1460,17 @@ def parse_request_items(raw_items):
         if isinstance(item, dict):
             parsed_items.append(
                 {
-                    "product_group_slug": str(item.get("product_group_slug") or item.get("group_slug") or "").strip(),
-                    "product_type_id": str(item.get("product_type_id") or "").strip(),
-                    "system_title": str(item.get("system_title") or item.get("system") or "").strip(),
+                    "product_group_slug": str(item.get("product_group_slug") or item.get("group_slug") or "").strip()[:140],
+                    "product_type_id": str(item.get("product_type_id") or "").strip()[:40],
+                    "system_title": str(item.get("system_title") or item.get("system") or "").strip()[:220],
                     "product_group_title": str(
                         item.get("product_group_title") or item.get("group_title") or item.get("group") or ""
-                    ).strip(),
+                    ).strip()[:220],
                     "product_type_title": str(
                         item.get("product_type_title") or item.get("type_title") or item.get("type") or ""
-                    ).strip(),
-                    "quantity": str(item.get("quantity") or "").strip(),
-                    "comment": str(item.get("comment") or "").strip(),
+                    ).strip()[:220],
+                    "quantity": str(item.get("quantity") or "").strip()[:120],
+                    "comment": str(item.get("comment") or "").strip()[:500],
                     "raw_item": item,
                 }
             )
@@ -1471,10 +1507,77 @@ def resolve_product_type(product_group, item):
 
 
 def client_ip(request):
-    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "") if settings.TRUST_X_FORWARDED_FOR else ""
     if forwarded_for:
         return forwarded_for.split(",", 1)[0].strip()
     return request.META.get("REMOTE_ADDR") or None
+
+
+def lead_rate_limited(request):
+    ip = client_ip(request) or "unknown"
+    now = time.monotonic()
+    recent = [stamp for stamp in LEAD_RATE_BUCKET.get(ip, []) if now - stamp < LEAD_RATE_LIMIT_WINDOW_SECONDS]
+    recent.append(now)
+    LEAD_RATE_BUCKET[ip] = recent
+    return len(recent) > LEAD_RATE_LIMIT_MAX
+
+
+def upload_extension(uploaded_file):
+    return Path(uploaded_file.name or "").suffix.lower()
+
+
+def upload_head(uploaded_file, size=16):
+    try:
+        position = uploaded_file.tell()
+    except (AttributeError, OSError):
+        position = None
+    head = uploaded_file.read(size)
+    try:
+        uploaded_file.seek(position or 0)
+    except (AttributeError, OSError):
+        pass
+    return head
+
+
+def upload_signature_allowed(extension, uploaded_file):
+    head = upload_head(uploaded_file)
+    if extension == ".pdf":
+        return head.startswith(b"%PDF-")
+    if extension in {".jpg", ".jpeg"}:
+        return head.startswith(b"\xff\xd8\xff")
+    if extension == ".png":
+        return head.startswith(b"\x89PNG\r\n\x1a\n")
+    if extension in {".zip", ".docx", ".xlsx"}:
+        return head.startswith((b"PK\x03\x04", b"PK\x05\x06", b"PK\x07\x08"))
+    if extension in {".doc", ".xls"}:
+        return head.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1")
+    if extension == ".dwg":
+        return head.startswith(b"AC10")
+    return False
+
+
+def validate_uploaded_files(uploaded_files):
+    if len(uploaded_files) > MAX_UPLOAD_FILES:
+        return f"Можно прикрепить не больше {MAX_UPLOAD_FILES} файлов."
+
+    total_size = 0
+    for uploaded_file in uploaded_files:
+        size = uploaded_file.size or 0
+        total_size += size
+        if size <= 0:
+            return "Пустой файл нельзя прикрепить к заявке."
+        if size > MAX_UPLOAD_FILE_SIZE:
+            return "Размер одного файла не должен превышать 30 МБ."
+
+        extension = upload_extension(uploaded_file)
+        if extension not in ALLOWED_UPLOAD_EXTENSIONS:
+            return "Недопустимый тип файла."
+        if not upload_signature_allowed(extension, uploaded_file):
+            return "Файл не похож на заявленный формат."
+
+    if total_size > MAX_UPLOAD_TOTAL_SIZE:
+        return "Общий размер файлов не должен превышать 60 МБ."
+    return ""
 
 
 def request_files(request):
@@ -1496,32 +1599,124 @@ def check_phone(phone):
         return "+" + phone_clean
     return False
 
+
+def ai_rate_limited(request):
+    ip = client_ip(request) or "unknown"
+    ip_hash = hashlib.sha256(ip.encode("utf-8")).hexdigest()[:24]
+    cache_key = f"pnp:ai-chat-rate:{ip_hash}"
+    if cache.add(cache_key, 1, timeout=AI_RATE_LIMIT_WINDOW_SECONDS):
+        return False
+    try:
+        request_count = cache.incr(cache_key)
+    except ValueError:
+        cache.set(cache_key, 1, timeout=AI_RATE_LIMIT_WINDOW_SECONDS)
+        request_count = 1
+    return request_count > AI_RATE_LIMIT_MAX
+
+
+def ai_error_response(error, message, status):
+    return JsonResponse(
+        {
+            "ok": False,
+            "error": error,
+            "error_message": message,
+        },
+        status=status,
+    )
+
+
+@require_POST
+def ai_chat_api(request):
+    if ai_rate_limited(request):
+        return ai_error_response(
+            "rate_limited",
+            "Слишком много сообщений подряд. Попробуйте немного позже.",
+            429,
+        )
+    if request.content_type != "application/json":
+        return ai_error_response("invalid_content_type", "Ожидается JSON-запрос.", 400)
+    if len(request.body) > AI_MAX_BODY_BYTES:
+        return ai_error_response("request_too_large", "Сообщение слишком большое.", 413)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return ai_error_response("invalid_json", "Некорректный JSON.", 400)
+    if not isinstance(payload, dict):
+        return ai_error_response("invalid_json", "JSON должен быть объектом.", 400)
+    if not payload_bool(payload, "consent"):
+        return ai_error_response(
+            "consent_required",
+            "Подтвердите согласие на обработку сообщения AI-сервисом.",
+            400,
+        )
+
+    raw_message = payload.get("message")
+    if not isinstance(raw_message, str) or not raw_message.strip():
+        return ai_error_response("empty_message", "Напишите сообщение для AI-помощника.", 400)
+    if len(raw_message.strip()) > 2000:
+        return ai_error_response("message_too_long", "Сообщение не должно превышать 2000 символов.", 400)
+
+    message = raw_message.strip()
+    history = normalize_ai_history(payload.get("history"))
+    lead_draft = normalize_lead_draft(payload.get("lead_draft") or payload.get("leadDraft"))
+    catalog_items = normalize_catalog_items(payload.get("catalog_items") or payload.get("catalogItems"))
+    page = normalize_ai_page(payload.get("page"))
+    messages = build_ai_messages(message, history, lead_draft, catalog_items, page)
+
+    try:
+        provider_content = call_deepseek(messages)
+        result = parse_ai_result(provider_content, previous_draft=lead_draft)
+    except AiConfigurationError:
+        return ai_error_response(
+            "ai_not_configured",
+            "AI-помощник пока не настроен. Можно перейти во вкладку «Менеджер».",
+            503,
+        )
+    except (AiProviderError, AiResponseError):
+        return ai_error_response(
+            "ai_unavailable",
+            "AI-помощник сейчас недоступен. Можно перейти во вкладку «Менеджер».",
+            502,
+        )
+    except Exception:
+        logger.exception("Unexpected AI chat error")
+        return ai_error_response(
+            "ai_unavailable",
+            "AI-помощник сейчас недоступен. Можно перейти во вкладку «Менеджер».",
+            502,
+        )
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "provider": "deepseek",
+            "model": deepseek_model_name(),
+            **result,
+        }
+    )
+
 @require_POST
 def catalog_request_api(request):
+    if lead_rate_limited(request):
+        return JsonResponse({"ok": False, "error": "Слишком много заявок подряд. Попробуйте позже."}, status=429)
+
     payload = parse_payload(request)
     if payload is None:
         return JsonResponse({"ok": False, "error": "Некорректный JSON."}, status=400)
 
-    contact_name = payload_value(payload, "contact_name") or payload_value(payload, "name")
-    phone = payload_value(payload, "phone")
-    email = payload_value(payload, "email")
-    company = payload_value(payload, "company")
-    message = payload_value(payload, "message") or payload_value(payload, "comment")
-    category = payload_value(payload, "category")
-    object_name = payload_value(payload, "object")
-    if category or object_name:
-        details = []
-        if category:
-            details.append(f"Направление: {category}")
-        if object_name:
-            details.append(f"Объект: {object_name}")
-        if message:
-            details.append(message)
-        message = "\n".join(details)
-    request_text = payload_value(payload, "request_text")
-    source = payload_value(payload, "source", Lead.SOURCE_CATALOG_MINI)
-    product_group_slug = payload_value(payload, "product_group_slug")
-    product_group_title = payload_value(payload, "product_group_title")
+    contact_name = payload_value(payload, "contact_name", max_length=220) or payload_value(payload, "name", max_length=220)
+    phone = payload_value(payload, "phone", max_length=80)
+    email = payload_value(payload, "email", max_length=254)
+    company = payload_value(payload, "company", max_length=220)
+    message = payload_value(payload, "message", max_length=5000) or payload_value(payload, "comment", max_length=5000)
+    category = payload_value(payload, "category", max_length=220)
+    direction = payload_value(payload, "direction", max_length=220) or category
+    object_name = payload_value(payload, "object", max_length=220) or payload_value(payload, "object_name", max_length=220)
+    request_text = payload_value(payload, "request_text", max_length=5000)
+    source = payload_value(payload, "source", Lead.SOURCE_CATALOG_MINI, max_length=40)
+    product_group_slug = payload_value(payload, "product_group_slug", max_length=140)
+    product_group_title = payload_value(payload, "product_group_title", max_length=220)
     items = parse_request_items(payload_value(payload, "items"))
     uploaded_files = request_files(request)
     consent_value = payload_bool(payload, "consent")
@@ -1536,17 +1731,23 @@ def catalog_request_api(request):
         return JsonResponse({"ok": False, "error": "Укажите телефон или email."}, status=400)
     if not items and not request_text and not message and not uploaded_files:
         return JsonResponse({"ok": False, "error": "Добавьте позицию или комментарий к заявке."}, status=400)
-    if len(phone) > 0:
-        if check_phone(phone) == False:
+    if phone:
+        normalized_phone = check_phone(phone)
+        if normalized_phone is False:
             return JsonResponse({"ok": False, "error": "Номер телефона введен неверно"}, status=400)
-        else:
-            phone = check_phone(phone)
+        phone = normalized_phone
+    if email:
+        try:
+            validate_email(email)
+        except ValidationError:
+            return JsonResponse({"ok": False, "error": "Email введён неверно."}, status=400)
 
-        
+    upload_error = validate_uploaded_files(uploaded_files)
+    if upload_error:
+        return JsonResponse({"ok": False, "error": upload_error}, status=400)
 
     product_group = resolve_product_group(product_group_slug, product_group_title)
     raw_payload = payload_to_dict(payload)
-    
 
     with transaction.atomic():
         lead = Lead.objects.create(
@@ -1555,6 +1756,7 @@ def catalog_request_api(request):
             phone=phone,
             email=email,
             company=company,
+            direction=direction,
             category=category,
             object_name=object_name,
             message=message,
@@ -1604,7 +1806,7 @@ def catalog_request_api(request):
             UploadedFile.objects.create(
                 lead=lead,
                 file=uploaded_file,
-                original_name=uploaded_file.name[:255],
+                original_name=Path(uploaded_file.name or "file").name[:255],
                 content_type=(uploaded_file.content_type or "")[:120],
                 size=uploaded_file.size,
             )

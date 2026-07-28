@@ -2,12 +2,24 @@ import base64
 import json
 import logging
 import os
+from urllib.parse import urlparse
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from .models import Lead
 
 logger = logging.getLogger(__name__)
+
+
+def normalized_webhook_url():
+    webhook_url = os.getenv("BITRIX_WEBHOOK_URL", "").strip().rstrip("/")
+    if not webhook_url:
+        return ""
+
+    parsed = urlparse(webhook_url)
+    if parsed.scheme != "https" or not parsed.netloc or "/rest/" not in parsed.path:
+        raise ValueError("BITRIX_WEBHOOK_URL must be an https Bitrix REST webhook URL")
+    return webhook_url
 
 
 def call_bitrix_method(webhook_url, method, payload):
@@ -24,19 +36,11 @@ def call_bitrix_method(webhook_url, method, payload):
 
 
 def build_bitrix_comment(lead):
-    lines = [
-        f"Заявка #{lead.pk} с сайта ПНП",
-        "",
-        f"Имя: {lead.contact_name or 'не указано'}",
-        f"Телефон: {lead.phone or 'не указан'}",
-    ]
+    lines = [f"Заявка #{lead.pk} с сайта ПНП"]
 
-    if lead.email:
-        lines.append(f"Email: {lead.email}")
-    if lead.company:
-        lines.append(f"Компания: {lead.company}")
-    if lead.category:
-        lines.append(f"Категория: {lead.category}")
+    direction = lead.direction or lead.category
+    if direction:
+        lines.extend(["", f"Направление: {direction}"])
     if lead.object_name:
         lines.append(f"Объект: {lead.object_name}")
     if lead.message or lead.request_text:
@@ -55,14 +59,6 @@ def build_bitrix_comment(lead):
                 if part
             )
             lines.append(f"- {item_title or item}")
-
-    uploads = list(lead.uploads.all())
-    if uploads:
-        lines.extend(["", "Файлы:"])
-        for upload in uploads:
-            file_url = upload.file.url if upload.file else ""
-            file_text = f"{upload.original_name}: {file_url}" if file_url else upload.original_name
-            lines.append(f"- {file_text}")
 
     return "\n".join(lines)
 
@@ -128,11 +124,10 @@ def build_bitrix_payload(lead):
 
 
 def send_lead_to_bitrix(lead):
-    webhook_url = os.getenv("BITRIX_WEBHOOK_URL", "").strip().rstrip("/")
-    if not webhook_url:
-        return {"configured": False, "sent": False}
-
     try:
+        webhook_url = normalized_webhook_url()
+        if not webhook_url:
+            return {"configured": False, "sent": False}
         payload = build_bitrix_payload(lead)
         data = call_bitrix_method(webhook_url, "crm.lead.add", payload)
     except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
