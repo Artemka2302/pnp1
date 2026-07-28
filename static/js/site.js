@@ -1778,7 +1778,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div>
             <h2 data-catalog-stage-title>${escapeHtml(title)}</h2>
           </div>
-          <a class="link-more" href="/contacts/#request-form">Отправить спецификацию →</a>
+          <a class="link-more" href="/contacts/#request-form">Отправить заявку →</a>
         </div>
         <div class="${gridClass}" data-catalog-card-grid>${cards}</div>`;
       if (!childIds.length) {

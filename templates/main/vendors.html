@@ -11,21 +11,21 @@
     <h1>Производители <span class="accent-word">под требования проекта</span></h1>
     <p class="hero-subtitle">Работаем с широким перечнем брендов и заводов: от архитектурных и конструктивных решений до инженерных систем, ЭОМ, слаботочных сетей, ОВиК, водоснабжения, технологического оборудования и доступной среды.</p>
     <div class="hero-actions">
-      <a class="btn" href="{% url 'contacts' %}#request-form">Отправить спецификацию</a>
-      <a class="btn ghost" href="#allManufacturers">Получить подбор по производителям →</a>
+      <a class="btn pnp-btn-primary" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
+      <a class="btn ghost pnp-btn-secondary" href="#allManufacturers">Подобрать производителей →</a>
     </div>
     <div class="hero-features vendor-hero-features">
-      <div class="feature-mini"><i aria-hidden="true">01</i><span>комплектация по разделам<br>документации</span></div>
-      <div class="feature-mini"><i aria-hidden="true">02</i><span>подбор замен<br>под спецификацию</span></div>
-      <div class="feature-mini"><i aria-hidden="true">03</i><span>позиции, сроки<br>персональное сопровождение</span></div>
-      <div class="feature-mini"><i aria-hidden="true">04</i><span>материалы, документы<br>логистика объекта</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Zm7 1.5V8h3.5M9 12h6M9 16h6"/></svg></i><span>комплектация по разделам<br>документации</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7h7a3 3 0 0 1 0 6H9M17 17h-7a3 3 0 0 1 0-6h5M8 5l-3 3 3 3M16 19l3-3-3-3"/></svg></i><span>подбор замен<br>под спецификацию</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Zm-3 9 2 2 4-5"/></svg></i><span>позиции и сроки<br>персональное сопровождение</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h11v9H4V7Zm11 3h3l2 3v3h-5v-6ZM7 18a2 2 0 1 0 0 .1M17 18a2 2 0 1 0 0 .1M7 10h5"/></svg></i><span>материалы, документы<br>логистика объекта</span></div>
     </div>
   </div>
 </section>
 
 <section class="section compact">
   <div class="container">
-    <div class="section-head"><div><h2>Основные направления</h2></div></div>
+    <div class="section-head"><div><h2>Основные разделы поставки</h2></div></div>
     <div class="vendor-direction-grid">
       {% for direction in direction_cards %}
         <article class="vendor-direction-card" {% if direction.image %}style="--direction-photo: url('{% static direction.image %}')"{% endif %}>
@@ -36,12 +36,11 @@
           <h3>{{ direction.title }}</h3>
           <p>{{ direction.purpose|default:direction.block.title }}</p>
           <div class="direction-position-list">
-            <b>{{ direction.block.title }}</b>
-            <b>{{ direction.system_count }} систем</b>
-            <b>{{ direction.group_count }} групп</b>
+            <div class="direction-supply-line"><span>Сфера поставки</span><b>{{ direction.block.title }}</b></div>
+            <div class="direction-structure-line"><b>{{ direction.system_count }} систем</b><span>·</span><b>{{ direction.group_count }} групп</b></div>
           </div>
           <div class="vendor-direction-logo-strip" aria-label="Производители направления">
-            {% for vendor in direction.preview_vendors %}
+            {% for vendor in direction.preview_vendors|slice:":2" %}
               <span class="vendor-chip vendor-chip-logo" title="{{ vendor.name }}">
                 {% if vendor.logo %}
                   <img src="{% static vendor.logo %}" alt="{{ vendor.name }}">
@@ -146,9 +145,4 @@
   </div>
 </section>
 
-<section class="section compact">
-  <div class="container service-band">
-    <div class="left"><h2>Есть спецификация или бренд-лист?</h2><p>Пришлите список позиций. Проверим производителей, предложим аналоги и подготовим коммерческое предложение под ваш объект.</p><a class="btn light" href="{% url 'contacts' %}#request-form">Отправить запрос →</a></div>
-  </div>
-</section>
 {% endblock %}

@@ -6,7 +6,6 @@
 {% block extra_head %}
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20260727" media="(min-width: 1081px)">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260727" media="(min-width: 1081px)">
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260728" media="(min-width: 1081px)">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260728" media="(min-width: 1081px)">
 {% endblock %}
 
@@ -43,7 +42,7 @@
         <h1>Единый центр <span class="accent-word">комплектации</span> строительных объектов</h1>
         <p class="hero-subtitle">Берём на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
         <div class="hero-actions">
-          <a class="btn" href="{% url 'contacts' %}#request-form">Отправить спецификацию</a>
+          <a class="btn" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
           <a class="btn ghost" href="{% url 'catalog' %}">Открыть каталог →</a>
         </div>
       </div>
@@ -247,7 +246,7 @@
   <div class="container home-bottom">
     <article class="glass home-about-sales"><h2>О компании</h2><p>ПНП объединяет подбор оборудования, работу с производителями и сопровождение заявок для строительных объектов.</p><p class="sales-trigger">Вместо разрозненных прайсов клиент получает рабочий комплект под объект: позиции, аналоги, сроки поставки и понятные точки риска.</p><div class="about-sales-points"><span><b>Проверяем</b><small>спецификацию</small></span><span><b>Подбираем</b><small>аналоги</small></span><span><b>Готовим КП</b><small>под задачу</small></span></div></article>
     <article class="glass request-panel"><h2>Запросить <span class="accent-word">коммерческое предложение</span></h2><p>Отправьте спецификацию или опишите задачу — подготовим оптимальное предложение в кратчайшие сроки.</p><form class="home-request-form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">{% csrf_token %}<input type="hidden" name="source" value="contact"><div class="form-row"><div class="field"><label for="homeMobileName">Имя / компания</label><input id="homeMobileName" name="name" placeholder="ООО СтройПроект" autocomplete="organization" required></div><div class="field"><label for="homeMobileContact">Телефон</label><input id="homeMobileContact" name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input placeholder="+7 ___ ___-__-__" autocomplete="tel" required></div></div><div class="field"><label for="homeMobileMessage">Комментарий</label><textarea id="homeMobileMessage" name="message" placeholder="Опишите задачу или добавьте список позиций"></textarea></div><div class="field file-field"><label class="upload-box" for="homeMobileSpecification"><span data-file-label>Прикрепить файл / спецификацию</span><small>PDF, DOC, XLS, DWG, JPG, PNG, ZIP до 30 МБ</small></label><input class="file-input" id="homeMobileSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div><p class="file-warning">Не загружайте паспорта, медицинские данные, биометрию и чужие персональные данные без законного основания.</p></div><label class="form-consent form-consent-check home-request-consent"><input type="checkbox" name="consent" value="1" required><span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener noreferrer">Согласие</a></span></label><button class="btn light" type="submit">Отправить запрос →</button><p class="form-status" data-form-status role="status" aria-live="polite"></p></form></article>
-    <aside class="contact-mini"><h3>Контакты</h3><div class="contact-line"><span>Телефон</span><a href="tel:+79214370438">+7 921 437 04 38</a></div><div class="contact-line"><span>Email</span><a href="mailto:info@pnp1.ru">info@pnp1.ru</a></div><div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div></aside>
+    <aside class="contact-mini"><h3>Контакты</h3><div class="contact-line"><span>Телефон</span><a href="tel:+74951874950">+7 (495) 187-49-50</a></div><div class="contact-line"><span>Email</span><a href="mailto:info@proleans.ru">info@proleans.ru</a></div><div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div></aside>
   </div>
 </section>
 {% endblock %}

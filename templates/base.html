@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" href="{% static 'assets/img/brand/pnp-logo-exact-symbol-clean.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-shared-header">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260728-shared" media="(min-width: 1081px)">
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}">
@@ -44,13 +45,13 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9.5 12 14l5-4.5 1.2 1.3L12 16.4l-6.2-5.6L7 9.5Z"/></svg>
             </button>
             <div class="header-contact-dropdown" role="menu" aria-label="Способы связи">
-              <a class="header-contact-item" href="tel:+79214370438" role="menuitem">
+              <a class="header-contact-item" href="tel:+74951874950" role="menuitem">
                 <span class="header-contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 2.9 9.3 2c.7-.2 1.4.1 1.7.8l1.2 2.8c.3.6.1 1.3-.4 1.7l-1.5 1.2c1 2 2.6 3.6 4.6 4.6l1.2-1.5c.4-.5 1.1-.7 1.7-.4l2.8 1.2c.7.3 1 1 .8 1.7l-.9 2.7c-.2.7-.8 1.1-1.5 1.1C10.1 18 4 11.9 4 4.5c0-.7.5-1.3 1.1-1.5l1.5-.1Z"/></svg></span>
-                <span class="header-contact-text"><b>Позвонить</b><small>+7 921 437 04 38</small></span>
+                <span class="header-contact-text"><b>Позвонить</b><small>+7 (495) 187-49-50</small></span>
               </a>
-              <a class="header-contact-item" href="mailto:info@pnp1.ru" role="menuitem">
+              <a class="header-contact-item" href="mailto:sales@proleans.ru" role="menuitem">
                 <span class="header-contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.8 5h14.4c1 0 1.8.8 1.8 1.8v10.4c0 1-.8 1.8-1.8 1.8H4.8c-1 0-1.8-.8-1.8-1.8V6.8C3 5.8 3.8 5 4.8 5Zm.7 3.1 6.5 4.4 6.5-4.4V7L12 11.2 5.5 7v1.1Z"/></svg></span>
-                <span class="header-contact-text"><b>Написать</b><small>info@pnp1.ru</small></span>
+                <span class="header-contact-text"><b>Написать</b><small>sales@proleans.ru</small></span>
               </a>
               <a class="header-contact-item header-contact-item-primary" href="{% url 'contacts' %}#request-form" role="menuitem">
                 <span class="header-contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10.2L20 7.8V21H5V3Zm9 1.8V9h4.2L14 4.8ZM8 12h8v1.7H8V12Zm0 3.4h8v1.7H8v-1.7Z"/></svg></span>
@@ -70,8 +71,7 @@
       {% block content %}{% endblock %}
     </main>
 
-    {% if request.resolver_match.url_name == 'index' %}
-    <footer class="footer site-footer home-desktop-only" aria-label="Подвал сайта">
+    <footer class="footer site-footer shared-desktop-footer" aria-label="Подвал сайта">
       <div class="site-footer-container">
         <section class="site-footer-cta" aria-labelledby="siteFooterCtaTitle">
           <div class="site-footer-cta-copy">
@@ -81,8 +81,8 @@
             <span class="site-footer-selection" data-footer-selection hidden>В заявке <b class="site-footer-selection-count" data-footer-selection-count>0</b></span>
           </div>
           <div class="site-footer-cta-actions">
-            <button class="site-footer-button site-footer-button--primary" type="button" data-footer-ai-button data-footer-ai-mode="ai"><strong>Начать с AI-помощником</strong><small>Уточнить задачу и собрать запрос</small></button>
-            <button class="site-footer-button site-footer-button--secondary" type="button" data-footer-ai-button data-footer-ai-mode="manager"><strong>Чат с менеджером</strong><small>Сразу передать вопрос специалисту</small></button>
+            <a class="site-footer-button site-footer-button--primary" href="{% url 'contacts' %}#request-form"><strong>Отправить заявку</strong><small>Передать спецификацию или описание задачи</small></a>
+            <button class="site-footer-button site-footer-button--secondary" type="button" data-footer-ai-button data-footer-ai-mode="ai"><strong>Открыть помощника ПНП</strong><small>Уточнить задачу и собрать запрос</small></button>
           </div>
         </section>
 
@@ -134,17 +134,16 @@
         </div>
       </div>
     </footer>
-    {% endif %}
 
-    <footer class="footer {% if request.resolver_match.url_name == 'index' %}home-mobile-only{% endif %}">
+    <footer class="footer shared-mobile-footer">
       <div class="container footer-inner">
         <span>© ПНП. Инженерные решения и комплектация объектов.</span>
-        <span><a href="tel:+79214370438">+7 921 437 04 38</a> · <a href="mailto:info@pnp1.ru">info@pnp1.ru</a> · <a href="{% url 'privacy' %}">Политика</a> · <a href="{% url 'consent' %}">Согласие</a></span>
+        <span><a href="tel:+74951874950">+7 (495) 187-49-50</a> · <a href="mailto:info@proleans.ru">info@proleans.ru</a> · <a href="{% url 'privacy' %}">Политика</a> · <a href="{% url 'consent' %}">Согласие</a></span>
       </div>
     </footer>
 
     <div class="mobile-call">
-      <a class="btn" href="tel:+79214370438">Позвонить: <span>+7 921 437 04 38</span></a>
+      <a class="btn" href="tel:+74951874950">Позвонить: <span>+7 (495) 187-49-50</span></a>
     </div>
   </div>
   <section class="cookie-banner" data-cookie-consent data-endpoint="{% url 'api_cookie_consent' %}" hidden aria-label="Настройки cookie">
