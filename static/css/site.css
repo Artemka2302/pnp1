@@ -5477,7 +5477,6 @@ a[href*="wa.me"] {
   }
 }
 
-<<<<<<< HEAD
 /* Shared site chrome: the approved full footer is desktop-only for now. */
 .shared-desktop-footer {
   display: none;
@@ -5636,7 +5635,9 @@ a[href*="wa.me"] {
 @media (max-width: 1080px) {
   .shared-desktop-footer {
     display: none !important;
-=======
+  }
+}
+
 .support-chat-widget {
   position: fixed;
   right: 24px;
@@ -5988,6 +5989,5 @@ a[href*="wa.me"] {
 @media (max-width: 760px) {
   .support-chat-panel {
     max-height: calc(100vh - 240px);
->>>>>>> 792339d5aafd53b3be5344057d57ed96e4a01323
   }
 }

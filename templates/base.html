@@ -8,12 +8,8 @@
   <meta name="description" content="{% block description %}Комплектация строительных объектов по разделам проекта: материалы, оборудование, производители и аналоги под спецификацию, сроки и бюджет.{% endblock %}">
   <link rel="icon" type="image/png" href="{% static 'assets/img/brand/pnp-logo-exact-symbol-clean.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-<<<<<<< HEAD
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-shared-header">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-deepseek-shared-ui">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260728-shared" media="(min-width: 1081px)">
-=======
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-deepseek-chat">
->>>>>>> 792339d5aafd53b3be5344057d57ed96e4a01323
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-ai-chat-endpoint="/api/ai-chat/" data-privacy-url="{% url 'privacy' %}" data-consent-url="{% url 'consent' %}">
