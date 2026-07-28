@@ -1,0 +1,61 @@
+@bitrixHost = https://bitrix.bus-sup.ru
+@formId = 6
+@formSec = ee55tl
+@boundary = PnpBitrixFormBoundary
+24523й
+### Прямая отправка в публичную CRM-форму Bitrix24
+POST {{bitrixHost}}/bitrix/services/main/ajax.php?action=crm.site.form.fill
+Origin: https://www.pnp1.ru
+Referer: https://www.pnp1.ru/
+Content-Type: multipart/form-data; boundary={{boundary}}
+Accept: application/json
+
+--{{boundary}}
+Content-Disposition: form-data; name="id"
+
+{{formId}}
+--{{boundary}}
+Content-Disposition: form-data; name="sec"
+
+{{formSec}}
+--{{boundary}}
+Content-Disposition: form-data; name="lang"
+
+ru
+--{{boundary}}
+Content-Disposition: form-data; name="trace"
+
+
+--{{boundary}}
+Content-Disposition: form-data; name="entities"
+
+[]
+--{{boundary}}
+Content-Disposition: form-data; name="security_sign"
+
+
+--{{boundary}}
+Content-Disposition: form-data; name="properties"
+
+{}
+--{{boundary}}
+Content-Disposition: form-data; name="consents"
+
+{"AGREEMENT_1":"Y"}
+--{{boundary}}
+Content-Disposition: form-data; name="recaptcha"
+
+
+--{{boundary}}
+Content-Disposition: form-data; name="yandexSmartCaptcha"
+
+
+--{{boundary}}
+Content-Disposition: form-data; name="timeZoneOffset"
+
+-180
+--{{boundary}}
+Content-Disposition: form-data; name="values"
+
+{"LEAD_NAME":["Тест REST Client"],"LEAD_PHONE":["+79990000000"],"LEAD_COMMENTS":["Тестовая заявка напрямую в CRM-форму Bitrix24. Не обрабатывать."]}
+--{{boundary}}--

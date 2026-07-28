@@ -1,0 +1,106 @@
+{% extends 'cabinet/base_cabinet.html' %}
+{% load static %}
+
+{% block title %}Редактирование | ПНП Кабинет{% endblock %}
+
+{% block cabinet_content %}
+{% with account_type=cabinet_account_type|default:"client" account_label=cabinet_account_label|default:"Клиент" %}
+<div class="cabinet-page-head">
+    <div>
+        <span class="cabinet-eyebrow">Профиль</span>
+        <h2>Редактирование данных</h2>
+        <p>Обновите контактные данные, которые будут использоваться в личном кабинете и будущих заявках.</p>
+    </div>
+    <div class="cabinet-page-actions">
+        <a class="cabinet-btn cabinet-btn-ghost" href="{% url 'cabinet:profile' %}">
+            <span aria-hidden="true">←</span>
+            Назад в профиль
+        </a>
+    </div>
+</div>
+
+<form class="cabinet-edit-layout" method="post" action="{% url 'cabinet:edit' %}">
+    {% csrf_token %}
+
+    <section class="cabinet-card cabinet-edit-main">
+        <div class="cabinet-card-head">
+            <div>
+                <span class="cabinet-eyebrow">Контакты</span>
+                <h3>Основная информация</h3>
+            </div>
+            <span class="cabinet-user-role cabinet-role-{{ account_type }}">{{ account_label }}</span>
+        </div>
+
+        {% if messages %}
+        <div class="cabinet-form-messages">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="cabinet-edit-grid">
+            <label class="cabinet-field">
+                <span>Имя</span>
+                <input type="text" name="first_name" autocomplete="given-name" value="{{ user.first_name }}" required>
+            </label>
+
+            <label class="cabinet-field">
+                <span>Фамилия</span>
+                <input type="text" name="last_name" autocomplete="family-name" value="{{ user.last_name }}">
+            </label>
+        </div>
+
+        <label class="cabinet-field">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" value="{{ user.email }}" required>
+        </label>
+
+        <label class="cabinet-field">
+            <span>Телефон</span>
+            <input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="18" placeholder="+7 (___) ___-__-__" data-phone-input value="{{ user.profile.phone|default:'' }}" required>
+        </label>
+
+        <div class="cabinet-edit-note">
+            <b>Важно</b>
+            <span>Эти данные можно подставлять в форму заявки автоматически, чтобы пользователь не вводил контакты заново.</span>
+        </div>
+    </section>
+
+    <section class="cabinet-card cabinet-edit-side">
+        <div class="cabinet-card-head">
+            <div>
+                <span class="cabinet-eyebrow">Безопасность</span>
+                <h3>Смена пароля</h3>
+            </div>
+        </div>
+
+        <label class="cabinet-field">
+            <span>Текущий пароль</span>
+            <input type="password" name="current_password" autocomplete="current-password">
+        </label>
+
+        <label class="cabinet-field">
+            <span>Новый пароль</span>
+            <input type="password" name="password1" autocomplete="new-password">
+        </label>
+
+        <label class="cabinet-field">
+            <span>Повторите пароль</span>
+            <input type="password" name="password2" autocomplete="new-password">
+        </label>
+
+        <p class="cabinet-field-hint">Если пароль менять не нужно, оставьте эти поля пустыми.</p>
+
+        <div class="cabinet-form-actions">
+            <button class="cabinet-btn cabinet-btn-primary" type="submit">
+                Сохранить изменения
+            </button>
+            <a class="cabinet-btn cabinet-btn-ghost" href="{% url 'cabinet:profile' %}">
+                Отмена
+            </a>
+        </div>
+    </section>
+</form>
+{% endwith %}
+{% endblock %}
