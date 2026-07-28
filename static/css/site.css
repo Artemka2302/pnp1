@@ -3138,12 +3138,11 @@ a[href*="wa.me"] {
 }
 
 .catalog-block-grid .catalog-level-card {
-  grid-column: span 2;
+  grid-column: span 3;
 }
 
-.catalog-block-grid .catalog-level-card:nth-child(1),
-.catalog-block-grid .catalog-level-card:nth-child(2) {
-  grid-column: span 3;
+.catalog-block-grid .catalog-level-card:nth-child(5) {
+  grid-column: 1 / -1;
 }
 
 .catalog-level-card {
@@ -3161,52 +3160,6 @@ a[href*="wa.me"] {
   color: inherit;
   text-decoration: none;
   transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) {
-  min-height: 620px;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-media {
-  min-height: 180px;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-body {
-  padding: 18px;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-kicker {
-  margin-bottom: 12px;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-kicker b {
-  width: 34px;
-  height: 34px;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-body h3 {
-  font-size: clamp(22px, 1.55vw, 26px);
-  line-height: 1.08;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-body p {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  font-size: 13px;
-  line-height: 1.46;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-stats span,
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-chips span {
-  min-height: 28px;
-  padding: 6px 9px;
-  font-size: 11px;
-}
-
-.catalog-block-grid .catalog-level-card:nth-child(n + 3) .catalog-level-chips span:nth-child(n + 4) {
-  display: none;
 }
 
 .catalog-level-card-compact {
@@ -3333,8 +3286,8 @@ a[href*="wa.me"] {
 }
 
 .catalog-level-chips {
-  margin-top: auto;
-  padding-top: 4px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .catalog-product-grid {
@@ -3904,7 +3857,8 @@ a[href*="wa.me"] {
 
   .catalog-block-grid .catalog-level-card,
   .catalog-block-grid .catalog-level-card:nth-child(1),
-  .catalog-block-grid .catalog-level-card:nth-child(2) {
+  .catalog-block-grid .catalog-level-card:nth-child(2),
+  .catalog-block-grid .catalog-level-card:nth-child(5) {
     grid-column: span 1;
   }
 }

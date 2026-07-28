@@ -1764,12 +1764,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const gridClass = childIds.length === root?.children?.length
         ? "catalog-level-grid catalog-block-grid"
         : "catalog-level-grid catalog-next-grid";
-      const title = node.kind === "root" ? "Глобальные блоки" : "Следующий уровень";
+      const childLevel = nodes[childIds[0]]?.level || "";
+      const titleByLevel = {
+        "Блок": "Глобальные блоки",
+        "Направление": "Направления",
+        "Система": "Системы",
+        "Товарная группа": "Товарные группы",
+      };
+      const title = titleByLevel[childLevel] || "Разделы каталога";
       stage.innerHTML = `
         ${currentCardHtml(node)}
         <div class="section-head" data-catalog-stage-head>
           <div>
-            <span class="soft-label">Следующий уровень</span>
             <h2 data-catalog-stage-title>${escapeHtml(title)}</h2>
           </div>
           <a class="link-more" href="/contacts/#request-form">Отправить спецификацию →</a>
@@ -1779,7 +1785,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stage.querySelector("[data-catalog-card-grid]").innerHTML = `
           <article class="glass catalog-empty-state">
             <h3>На этом уровне пока нет элементов</h3>
-            <p>Структура сохранена в базе. Следующий уровень можно добавить через импорт или ORM.</p>
+            <p>Структура сохранена в базе. Раздел можно добавить через импорт или ORM.</p>
           </article>`;
       }
       syncTree(target);
