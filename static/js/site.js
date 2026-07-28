@@ -996,6 +996,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const initSupportChatWidget = () => {
     const leadEndpoint = document.body.dataset.leadEndpoint || "/api/catalog-request/";
     const aiEndpoint = document.body.dataset.aiChatEndpoint || "/api/ai-chat/";
+    const liveChatSource = document.body.dataset.bitrixLivechatSrc || "";
     const privacyUrl = document.body.dataset.privacyUrl || "/privacy/";
     const consentUrl = document.body.dataset.consentUrl || "/consent/";
     const csrfToken = getCookie("csrftoken") || document.querySelector("[name='csrfmiddlewaretoken']")?.value || "";
@@ -1009,8 +1010,8 @@ document.addEventListener("DOMContentLoaded", () => {
       manager: {
         source: "contact",
         label: "Менеджер",
-        title: "Передать вопрос менеджеру",
-        submit: "Написать менеджеру",
+        title: "Чат с менеджером",
+        submit: "Передать и открыть чат",
       },
     };
 
@@ -1065,12 +1066,14 @@ document.addEventListener("DOMContentLoaded", () => {
           </section>
 
           <section class="support-chat-manager" data-support-manager-pane hidden>
-            <div class="support-chat-stream">
-              <article class="support-chat-message support-chat-message--assistant">
-                <span class="support-chat-avatar" aria-hidden="true">ПНП</span>
-                <p>Опишите вопрос или прикрепите спецификацию. Менеджер получит заявку в Bitrix и свяжется с вами.</p>
-              </article>
+            <div class="support-chat-manager-intro">
+              <span class="support-chat-manager-indicator" aria-hidden="true"></span>
+              <div>
+                <strong>Онлайн-чат отдела продаж</strong>
+                <p>Вопрос, выбранные позиции и файлы будут переданы менеджеру до открытия диалога.</p>
+              </div>
             </div>
+            <button class="support-chat-reopen" type="button" data-manager-reopen hidden>Продолжить текущий чат</button>
             <label class="support-chat-field">
               <span>Сообщение</span>
               <textarea name="message" data-manager-message placeholder="Что нужно подобрать? Укажите объект, город, сроки или приложите файл." required disabled></textarea>
@@ -1156,6 +1159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const draftMessage = root.querySelector("[data-ai-draft-message]");
     const draftMissing = root.querySelector("[data-ai-draft-missing]");
     const managerMessage = root.querySelector("[data-manager-message]");
+    const managerReopen = root.querySelector("[data-manager-reopen]");
     const managerConsent = root.querySelector("[data-manager-consent]");
     const managerConsentLabel = root.querySelector("[data-manager-consent-label]");
     const aiConsent = root.querySelector("[data-ai-consent]");
@@ -1169,10 +1173,196 @@ document.addEventListener("DOMContentLoaded", () => {
     const directionInput = form.elements.direction;
     const categoryInput = form.elements.category;
     const objectInput = form.elements.object;
+    const modeButtons = Array.from(root.querySelectorAll("[data-support-mode-option]"));
     let currentMode = "ai";
     let aiPending = false;
     let latestLeadDraft = null;
     let history = [];
+    let bitrixLiveChatWidget = null;
+    let bitrixScriptPromise = null;
+    let pendingManagerChatContext = null;
+    let lastManagerChatContext = null;
+    const configuredLiveChatWidgets = new WeakSet();
+
+    const cleanLiveChatValue = (value, maxLength = 500) => String(value || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, maxLength);
+
+    const normalizedLiveChatSource = () => {
+      if (!liveChatSource) return "";
+      try {
+        const url = new URL(liveChatSource, window.location.href);
+        return url.protocol === "https:" ? url.href : "";
+      } catch {
+        return "";
+      }
+    };
+
+    const buildBitrixLiveChatData = context => {
+      const catalogItems = cleanLiveChatValue(formatRequestItems(context.items || []), 900);
+      const fileNames = (context.files || [])
+        .map(fileName => cleanLiveChatValue(fileName, 160))
+        .filter(Boolean)
+        .join(", ");
+      const pageUrl = `${window.location.origin}${window.location.pathname}`;
+      const rows = [
+        ["Канал", "Чат с менеджером на сайте"],
+        ["Заявка на сайте", context.leadId ? `#${context.leadId}` : ""],
+        ["Телефон", context.phone],
+        ["Вопрос", context.message],
+        ["Позиции каталога", catalogItems],
+        ["Файлы", fileNames],
+        ["Страница", pageUrl],
+      ].filter(([, value]) => cleanLiveChatValue(value));
+      const customData = [];
+      const name = cleanLiveChatValue(context.name, 120);
+      if (name) customData.push({ USER: { NAME: name } });
+      if (rows.length) {
+        customData.push({
+          GRID: rows.map(([nameValue, value]) => ({
+            NAME: nameValue,
+            VALUE: cleanLiveChatValue(value, nameValue === "Вопрос" || nameValue === "Позиции каталога" ? 900 : 220),
+            DISPLAY: "LINE",
+          })),
+        });
+      }
+      return customData;
+    };
+
+    const localizeBitrixLiveChat = widget => {
+      if (typeof widget?.addLocalize !== "function") return;
+      try {
+        widget.addLocalize({
+          BX_LIVECHAT_TITLE: "Чат с менеджером ПНП",
+          BX_LIVECHAT_USER: "менеджер",
+          BX_LIVECHAT_OFFLINE_TITLE: "Оставьте сообщение для менеджера",
+          BX_MESSENGER_TEXTAREA_PLACEHOLDER: "Напишите сообщение менеджеру...",
+        });
+      } catch {
+        // Bitrix can reject localization until its configuration is loaded.
+      }
+    };
+
+    const configureBitrixLiveChat = (widget, context) => {
+      if (!widget) return;
+      const customData = buildBitrixLiveChatData(context || {});
+      if (customData.length && typeof widget.setCustomData === "function") {
+        try {
+          widget.setCustomData(customData);
+        } catch {
+          // The lead is already saved; chat can still open without extra context.
+        }
+      }
+      localizeBitrixLiveChat(widget);
+      if (configuredLiveChatWidgets.has(widget)) return;
+      configuredLiveChatWidgets.add(widget);
+      const configLoaded = window.BX?.LiveChatWidget?.SubscriptionType?.configLoaded;
+      if (!configLoaded || typeof widget.subscribe !== "function") return;
+      try {
+        widget.subscribe({
+          type: configLoaded,
+          callback: () => {
+            localizeBitrixLiveChat(widget);
+            if (!pendingManagerChatContext || typeof widget.open !== "function") return;
+            try {
+              widget.open();
+            } catch {
+              // The immediate open attempt remains the fallback.
+            }
+          },
+        });
+      } catch {
+        // Opening the official widget does not depend on custom localization.
+      }
+    };
+
+    window.addEventListener("onBitrixLiveChat", event => {
+      const widget = event?.detail?.widget;
+      if (!widget) return;
+      bitrixLiveChatWidget = widget;
+      configureBitrixLiveChat(widget, pendingManagerChatContext);
+    });
+
+    const waitForBitrixLiveChatWidget = (timeout = 6000) => {
+      if (bitrixLiveChatWidget) return Promise.resolve(bitrixLiveChatWidget);
+      return new Promise(resolve => {
+        let timeoutId;
+        const handleReady = event => {
+          const widget = event?.detail?.widget;
+          if (!widget) return;
+          window.removeEventListener("onBitrixLiveChat", handleReady);
+          clearTimeout(timeoutId);
+          resolve(widget);
+        };
+        window.addEventListener("onBitrixLiveChat", handleReady);
+        timeoutId = window.setTimeout(() => {
+          window.removeEventListener("onBitrixLiveChat", handleReady);
+          resolve(bitrixLiveChatWidget);
+        }, timeout);
+      });
+    };
+
+    const loadBitrixLiveChat = async () => {
+      if (bitrixLiveChatWidget) return bitrixLiveChatWidget;
+      const source = normalizedLiveChatSource();
+      if (!source) return null;
+      const sourceUrl = new URL(source);
+      const existingScript = Array.from(document.scripts).find(script => {
+        if (!script.src) return false;
+        try {
+          const scriptUrl = new URL(script.src);
+          return scriptUrl.origin === sourceUrl.origin && scriptUrl.pathname === sourceUrl.pathname;
+        } catch {
+          return false;
+        }
+      });
+      if (!existingScript && !bitrixScriptPromise) {
+        bitrixScriptPromise = new Promise(resolve => {
+          const script = document.createElement("script");
+          let settled = false;
+          const finish = loaded => {
+            if (settled) return;
+            settled = true;
+            resolve(loaded);
+          };
+          script.async = true;
+          script.src = source;
+          script.dataset.pnpBitrixLivechat = "";
+          script.referrerPolicy = "strict-origin-when-cross-origin";
+          script.addEventListener("load", () => finish(true), { once: true });
+          script.addEventListener("error", () => finish(false), { once: true });
+          document.head.append(script);
+          window.setTimeout(() => finish(false), 6000);
+        });
+      }
+      if (bitrixScriptPromise) await bitrixScriptPromise;
+      return waitForBitrixLiveChatWidget();
+    };
+
+    const openManagerLiveChat = async context => {
+      pendingManagerChatContext = context;
+      const widget = await loadBitrixLiveChat();
+      if (widget) {
+        configureBitrixLiveChat(widget, context);
+        if (typeof widget.open === "function") {
+          try {
+            widget.open();
+            return true;
+          } catch {
+            // Fall through to the legacy public API exposed by some loaders.
+          }
+        }
+      }
+      const liveChatApi = window.BX?.LiveChat || window.BX?.Livechat;
+      if (typeof liveChatApi?.openLiveChat !== "function") return false;
+      try {
+        liveChatApi.openLiveChat();
+        return true;
+      } catch {
+        return false;
+      }
+    };
 
     const cleanDraftValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
 
@@ -1315,7 +1505,7 @@ document.addEventListener("DOMContentLoaded", () => {
         categoryInput.value = "Менеджер";
         objectInput.value = "";
       }
-      root.querySelectorAll("[data-support-mode-option]").forEach(button => {
+      modeButtons.forEach(button => {
         const active = button.dataset.supportModeOption === currentMode;
         button.classList.toggle("is-active", active);
         button.setAttribute("aria-selected", String(active));
@@ -1331,7 +1521,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toggle.addEventListener("click", () => setOpen(panel.hidden));
     closeButton.addEventListener("click", () => setOpen(false));
-    root.querySelectorAll("[data-support-mode-option]").forEach(button => {
+    modeButtons.forEach(button => {
       button.addEventListener("click", () => setMode(button.dataset.supportModeOption));
     });
     root.querySelectorAll("[data-support-prompt]").forEach(button => {
@@ -1345,6 +1535,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
       event.preventDefault();
       sendAiMessage();
+    });
+    managerReopen.addEventListener("click", async () => {
+      if (!lastManagerChatContext) return;
+      managerReopen.disabled = true;
+      setStatus(status, "Открываем чат с менеджером...");
+      const opened = await openManagerLiveChat(lastManagerChatContext);
+      managerReopen.disabled = false;
+      if (opened) {
+        setStatus(status, "Чат с менеджером открыт.");
+        setOpen(false);
+      } else {
+        setStatus(status, "Чат сейчас недоступен. Менеджер ответит по указанному телефону.", true);
+      }
     });
     aiConsent.addEventListener("change", () => setStatus(aiStatus, ""));
     document.addEventListener("keydown", event => {
@@ -1360,13 +1563,21 @@ document.addEventListener("DOMContentLoaded", () => {
     initFilePicker(form);
     form.addEventListener("submit", async event => {
       event.preventDefault();
-      if (currentMode === "ai" && !latestLeadDraft) {
+      const submittedMode = currentMode;
+      if (submittedMode === "ai" && !latestLeadDraft) {
         setStatus(aiStatus, "Сначала опишите задачу, чтобы AI собрал черновик заявки.", true);
         return;
       }
       const items = readItems();
-      const modeLabel = modes[currentMode].label;
-      if (currentMode === "ai") {
+      const modeLabel = modes[submittedMode].label;
+      const managerContext = submittedMode === "manager" ? {
+        name: form.elements.name.value,
+        phone: form.elements.phone.value,
+        message: managerMessage.value,
+        items: [...items],
+        files: Array.from(form.querySelector("input[type='file']")?.files || []).map(file => file.name),
+      } : null;
+      if (submittedMode === "ai") {
         latestLeadDraft = normalizeLeadDraft({
           ...latestLeadDraft,
           direction: draftDirection.value,
@@ -1386,18 +1597,34 @@ document.addEventListener("DOMContentLoaded", () => {
         `Канал обращения: ${modeLabel}`,
         formatRequestItems(items),
       ].filter(Boolean).join("\n\n");
+      modeButtons.forEach(button => { button.disabled = true; });
       const data = await submitForm(form, status, submit, { items, requestText });
       if (data) {
-        if (currentMode === "ai") {
+        if (submittedMode === "ai") {
           addAiMessage(`Заявка #${data.lead_id} отправлена. Менеджер получил собранный запрос и прикреплённые файлы.`, "assistant");
           latestLeadDraft = null;
           history = [];
           draftCard.hidden = true;
           finalSection.hidden = true;
           aiConsent.checked = false;
+        } else {
+          lastManagerChatContext = { ...managerContext, leadId: data.lead_id };
+          setStatus(status, "Заявка сохранена. Открываем чат с менеджером...");
+          const opened = await openManagerLiveChat(lastManagerChatContext);
+          managerReopen.hidden = !opened;
+          if (opened) {
+            const sentText = data.bitrix_sent
+              ? `Заявка #${data.lead_id} передана в Bitrix. Чат открыт.`
+              : `Заявка #${data.lead_id} сохранена. Чат открыт.`;
+            setStatus(status, sentText);
+            if (currentMode === "manager") setOpen(false);
+          } else {
+            setStatus(status, `Заявка #${data.lead_id} сохранена. Чат сейчас недоступен; менеджер свяжется по телефону.`, true);
+          }
         }
         setMode(currentMode);
       }
+      modeButtons.forEach(button => { button.disabled = false; });
     });
 
     setMode(currentMode);
