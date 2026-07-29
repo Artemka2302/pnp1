@@ -8,7 +8,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.test import Client, SimpleTestCase, TestCase, override_settings
 
-from . import views as main_views
 from .ai import (
     AiConfigurationError,
     AiResponseError,
@@ -32,6 +31,12 @@ from .models import (
 
 
 class PublicRouteSmokeTests(TestCase):
+    def test_healthcheck_reports_database_availability(self):
+        response = self.client.get("/health/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"ok": True})
+
     @classmethod
     def setUpTestData(cls):
         call_command("import_pnp_data", verbosity=0)
@@ -133,13 +138,14 @@ class PublicRouteSmokeTests(TestCase):
 
 class MiniRequestApiTests(TestCase):
     def setUp(self):
-        main_views.LEAD_RATE_BUCKET.clear()
+        cache.clear()
         self.client = Client(HTTP_HOST="testserver")
         self.media_root = tempfile.mkdtemp()
         self.media_override = override_settings(MEDIA_ROOT=self.media_root)
         self.media_override.enable()
         self.addCleanup(self.media_override.disable)
         self.addCleanup(shutil.rmtree, self.media_root, ignore_errors=True)
+        self.addCleanup(cache.clear)
         self.bitrix_patcher = patch(
             "main.views.send_lead_to_bitrix",
             return_value={"configured": False, "sent": False},

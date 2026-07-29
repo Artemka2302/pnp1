@@ -2,7 +2,6 @@ import hashlib
 import json
 import logging
 import re
-import time
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -12,14 +11,14 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.validators import validate_email
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import Count, Prefetch, Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.templatetags.static import static
 from django.urls import reverse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from .models import (
     CatalogBlock,
@@ -64,10 +63,21 @@ MAX_UPLOAD_FILE_SIZE = 30 * 1024 * 1024
 MAX_UPLOAD_TOTAL_SIZE = 60 * 1024 * 1024
 LEAD_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
 LEAD_RATE_LIMIT_MAX = 20
-LEAD_RATE_BUCKET = {}
 AI_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
 AI_RATE_LIMIT_MAX = 20
 AI_MAX_BODY_BYTES = 32 * 1024
+
+
+@require_GET
+def healthcheck(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+    except Exception:
+        logger.exception("Healthcheck database query failed")
+        return JsonResponse({"ok": False}, status=503)
+    return JsonResponse({"ok": True})
 
 
 def first_existing_static_path(*paths):
@@ -1513,13 +1523,22 @@ def client_ip(request):
     return request.META.get("REMOTE_ADDR") or None
 
 
-def lead_rate_limited(request):
+def rate_limited(request, namespace, limit, window_seconds):
     ip = client_ip(request) or "unknown"
-    now = time.monotonic()
-    recent = [stamp for stamp in LEAD_RATE_BUCKET.get(ip, []) if now - stamp < LEAD_RATE_LIMIT_WINDOW_SECONDS]
-    recent.append(now)
-    LEAD_RATE_BUCKET[ip] = recent
-    return len(recent) > LEAD_RATE_LIMIT_MAX
+    ip_hash = hashlib.sha256(ip.encode("utf-8")).hexdigest()[:24]
+    cache_key = f"pnp:{namespace}-rate:{ip_hash}"
+    if cache.add(cache_key, 1, timeout=window_seconds):
+        return False
+    try:
+        request_count = cache.incr(cache_key)
+    except ValueError:
+        cache.set(cache_key, 1, timeout=window_seconds)
+        request_count = 1
+    return request_count > limit
+
+
+def lead_rate_limited(request):
+    return rate_limited(request, "lead", LEAD_RATE_LIMIT_MAX, LEAD_RATE_LIMIT_WINDOW_SECONDS)
 
 
 def upload_extension(uploaded_file):
@@ -1601,17 +1620,7 @@ def check_phone(phone):
 
 
 def ai_rate_limited(request):
-    ip = client_ip(request) or "unknown"
-    ip_hash = hashlib.sha256(ip.encode("utf-8")).hexdigest()[:24]
-    cache_key = f"pnp:ai-chat-rate:{ip_hash}"
-    if cache.add(cache_key, 1, timeout=AI_RATE_LIMIT_WINDOW_SECONDS):
-        return False
-    try:
-        request_count = cache.incr(cache_key)
-    except ValueError:
-        cache.set(cache_key, 1, timeout=AI_RATE_LIMIT_WINDOW_SECONDS)
-        request_count = 1
-    return request_count > AI_RATE_LIMIT_MAX
+    return rate_limited(request, "ai-chat", AI_RATE_LIMIT_MAX, AI_RATE_LIMIT_WINDOW_SECONDS)
 
 
 def ai_error_response(error, message, status):

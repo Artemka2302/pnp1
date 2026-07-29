@@ -18,3 +18,13 @@ staticfiles/
 
 .DS_Store
 Thumbs.db
+
+# Generated audits, browser profiles, and historical handoff packages.
+reports/
+deliverables/
+_handoff_*/
+CODEX_HANDOFF_*
+bitrix-form-test.http
+
+# Local editor settings.
+.vscode/

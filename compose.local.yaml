@@ -1,0 +1,32 @@
+services:
+  web:
+    environment:
+      DJANGO_DEBUG: "True"
+      DJANGO_SECURE_SSL_REDIRECT: "False"
+      DJANGO_SESSION_COOKIE_SECURE: "False"
+      DJANGO_CSRF_COOKIE_SECURE: "False"
+      DJANGO_SECURE_HSTS_SECONDS: "0"
+      TRUST_X_FORWARDED_FOR: "False"
+      DJANGO_TRUST_X_FORWARDED_PROTO: "False"
+
+  db:
+    ports:
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5433}:5432"
+
+  caddy:
+    image: caddy:2.11.4-alpine
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:80"
+    volumes:
+      - ./docker/Caddyfile.local:/etc/caddy/Caddyfile:ro
+      - static_data:/srv/static:ro
+      - caddy_local_data:/data
+      - caddy_local_config:/config
+
+volumes:
+  caddy_local_data:
+  caddy_local_config:
