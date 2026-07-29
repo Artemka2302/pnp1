@@ -8,13 +8,11 @@
   <div class="home-brand-viewport">
     <div class="partners-preview popular-logo-grid home-brand-track" data-brand-track>
       {% for partner in featured_partners %}
-        <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ partner.name }}">
-          {% if partner.logo %}
+        {% if partner.show_on_home and partner.logo %}
+          <a class="logo-tile" href="{{ partner.official_site|default:'#' }}" target="_blank" rel="noopener" title="{{ partner.name }}">
             <img src="{% static partner.logo %}" alt="{{ partner.name }}">
-          {% else %}
-            <span>{{ partner.name }}</span>
-          {% endif %}
-        </a>
+          </a>
+        {% endif %}
       {% empty %}
         <p class="partner-empty-state">Бренды не найдены</p>
       {% endfor %}

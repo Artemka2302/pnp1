@@ -777,6 +777,13 @@
     letter-spacing: 0;
   }
 
+  .catalog-page .catalog-v2-request-note {
+    margin: -2px 0 10px;
+    color: rgba(222, 230, 242, .7);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
   .catalog-page .catalog-v2-type-list {
     display: grid;
     gap: 7px;

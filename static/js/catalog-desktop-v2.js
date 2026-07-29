@@ -307,6 +307,7 @@
         <div class="catalog-v2-passport-grid">
           <section class="catalog-v2-passport-panel">
             <h3>Типы продукции</h3>
+            <p class="catalog-v2-request-note">Выбранные позиции уходят в заявку</p>
             <div class="catalog-v2-type-list">${typeRows}</div>
           </section>
           <section class="catalog-v2-passport-panel">
@@ -319,7 +320,7 @@
         <input type="hidden" name="items" data-request-items>
         <textarea class="mini-request-raw" name="request_text" data-request-output aria-label="Комментарий к заявке"></textarea>
         <div class="mini-request-head">
-          <div><span class="soft-label">Мини-заявка <b data-request-count>0</b></span><h3>Выбранные позиции</h3></div>
+          <div><span class="soft-label">Заявка <b data-request-count>0</b></span><h3>Выбранные позиции</h3></div>
           <button class="btn ghost small" type="button" data-request-clear>Очистить</button>
         </div>
         <div class="mini-request-selected-list" data-request-list>Выбранные позиции появятся здесь.</div>

@@ -4968,7 +4968,10 @@ a[href$="solution-tech-equipment.html"] .mini-visual{
   border-top:1px solid rgba(255,255,255,.13)!important;
 }
 #request-form .file-field .upload-box{
-  display:block!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  width:fit-content!important;
+  gap:9px!important;
   margin-top:0!important;
   cursor:pointer!important;
   user-select:none!important;
@@ -4980,7 +4983,7 @@ a[href$="solution-tech-equipment.html"] .mini-visual{
   transform:translateY(-1px)!important;
 }
 #request-form .file-field .upload-box span{
-  display:block!important;
+  display:inline!important;
   color:#fff!important;
   font-weight:850!important;
   line-height:1.35!important;
