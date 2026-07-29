@@ -8,8 +8,8 @@
   <meta name="description" content="{% block description %}Комплектация строительных объектов по разделам проекта: материалы, оборудование, производители и аналоги под спецификацию, сроки и бюджет.{% endblock %}">
   <link rel="icon" type="image/png" href="{% static 'assets/img/brand/pnp-logo-exact-symbol-clean.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260728-deepseek-shared-ui">
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260728-shared" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260729-catalog-help">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260729-catalog-help" media="(min-width: 1081px)">
   {% block extra_head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-ai-chat-endpoint="/api/ai-chat/" data-privacy-url="{% url 'privacy' %}" data-consent-url="{% url 'consent' %}">
@@ -76,13 +76,14 @@
         <section class="site-footer-cta" aria-labelledby="siteFooterCtaTitle">
           <div class="site-footer-cta-copy">
             <span class="site-footer-eyebrow">Быстрая помощь</span>
-            <h2 id="siteFooterCtaTitle" data-footer-cta-title>Нужна помощь с заявкой?</h2>
-            <p data-footer-cta-description>Продолжите с AI-помощником или сразу откройте онлайн-чат с менеджером.</p>
+            <h2 id="siteFooterCtaTitle" data-footer-cta-title>Нужна помощь с комплектацией?</h2>
+            <p data-footer-cta-description>Отправьте заявку, уточните задачу с AI-помощником или подключите менеджера.</p>
             <span class="site-footer-selection" data-footer-selection hidden>В заявке <b class="site-footer-selection-count" data-footer-selection-count>0</b></span>
           </div>
           <div class="site-footer-cta-actions">
             <a class="site-footer-button site-footer-button--primary" href="{% url 'contacts' %}#request-form"><strong>Отправить заявку</strong><small>Передать спецификацию или описание задачи</small></a>
-            <button class="site-footer-button site-footer-button--secondary" type="button" data-footer-ai-button data-footer-ai-mode="ai"><strong>Открыть помощника ПНП</strong><small>Уточнить задачу и собрать запрос</small></button>
+            <button class="site-footer-button site-footer-button--secondary" type="button" data-footer-ai-button data-footer-ai-mode="ai"><strong>Чат с AI</strong><small>Уточнить задачу и собрать запрос</small></button>
+            <button class="site-footer-button site-footer-button--secondary" type="button" data-footer-ai-button data-footer-ai-mode="manager"><strong>Чат с менеджером</strong><small>Передать вопрос специалисту</small></button>
           </div>
         </section>
 
@@ -113,6 +114,8 @@
               <ul class="site-footer-links">
                 <li><a class="site-footer-link" href="{% url 'contacts' %}#request-form">Отправить заявку</a></li>
                 <li><a class="site-footer-link" href="{% url 'contacts' %}?request_type=specification_review#request-form">Передать спецификацию</a></li>
+                <li><button class="site-footer-link" type="button" data-footer-ai-button data-footer-ai-mode="ai">Чат с AI</button></li>
+                <li><button class="site-footer-link" type="button" data-footer-ai-button data-footer-ai-mode="manager">Чат с менеджером</button></li>
               </ul>
             </details>
             <details class="site-footer-group" open>
@@ -158,7 +161,7 @@
       <button class="btn ghost small" type="button" data-cookie-reject>Отклонить необязательные</button>
     </div>
   </section>
-  <script src="{% static 'js/site.js' %}?v=20260728-deepseek-chat"></script>
+  <script src="{% static 'js/site.js' %}?v=20260729-catalog-help"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

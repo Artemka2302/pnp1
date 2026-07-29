@@ -23,23 +23,7 @@
   <div class="container">
     <div class="section-head">
       <div><h2>Наши партнёры</h2></div>
-      <a class="btn ghost" href="{% url 'vendors' %}">Все производители →</a>
     </div>
-    <form class="partners-filter-panel" method="get" action="{% url 'partners' %}" data-partners-filter-form>
-      <div class="partners-search-card">
-        <label for="partnerSearch">Поиск по партнёрам</label>
-        <div class="partners-search-control">
-          <input id="partnerSearch" name="q" type="search" value="{{ filters.q }}" placeholder="Например: DAICHI, Рубеж, климат, освещение, безопасность">
-          <button class="btn" type="submit">Найти</button>
-        </div>
-      </div>
-
-      <div class="partners-category-card">
-        <div class="partners-category-list" aria-label="Фильтр по категориям" data-partner-category-list>
-          {% include "main/partials/partner_category_chips.html" %}
-        </div>
-      </div>
-    </form>
     <div class="partners-results-grid" data-partner-results>
       {% include "main/partials/partner_results.html" %}
     </div>
