@@ -4,9 +4,59 @@
 {% block title %}Каталог поставки — ПНП{% endblock %}
 {% block body_class %}catalog-page catalog-master-site-preview catalog-master-public{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260729-catalog-tree-v4">
+{% endblock %}
+
 {% block content %}
 {{ catalog_interactive_data|json_script:"catalogInteractiveData" }}
-<section class="hero hero-small catalog-hero">
+
+<section class="catalog-desktop-v2" data-catalog-v2 aria-label="Каталог поставки">
+  <div class="catalog-v2-frame">
+    <aside class="catalog-v2-index" aria-label="Навигация по уровням каталога">
+      <ul class="catalog-v2-index-list" data-catalog-v2-index role="tree"></ul>
+    </aside>
+
+    <div class="catalog-v2-workspace">
+      <header class="catalog-v2-toolbar">
+        <h1>Каталог</h1>
+        <div class="catalog-v2-search" data-catalog-v2-search-box>
+          <button class="catalog-v2-search-button" type="button" aria-label="Перейти к поиску по каталогу" data-catalog-v2-search-button>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.8"></circle>
+              <path d="m16 16 4.3 4.3"></path>
+            </svg>
+          </button>
+          <div class="catalog-v2-search-field">
+            <label class="sr-only" for="catalogV2Search">Поиск по каталогу</label>
+            <input id="catalogV2Search" type="search" placeholder="Найти раздел, систему или материал" autocomplete="off" data-catalog-v2-search>
+            <div class="catalog-v2-search-results" data-catalog-v2-search-results hidden></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="catalog-v2-blocks" aria-label="Глобальные блоки каталога">
+        <div class="catalog-v2-block-grid" data-catalog-v2-blocks></div>
+      </section>
+
+      <section class="catalog-v2-content" aria-live="polite">
+        <nav class="catalog-v2-breadcrumbs" aria-label="Путь в каталоге" data-catalog-v2-breadcrumbs hidden></nav>
+        <div class="catalog-v2-content-head">
+          <div>
+            <span class="catalog-v2-kicker" data-catalog-v2-kicker hidden></span>
+            <h2 data-catalog-v2-title>Направления</h2>
+          </div>
+          <button class="catalog-v2-back" type="button" data-catalog-v2-back hidden>
+            <span aria-hidden="true">←</span> Назад
+          </button>
+        </div>
+        <div class="catalog-v2-system-grid" data-catalog-v2-content></div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="hero hero-small catalog-hero catalog-legacy-only">
   <div class="vertical-accent"></div>
   <div class="container">
     <div class="eyebrow">Каталог</div>
@@ -77,7 +127,7 @@
         <span class="soft-label">База комплектации</span>
         <h2>Основные блоки поставки</h2>
 {% endcomment %}
-<section class="section catalog-section">
+<section class="section catalog-section catalog-legacy-only">
   <div class="container catalog-layout">
     {% include "main/partials/catalog_nav.html" %}
 
@@ -97,4 +147,8 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260729-catalog-tree-v4"></script>
 {% endblock %}

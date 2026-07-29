@@ -1019,9 +1019,26 @@ document.addEventListener("DOMContentLoaded", () => {
     root.className = "support-chat-widget";
     root.dataset.supportChat = "";
     root.innerHTML = `
-      <button class="support-chat-toggle" type="button" data-support-toggle aria-expanded="false" aria-controls="supportChatPanel">
-        <span>Помощь</span>
-      </button>
+      <div class="support-chat-launcher">
+        <div class="support-chat-channels" aria-label="Мессенджеры">
+          <button class="support-chat-channel" type="button" data-support-channel="max" aria-label="MAX: открыть чат с менеджером" title="MAX">
+            <img src="/static/assets/img/messengers/max.svg" alt="" aria-hidden="true">
+          </button>
+          <button class="support-chat-channel" type="button" data-support-channel="telegram" aria-label="Telegram: открыть чат с менеджером" title="Telegram">
+            <img src="/static/assets/img/messengers/telegram.svg" alt="" aria-hidden="true">
+          </button>
+        </div>
+        <button class="support-chat-toggle" type="button" data-support-toggle aria-expanded="false" aria-controls="supportChatPanel">
+          <span class="support-chat-toggle-mobile">Помощь</span>
+          <span class="support-chat-toggle-desktop" aria-hidden="true">
+            <svg class="support-chat-launch-icon" viewBox="0 0 24 24">
+              <path d="M20 11.5a7.5 7.5 0 0 1-8 7.47 8.8 8.8 0 0 1-3.15-.75L4 20l1.55-4.2A7.5 7.5 0 1 1 20 11.5Z"></path>
+            </svg>
+            <span class="support-chat-toggle-copy"><small>AI-поддержка</small><strong>Помощник по комплектации</strong></span>
+            <span class="support-chat-ai-badge">AI</span>
+          </span>
+        </button>
+      </div>
       <div class="support-chat-panel" id="supportChatPanel" data-support-panel hidden role="dialog" aria-label="Быстрая помощь">
         <header class="support-chat-head">
           <div>
@@ -1521,7 +1538,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toggle.addEventListener("click", () => setOpen(panel.hidden));
     closeButton.addEventListener("click", () => setOpen(false));
+<<<<<<< HEAD
+    root.querySelectorAll("[data-support-channel]").forEach(button => {
+      button.addEventListener("click", () => {
+        setMode("manager");
+        setOpen(true);
+      });
+    });
+    root.querySelectorAll("[data-support-mode-option]").forEach(button => {
+=======
     modeButtons.forEach(button => {
+>>>>>>> d25a9352b2d8bf8bfff77d460524b72c75689a87
       button.addEventListener("click", () => setMode(button.dataset.supportModeOption));
     });
     root.querySelectorAll("[data-support-prompt]").forEach(button => {
