@@ -106,6 +106,13 @@ ALLOWED_HOSTS = env_list(
 
 TRUST_X_FORWARDED_FOR = env_bool("TRUST_X_FORWARDED_FOR", False)
 
+# Public Bitrix24 website-widget loader. Unlike BITRIX_WEBHOOK_URL, this value
+# is intentionally exposed to the browser and must never contain REST secrets.
+BITRIX_SITE_BUTTON_URL = os.getenv(
+    "BITRIX_SITE_BUTTON_URL",
+    "https://bitrix.bus-sup.ru/upload/crm/site_button/loader_1_xry75s.js",
+).strip()
+
 SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", not DEBUG)
 SESSION_COOKIE_SECURE = env_bool("DJANGO_SESSION_COOKIE_SECURE", not DEBUG)
 CSRF_COOKIE_SECURE = env_bool("DJANGO_CSRF_COOKIE_SECURE", not DEBUG)

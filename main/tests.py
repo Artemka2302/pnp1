@@ -56,6 +56,15 @@ class PublicRouteSmokeTests(TestCase):
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(url).status_code, status_code)
 
+    @override_settings(BITRIX_SITE_BUTTON_URL="https://example.bitrix24.ru/upload/crm/site_button/loader_test.js")
+    def test_base_exposes_public_bitrix_livechat_loader(self):
+        response = self.client.get("/")
+
+        self.assertContains(
+            response,
+            'data-bitrix-livechat-src="https://example.bitrix24.ru/upload/crm/site_button/loader_test.js"',
+        )
+
     def test_vendor_ajax_filter_updates_cloud_and_rows(self):
         response = self.client.get(
             "/vendors/",

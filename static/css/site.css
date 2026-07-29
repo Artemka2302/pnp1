@@ -1923,6 +1923,60 @@ button.vendor-chip.is-selected:focus-visible {
   padding-top: 2px;
 }
 
+.support-chat-manager-intro {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 3px 0 4px;
+}
+
+.support-chat-manager-indicator {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border: 2px solid rgba(255, 255, 255, .26);
+  border-radius: 50%;
+  background: #d83070;
+  box-shadow: 0 0 0 4px rgba(216, 48, 112, .14);
+}
+
+.support-chat-manager-intro strong {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.support-chat-manager-intro p {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, .68);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.support-chat-reopen {
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .075);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.support-chat-reopen:hover {
+  border-color: rgba(240, 119, 160, .58);
+  background: rgba(188, 47, 96, .2);
+}
+
+.support-chat-reopen:disabled {
+  cursor: progress;
+  opacity: .68;
+}
+
 .support-chat-final {
   margin-top: 2px;
   padding-top: 14px;
@@ -1991,7 +2045,7 @@ button.vendor-chip.is-selected:focus-visible {
 
 @media (max-width: 760px) {
   .support-chat-panel {
-    width: calc(100vw - 24px);
+    width: calc(100vw - 40px);
   }
 
   .support-chat-stream[data-ai-messages] {
@@ -5969,7 +6023,7 @@ a[href*="wa.me"] {
   }
 
   .support-chat-panel {
-    width: calc(100vw - 24px);
+    width: calc(100vw - 40px);
     max-height: calc(100vh - 150px);
   }
 
