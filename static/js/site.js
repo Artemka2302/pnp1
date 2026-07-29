@@ -1538,17 +1538,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toggle.addEventListener("click", () => setOpen(panel.hidden));
     closeButton.addEventListener("click", () => setOpen(false));
-<<<<<<< HEAD
     root.querySelectorAll("[data-support-channel]").forEach(button => {
       button.addEventListener("click", () => {
         setMode("manager");
         setOpen(true);
       });
     });
-    root.querySelectorAll("[data-support-mode-option]").forEach(button => {
-=======
     modeButtons.forEach(button => {
->>>>>>> d25a9352b2d8bf8bfff77d460524b72c75689a87
       button.addEventListener("click", () => setMode(button.dataset.supportModeOption));
     });
     root.querySelectorAll("[data-support-prompt]").forEach(button => {
