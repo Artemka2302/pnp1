@@ -1,9 +1,0 @@
-<nav class="catalog-breadcrumbs" aria-label="Навигация каталога">
-  {% for crumb in breadcrumbs %}
-    {% if crumb.url %}
-      <a href="{{ crumb.url }}">{{ crumb.title }}</a>
-    {% else %}
-      <span>{{ crumb.title }}</span>
-    {% endif %}
-  {% endfor %}
-</nav>

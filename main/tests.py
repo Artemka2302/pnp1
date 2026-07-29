@@ -6,7 +6,9 @@ from unittest.mock import patch
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
+from django.http import HttpResponse
 from django.test import Client, SimpleTestCase, TestCase, override_settings
+from django.test import RequestFactory
 
 from .ai import (
     AiConfigurationError,
@@ -16,6 +18,7 @@ from .ai import (
     parse_ai_result,
 )
 from .bitrix import build_bitrix_comment, build_bitrix_payload
+from .middleware import CatalogCrawlThrottleMiddleware
 from .models import (
     CatalogBlock,
     CatalogSystem,
@@ -42,6 +45,7 @@ class PublicRouteSmokeTests(TestCase):
         call_command("import_pnp_data", verbosity=0)
 
     def setUp(self):
+        cache.clear()
         self.client = Client(HTTP_HOST="testserver")
 
     def test_public_routes_match_handoff_smoke(self):
@@ -113,6 +117,8 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("Товарные группы", data["html"])
         self.assertIn("catalog-search-path", data["html"])
         self.assertIn("data-request-item", data["html"])
+        self.assertTrue(data["groups"])
+        self.assertTrue(any(item.get("target") for group in data["groups"] for item in group["items"]))
 
     def test_catalog_search_api_links_vendors_to_vendor_filter(self):
         response = self.client.get(
@@ -127,13 +133,79 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("Производители", data["html"])
         self.assertIn("vendorRowsSection", data["html"])
 
-    def test_catalog_page_contains_interactive_catalog_data(self):
+    def test_catalog_page_contains_only_lazy_catalog_data(self):
         response = self.client.get("/catalog/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "catalogInteractiveData")
-        self.assertContains(response, "data-catalog-stage")
-        self.assertContains(response, "data-catalog-card-grid")
+        self.assertContains(response, "catalogInitialData")
+        self.assertContains(response, "data-catalog-v2")
+        self.assertNotContains(response, "catalogInteractiveData")
+        self.assertNotContains(response, "catalogSearchData")
+        self.assertNotContains(response, "catalog-legacy-only")
+        self.assertLess(len(response.content), 100_000)
+
+    def test_catalog_node_api_loads_one_level_at_a_time(self):
+        root_response = self.client.get("/api/catalog-node/", {"id": "root"})
+
+        self.assertEqual(root_response.status_code, 200)
+        root_data = root_response.json()
+        self.assertEqual(root_data["node"]["id"], "root")
+        self.assertEqual(len(root_data["children"]), 5)
+        self.assertTrue(all(child["kind"] == "block" for child in root_data["children"]))
+        self.assertTrue(all(child["children"] == [] for child in root_data["children"]))
+
+        block_response = self.client.get("/api/catalog-node/", {"id": "block:building-materials"})
+        self.assertEqual(block_response.status_code, 200)
+        block_data = block_response.json()
+        self.assertEqual(block_data["node"]["kind"], "block")
+        self.assertTrue(block_data["children"])
+        self.assertTrue(all(child["kind"] == "direction" for child in block_data["children"]))
+
+    def test_product_group_uses_the_same_lightweight_catalog_shell(self):
+        response = self.client.get(
+            "/catalog/building-materials/constructive/wood-based-panel-materials/plywood/"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "catalogInitialData")
+        self.assertContains(response, "group:plywood")
+        self.assertNotContains(response, "catalogSearchData")
+        self.assertLess(len(response.content), 150_000)
+
+    def test_robots_file_blocks_api_filters_and_gptbot(self):
+        response = self.client.get("/robots.txt")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "text/plain; charset=utf-8")
+        self.assertContains(response, "User-agent: GPTBot")
+        self.assertContains(response, "Disallow: /api/")
+        self.assertContains(response, "Disallow: /*?")
+
+    def test_filtered_vendor_page_is_noindex_with_clean_canonical(self):
+        response = self.client.get("/vendors/", {"q": "Eltex"})
+
+        self.assertContains(response, '<meta name="robots" content="noindex,follow">', html=True)
+        self.assertContains(response, '<link rel="canonical" href="http://testserver/vendors/">', html=True)
+
+
+class CatalogCrawlThrottleTests(SimpleTestCase):
+    def setUp(self):
+        cache.clear()
+        self.factory = RequestFactory()
+        self.middleware = CatalogCrawlThrottleMiddleware(lambda request: HttpResponse("ok"))
+
+    def tearDown(self):
+        cache.clear()
+
+    def test_repeated_crawler_requests_are_throttled(self):
+        for _ in range(self.middleware.crawler_limit):
+            request = self.factory.get("/catalog/", HTTP_USER_AGENT="GPTBot/1.0", REMOTE_ADDR="203.0.113.8")
+            self.assertEqual(self.middleware(request).status_code, 200)
+
+        request = self.factory.get("/catalog/", HTTP_USER_AGENT="GPTBot/1.0", REMOTE_ADDR="203.0.113.8")
+        response = self.middleware(request)
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(response["Retry-After"], str(self.middleware.window_seconds))
 
 
 class MiniRequestApiTests(TestCase):

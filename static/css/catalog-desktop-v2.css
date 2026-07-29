@@ -1,9 +1,4 @@
-.catalog-desktop-v2 {
-  display: none;
-}
-
-@media (min-width: 1181px) {
-  .catalog-page .catalog-desktop-v2 .sr-only {
+.catalog-page .catalog-desktop-v2 .sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -13,10 +8,6 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  .catalog-page .catalog-legacy-only {
-    display: none !important;
   }
 
   .catalog-page .catalog-desktop-v2 {
@@ -60,6 +51,10 @@
     box-shadow: 0 20px 54px rgba(0, 0, 0, .18);
     overflow: hidden;
     backdrop-filter: blur(10px);
+  }
+
+  .catalog-page .catalog-v2-index-head {
+    display: none;
   }
 
   .catalog-page .catalog-v2-index-list {
@@ -229,6 +224,27 @@
   .catalog-page .catalog-v2-workspace {
     min-width: 0;
     overflow-anchor: none;
+  }
+
+  .catalog-page .catalog-v2-status {
+    margin: 0 0 16px;
+    padding: 11px 13px;
+    border: 1px solid rgba(151, 174, 204, .24);
+    border-radius: 6px;
+    color: rgba(231, 238, 248, .82);
+    background: rgba(9, 24, 42, .72);
+    font-size: 13px;
+  }
+
+  .catalog-page .catalog-v2-status.is-error {
+    border-color: rgba(218, 71, 112, .58);
+    color: #ffd9e5;
+  }
+
+  .catalog-page .catalog-v2-status[hidden],
+  .catalog-page .catalog-v2-content[hidden],
+  .catalog-page .catalog-v2-blocks[hidden] {
+    display: none !important;
   }
 
   .catalog-page .catalog-v2-toolbar {
@@ -895,6 +911,212 @@
     }
   }
 
+  @media (max-width: 1180px) {
+    .catalog-page .catalog-desktop-v2 {
+      min-height: auto;
+      padding: 20px 0 52px;
+    }
+
+    .catalog-page .catalog-desktop-v2::before {
+      background: linear-gradient(180deg, rgba(2, 10, 20, .16), rgba(6, 17, 31, .03));
+    }
+
+    .catalog-page .catalog-v2-frame {
+      width: min(100% - 24px, 760px);
+      padding-left: 0;
+      display: block;
+    }
+
+    .catalog-page .catalog-v2-index {
+      position: relative;
+      top: auto;
+      margin-bottom: 16px;
+    }
+
+    .catalog-page .catalog-v2-index-head {
+      min-height: 50px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .catalog-page .catalog-v2-index-head > span {
+      color: rgba(226, 235, 246, .72);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .catalog-page .catalog-v2-index-head button {
+      min-height: 36px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(184, 204, 228, .25);
+      border-radius: 6px;
+      color: #f4f7fb;
+      background: rgba(255, 255, 255, .04);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .catalog-page .catalog-v2-index-head i {
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform .2s ease;
+    }
+
+    .catalog-page .is-index-open .catalog-v2-index-head i {
+      transform: rotate(225deg) translate(-2px, -2px);
+    }
+
+    .catalog-page .catalog-v2-index-list {
+      max-height: 0;
+      padding-block: 0;
+      overflow: hidden;
+      transition: max-height .25s ease, padding .25s ease;
+    }
+
+    .catalog-page .is-index-open .catalog-v2-index-list {
+      max-height: 55vh;
+      padding-block: 8px;
+      overflow-y: auto;
+      border-top: 1px solid rgba(151, 174, 204, .16);
+    }
+
+    .catalog-page .catalog-v2-toolbar {
+      min-height: 0;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .catalog-page .catalog-v2-toolbar h1 {
+      font-size: 30px;
+      white-space: normal;
+    }
+
+    .catalog-page .catalog-v2-search {
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .catalog-page .catalog-v2-search-button,
+    .catalog-page .catalog-v2-search-field input {
+      min-height: 46px;
+    }
+
+    .catalog-page .catalog-v2-search-results {
+      right: 0;
+      left: -54px;
+      max-height: 60vh;
+    }
+
+    .catalog-page .catalog-v2-block-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .catalog-page .catalog-v2-block-card {
+      height: 180px;
+    }
+
+    .catalog-page .catalog-v2-content {
+      padding-top: 28px;
+      scroll-margin-top: 76px;
+    }
+
+    .catalog-page .catalog-v2-content-head {
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .catalog-page .catalog-v2-content-head h2 {
+      font-size: 25px;
+    }
+
+    .catalog-page .catalog-v2-back {
+      min-width: 84px;
+      min-height: 40px;
+      padding: 0 10px;
+    }
+
+    .catalog-page .catalog-v2-system-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: 170px;
+      gap: 10px;
+    }
+
+    .catalog-page .catalog-v2-system-grid[data-catalog-v2-count] .catalog-v2-system-card {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    .catalog-page .catalog-v2-product-hero,
+    .catalog-page .catalog-v2-passport-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-page .catalog-v2-product-hero {
+      min-height: 0;
+    }
+
+    .catalog-page .catalog-v2-product-hero > img {
+      width: 100%;
+      height: 210px;
+    }
+
+    .catalog-page .catalog-v2-product-hero-copy {
+      padding: 22px;
+    }
+
+    .catalog-page .catalog-v2-vendor-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .catalog-page .catalog-v2-block-grid,
+    .catalog-page .catalog-v2-system-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-page .catalog-v2-block-card,
+    .catalog-page .catalog-v2-system-grid {
+      grid-auto-rows: auto;
+    }
+
+    .catalog-page .catalog-v2-block-card,
+    .catalog-page .catalog-v2-system-card {
+      min-height: 168px;
+    }
+
+    .catalog-page .catalog-v2-content-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .catalog-page .catalog-v2-back {
+      align-self: stretch;
+    }
+
+    .catalog-page .catalog-v2-product-hero-copy h2 {
+      font-size: 26px;
+    }
+
+    .catalog-page .catalog-v2-passport-panel {
+      padding: 16px;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .catalog-page .catalog-desktop-v2 *,
     .catalog-page .catalog-desktop-v2 *::before,
@@ -905,4 +1127,3 @@
       animation-iteration-count: 1 !important;
     }
   }
-}

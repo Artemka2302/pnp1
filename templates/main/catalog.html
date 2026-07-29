@@ -1,20 +1,28 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Каталог поставки — ПНП{% endblock %}
-{% block body_class %}catalog-page catalog-master-site-preview catalog-master-public{% endblock %}
+{% block title %}{{ catalog_page_title }} — ПНП{% endblock %}
+{% block body_class %}catalog-page{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260729-catalog-tree-v4">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260729-catalog-lazy-v1">
 {% endblock %}
 
 {% block content %}
-{{ catalog_interactive_data|json_script:"catalogInteractiveData" }}
+{{ catalog_initial_data|json_script:"catalogInitialData" }}
 
 <section class="catalog-desktop-v2" data-catalog-v2 aria-label="Каталог поставки">
   <div class="catalog-v2-frame">
-    <aside class="catalog-v2-index" aria-label="Навигация по уровням каталога">
-      <ul class="catalog-v2-index-list" data-catalog-v2-index role="tree"></ul>
+    <aside class="catalog-v2-index" aria-label="Разделы каталога">
+      <div class="catalog-v2-index-head">
+        <span>Структура каталога</span>
+        <button type="button" data-catalog-v2-index-toggle aria-expanded="false" aria-controls="catalogV2IndexList">
+          <span>Разделы</span>
+          <i aria-hidden="true"></i>
+        </button>
+      </div>
+      <ul class="catalog-v2-index-list" id="catalogV2IndexList" data-catalog-v2-index role="tree"></ul>
     </aside>
 
     <div class="catalog-v2-workspace">
@@ -29,22 +37,24 @@
           </button>
           <div class="catalog-v2-search-field">
             <label class="sr-only" for="catalogV2Search">Поиск по каталогу</label>
-            <input id="catalogV2Search" type="search" placeholder="Найти раздел, систему или материал" autocomplete="off" data-catalog-v2-search>
+            <input id="catalogV2Search" type="search" placeholder="Материал, система или производитель" autocomplete="off" data-catalog-v2-search>
             <div class="catalog-v2-search-results" data-catalog-v2-search-results hidden></div>
           </div>
         </div>
       </header>
 
-      <section class="catalog-v2-blocks" aria-label="Глобальные блоки каталога">
+      <div class="catalog-v2-status" data-catalog-v2-status role="status" hidden></div>
+
+      <section class="catalog-v2-blocks" aria-label="Основные разделы каталога" data-catalog-v2-block-section>
         <div class="catalog-v2-block-grid" data-catalog-v2-blocks></div>
       </section>
 
-      <section class="catalog-v2-content" aria-live="polite">
+      <section class="catalog-v2-content" data-catalog-v2-content-section aria-live="polite" hidden>
         <nav class="catalog-v2-breadcrumbs" aria-label="Путь в каталоге" data-catalog-v2-breadcrumbs hidden></nav>
         <div class="catalog-v2-content-head">
           <div>
             <span class="catalog-v2-kicker" data-catalog-v2-kicker hidden></span>
-            <h2 data-catalog-v2-title>Направления</h2>
+            <h2 data-catalog-v2-title></h2>
           </div>
           <button class="catalog-v2-back" type="button" data-catalog-v2-back hidden>
             <span aria-hidden="true">←</span> Назад
@@ -55,100 +65,8 @@
     </div>
   </div>
 </section>
-
-<section class="hero hero-small catalog-hero catalog-legacy-only">
-  <div class="vertical-accent"></div>
-  <div class="container">
-    <div class="eyebrow">Каталог</div>
-    <h1>Каталог <span class="accent-word">поставки по разделам проекта</span></h1>
-    <p class="hero-subtitle">Каталог построен по уровням: от глобального блока до направления, системы, товарной группы, типа продукции и производителей.</p>
-    <div class="hero-features catalog-hero-features">
-      <div class="feature-mini"><i aria-hidden="true">01</i><span>{{ stats.blocks }} блоков<br>глобальной поставки</span></div>
-      <div class="feature-mini"><i aria-hidden="true">02</i><span>{{ stats.directions }} направлений<br>по разделам проекта</span></div>
-      <div class="feature-mini"><i aria-hidden="true">03</i><span>{{ stats.systems }} систем<br>для быстрого выбора</span></div>
-      <div class="feature-mini"><i aria-hidden="true">04</i><span>{{ stats.groups }} групп<br>с привязкой к брендам</span></div>
-    </div>
-  </div>
-</section>
-
-{% comment %}
-<section class="section compact catalog-level-section" id="catalogLevelNavigator">
-  <div class="container">
-    <div class="catalog-level-head">
-      <div>
-        <span class="soft-label">Каталог по уровням</span>
-        <h2>Подберите позицию по структуре проекта</h2>
-      </div>
-      <a class="link-more" href="{% url 'contacts' %}#request-form">Перейти к заявке →</a>
-    </div>
-
-    <div class="catalog-level-shell" data-catalog-level-shell>
-      <aside class="catalog-level-sidebar">
-        <div class="catalog-level-search">
-          <label for="catalogLevelSearch">Поиск по каталогу</label>
-          <input id="catalogLevelSearch" type="search" data-catalog-level-search placeholder="Найти раздел, систему или материал" autocomplete="off">
-        </div>
-        <div class="catalog-level-tree" data-catalog-level-tree aria-label="Разделы каталога"></div>
-      </aside>
-
-      <main class="catalog-level-main">
-        <nav class="catalog-level-breadcrumbs" data-catalog-level-breadcrumbs aria-label="Путь в каталоге"></nav>
-
-        <article class="catalog-level-hero" data-catalog-level-hero>
-          <div class="catalog-level-hero-copy">
-            <span class="catalog-level-kicker" data-catalog-level-kicker></span>
-            <h3 class="catalog-level-title" data-catalog-level-title></h3>
-            <p class="catalog-level-summary" data-catalog-level-summary></p>
-            <div class="catalog-level-stats" data-catalog-level-stats></div>
-          </div>
-          <div class="catalog-level-hero-media" data-catalog-level-media></div>
-        </article>
-
-        <div class="catalog-level-subhead">
-          <div>
-            <h3 data-catalog-level-list-title>Выберите раздел</h3>
-          </div>
-          <a class="btn ghost small" data-catalog-level-open href="{% url 'catalog' %}">Открыть страницу</a>
-        </div>
-
-        <div class="catalog-level-card-grid" data-catalog-level-cards></div>
-        <aside class="catalog-level-selection-panel" data-catalog-selection-panel hidden aria-live="polite"></aside>
-      </main>
-    </div>
-
-    {{ catalog_level_data|json_script:"catalogLevelData" }}
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <div>
-        <span class="soft-label">База комплектации</span>
-        <h2>Основные блоки поставки</h2>
-{% endcomment %}
-<section class="section catalog-section catalog-legacy-only">
-  <div class="container catalog-layout">
-    {% include "main/partials/catalog_nav.html" %}
-
-    <div class="catalog-main" data-catalog-stage>
-      <div class="section-head" data-catalog-stage-head>
-        <div>
-          <h2 data-catalog-stage-title>Глобальные блоки</h2>
-        </div>
-        <a class="link-more" href="{% url 'contacts' %}#request-form">Отправить заявку →</a>
-      </div>
-
-      <div class="catalog-level-grid catalog-block-grid" data-catalog-card-grid>
-        {% for item in blocks %}
-          {% include "main/partials/catalog_card.html" with card_level="Блок" %}
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-</section>
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260729-catalog-tree-v4"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260729-catalog-lazy-v1"></script>
 {% endblock %}

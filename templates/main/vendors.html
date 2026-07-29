@@ -3,6 +3,11 @@
 
 {% block title %}Производители под требования проекта — ПНП{% endblock %}
 
+{% block extra_head %}
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{% url 'vendors' %}">
+  {% if request.GET %}<meta name="robots" content="noindex,follow">{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="hero hero-small vendors-hero">
   <div class="vertical-accent"></div>

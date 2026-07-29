@@ -5,6 +5,7 @@ from pathlib import Path
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
+from main.catalog import invalidate_catalog_cache
 from main.models import (
     CatalogBlock,
     CatalogSystem,
@@ -71,6 +72,7 @@ class Command(BaseCommand):
             stats.update(self.import_vendor_map(source_dir / "catalog_vendor_map.csv"))
             stats.update(self.import_partners(source_dir / "partners.json"))
 
+        invalidate_catalog_cache()
         self.stdout.write(self.style.SUCCESS("PNP import completed"))
         for key, value in stats.items():
             self.stdout.write(f"{key}: {value}")

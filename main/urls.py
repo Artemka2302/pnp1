@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path("health/", views.healthcheck, name="healthcheck"),
+    path("robots.txt", views.robots_txt, name="robots_txt"),
     path("", views.index, name="index"),
     path("about/", views.about, name="about"),
     path("contacts/", views.contacts, name="contacts"),
@@ -31,6 +32,7 @@ urlpatterns = [
     path("vendors/", views.vendors, name="vendors"),
     path("partners/", views.partners, name="partners"),
     path("api/catalog-search/", views.catalog_search_api, name="api_catalog_search"),
+    path("api/catalog-node/", views.catalog_node_api, name="api_catalog_node"),
     path("api/ai-chat/", views.ai_chat_api, name="api_ai_chat"),
     path("api/catalog-request/", views.catalog_request_api, name="api_catalog_request"),
     path("api/mini-request/", views.catalog_request_api, name="api_mini_request"),

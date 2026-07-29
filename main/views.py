@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 from django.core.validators import validate_email
 from django.db import connection, transaction
 from django.db.models import Count, Prefetch, Q
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -54,6 +54,7 @@ from .compliance import (
     COOKIE_TEXT_VERSION,
     PRIVACY_VERSION,
 )
+from .catalog import catalog_cache_key, catalog_initial_data, catalog_node_id, get_catalog_node
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +81,21 @@ def healthcheck(request):
     return JsonResponse({"ok": True})
 
 
+@require_GET
+def robots_txt(request):
+    content = """User-agent: GPTBot
+Disallow: /
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*?
+"""
+    response = HttpResponse(content, content_type="text/plain; charset=utf-8")
+    response["Cache-Control"] = "public, max-age=86400"
+    return response
+
+
 def first_existing_static_path(*paths):
     for path in paths:
         if finders.find(path):
@@ -99,344 +115,6 @@ def catalog_queryset():
             ),
         )
     )
-
-
-def catalog_tree_queryset():
-    return CatalogBlock.objects.prefetch_related(
-        Prefetch(
-            "directions",
-            queryset=Direction.objects.prefetch_related(
-                Prefetch(
-                    "systems",
-                    queryset=CatalogSystem.objects.prefetch_related("product_groups"),
-                )
-            ),
-        )
-    ).order_by("sort_order", "title")
-
-
-def block_cards_queryset():
-    return CatalogBlock.objects.prefetch_related("directions").annotate(
-        direction_count=Count("directions", distinct=True),
-        system_count=Count("directions__systems", distinct=True),
-        group_count=Count("directions__systems__product_groups", distinct=True),
-        type_count=Count("directions__systems__product_groups__types", distinct=True),
-        vendor_count=Count("directions__systems__product_groups__vendors", distinct=True),
-    )
-
-
-def direction_cards_queryset():
-    return Direction.objects.select_related("block").prefetch_related("systems").annotate(
-        system_count=Count("systems", distinct=True),
-        group_count=Count("systems__product_groups", distinct=True),
-        type_count=Count("systems__product_groups__types", distinct=True),
-        vendor_count=Count("systems__product_groups__vendors", distinct=True),
-    )
-
-
-def system_cards_queryset():
-    return CatalogSystem.objects.select_related("direction__block").prefetch_related("product_groups").annotate(
-        group_count=Count("product_groups", distinct=True),
-        type_count=Count("product_groups__types", distinct=True),
-        vendor_count=Count("product_groups__vendors", distinct=True),
-    )
-
-
-def product_group_cards_queryset():
-    return ProductGroup.objects.select_related("system__direction__block").prefetch_related("types", "vendors").annotate(
-        type_count=Count("types", distinct=True),
-        vendor_count=Count("vendors", distinct=True),
-    )
-
-
-def catalog_stats():
-    return {
-        "blocks": CatalogBlock.objects.count(),
-        "directions": Direction.objects.count(),
-        "systems": CatalogSystem.objects.count(),
-        "groups": ProductGroup.objects.count(),
-        "types": ProductType.objects.count(),
-        "vendors": Vendor.objects.count(),
-    }
-
-
-def catalog_search_items():
-    items = []
-
-    for block in CatalogBlock.objects.all():
-        items.append(
-            {
-                "level": "Блок",
-                "title": block.title,
-                "url": block.get_absolute_url(),
-                "target": f"block:{block.slug}",
-                "path": block.title,
-                "aliases": [],
-            }
-        )
-
-    for direction in Direction.objects.select_related("block"):
-        aliases = []
-        if direction.slug == "it-infrastructure":
-            aliases.extend(["ит", "it"])
-        if direction.slug == "eom":
-            aliases.extend(["эом", "электрика"])
-        if direction.slug == "hvac":
-            aliases.extend(["овик", "овик и тепловые сети", "вентиляция", "кондиционирование"])
-        items.append(
-            {
-                "level": "Направление",
-                "title": direction.title,
-                "url": direction.get_absolute_url(),
-                "target": f"direction:{direction.slug}",
-                "path": f"{direction.block.title} / {direction.title}",
-                "aliases": aliases,
-            }
-        )
-
-    for system in CatalogSystem.objects.select_related("direction__block"):
-        aliases = []
-        if "ПО" in system.title or "Программ" in system.title:
-            aliases.extend(["по", "software", "программное обеспечение"])
-        if "ОВиК" in system.title:
-            aliases.extend(["овик"])
-        items.append(
-            {
-                "level": "Система",
-                "title": system.title,
-                "url": system.get_absolute_url(),
-                "target": f"system:{system.slug}",
-                "path": f"{system.direction.block.title} / {system.direction.title} / {system.title}",
-                "aliases": aliases,
-            }
-        )
-
-    for group in ProductGroup.objects.select_related("system__direction__block").prefetch_related("types"):
-        type_titles = [item.title for item in group.types.all()]
-        aliases = list(group.ai_aliases or []) + type_titles
-        if "ПО" in group.title or "Программ" in group.title:
-            aliases.extend(["по", "software", "программное обеспечение"])
-        items.append(
-            {
-                "level": "Товарная группа",
-                "title": group.title,
-                "url": group.get_absolute_url(),
-                "target": f"group:{group.slug}",
-                "path": group.catalog_path,
-                "aliases": aliases,
-            }
-        )
-
-    return items
-
-
-def catalog_image_url(path):
-    if path:
-        return static(path)
-    return static("assets/img/catalog/empty-photo-placeholder.svg")
-
-
-def catalog_display_title(value):
-    value = str(value or "")
-    if not value:
-        return value
-    return value[:1].upper() + value[1:]
-
-
-def catalog_interactive_data():
-    blocks = CatalogBlock.objects.prefetch_related(
-        Prefetch(
-            "directions",
-            queryset=Direction.objects.prefetch_related(
-                Prefetch(
-                    "systems",
-                    queryset=CatalogSystem.objects.prefetch_related(
-                        Prefetch(
-                            "product_groups",
-                            queryset=ProductGroup.objects.prefetch_related(
-                                "types",
-                                Prefetch("vendors", queryset=Vendor.objects.order_by("name")),
-                            ),
-                        )
-                    ),
-                )
-            ),
-        )
-    ).order_by("sort_order", "title")
-
-    nodes = {}
-    root_children = []
-
-    def node_id(kind, slug):
-        return f"{kind}:{slug}"
-
-    def type_count_for_groups(groups):
-        return sum(len(list(group.types.all())) for group in groups)
-
-    def vendor_count_for_groups(groups):
-        vendor_ids = set()
-        for group in groups:
-            vendor_ids.update(vendor.id for vendor in group.vendors.all())
-        return len(vendor_ids)
-
-    for block in blocks:
-        block_directions = list(block.directions.all())
-        block_systems = [system for direction in block_directions for system in direction.systems.all()]
-        block_groups = [group for system in block_systems for group in system.product_groups.all()]
-        block_id = node_id("block", block.slug)
-        root_children.append(block_id)
-        nodes[block_id] = {
-            "id": block_id,
-            "kind": "block",
-            "level": "Блок",
-            "title": block.title,
-            "summary": block.summary,
-            "image": catalog_image_url(block.image),
-            "url": block.get_absolute_url(),
-            "parent": "root",
-            "children": [node_id("direction", direction.slug) for direction in block_directions],
-            "chips": [direction.title for direction in block_directions[:4]],
-            "stats": [
-                {"label": "направлений", "value": len(block_directions)},
-                {"label": "систем", "value": len(block_systems)},
-                {"label": "групп", "value": len(block_groups)},
-            ],
-            "breadcrumbs": [{"title": "Каталог", "target": "root"}, {"title": block.title, "target": block_id}],
-        }
-
-        for direction in block_directions:
-            direction_systems = list(direction.systems.all())
-            direction_groups = [group for system in direction_systems for group in system.product_groups.all()]
-            direction_id = node_id("direction", direction.slug)
-            nodes[direction_id] = {
-                "id": direction_id,
-                "kind": "direction",
-                "level": "Направление",
-                "title": direction.title,
-                "summary": direction.purpose,
-                "image": catalog_image_url(direction.image),
-                "url": direction.get_absolute_url(),
-                "parent": block_id,
-                "children": [node_id("system", system.slug) for system in direction_systems],
-                "chips": [system.title for system in direction_systems[:4]],
-                "stats": [
-                    {"label": "систем", "value": len(direction_systems)},
-                    {"label": "групп", "value": len(direction_groups)},
-                    {"label": "типов", "value": type_count_for_groups(direction_groups)},
-                ],
-                "breadcrumbs": [
-                    {"title": "Каталог", "target": "root"},
-                    {"title": block.title, "target": block_id},
-                    {"title": direction.title, "target": direction_id},
-                ],
-            }
-
-            for system in direction_systems:
-                system_groups = list(system.product_groups.all())
-                system_id = node_id("system", system.slug)
-                nodes[system_id] = {
-                    "id": system_id,
-                    "kind": "system",
-                    "level": "Система",
-                    "title": system.title,
-                    "summary": f"Откройте товарные группы внутри системы «{system.title}».",
-                    "image": catalog_image_url(system.image),
-                    "url": system.get_absolute_url(),
-                    "parent": direction_id,
-                    "children": [node_id("group", group.slug) for group in system_groups],
-                    "chips": [group.title for group in system_groups[:4]],
-                    "stats": [
-                        {"label": "групп", "value": len(system_groups)},
-                        {"label": "типов", "value": type_count_for_groups(system_groups)},
-                        {"label": "брендов", "value": vendor_count_for_groups(system_groups)},
-                    ],
-                    "breadcrumbs": [
-                        {"title": "Каталог", "target": "root"},
-                        {"title": block.title, "target": block_id},
-                        {"title": direction.title, "target": direction_id},
-                        {"title": system.title, "target": system_id},
-                    ],
-                }
-
-                for group in system_groups:
-                    group_id = node_id("group", group.slug)
-                    group_types = list(group.types.all())
-                    group_vendors = list(group.vendors.all())
-                    nodes[group_id] = {
-                        "id": group_id,
-                        "kind": "group",
-                        "slug": group.slug,
-                        "level": "Товарная группа",
-                        "title": group.title,
-                        "summary": f"Товарная группа внутри системы «{system.title}». Помогаем уточнить исполнение, формат, объём, сроки и требования проекта.",
-                        "image": catalog_image_url(group.image),
-                        "url": group.get_absolute_url(),
-                        "parent": system_id,
-                        "children": [],
-                        "chips": [catalog_display_title(product_type.title) for product_type in group_types[:4]],
-                        "stats": [
-                            {"label": "типов", "value": len(group_types) or 1},
-                            {"label": "брендов", "value": len(group_vendors)},
-                        ],
-                        "breadcrumbs": [
-                            {"title": "Каталог", "target": "root"},
-                            {"title": block.title, "target": block_id},
-                            {"title": direction.title, "target": direction_id},
-                            {"title": system.title, "target": system_id},
-                            {"title": group.title, "target": group_id},
-                        ],
-                        "systemTitle": system.title,
-                        "types": [
-                            {"id": product_type.id, "title": catalog_display_title(product_type.title)}
-                            for product_type in group_types
-                        ] or [{"id": f"group-{group.id}", "title": group.title}],
-                        "vendors": [
-                            {
-                                "name": vendor.name,
-                                "slug": vendor.slug,
-                                "logo": catalog_image_url(vendor.logo) if vendor.logo else "",
-                                "url": f"{reverse('vendors')}?vendors={vendor.slug}#allManufacturers",
-                            }
-                            for vendor in group_vendors[:12]
-                        ],
-                    }
-
-    return {
-        "root": {
-            "id": "root",
-            "kind": "root",
-            "level": "Каталог",
-            "title": "Основные направления поставки",
-            "summary": "Каталог построен по разделам проекта: от глобального блока до товарной группы, типа продукции и производителей.",
-            "children": root_children,
-            "breadcrumbs": [{"title": "Каталог", "target": "root"}],
-        },
-        "nodes": nodes,
-    }
-
-
-def catalog_base_context(active=None, breadcrumbs=None):
-    return {
-        "catalog_tree": catalog_tree_queryset(),
-        "catalog_search_items": catalog_search_items(),
-        "catalog_interactive_data": catalog_interactive_data(),
-        "active_catalog": active or {},
-        "breadcrumbs": breadcrumbs or [{"title": "Каталог", "url": reverse("catalog")}],
-        "stats": catalog_stats(),
-    }
-
-
-def level_context(*, request, level, object_, children, child_level, breadcrumbs, active):
-    context = catalog_base_context(active=active, breadcrumbs=breadcrumbs)
-    context.update(
-        {
-            "level": level,
-            "object": object_,
-            "children": children,
-            "child_level": child_level,
-        }
-    )
-    return context
 
 
 def index(request):
@@ -486,177 +164,6 @@ def contacts(request):
     )
 
 
-def catalog_node_image(image, fallback="assets/img/catalog/empty-photo-placeholder.svg"):
-    return static(image or fallback)
-
-
-def catalog_block_node_id(block):
-    return f"block:{block.slug}"
-
-
-def catalog_direction_node_id(direction):
-    return f"direction:{direction.slug}"
-
-
-def catalog_system_node_id(direction, system):
-    return f"system:{direction.slug}:{system.slug}"
-
-
-def catalog_group_node_id(direction, system, group):
-    return f"group:{direction.slug}:{system.slug}:{group.slug}"
-
-
-def catalog_vendor_payload(vendor):
-    return {
-        "name": vendor.name,
-        "slug": vendor.slug,
-        "logo": static(vendor.logo) if vendor.logo else "",
-        "site": vendor.official_site,
-        "url": f"{reverse('vendors')}?{urlencode([('vendors', vendor.slug)])}#vendorRowsSection",
-    }
-
-
-def catalog_tree_data():
-    product_group_qs = ProductGroup.objects.prefetch_related(
-        "types",
-        "attributes",
-        Prefetch("vendors", queryset=Vendor.objects.order_by("name")),
-    )
-    system_qs = CatalogSystem.objects.prefetch_related(
-        Prefetch("product_groups", queryset=product_group_qs),
-    )
-    direction_qs = Direction.objects.prefetch_related(
-        Prefetch("systems", queryset=system_qs),
-    )
-    blocks = CatalogBlock.objects.prefetch_related(
-        Prefetch("directions", queryset=direction_qs),
-    ).order_by("sort_order", "title")
-
-    roots = []
-    nodes = {}
-
-    for block in blocks:
-        block_id = catalog_block_node_id(block)
-        roots.append(block_id)
-        directions = list(block.directions.all())
-        block_systems = [system for direction in directions for system in direction.systems.all()]
-        block_groups = [group for system in block_systems for group in system.product_groups.all()]
-        nodes[block_id] = {
-            "children": [catalog_direction_node_id(direction) for direction in directions],
-            "productTypes": [],
-            "brands": [],
-            "manufacturers": [],
-            "attributes": [],
-            "aliases": [],
-            "stats": [
-                {"value": len(directions), "label": "направлений"},
-                {"value": len(block_systems), "label": "систем"},
-                {"value": len(block_groups), "label": "групп"},
-            ],
-            "id": block_id,
-            "level": "global_block",
-            "label": "Блок",
-            "title": block.title,
-            "summary": block.summary,
-            "image": catalog_node_image(block.image, "assets/img/hero-cover.webp"),
-            "url": reverse("catalog_block", args=[block.slug]),
-            "path": [block.title],
-        }
-
-        for direction in directions:
-            direction_id = catalog_direction_node_id(direction)
-            systems = list(direction.systems.all())
-            direction_groups = [group for system in systems for group in system.product_groups.all()]
-            direction_type_count = sum(group.types.count() for group in direction_groups)
-            nodes[direction_id] = {
-                "children": [catalog_system_node_id(direction, system) for system in systems],
-                "productTypes": [],
-                "brands": [],
-                "manufacturers": [],
-                "attributes": [],
-                "aliases": [],
-                "stats": [
-                    {"value": len(systems), "label": "систем"},
-                    {"value": len(direction_groups), "label": "групп"},
-                    {"value": direction_type_count, "label": "типов"},
-                ],
-                "id": direction_id,
-                "parent": block_id,
-                "level": "direction",
-                "label": "Направление",
-                "title": direction.title,
-                "summary": direction.purpose or block.title,
-                "image": catalog_node_image(direction.image, "assets/img/hero-cover.webp"),
-                "url": reverse("catalog_direction", args=[block.slug, direction.slug]),
-                "path": [block.title, direction.title],
-            }
-
-            for system in systems:
-                system_id = catalog_system_node_id(direction, system)
-                groups = list(system.product_groups.all())
-                system_vendors = {}
-                for group in groups:
-                    for vendor in group.vendors.all():
-                        system_vendors.setdefault(vendor.slug, vendor)
-                nodes[system_id] = {
-                    "children": [catalog_group_node_id(direction, system, group) for group in groups],
-                    "productTypes": [],
-                    "brands": [vendor.name for vendor in system_vendors.values()],
-                    "manufacturers": [catalog_vendor_payload(vendor) for vendor in list(system_vendors.values())[:12]],
-                    "attributes": [],
-                    "aliases": [],
-                    "stats": [
-                        {"value": len(groups), "label": "групп"},
-                        {"value": sum(group.types.count() for group in groups), "label": "типов"},
-                        {"value": len(system_vendors), "label": "брендов"},
-                    ],
-                    "id": system_id,
-                    "parent": direction_id,
-                    "level": "system",
-                    "label": "Система",
-                    "title": system.title,
-                    "summary": f"Подбор внутри раздела «{direction.title}»: проверяем назначение, совместимость, сроки и требования проекта.",
-                    "image": catalog_node_image(system.image),
-                    "url": reverse("catalog_system", args=[block.slug, direction.slug, system.slug]),
-                    "path": [block.title, direction.title, system.title],
-                }
-
-                for group in groups:
-                    group_id = catalog_group_node_id(direction, system, group)
-                    types = [product_type.title for product_type in group.types.all()]
-                    attributes = [attribute.title for attribute in group.attributes.all()]
-                    vendors = list(group.vendors.all())
-                    nodes[group_id] = {
-                        "children": [],
-                        "productTypes": types,
-                        "brands": [vendor.name for vendor in vendors],
-                        "manufacturers": [catalog_vendor_payload(vendor) for vendor in vendors[:12]],
-                        "attributes": attributes,
-                        "aliases": group.ai_aliases or [],
-                        "stats": [
-                            {"value": len(types), "label": "типов"},
-                            {"value": len(vendors), "label": "брендов"},
-                            {"value": len(attributes), "label": "характеристик"},
-                        ],
-                        "id": group_id,
-                        "parent": system_id,
-                        "level": "product_group",
-                        "label": "Товарная группа",
-                        "title": group.title,
-                        "summary": group.crm_comment_hint
-                        or f"Товарная группа внутри системы «{system.title}». Помогаем уточнить исполнение, формат, объём, сроки и требования проекта.",
-                        "image": catalog_node_image(group.image),
-                        "url": reverse("product_group", args=[block.slug, direction.slug, system.slug, group.slug]),
-                        "path": [block.title, direction.title, system.title, group.title],
-                    }
-
-    return {
-        "roots": roots,
-        "nodes": nodes,
-        "initialActiveId": roots[0] if roots else "",
-    }
-
-
 def privacy(request):
     return render(request, "main/privacy.html")
 
@@ -665,15 +172,20 @@ def consent(request):
     return render(request, "main/consent.html")
 
 
-def catalog(request):
-    blocks = block_cards_queryset()
-    context = catalog_base_context()
-    context.update({"blocks": blocks})
+def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):
     return render(
         request,
         "main/catalog.html",
-        context,
+        {
+            "catalog_initial_data": catalog_initial_data(initial_target),
+            "catalog_page_title": page_title,
+            "canonical_url": request.build_absolute_uri(request.path),
+        },
     )
+
+
+def catalog(request):
+    return render_catalog_page(request)
 
 
 def group_path_parts(group):
@@ -697,7 +209,18 @@ def group_url(group):
     )
 
 
-def catalog_result_item(kind, title, path_parts, url, summary="", request_item="", vendors=None, related_groups=None, logo_url=""):
+def catalog_result_item(
+    kind,
+    title,
+    path_parts,
+    url,
+    summary="",
+    request_item="",
+    vendors=None,
+    related_groups=None,
+    logo_url="",
+    target="",
+):
     return {
         "kind": kind,
         "title": title,
@@ -708,6 +231,7 @@ def catalog_result_item(kind, title, path_parts, url, summary="", request_item="
         "vendors": vendors or [],
         "related_groups": related_groups or [],
         "logo_url": logo_url,
+        "target": target,
     }
 
 
@@ -728,6 +252,7 @@ def catalog_group_result(group):
         summary=group.crm_comment_hint or group.system.title,
         request_item=f"{group.system.title}|{group.title}|{group.title}",
         vendors=vendors,
+        target=catalog_node_id("group", group.slug),
     )
 
 
@@ -740,6 +265,7 @@ def catalog_type_result(product_type):
         group_url(group),
         summary=f"{group.system.title} / {group.title}",
         request_item=f"{group.system.title}|{group.title}|{product_type.title.capitalize()}",
+        target=catalog_node_id("group", group.slug),
     )
 
 
@@ -784,6 +310,7 @@ def catalog_search_groups(query):
                 [block.title],
                 reverse("catalog_block", args=[block.slug]),
                 summary=block.summary,
+                target=catalog_node_id("block", block.slug),
             )
         )
 
@@ -801,6 +328,7 @@ def catalog_search_groups(query):
                 [direction.block.title, direction.title],
                 reverse("catalog_direction", args=[direction.block.slug, direction.slug]),
                 summary=direction.purpose or direction.block.title,
+                target=catalog_node_id("direction", direction.slug),
             )
         )
 
@@ -825,6 +353,7 @@ def catalog_search_groups(query):
                     args=[system.direction.block.slug, system.direction.slug, system.slug],
                 ),
                 summary=system.direction.title,
+                target=catalog_node_id("system", system.slug),
             )
         )
 
@@ -896,8 +425,15 @@ def catalog_search_groups(query):
 
 
 def catalog_search_api(request):
-    query = request.GET.get("q", "").strip()
-    result_groups = catalog_search_groups(query)
+    query = request.GET.get("q", "").strip()[:120]
+    result_groups = []
+    if len(query) >= 2:
+        query_hash = hashlib.sha256(query.casefold().encode("utf-8")).hexdigest()
+        cache_key = catalog_cache_key("search", query_hash)
+        result_groups = cache.get(cache_key)
+        if result_groups is None:
+            result_groups = catalog_search_groups(query)
+            cache.set(cache_key, result_groups, timeout=5 * 60)
     total_count = sum(len(group["items"]) for group in result_groups)
     context = {
         "query": query,
@@ -908,115 +444,77 @@ def catalog_search_api(request):
         {
             "html": render_to_string("main/partials/catalog_search_results.html", context, request=request),
             "total_count": total_count,
+            "groups": result_groups,
         }
     )
 
 
+@require_GET
+def catalog_node_api(request):
+    target = request.GET.get("id", "root").strip()[:220] or "root"
+    return JsonResponse({"ok": True, **get_catalog_node(target)})
+
+
 def catalog_block(request, block_slug):
-    block = get_object_or_404(block_cards_queryset(), slug=block_slug)
-    children = direction_cards_queryset().filter(block=block)
-    return render(
+    block = get_object_or_404(CatalogBlock.objects.only("slug", "title"), slug=block_slug)
+    return render_catalog_page(
         request,
-        "main/catalog_level.html",
-        level_context(
-            request=request,
-            level="Блок",
-            object_=block,
-            children=children,
-            child_level="Направление",
-            breadcrumbs=[{"title": "Каталог", "url": reverse("catalog")}, {"title": block.title, "url": ""}],
-            active={"block": block.slug},
-        ),
+        initial_target=catalog_node_id("block", block.slug),
+        page_title=block.title,
     )
 
 
 def catalog_direction(request, block_slug, direction_slug):
     direction = get_object_or_404(
-        direction_cards_queryset(),
+        Direction.objects.select_related("block").only("slug", "title", "block__slug"),
         slug=direction_slug,
         block__slug=block_slug,
     )
-    children = system_cards_queryset().filter(direction=direction)
-    return render(
+    return render_catalog_page(
         request,
-        "main/catalog_level.html",
-        level_context(
-            request=request,
-            level="Направление",
-            object_=direction,
-            children=children,
-            child_level="Система",
-            breadcrumbs=[
-                {"title": "Каталог", "url": reverse("catalog")},
-                {"title": direction.block.title, "url": direction.block.get_absolute_url()},
-                {"title": direction.title, "url": ""},
-            ],
-            active={"block": direction.block.slug, "direction": direction.slug},
-        ),
+        initial_target=catalog_node_id("direction", direction.slug),
+        page_title=direction.title,
     )
 
 
 def catalog_system(request, block_slug, direction_slug, system_slug):
     system = get_object_or_404(
-        system_cards_queryset(),
+        CatalogSystem.objects.select_related("direction__block").only(
+            "slug",
+            "title",
+            "direction__slug",
+            "direction__block__slug",
+        ),
         slug=system_slug,
         direction__slug=direction_slug,
         direction__block__slug=block_slug,
     )
-    children = product_group_cards_queryset().filter(system=system)
-    return render(
+    return render_catalog_page(
         request,
-        "main/catalog_level.html",
-        level_context(
-            request=request,
-            level="Система",
-            object_=system,
-            children=children,
-            child_level="Товарная группа",
-            breadcrumbs=[
-                {"title": "Каталог", "url": reverse("catalog")},
-                {"title": system.direction.block.title, "url": system.direction.block.get_absolute_url()},
-                {"title": system.direction.title, "url": system.direction.get_absolute_url()},
-                {"title": system.title, "url": ""},
-            ],
-            active={
-                "block": system.direction.block.slug,
-                "direction": system.direction.slug,
-                "system": system.slug,
-            },
-        ),
+        initial_target=catalog_node_id("system", system.slug),
+        page_title=system.title,
     )
 
 
 def product_group(request, block_slug, direction_slug, system_slug, group_slug):
     group = get_object_or_404(
-        ProductGroup.objects.select_related("system__direction__block").prefetch_related(
-            "types",
-            "attributes",
-            Prefetch("vendors", queryset=Vendor.objects.order_by("name")),
+        ProductGroup.objects.select_related("system__direction__block").only(
+            "slug",
+            "title",
+            "system__slug",
+            "system__direction__slug",
+            "system__direction__block__slug",
         ),
         slug=group_slug,
         system__slug=system_slug,
         system__direction__slug=direction_slug,
         system__direction__block__slug=block_slug,
     )
-    context = catalog_base_context(
-        active={
-            "block": group.system.direction.block.slug,
-            "direction": group.system.direction.slug,
-            "system": group.system.slug,
-            "group": group.slug,
-        },
-        breadcrumbs=[
-            {"title": "Каталог", "url": reverse("catalog")},
-            {"title": group.system.direction.block.title, "url": group.system.direction.block.get_absolute_url()},
-            {"title": group.system.direction.title, "url": group.system.direction.get_absolute_url()},
-            {"title": group.system.title, "url": group.system.get_absolute_url()},
-            {"title": group.title, "url": ""},
-        ],
+    return render_catalog_page(
+        request,
+        initial_target=catalog_node_id("group", group.slug),
+        page_title=group.title,
     )
-    context.update({"group": group})
-    return render(request, "main/product_group.html", context)
 
 
 def request_param(request, *names):
