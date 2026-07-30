@@ -81,7 +81,17 @@
                       "требования по акустике или влагостойкости",
                       "нужны ли комплектующие"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "saint-gobain",
+                      "name": "Saint-Gobain",
+                      "official_site": "https://www.saint-gobain.ru/",
+                      "logo": "assets/img/logos/approved-top/saint-gobain.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 }
               ],
               "image": "assets/img/catalog/generated/system-architecture-ceilings.webp"
@@ -1129,7 +1139,24 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "tehnonikol",
+                      "name": "Технониколь",
+                      "official_site": "https://www.tn.ru/",
+                      "logo": "assets/img/logos/approved-top/tehnonikol.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "saint-gobain",
+                      "name": "Saint-Gobain",
+                      "official_site": "https://www.saint-gobain.ru/",
+                      "logo": "assets/img/logos/approved-top/saint-gobain.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Архитектурные решения",
                     "comment_hint": "Утеплитель: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -1365,7 +1392,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "saint-gobain",
+                      "name": "Saint-Gobain",
+                      "official_site": "https://www.saint-gobain.ru/",
+                      "logo": "assets/img/logos/approved-top/saint-gobain.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Архитектурные решения",
                     "comment_hint": "Сухие смеси: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -1456,7 +1492,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "tehnonikol",
+                      "name": "Технониколь",
+                      "official_site": "https://www.tn.ru/",
+                      "logo": "assets/img/logos/approved-top/tehnonikol.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Архитектурные решения",
                     "comment_hint": "Кровельные системы: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -1522,14 +1567,7 @@
                     "Липковский кирпичный завод",
                     "Керамин"
                   ],
-                  "vendors": [
-                    "ООО «Липковский кирпичный завод»",
-                    "ОАО «Голицынский керамический завод»",
-                    "АО «Керамика» / Ломинцевский кирпичный завод",
-                    "АО «Силикат»",
-                    "ООО «Богандинский кирпичный завод»",
-                    "ОАО «Ново-Иерусалимский кирпичный завод»"
-                  ],
+                  "vendors": [],
                   "crm": {
                     "category": "Конструктивные решения",
                     "comment_hint": "Кирпич: тип, формат, марка, морозостойкость, объем, фуры/паллеты, город."
@@ -1818,7 +1856,17 @@
                       "основание",
                       "условия эксплуатации"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "tehnonikol",
+                      "name": "Технониколь",
+                      "official_site": "https://www.tn.ru/",
+                      "logo": "assets/img/logos/approved-top/tehnonikol.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "metal",
@@ -2166,7 +2214,17 @@
                       "если клиент пишет 'без комплектующих', не навязывать комплектующие",
                       "если клиент отменяет ГКЛ, удалить ГКЛ из активной заявки"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "saint-gobain",
+                      "name": "Saint-Gobain",
+                      "official_site": "https://www.saint-gobain.ru/",
+                      "logo": "assets/img/logos/approved-top/saint-gobain.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "gypsum-partition-blocks",
@@ -4933,7 +4991,17 @@
                       "требования к обеззараживанию",
                       "количество"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "korf",
+                      "name": "KORF",
+                      "official_site": "https://po-korf.ru/",
+                      "logo": "assets/img/logos/approved-top/korf.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "ventilation-system",
@@ -4984,7 +5052,25 @@
                       "тип объекта",
                       "нужна ли автоматика и комплектующие"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "korf",
+                      "name": "KORF",
+                      "official_site": "https://po-korf.ru/",
+                      "logo": "assets/img/logos/approved-top/korf.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "ned",
+                      "name": "NED",
+                      "official_site": "https://air-ned.com/",
+                      "logo": "assets/img/logos/approved-top/ned.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 }
               ],
               "image": "assets/img/catalog/generated/system-hvac-air-ventilation.webp"
@@ -5967,7 +6053,17 @@
                       "архив в днях",
                       "есть ли проект или план"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "iss",
+                      "name": "ISS SecurOS",
+                      "official_site": "https://www.iss.ru/",
+                      "logo": "assets/img/logos/approved-top/iss.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "active-lan-equipment",
@@ -6001,8 +6097,8 @@
                       "name": "Eltex",
                       "slug": "eltex",
                       "official_site": "https://eltex.ru/",
-                      "logo": "assets/img/logos/vendors/eltex.svg",
-                      "status": "logo_ready",
+                      "logo": "assets/img/logos/approved-top/eltex.png",
+                      "status": "approved_top",
                       "confidence": "high"
                     }
                   ],
@@ -6052,7 +6148,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "iss",
+                      "name": "ISS SecurOS",
+                      "official_site": "https://www.iss.ru/",
+                      "logo": "assets/img/logos/approved-top/iss.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Слаботочные сети и связь",
                     "comment_hint": "Системы видеонаблюдения: количество камер, тип камер, точки установки, архив хранения, PoE/питание, проект."
@@ -6109,16 +6214,7 @@
                   "brands": [
                     "Интегра Кабель"
                   ],
-                  "vendors": [
-                    {
-                      "name": "Интегра Кабель",
-                      "slug": "integra-kabel",
-                      "official_site": "https://intg.ru/",
-                      "logo": "assets/img/logos/vendors/integra-kabel.png",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    }
-                  ],
+                  "vendors": [],
                   "crm": {
                     "category": "Слаботочные сети и связь",
                     "comment_hint": "ВОК: тип прокладки, количество ОВ, тип волокна, усилие, оболочка, метраж, объект."
@@ -6232,7 +6328,17 @@
                       "нужна ли интеграция",
                       "есть ли проект"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "biosmart",
+                      "name": "BIOSMART",
+                      "official_site": "https://bio-smart.ru/",
+                      "logo": "assets/img/logos/approved-top/biosmart.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "automatic-key-issue-systems",
@@ -6273,7 +6379,17 @@
                       "нужна ли интеграция со СКУД",
                       "объект"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "keyguard",
+                      "name": "KeyGuard",
+                      "official_site": "https://keyguard.ru/",
+                      "logo": "assets/img/logos/approved-top/keyguard.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "locking-devices",
@@ -6336,7 +6452,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "biosmart",
+                      "name": "BIOSMART",
+                      "official_site": "https://bio-smart.ru/",
+                      "logo": "assets/img/logos/approved-top/biosmart.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Слаботочные сети и связь",
                     "comment_hint": "СКУД: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -6534,7 +6659,25 @@
                       "рабочие места",
                       "есть ли проект"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "twinpro",
+                      "name": "TwinPro",
+                      "official_site": "https://www.twinpro.ru/",
+                      "logo": "assets/img/logos/approved-top/twinpro.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "iss",
+                      "name": "ISS SecurOS",
+                      "official_site": "https://www.iss.ru/",
+                      "logo": "assets/img/logos/approved-top/iss.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 }
               ],
               "image": "assets/img/catalog/generated/system-low-current-information-collection-processing-systems.webp"
@@ -6584,7 +6727,17 @@
                       "количество операторов",
                       "объект"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "visitorcontrol",
+                      "name": "VisitorControl",
+                      "official_site": "https://www.visitorcontrol.ru/",
+                      "logo": "assets/img/logos/approved-top/visitorcontrol.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "sistemy-avtomatizatsii-propusknogo-rezhima",
@@ -6604,7 +6757,24 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "visitorcontrol",
+                      "name": "VisitorControl",
+                      "official_site": "https://www.visitorcontrol.ru/",
+                      "logo": "assets/img/logos/approved-top/visitorcontrol.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "infomatika",
+                      "name": "Инфоматика",
+                      "official_site": "https://infomatika.ru/",
+                      "logo": "assets/img/logos/approved-top/infomatika.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Слаботочные сети и связь",
                     "comment_hint": "Системы автоматизации пропускного режима: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -6674,7 +6844,17 @@
                       "условия эксплуатации",
                       "есть ли проект"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "twinpro",
+                      "name": "TwinPro",
+                      "official_site": "https://www.twinpro.ru/",
+                      "logo": "assets/img/logos/approved-top/twinpro.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 }
               ],
               "image": "assets/img/catalog/generated/system-low-current-perimeter-intrusion-alarm-systems.webp"
@@ -8567,7 +8747,17 @@
                       "количество или проект",
                       "требования к свету"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "htl",
+                      "name": "HTL",
+                      "official_site": "https://h-t-l.one/",
+                      "logo": "assets/img/logos/approved-top/htl.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 }
               ],
               "image": "assets/img/catalog/generated/system-eom-indoor-lighting.webp"
@@ -8888,19 +9078,11 @@
                   ],
                   "vendors": [
                     {
-                      "name": "DEPO Computers",
-                      "slug": "depo-computers",
-                      "official_site": "https://depo-computers.com/",
-                      "logo": "assets/img/logos/partners/depo-computers.png",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    },
-                    {
                       "name": "YADRO",
                       "slug": "yadro",
                       "official_site": "https://yadro.com/",
-                      "logo": "assets/img/logos/partners/yadro-on-white.svg",
-                      "status": "logo_ready",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
                       "confidence": "high"
                     }
                   ],
@@ -8952,19 +9134,11 @@
                   ],
                   "vendors": [
                     {
-                      "name": "DEPO Computers",
-                      "slug": "depo-computers",
-                      "official_site": "https://depo-computers.com/",
-                      "logo": "assets/img/logos/partners/depo-computers.png",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    },
-                    {
                       "name": "YADRO",
                       "slug": "yadro",
                       "official_site": "https://yadro.com/",
-                      "logo": "assets/img/logos/partners/yadro-on-white.svg",
-                      "status": "logo_ready",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
                       "confidence": "high"
                     }
                   ],
@@ -9008,7 +9182,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "yadro",
+                      "name": "YADRO",
+                      "official_site": "https://yadro.com/",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "IT-инфраструктура",
                     "comment_hint": "Серверы и СХД: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -9062,19 +9245,19 @@
                   ],
                   "vendors": [
                     {
-                      "name": "DEPO Computers",
-                      "slug": "depo-computers",
-                      "official_site": "https://depo-computers.com/",
-                      "logo": "assets/img/logos/partners/depo-computers.png",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    },
-                    {
                       "name": "YADRO",
                       "slug": "yadro",
                       "official_site": "https://yadro.com/",
-                      "logo": "assets/img/logos/partners/yadro-on-white.svg",
-                      "status": "logo_ready",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "eltex",
+                      "name": "Eltex",
+                      "official_site": "https://eltex.ru/",
+                      "logo": "assets/img/logos/approved-top/eltex.png",
+                      "status": "approved_top",
                       "confidence": "high"
                     }
                   ],
@@ -9117,7 +9300,24 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "eltex",
+                      "name": "Eltex",
+                      "official_site": "https://eltex.ru/",
+                      "logo": "assets/img/logos/approved-top/eltex.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "yadro",
+                      "name": "YADRO",
+                      "official_site": "https://yadro.com/",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "IT-инфраструктура",
                     "comment_hint": "Сетевое оборудование и телеком: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -9171,19 +9371,11 @@
                   ],
                   "vendors": [
                     {
-                      "name": "DEPO Computers",
-                      "slug": "depo-computers",
-                      "official_site": "https://depo-computers.com/",
-                      "logo": "assets/img/logos/partners/depo-computers.png",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    },
-                    {
                       "name": "YADRO",
                       "slug": "yadro",
                       "official_site": "https://yadro.com/",
-                      "logo": "assets/img/logos/partners/yadro-on-white.svg",
-                      "status": "logo_ready",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
                       "confidence": "high"
                     }
                   ],
@@ -9239,24 +9431,7 @@
                     "DEPO Computers",
                     "KVADRA"
                   ],
-                  "vendors": [
-                    {
-                      "name": "DEPO Computers",
-                      "slug": "depo-computers",
-                      "official_site": "https://depo-computers.com/",
-                      "logo": "assets/img/logos/partners/depo-computers.png",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    },
-                    {
-                      "name": "KVADRA",
-                      "slug": "kvadra",
-                      "official_site": "https://квадра.рф/",
-                      "logo": "assets/img/logos/partners/kvadra-on-white.svg",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    }
-                  ],
+                  "vendors": [],
                   "crm": {
                     "category": "IT-инфраструктура",
                     "comment_hint": "Рабочие станции: CPU, RAM, SSD, GPU, ОС, форм-фактор, количество, задача."
@@ -9347,16 +9522,7 @@
                   "brands": [
                     "KVADRA"
                   ],
-                  "vendors": [
-                    {
-                      "name": "KVADRA",
-                      "slug": "kvadra",
-                      "official_site": "https://квадра.рф/",
-                      "logo": "assets/img/logos/partners/kvadra-on-white.svg",
-                      "status": "logo_ready",
-                      "confidence": "high"
-                    }
-                  ],
+                  "vendors": [],
                   "crm": {
                     "category": "IT-инфраструктура",
                     "comment_hint": "Корпоративные устройства: тип, диагональ, CPU, RAM, SSD, ОС, количество."
@@ -9451,8 +9617,8 @@
                       "name": "YADRO",
                       "slug": "yadro",
                       "official_site": "https://yadro.com/",
-                      "logo": "assets/img/logos/partners/yadro-on-white.svg",
-                      "status": "logo_ready",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
                       "confidence": "high"
                     }
                   ],
@@ -9495,7 +9661,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "yadro",
+                      "name": "YADRO",
+                      "official_site": "https://yadro.com/",
+                      "logo": "assets/img/logos/approved-top/yadro.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "IT-инфраструктура",
                     "comment_hint": "Программное обеспечение: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."
@@ -10288,7 +10463,25 @@
                       "пропускная способность",
                       "нужна ли интеграция"
                     ]
-                  }
+                  },
+                  "vendors": [
+                    {
+                      "slug": "itbp",
+                      "name": "ИТБП",
+                      "official_site": "https://it-s-p.ru/",
+                      "logo": "assets/img/logos/approved-top/itbp.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    },
+                    {
+                      "slug": "infomatika",
+                      "name": "Инфоматика",
+                      "official_site": "https://infomatika.ru/",
+                      "logo": "assets/img/logos/approved-top/infomatika.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ]
                 },
                 {
                   "id": "dosmotrovoe-oborudovanie",
@@ -10311,7 +10504,16 @@
                     "проектные требования"
                   ],
                   "brands": [],
-                  "vendors": [],
+                  "vendors": [
+                    {
+                      "slug": "itbp",
+                      "name": "ИТБП",
+                      "official_site": "https://it-s-p.ru/",
+                      "logo": "assets/img/logos/approved-top/itbp.png",
+                      "status": "approved_top",
+                      "confidence": "high"
+                    }
+                  ],
                   "crm": {
                     "category": "Технологическое оборудование",
                     "comment_hint": "Досмотровое оборудование: тип/исполнение, размеры, объём, город доставки, срок, проектные требования."

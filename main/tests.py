@@ -89,7 +89,7 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("vendor-row", data["rows_html"])
 
     def test_vendor_ajax_filter_accepts_selected_vendors(self):
-        vendors = list(Vendor.objects.filter(name__in=["Eltex", "Kaspersky"]).order_by("name"))
+        vendors = list(Vendor.objects.filter(name__in=["Eltex", "YADRO"]).order_by("name"))
         self.assertEqual(len(vendors), 2)
 
         response = self.client.get(
@@ -101,7 +101,8 @@ class PublicRouteSmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertIn("Eltex", data["cloud_html"])
-        self.assertIn("Kaspersky", data["cloud_html"])
+        self.assertIn("YADRO", data["cloud_html"])
+        self.assertNotIn("Kaspersky", data["cloud_html"])
         self.assertGreater(data["cloud_html"].count("data-vendor-chip"), 2)
 
     def test_catalog_search_api_returns_grouped_results(self):

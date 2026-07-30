@@ -24,6 +24,7 @@
   const indexToggle = rootElement.querySelector("[data-catalog-v2-index-toggle]");
   const blockSection = rootElement.querySelector("[data-catalog-v2-block-section]");
   const blockGrid = rootElement.querySelector("[data-catalog-v2-blocks]");
+  const popularSection = rootElement.querySelector("[data-catalog-v2-popular]");
   const contentSection = rootElement.querySelector("[data-catalog-v2-content-section]");
   const content = rootElement.querySelector("[data-catalog-v2-content]");
   const contentTitle = rootElement.querySelector("[data-catalog-v2-title]");
@@ -157,7 +158,6 @@
           ${toggle}
           <a class="catalog-v2-tree-link" href="${escapeHtml(urlFor(node))}" data-catalog-v2-target="${escapeHtml(target)}"${selected ? ' aria-current="page"' : ""}>
             <span class="catalog-v2-tree-label">${escapeHtml(node.title)}</span>
-            <small>${escapeHtml(node.level || "")}</small>
           </a>
         </div>
         ${nested}
@@ -189,7 +189,6 @@
     <a class="catalog-v2-system-card" href="${escapeHtml(urlFor(node))}" data-catalog-v2-target="${escapeHtml(node.id)}">
       <img src="${escapeHtml(imageFor(node))}" alt="" loading="lazy">
       <span class="catalog-v2-system-overlay">
-        <span>${escapeHtml(node.level || "")}</span>
         <h3>${escapeHtml(node.title)}</h3>
         <span class="catalog-v2-card-arrow" aria-hidden="true">›</span>
       </span>
@@ -307,7 +306,10 @@
         <div class="catalog-v2-passport-grid">
           <section class="catalog-v2-passport-panel">
             <h3>Типы продукции</h3>
-            <p class="catalog-v2-request-note">Выбранные позиции уходят в заявку</p>
+            <div class="catalog-v2-request-guide" role="note">
+              <span class="catalog-v2-request-guide-icon" aria-hidden="true">+</span>
+              <span><strong>Соберите заявку прямо в каталоге</strong><small>Нажмите на нужный тип продукции — выбранная позиция появится в заявке.</small></span>
+            </div>
             <div class="catalog-v2-type-list">${typeRows}</div>
           </section>
           <section class="catalog-v2-passport-panel">
@@ -364,11 +366,13 @@
 
       if (target === rootTarget) {
         if (blockSection) blockSection.hidden = false;
+        if (popularSection) popularSection.hidden = false;
         if (contentSection) contentSection.hidden = true;
         updateHistory(node, historyMode);
         return;
       }
 
+      if (popularSection) popularSection.hidden = true;
       if (contentSection) contentSection.hidden = false;
       if (contentTitle) contentTitle.textContent = headingFor(node);
       if (contentKicker) {
@@ -386,7 +390,6 @@
 
       updateHistory(node, historyMode);
       setStatus();
-      contentSection?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
       setStatus(error.message || "Не удалось загрузить каталог.", true);
     }

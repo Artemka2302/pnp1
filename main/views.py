@@ -117,7 +117,7 @@ def catalog_queryset():
     )
 
 
-def index(request):
+def homepage_context():
     blocks = catalog_queryset().annotate(
         direction_count=Count("directions", distinct=True),
         system_count=Count("directions__systems", distinct=True),
@@ -125,7 +125,7 @@ def index(request):
     )
     partners_qs = Partner.objects.order_by("-show_on_home", "name")
 
-    context = {
+    return {
         "blocks": blocks,
         "featured_partners": partners_qs,
         "featured_vendors": Vendor.objects.filter(vendorproductgroup__show_on_home=True).distinct()[:24],
@@ -137,21 +137,14 @@ def index(request):
             "vendors": Vendor.objects.count(),
         },
     }
-    return render(request, "main/home.html", context)
+
+
+def index(request):
+    return render(request, "main/home.html", homepage_context())
 
 
 def about(request):
-    context = {
-        "stats": {
-            "blocks": CatalogBlock.objects.count(),
-            "directions": Direction.objects.count(),
-            "systems": CatalogSystem.objects.count(),
-            "groups": ProductGroup.objects.count(),
-            "vendors": Vendor.objects.count(), 
-        },
-        "blocks": CatalogBlock.objects.all(),
-    }
-    return render(request, "main/about.html", context)
+    return render(request, "main/about.html", homepage_context())
 
 
 def contacts(request):

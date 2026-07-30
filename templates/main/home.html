@@ -4,12 +4,15 @@
 {% block body_class %}home-page pnp-live-home{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20260727" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20260730-2" media="(min-width: 1081px)">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260727" media="(min-width: 1081px)">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260728" media="(min-width: 1081px)">
 {% endblock %}
 
 {% block content %}
+{% if request.resolver_match.url_name == 'about' %}
+  {% include "main/partials/about_hero.html" %}
+{% else %}
 <section class="hero hero-light hero-v13 home-desktop-only" id="top">
   <div class="vertical-accent"></div>
   <div class="container">
@@ -55,6 +58,7 @@
     </div>
   </div>
 </section>
+{% endif %}
 
 <section class="section compact role-entry-section home-desktop-only" id="clients">
   <div class="container">
@@ -62,27 +66,27 @@
       <div>
         <div class="eyebrow">С кем работаем</div>
         <h2>Наши партнёры</h2>
-        <p>Помогаем проектировщикам, генподрядчикам и подрядным организациям подбирать решения, рассчитывать поставку и комплектовать объекты.</p>
+        <p>Помогаем проектировщикам, генподрядчикам, подрядчикам и субподрядчикам подбирать решения, рассчитывать поставку и комплектовать объекты.</p>
       </div>
     </div>
     <div class="role-entry-grid">
       <article class="role-entry-card" id="client-designers" data-role-card="designer">
-        <div class="role-entry-card-top"><span class="role-entry-index">01</span><span class="role-entry-tag">Проектирование</span></div>
+        <div class="role-entry-card-top"><span class="role-entry-tag">Проектирование</span></div>
         <h3>Проектировщики</h3>
         <p>Подбираем решения по требованиям проекта, проверяем применимость и доступность материалов для спецификации.</p>
         <ul><li>Технический подбор</li><li>Проверка аналогов</li><li>Документы производителей по запросу</li></ul>
         <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=designer&amp;request_type=technical_selection&amp;project_stage=design#request-form">Начать технический подбор <span aria-hidden="true">→</span></a>
       </article>
       <article class="role-entry-card role-entry-card-accent" id="client-contractors" data-role-card="general_contractor">
-        <div class="role-entry-card-top"><span class="role-entry-index">02</span><span class="role-entry-tag">Комплектация</span></div>
+        <div class="role-entry-card-top"><span class="role-entry-tag">Комплектация</span></div>
         <h3>Генподрядчики</h3>
         <p>Разбираем ведомость, подбираем варианты комплектации и готовим коммерческое предложение по объекту.</p>
         <ul><li>Разбор ведомости</li><li>Подбор производителей и замен</li><li>Коммерческое предложение</li></ul>
         <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=general_contractor&amp;request_type=specification_review#request-form">Передать ведомость на расчёт <span aria-hidden="true">→</span></a>
       </article>
       <article class="role-entry-card" id="client-institutes" data-role-card="procurement">
-        <div class="role-entry-card-top"><span class="role-entry-index">03</span><span class="role-entry-tag">Снабжение участка</span></div>
-        <h3>Подрядчики</h3>
+        <div class="role-entry-card-top"><span class="role-entry-tag">Снабжение участка</span></div>
+        <h3>Подрядчики и субподрядчики</h3>
         <p>Подбираем материалы и оборудование под работы на объекте, готовим варианты замены и расчёт для согласования.</p>
         <ul><li>Подбор под вид работ</li><li>Замены по требованиям проекта</li><li>КП и документы для согласования</li></ul>
         <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=procurement&amp;request_type=commercial_offer&amp;project_stage=construction#request-form">Отправить список материалов <span aria-hidden="true">→</span></a>
@@ -95,16 +99,18 @@
   <div class="container">
     <div class="section-head why-tech-head"><div><div class="eyebrow">Преимущества ПНП</div><h2>Что ПНП берёт на себя</h2><p>От разбора спецификации и подбора решений до технических документов и сопровождения поставки — всё в контексте одной задачи по объекту.</p></div></div>
     <div class="why-grid-v13 why-tech-grid" data-pnp-live-why>
-      <article class="why-tech-card" tabindex="0" data-label="Комплектация"><div class="why-tech-card__top"><span class="why-tech-card__index">01</span><span class="why-tech-card__pill">Комплектация</span></div><h3>Комплектуем объект по разделам</h3><div class="why-tech-card__detail"><p>Сводим архитектуру, конструктив, инженерные системы и безопасность в связанную заявку — без разрозненных обращений.</p></div></article>
-      <article class="why-tech-card" tabindex="0" data-label="Спецификация"><div class="why-tech-card__top"><span class="why-tech-card__index">02</span><span class="why-tech-card__pill">Спецификация</span></div><h3>Разбираем спецификации и ТЗ</h3><div class="why-tech-card__detail"><p>Принимаем ведомости, PDF, Excel и проектные файлы, уточняем позиции и готовим основу для подбора и расчёта.</p></div></article>
-      <article class="why-tech-card" tabindex="0" data-label="Аналоги"><div class="why-tech-card__top"><span class="why-tech-card__index">03</span><span class="why-tech-card__pill">Аналоги</span></div><h3>Сопоставляем бренды и замены</h3><div class="why-tech-card__detail"><p>Сравниваем решения по требованиям проекта, бюджету и условиям поставки; применимость подтверждаем после проверки специалистом.</p></div></article>
-      <article class="why-tech-card" tabindex="0" data-label="Координация"><div class="why-tech-card__top"><span class="why-tech-card__index">04</span><span class="why-tech-card__pill">Координация</span></div><h3>Сводим запрос по объекту в один контекст</h3><div class="why-tech-card__detail"><p>Собираем позиции, уточнения и согласованные варианты вместе, чтобы клиент и менеджер работали с одной задачей.</p></div></article>
-      <article class="why-tech-card" tabindex="0" data-label="Документы"><div class="why-tech-card__top"><span class="why-tech-card__index">05</span><span class="why-tech-card__pill">Документы</span></div><h3>Запрашиваем документы к решению</h3><div class="why-tech-card__detail"><p>По выбранным позициям запрашиваем каталоги, паспорта и сертификаты; состав комплекта уточняется для каждой позиции.</p></div></article>
-      <article class="why-tech-card" tabindex="0" data-label="Сопровождение"><div class="why-tech-card__top"><span class="why-tech-card__index">06</span><span class="why-tech-card__pill">Сопровождение</span></div><h3>Сопровождаем согласование и поставку</h3><div class="why-tech-card__detail"><p>Фиксируем согласованные позиции, уточняем изменения и сохраняем контекст заявки от подбора до отгрузки.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Комплектация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Комплектация</span></div><h3>Комплектуем объект по разделам</h3><div class="why-tech-card__detail"><p>Собираем потребность по архитектурным, конструктивным и инженерным разделам в одну рабочую ведомость. Связываем материалы, оборудование, количества, требования и сроки, чтобы заказчику не приходилось координировать десятки отдельных запросов.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Спецификация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Спецификация</span></div><h3>Разбираем спецификации и ТЗ</h3><div class="why-tech-card__detail"><p>Разбираем спецификации, ТЗ, ведомости и проектные файлы построчно. Уточняем назначение, характеристики, количество, объект и сроки; спорные или неполные позиции отмечаем до расчёта, чтобы подбор и коммерческое предложение опирались на согласованный объём.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Аналоги"><div class="why-tech-card__top"><span class="why-tech-card__pill">Аналоги</span></div><h3>Сопоставляем бренды и замены</h3><div class="why-tech-card__detail"><p>Сопоставляем исходные бренды и возможные замены по техническим характеристикам, применимости, документам, срокам и условиям поставки. Отличия фиксируем и передаём на согласование ответственным участникам проекта.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Координация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Координация</span></div><h3>Сводим запрос по объекту в один контекст</h3><div class="why-tech-card__detail"><p>Сводим выбранные позиции, уточнения, версии и открытые вопросы по объекту в единый рабочий контекст. Проектировщик, генподрядчик, подрядчик и менеджер видят одну задачу и не возвращаются к уже согласованным вводным.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Документы"><div class="why-tech-card__top"><span class="why-tech-card__pill">Документы</span></div><h3>Запрашиваем документы к решению</h3><div class="why-tech-card__detail"><p>По выбранному решению запрашиваем у производителей технические листы, паспорта, сертификаты и другие необходимые материалы. Привязываем документы к конкретным позициям и версии подбора, чтобы их было проще проверить и передать на согласование.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Сопровождение"><div class="why-tech-card__top"><span class="why-tech-card__pill">Сопровождение</span></div><h3>Сопровождаем согласование и поставку</h3><div class="why-tech-card__detail"><p>Фиксируем согласованные позиции, изменения, сроки и открытые вопросы в одной заявке. Сохраняем контекст от первичного подбора и расчёта до подтверждения условий, подготовки документов и организации отгрузки.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="КАЦ"><div class="why-tech-card__top"><span class="why-tech-card__pill">КАЦ</span></div><h3>Готовим данные для КАЦ</h3><div class="why-tech-card__detail"><p>Собираем и структурируем согласованные коммерческие предложения производителей, ценовые данные и подтверждающие материалы для КАЦ. Готовим сопоставимую основу, с которой проектировщику и заказчику проще проверять и обосновывать выбранные решения.</p></div></article>
+      <article class="why-tech-card" tabindex="0" data-label="Коммерческое предложение"><div class="why-tech-card__top"><span class="why-tech-card__pill">КП</span></div><h3>Формируем коммерческое предложение</h3><div class="why-tech-card__detail"><p>Запрашиваем исходные предложения у согласованных производителей и сводим позиции, аналоги, сроки и условия поставки по объекту. В итоговом КП показываем состав решения и вопросы, которые требуют подтверждения до заказа.</p></div></article>
       <aside class="why-tech-console" aria-live="polite">
         <div class="why-tech-console__head"><span class="why-tech-console__kicker">Активное преимущество</span><span class="why-tech-console__pill" data-live-why-label>Комплектация</span></div>
         <strong class="why-tech-console__title" data-live-why-title>Комплектуем объект по разделам</strong>
-        <p class="why-tech-console__text" data-live-why-text>Сводим архитектуру, конструктив, инженерные системы и безопасность в связанную заявку — без разрозненных обращений.</p>
+        <p class="why-tech-console__text" data-live-why-text>Собираем потребность по архитектурным, конструктивным и инженерным разделам в одну рабочую ведомость. Связываем материалы, оборудование, количества, требования и сроки, чтобы заказчику не приходилось координировать десятки отдельных запросов.</p>
         <div class="why-tech-console__meta"><span>Один запрос</span><span>Единый контекст</span><span>Сопровождение</span></div>
       </aside>
     </div>
@@ -115,19 +121,19 @@
   <div class="container">
     <div class="section-head"><div><h2>Почему мы</h2></div></div>
     <div class="why-grid-v13">
-      <article><i>01</i><b>Закрываем объект по направлениям</b><span>Архитектура, конструктив, инженерные системы, безопасность, связь и специальные разделы.</span></article>
-      <article><i>02</i><b>Работаем со спецификациями и ТЗ</b><span>Принимаем проектную документацию, ведомости и заявки, чтобы собрать подбор и КП.</span></article>
-      <article><i>03</i><b>Подбираем производителей и аналоги</b><span>Используем базу брендов и предлагаем альтернативы по срокам, бюджету и наличию.</span></article>
-      <article><i>04</i><b>Сопровождаем поставку</b><span>Ведём путь от первичного запроса до коммерческого предложения и отгрузки.</span></article>
-      <article><i>05</i><b>Фокус на строительные объекты</b><span>Учитываем совместимость, сроки, комплектацию, документы и требования проекта.</span></article>
-      <article><i>06</i><b>ПНП</b><span>Используем продуктовую экспертизу и фирменную систему ПНП для понятного подбора решений.</span></article>
+      <article><b>Закрываем объект по направлениям</b><span>Архитектура, конструктив, инженерные системы, безопасность, связь и специальные разделы.</span></article>
+      <article><b>Работаем со спецификациями и ТЗ</b><span>Принимаем проектную документацию, ведомости и заявки, чтобы собрать подбор и КП.</span></article>
+      <article><b>Подбираем производителей и аналоги</b><span>Используем базу брендов и предлагаем альтернативы по срокам, бюджету и наличию.</span></article>
+      <article><b>Сопровождаем поставку</b><span>Ведём путь от первичного запроса до коммерческого предложения и отгрузки.</span></article>
+      <article><b>Готовим данные для КАЦ</b><span>Организуем согласованные КП производителей, сводим ценовые данные и помогаем с защитой материалов.</span></article>
+      <article><b>Формируем коммерческое предложение</b><span>Запрашиваем исходные КП и сводим позиции, аналоги, сроки и условия поставки по объекту.</span></article>
     </div>
   </div>
 </section>
 
 <section class="section home-supply-section home-directions-section home-desktop-only" aria-labelledby="homeSupplyTitle">
   <div class="container">
-    <div class="section-head home-supply-section-head"><div><div class="section-eyebrow">Сферы поставки</div><h2 id="homeSupplyTitle">Закрываем все разделы проекта</h2></div></div>
+    <div class="section-head home-supply-section-head"><div><div class="section-eyebrow">Комплектация по проекту</div><h2 id="homeSupplyTitle">Закрываем все разделы проекта</h2></div></div>
     <div id="homeCategories">
       <div class="home-supply-map" data-pnp-live-supply>
         <div class="home-supply-columns">
@@ -140,7 +146,7 @@
               </div>
               <div class="home-supply-direction-list" aria-label="{{ block.title }}">
                 {% for direction in block.directions.all %}
-                  <a class="home-supply-direction" href="{% url 'catalog' %}?open={{ direction.get_absolute_url|urlencode }}"
+                  <a class="home-supply-direction" href="{{ direction.get_absolute_url }}"
                     data-live-supply-direction="{{ direction.slug }}"
                     aria-label="Открыть направление: {{ direction.title }}">
                     <span class="home-supply-direction-icon" data-live-supply-icon></span>
@@ -148,7 +154,7 @@
                     <span class="home-supply-direction-arrow" aria-hidden="true">→</span>
                   </a>
                 {% empty %}
-                  <a class="home-supply-direction" href="{% url 'catalog' %}"><span class="home-supply-direction-name">Открыть блок</span><span class="home-supply-direction-arrow">→</span></a>
+                  <a class="home-supply-direction" href="{{ block.get_absolute_url }}"><span class="home-supply-direction-name">Открыть блок</span><span class="home-supply-direction-arrow">→</span></a>
                 {% endfor %}
               </div>
             </article>
@@ -175,7 +181,7 @@
 
 <section class="section compact home-brands-section home-desktop-only">
   <div class="container">
-    <div class="section-head"><div><div class="eyebrow home-desktop-eyebrow">Проверенные производители</div><h2>Популярные бренды</h2></div><div style="display:flex;gap:18px;flex-wrap:wrap"><a class="link-more" href="{% url 'vendors' %}">Все бренды →</a></div></div>
+    <div class="section-head"><div><div class="eyebrow home-desktop-eyebrow">Проверенные производители</div><h2>Популярные бренды</h2></div></div>
     <div class="partners-preview popular-logo-grid" id="featuredPartnersHome">
       <div class="partner-logo-carousel home-partner-logo-carousel is-at-start" data-partner-logo-carousel aria-label="Популярные бренды и партнёры">
         <button class="partner-logo-nav partner-logo-nav-prev" type="button" aria-label="Листать логотипы назад" data-partner-logo-prev>‹</button>
@@ -220,7 +226,7 @@
       </div>
       <nav class="home-request-route-grid" aria-label="Перейти к подбору решений">
         <a class="home-request-route home-request-route-catalog" href="{% url 'catalog' %}" data-home-pre-request-route="catalog"><span class="home-request-route-node home-request-route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"></rect><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"></rect><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"></rect><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"></rect></svg></span><span class="home-request-route-copy"><small>Каталог</small><strong>Разделы и группы</strong></span><span class="home-request-route-action" aria-hidden="true">→</span></a>
-        <a class="home-request-route home-request-route-vendors" href="{% url 'vendors' %}" data-home-pre-request-route="vendors"><span class="home-request-route-node home-request-route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3.5 20.5V9.8l5-2.6v3.4l5-2.6v3.5l3-1.6V4.5h3v16M3.5 20.5h17M7 15h2m3 0h2m3 0h2M7 18h2m3 0h2m3 0h2"></path></svg></span><span class="home-request-route-copy"><small>Производители</small><strong>Бренды и аналоги</strong></span><span class="home-request-route-action" aria-hidden="true">→</span></a>
+        <a class="home-request-route home-request-route-vendors" href="{% url 'partners' %}" data-home-pre-request-route="partners"><span class="home-request-route-node home-request-route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3.5 20.5V9.8l5-2.6v3.4l5-2.6v3.5l3-1.6V4.5h3v16M3.5 20.5h17M7 15h2m3 0h2m3 0h2M7 18h2m3 0h2m3 0h2"></path></svg></span><span class="home-request-route-copy"><small>Партнёры</small><strong>Бренды и поставщики</strong></span><span class="home-request-route-action" aria-hidden="true">→</span></a>
       </nav>
     </section>
     <div class="eyebrow home-desktop-eyebrow home-desktop-eyebrow-form">Быстрая заявка</div>

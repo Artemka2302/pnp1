@@ -2653,12 +2653,40 @@ a[href$="solution-tech-equipment.html"] .mini-visual{
   color:#fff;
   font-weight:850;
 }
+.vendors-hero h1,
+.partners-hero h1,
+.contacts-hero h1{
+  font-size:clamp(42px,5.8vw,74px);
+}
+.partners-hero h1{
+  max-width:980px;
+}
 .partner-hero-features{
+  width:100%;
   max-width:1120px;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
 }
 .partner-hero-features .feature-mini{
+  min-width:0;
   min-height:92px;
+  gap:12px;
+  padding-inline:18px;
+}
+.partner-hero-features .feature-mini i{
+  flex:0 0 36px;
+}
+.partner-hero-features .feature-mini span{
+  min-width:0;
+  font-size:12.5px;
+  line-height:1.28;
+  letter-spacing:0;
+  text-transform:none;
+  white-space:normal;
+}
+@media(max-width:1080px){
+  .partner-hero-features{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
 }
 
 /* PNP vendors: empty manufacturer list should use the full section width */

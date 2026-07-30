@@ -2952,7 +2952,7 @@ body.has-callback-modal{overflow:hidden}
 #why-pnp[data-why-variant="console"] .why-tech-grid{
   display:grid;
   grid-template-columns:minmax(0,.72fr) minmax(0,.72fr) minmax(360px,1.25fr);
-  grid-template-rows:repeat(3,112px);
+  grid-template-rows:repeat(4,112px);
   gap:12px;
 }
 #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card{
@@ -2971,6 +2971,8 @@ body.has-callback-modal{overflow:hidden}
 #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card:nth-child(4){grid-column:2;grid-row:2}
 #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card:nth-child(5){grid-column:1;grid-row:3}
 #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card:nth-child(6){grid-column:2;grid-row:3}
+#why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card:nth-child(7){grid-column:1;grid-row:4}
+#why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card:nth-child(8){grid-column:2;grid-row:4}
 #why-pnp[data-why-variant="console"] .why-tech-card__top{
   min-height:0;
   margin:0 0 9px;
@@ -3005,7 +3007,7 @@ body.has-callback-modal{overflow:hidden}
   position:relative;
   isolation:isolate;
   grid-column:3;
-  grid-row:1/4;
+  grid-row:1/5;
   display:flex;
   flex-direction:column;
   min-width:0;
@@ -11001,6 +11003,39 @@ a[href*="wa.me"]{
 @media (forced-colors:active){
   #clients .role-entry-card::before{
     display:none;
+  }
+}
+
+/* Desktop alignment: shared content registers for partner and responsibility cards. */
+@media (min-width:1081px){
+  body.home-page #clients .role-entry-card h3{
+    min-block-size:62px;
+  }
+  body.home-page #clients .role-entry-card>.role-entry-link.role-entry-link-action{
+    align-self:flex-start;
+    margin-inline:0;
+    min-height:48px;
+    padding:0 16px;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.1;
+    color:#fff;
+    border:1px solid rgba(239,118,162,.95);
+    background:linear-gradient(135deg,#b92f61,#d03f76);
+    box-shadow:0 14px 32px rgba(143,33,71,.48);
+  }
+  body.home-page #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card{
+    justify-content:flex-start;
+  }
+  body.home-page #why-pnp[data-why-variant="console"] .why-tech-card__top{
+    flex:0 0 auto;
+    min-block-size:22px;
+  }
+  body.home-page #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card h3{
+    display:flex;
+    align-items:flex-start;
+    min-block-size:36px;
   }
 }
 
