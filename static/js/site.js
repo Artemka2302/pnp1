@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (csrfToken) headers["X-CSRFToken"] = csrfToken;
 
     if (submitButton) submitButton.disabled = true;
-    setStatus(statusElement, "Отправляем заявку...");
+    setStatus(statusElement, form.dataset.submitPending || "Отправляем заявку...");
     try {
       const response = await fetch(form.dataset.requestUrl || form.dataset.leadUrl || form.action, {
         method: "POST",
@@ -276,7 +276,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok || !data.ok) {
         throw new Error(data.error || "Не удалось отправить заявку.");
       }
-      setStatus(statusElement, `Заявка #${data.lead_id} сохранена.`);
+      setStatus(
+        statusElement,
+        form.dataset.submitSuccess || `Заявка #${data.lead_id} сохранена.`,
+      );
       form.reset();
       resetFilePicker(form);
       if (form.matches("[data-lead-form]") || form.querySelector("[data-request-items]")) {
@@ -1267,6 +1270,74 @@ document.addEventListener("DOMContentLoaded", () => {
     reject?.addEventListener("click", () => saveChoice("rejected"));
   };
 
+  const initSupportWidgetFormVisibility = () => {
+    const supportWidget = document.querySelector("[data-support-chat]");
+    const requestForms = [...document.querySelectorAll("[data-contact-request-switcher]")];
+    if (!supportWidget || !requestForms.length || !("IntersectionObserver" in window)) return;
+
+    const visibleForms = new Set();
+    const syncVisibility = () => {
+      document.body.classList.toggle("request-form-in-view", visibleForms.size > 0);
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) visibleForms.add(entry.target);
+        else visibleForms.delete(entry.target);
+      });
+      syncVisibility();
+    }, { threshold: 0.15 });
+
+    requestForms.forEach(form => observer.observe(form));
+  };
+
+  const initContactRequestSwitcher = () => {
+    document.querySelectorAll("[data-contact-request-switcher]").forEach(root => {
+      const tabs = [...root.querySelectorAll("[data-contact-request-tab]")];
+      const panels = [...root.querySelectorAll("[data-contact-request-panel]")];
+      if (tabs.length < 2 || panels.length < 2) return;
+
+      const activate = (mode, focus = false) => {
+        const activeTab = tabs.find(tab => tab.dataset.contactRequestTab === mode);
+        const activePanel = panels.find(panel => panel.dataset.contactRequestPanel === mode);
+        if (!activeTab || !activePanel) return;
+
+        tabs.forEach(tab => {
+          const isActive = tab === activeTab;
+          tab.classList.toggle("is-active", isActive);
+          tab.setAttribute("aria-selected", String(isActive));
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+        panels.forEach(panel => {
+          panel.hidden = panel !== activePanel;
+        });
+        if (focus) activeTab.focus();
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(tab.dataset.contactRequestTab));
+        tab.addEventListener("keydown", event => {
+          if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+          event.preventDefault();
+          let nextIndex = index;
+          if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+          if (event.key === "Home") nextIndex = 0;
+          if (event.key === "End") nextIndex = tabs.length - 1;
+          activate(tabs[nextIndex].dataset.contactRequestTab, true);
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      const requestedMode = params.get("form") === "cooperation" || window.location.hash === "#cooperation-form"
+        ? "cooperation"
+        : "supply";
+      activate(requestedMode);
+    });
+  };
+
+  initContactRequestSwitcher();
+
   document.querySelectorAll("[data-lead-form]").forEach(form => {
     const status = form.querySelector("[data-form-status]");
     const submit = form.querySelector("[type='submit']");
@@ -1285,7 +1356,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const raw = sessionStorage.getItem(transferMetaKey);
     if (!raw) return;
 
-    const form = document.querySelector("[data-lead-form]");
+    const form = document.querySelector("[data-lead-form][data-request-mode='supply']");
     if (!form) return;
 
     let payload = {};
@@ -1315,7 +1386,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const initContactCatalogItems = () => {
-    const form = document.querySelector("[data-lead-form]");
+    const form = document.querySelector("[data-lead-form][data-request-mode='supply']");
     if (!form) return;
     const hiddenItems = form.querySelector("[data-request-items]");
     const panel = form.querySelector("[data-contact-request-items]");
@@ -1902,6 +1973,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactRequestTransfer();
   initContactCatalogItems();
   initSupportChatWidget();
+  initSupportWidgetFormVisibility();
   initPhoneInputs();
   initCookieConsent();
   renderRequest();

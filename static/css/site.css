@@ -4481,12 +4481,150 @@ a[href*="wa.me"] {
     box-shadow: 0 16px 34px rgba(109, 32, 57, .38);
     outline: none;
   }
+
+  .header-direct-action-secondary {
+    border-color: rgba(238, 106, 151, .82);
+    background: rgba(10, 24, 44, .18);
+    box-shadow: none;
+  }
+
+  .header-direct-action-secondary:hover,
+  .header-direct-action-secondary:focus-visible {
+    background: rgba(196, 55, 102, .2);
+    box-shadow: 0 16px 34px rgba(35, 9, 25, .25);
+  }
+}
+
+@media (min-width: 1081px) and (max-width: 1180px) {
+  .header-direct-contact-stack {
+    min-width: 132px;
+    padding-inline: 8px;
+  }
+
+  .header-direct-action {
+    min-height: 38px;
+    padding-inline: 10px;
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 1080px) {
   .header-desktop-direct-actions {
     display: none !important;
   }
+}
+
+/* The home page keeps the same two request modes on the compact layout. */
+[data-contact-request-panel][hidden] {
+  display: none !important;
+}
+
+.home-mobile-request-card .contact-request-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 18px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 8px;
+  background: rgba(31, 12, 27, .46);
+}
+
+.home-mobile-request-card .contact-request-tab {
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 7px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, .68);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.home-mobile-request-card .contact-request-tab.is-active,
+.home-mobile-request-card .contact-request-tab[aria-selected="true"] {
+  border-color: rgba(255, 186, 211, .44);
+  background: #c8376d;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(68, 8, 32, .24);
+}
+
+.home-mobile-request-card .contact-request-tab:focus-visible,
+.home-mobile-request-card .cooperation-role-option input:focus-visible + span {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.home-mobile-request-card .cooperation-role-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.home-mobile-request-card .cooperation-role-field legend {
+  margin-bottom: 8px;
+  padding: 0;
+  color: rgba(255, 255, 255, .86);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.home-mobile-request-card .cooperation-role-field legend span {
+  color: #ffd0e0;
+}
+
+.home-mobile-request-card .cooperation-role-options,
+.home-mobile-request-card .cooperation-contact-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.home-mobile-request-card .cooperation-role-option {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.home-mobile-request-card .cooperation-role-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.home-mobile-request-card .cooperation-role-option span {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 7px;
+  background: rgba(45, 20, 43, .54);
+  color: rgba(255, 255, 255, .76);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.home-mobile-request-card .cooperation-role-option input:checked + span {
+  border-color: #ffbad2;
+  background: rgba(205, 55, 110, .42);
+  color: #fff;
+}
+
+.home-mobile-request-card .cooperation-request-form textarea {
+  min-height: 112px;
 }
 
 /* Home desktop parity with the approved pnp1.ru visual. Mobile keeps the legacy layout. */
@@ -6084,6 +6222,11 @@ a[href*="wa.me"] {
   .support-chat-widget {
     right: 12px;
     bottom: 82px;
+  }
+
+  .request-form-in-view .support-chat-widget:not(.is-open) {
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .support-chat-panel {

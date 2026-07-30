@@ -11,14 +11,20 @@ from .models import Lead
 logger = logging.getLogger(__name__)
 
 
-def normalized_webhook_url():
-    webhook_url = os.getenv("BITRIX_WEBHOOK_URL", "").strip().rstrip("/")
+def bitrix_webhook_env_name(lead):
+    if lead.source == Lead.SOURCE_COOPERATION:
+        return "BITRIX_COOPERATION_WEBHOOK_URL"
+    return "BITRIX_WEBHOOK_URL"
+
+
+def normalized_webhook_url(env_name="BITRIX_WEBHOOK_URL"):
+    webhook_url = os.getenv(env_name, "").strip().rstrip("/")
     if not webhook_url:
         return ""
 
     parsed = urlparse(webhook_url)
     if parsed.scheme != "https" or not parsed.netloc or "/rest/" not in parsed.path:
-        raise ValueError("BITRIX_WEBHOOK_URL must be an https Bitrix REST webhook URL")
+        raise ValueError(f"{env_name} must be an https Bitrix REST webhook URL")
     return webhook_url
 
 
@@ -36,6 +42,16 @@ def call_bitrix_method(webhook_url, method, payload):
 
 
 def build_bitrix_comment(lead):
+    if lead.source == Lead.SOURCE_COOPERATION:
+        proposer_type = str(lead.raw_payload.get("proposer_type", "")).strip()
+        proposer_labels = dict(Lead.COOPERATION_TYPE_CHOICES)
+        lines = [f"Предложение о сотрудничестве #{lead.pk} с сайта ПНП"]
+        if proposer_type in proposer_labels:
+            lines.extend(["", f"Кто обращается: {proposer_labels[proposer_type]}"])
+        if lead.message:
+            lines.extend(["", "Предложение:", lead.message])
+        return "\n".join(lines)
+
     lines = [f"Заявка #{lead.pk} с сайта ПНП"]
 
     direction = lead.direction or lead.category
@@ -101,9 +117,14 @@ def attach_files_to_bitrix_lead(webhook_url, lead, bitrix_id):
 
 
 def build_bitrix_payload(lead):
+    is_cooperation = lead.source == Lead.SOURCE_COOPERATION
     fields = {
-        "TITLE": f"Заявка с сайта ПНП #{lead.pk}",
-        "NAME": lead.contact_name or lead.company or "Клиент сайта",
+        "TITLE": (
+            f"Предложение о сотрудничестве с сайта ПНП #{lead.pk}"
+            if is_cooperation
+            else f"Заявка с сайта ПНП #{lead.pk}"
+        ),
+        "NAME": lead.contact_name or lead.company or ("Партнёр сайта" if is_cooperation else "Клиент сайта"),
         "SOURCE_ID": "WEB",
         "OPENED": "Y",
         "COMMENTS": build_bitrix_comment(lead),
@@ -125,7 +146,7 @@ def build_bitrix_payload(lead):
 
 def send_lead_to_bitrix(lead):
     try:
-        webhook_url = normalized_webhook_url()
+        webhook_url = normalized_webhook_url(bitrix_webhook_env_name(lead))
         if not webhook_url:
             return {"configured": False, "sent": False}
         payload = build_bitrix_payload(lead)

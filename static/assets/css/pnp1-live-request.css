@@ -1815,3 +1815,172 @@
     animation: none !important;
   }
 }
+
+/* Contacts: supply and cooperation are separate, explicit request flows. */
+.contact-request-tabs {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 22px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 8px;
+  background: rgba(31, 12, 27, .46);
+}
+
+.contact-request-tab {
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, .68);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color .18s ease, background-color .18s ease, color .18s ease;
+}
+
+.contact-request-tab:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .06);
+}
+
+.contact-request-tab.is-active,
+.contact-request-tab[aria-selected="true"] {
+  border-color: rgba(255, 186, 211, .44);
+  background: #c8376d;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(68, 8, 32, .24);
+}
+
+.contact-request-tab:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.contact-request-panel[hidden] {
+  display: none !important;
+}
+
+.cooperation-request-head {
+  display: grid;
+  gap: 7px;
+}
+
+.cooperation-request-head .home-request-kicker {
+  margin: 0;
+}
+
+.cooperation-request-head h2 {
+  margin-top: 0;
+  font-size: clamp(30px, 4vw, 40px);
+}
+
+.cooperation-role-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cooperation-role-field legend {
+  margin-bottom: 8px;
+  padding: 0;
+  color: rgba(255, 255, 255, .86);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cooperation-role-field legend span {
+  color: #ffd0e0;
+}
+
+.cooperation-role-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cooperation-role-option {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.cooperation-role-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.cooperation-role-option span {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 7px;
+  background: rgba(17, 13, 29, .34);
+  color: rgba(255, 255, 255, .72);
+  font-size: 12px;
+  font-weight: 750;
+  text-align: center;
+  transition: border-color .18s ease, background-color .18s ease, color .18s ease, box-shadow .18s ease;
+}
+
+.cooperation-role-option:hover span {
+  border-color: rgba(255, 196, 217, .5);
+  color: #fff;
+}
+
+.cooperation-role-option input:checked + span {
+  border-color: #ffbad2;
+  background: rgba(205, 55, 110, .42);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+}
+
+.cooperation-role-option input:focus-visible + span {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.cooperation-contact-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cooperation-request-form textarea {
+  min-height: 116px;
+}
+
+@media (max-width: 700px) {
+  .contact-request-tabs {
+    margin-bottom: 18px;
+  }
+
+  .contact-request-tab {
+    padding-inline: 8px;
+    font-size: 11.5px;
+  }
+
+  .cooperation-role-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cooperation-contact-row {
+    grid-template-columns: 1fr;
+  }
+}

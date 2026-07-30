@@ -1196,8 +1196,7 @@ def ai_chat_api(request):
         }
     )
 
-@require_POST
-def catalog_request_api(request):
+def lead_request_api(request, forced_source=None):
     if lead_rate_limited(request):
         return JsonResponse({"ok": False, "error": "Слишком много заявок подряд. Попробуйте позже."}, status=429)
 
@@ -1214,7 +1213,8 @@ def catalog_request_api(request):
     direction = payload_value(payload, "direction", max_length=220) or category
     object_name = payload_value(payload, "object", max_length=220) or payload_value(payload, "object_name", max_length=220)
     request_text = payload_value(payload, "request_text", max_length=5000)
-    source = payload_value(payload, "source", Lead.SOURCE_CATALOG_MINI, max_length=40)
+    source = forced_source or payload_value(payload, "source", Lead.SOURCE_CATALOG_MINI, max_length=40)
+    proposer_type = payload_value(payload, "proposer_type", max_length=40)
     product_group_slug = payload_value(payload, "product_group_slug", max_length=140)
     product_group_title = payload_value(payload, "product_group_title", max_length=220)
     items = parse_request_items(payload_value(payload, "items"))
@@ -1225,12 +1225,26 @@ def catalog_request_api(request):
     if source not in allowed_sources:
         source = Lead.SOURCE_CATALOG_REQUEST
 
+    cooperation_types = {choice[0] for choice in Lead.COOPERATION_TYPE_CHOICES}
+
     if not consent_value:
         return JsonResponse({"ok": False, "error": "Подтвердите согласие на обработку данных."}, status=400)
-    if not phone and not email:
-        return JsonResponse({"ok": False, "error": "Укажите телефон или email."}, status=400)
-    if not items and not request_text and not message and not uploaded_files:
-        return JsonResponse({"ok": False, "error": "Добавьте позицию или комментарий к заявке."}, status=400)
+    if source == Lead.SOURCE_COOPERATION:
+        if proposer_type not in cooperation_types:
+            return JsonResponse({"ok": False, "error": "Укажите, кого вы представляете."}, status=400)
+        if not company:
+            return JsonResponse({"ok": False, "error": "Укажите компанию или контактное лицо."}, status=400)
+        if not phone:
+            return JsonResponse({"ok": False, "error": "Укажите телефон."}, status=400)
+        if not email:
+            return JsonResponse({"ok": False, "error": "Укажите email."}, status=400)
+        if not message:
+            return JsonResponse({"ok": False, "error": "Расскажите о вашем предложении."}, status=400)
+    else:
+        if not phone and not email:
+            return JsonResponse({"ok": False, "error": "Укажите телефон или email."}, status=400)
+        if not items and not request_text and not message and not uploaded_files:
+            return JsonResponse({"ok": False, "error": "Добавьте позицию или комментарий к заявке."}, status=400)
     if phone:
         normalized_phone = check_phone(phone)
         if normalized_phone is False:
@@ -1342,6 +1356,16 @@ def catalog_request_api(request):
         },
         status=201,
     )
+
+
+@require_POST
+def catalog_request_api(request):
+    return lead_request_api(request)
+
+
+@require_POST
+def cooperation_request_api(request):
+    return lead_request_api(request, forced_source=Lead.SOURCE_COOPERATION)
 
 
 @require_POST

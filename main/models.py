@@ -209,12 +209,25 @@ class Lead(TimeStampedModel):
     SOURCE_CATALOG_REQUEST = "catalog_request"
     SOURCE_CONTACT = "contact"
     SOURCE_AI_CHAT = "ai_chat"
+    SOURCE_COOPERATION = "cooperation"
+
+    COOPERATION_TYPE_MANUFACTURER = "manufacturer"
+    COOPERATION_TYPE_SUPPLIER = "supplier"
+    COOPERATION_TYPE_CONTRACTOR = "contractor"
+    COOPERATION_TYPE_OTHER = "other"
+    COOPERATION_TYPE_CHOICES = [
+        (COOPERATION_TYPE_MANUFACTURER, "Производитель"),
+        (COOPERATION_TYPE_SUPPLIER, "Поставщик"),
+        (COOPERATION_TYPE_CONTRACTOR, "Подрядчик"),
+        (COOPERATION_TYPE_OTHER, "Другое"),
+    ]
 
     SOURCE_CHOICES = [
         (SOURCE_CATALOG_MINI, "Мини-заявка каталога"),
         (SOURCE_CATALOG_REQUEST, "Заявка каталога"),
         (SOURCE_CONTACT, "Контактная форма"),
         (SOURCE_AI_CHAT, "AI-чат"),
+        (SOURCE_COOPERATION, "Предложение о сотрудничестве"),
     ]
 
     STATUS_NEW = "new"

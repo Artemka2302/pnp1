@@ -17,7 +17,7 @@ from .ai import (
     normalize_lead_draft,
     parse_ai_result,
 )
-from .bitrix import build_bitrix_comment, build_bitrix_payload
+from .bitrix import bitrix_webhook_env_name, build_bitrix_comment, build_bitrix_payload
 from .middleware import CatalogCrawlThrottleMiddleware
 from .models import (
     CatalogBlock,
@@ -352,6 +352,60 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(Lead.objects.count(), 0)
 
+    def test_cooperation_api_creates_dedicated_lead(self):
+        response = self.client.post(
+            "/api/cooperation-request/",
+            data={
+                "source": "contact",
+                "proposer_type": "manufacturer",
+                "company": "ООО Производитель",
+                "phone": "+7 900 000-00-00",
+                "email": "partner@example.com",
+                "message": "Предлагаем поставку собственной продукции.",
+                "consent": "1",
+            },
+        )
+
+        self.assertEqual(response.status_code, 201)
+        lead = Lead.objects.get()
+        self.assertEqual(lead.source, Lead.SOURCE_COOPERATION)
+        self.assertEqual(lead.company, "ООО Производитель")
+        self.assertEqual(lead.email, "partner@example.com")
+        self.assertEqual(lead.raw_payload["proposer_type"], "manufacturer")
+        self.assertEqual(ConsentLog.objects.get().form_type, Lead.SOURCE_COOPERATION)
+
+    def test_cooperation_api_requires_all_contact_fields(self):
+        response = self.client.post(
+            "/api/cooperation-request/",
+            data={
+                "proposer_type": "supplier",
+                "company": "Поставщик",
+                "phone": "+7 900 000-00-00",
+                "message": "Предлагаем сотрудничество.",
+                "consent": "1",
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("email", response.json()["error"].lower())
+        self.assertEqual(Lead.objects.count(), 0)
+
+    def test_contacts_page_contains_supply_and_cooperation_forms(self):
+        response = self.client.get("/contacts/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-contact-request-panel="supply"')
+        self.assertContains(response, 'data-contact-request-panel="cooperation"')
+        self.assertContains(response, "/api/cooperation-request/")
+
+    def test_home_page_contains_supply_and_cooperation_forms(self):
+        response = self.client.get("/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="home-request-form"')
+        self.assertContains(response, 'id="home-mobile-request-form"')
+        self.assertContains(response, "/api/cooperation-request/")
+
     def test_cookie_consent_is_logged(self):
         response = self.client.post(
             "/api/cookie-consent/",
@@ -384,6 +438,26 @@ class BitrixPayloadTests(TestCase):
         self.assertNotIn("lead_uploads/", comment)
         self.assertEqual(payload["fields"]["NAME"], "Test User")
         self.assertEqual(payload["fields"]["PHONE"][0]["VALUE"], "+79000000000")
+        self.assertEqual(bitrix_webhook_env_name(lead), "BITRIX_WEBHOOK_URL")
+
+    def test_cooperation_payload_has_distinct_title_and_comment(self):
+        lead = Lead.objects.create(
+            source=Lead.SOURCE_COOPERATION,
+            company="ООО Производитель",
+            phone="+79000000000",
+            email="partner@example.com",
+            message="Предлагаем сотрудничество.",
+            raw_payload={"proposer_type": "manufacturer"},
+        )
+
+        comment = build_bitrix_comment(lead)
+        payload = build_bitrix_payload(lead)
+
+        self.assertIn("Предложение о сотрудничестве", payload["fields"]["TITLE"])
+        self.assertIn("Кто обращается: Производитель", comment)
+        self.assertIn("Предлагаем сотрудничество.", comment)
+        self.assertEqual(payload["fields"]["COMPANY_TITLE"], "ООО Производитель")
+        self.assertEqual(bitrix_webhook_env_name(lead), "BITRIX_COOPERATION_WEBHOOK_URL")
 
 
 class AiServiceTests(SimpleTestCase):

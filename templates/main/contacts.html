@@ -5,7 +5,7 @@
 {% block body_class %}contacts-page{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260729">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260730-cooperation">
   <style>
     .contacts-page .home-request-card {
       background:
@@ -30,57 +30,130 @@
   <div class="container">
     <div class="eyebrow">Контакты</div>
     <h1>Запросить <span class="accent-word">коммерческое предложение</span></h1>
-    <p class="hero-subtitle">Опишите задачу, прикрепите спецификацию или укажите направление поставки. Мы подготовим предложение под параметры объекта.</p>
+    <p class="hero-subtitle">Опишите задачу, прикрепите спецификацию или предложите сотрудничество. Заявки клиентов и предложения партнёров попадут к нужным специалистам.</p>
   </div>
 </section>
 
 <section class="section contacts-request-section">
   <div class="container contact-layout quick-contact-layout">
     <div class="contact-request-column">
-    <article class="glass request-panel home-request-card" id="request-form">
-      <header class="home-request-head"><h2>Заявка</h2></header>
-      <form class="form sym-request-home-form quick-request-form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" name="source" value="contact">
-        <input type="hidden" name="items" data-request-items>
-
-        <div class="field"><label for="name">Имя</label><input id="name" name="name" placeholder="Как к вам обращаться" autocomplete="name" required></div>
-        <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div>
-
-        <div class="field contact-selected-items" data-contact-request-items hidden>
-          <div class="contact-selected-items-head">
-            <label>Выбранные позиции из каталога</label>
-            <span><b data-request-count>0</b> поз.</span>
-          </div>
-          <div class="mini-request-selected-list contact-selected-items-list" data-request-list>
-            Выберите тип продукции — здесь появится структура заявки из каталога.
-          </div>
-          <button class="btn ghost small" type="button" data-request-clear>Очистить выбор</button>
+      <article class="glass request-panel home-request-card contact-request-card" id="request-form" data-contact-request-switcher>
+        <div class="contact-request-tabs" role="tablist" aria-label="Тип обращения">
+          <button class="contact-request-tab is-active" id="supplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="supplyRequestPanel" tabindex="0" data-contact-request-tab="supply">
+            Заявка на поставку
+          </button>
+          <button class="contact-request-tab" id="cooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="cooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">
+            Сотрудничество
+          </button>
         </div>
 
-        <div class="field"><label for="message">Комментарий</label><textarea id="message" name="message" placeholder="Что нужно подобрать? Укажите объект, город или сроки."></textarea></div>
+        <section class="contact-request-panel" id="supplyRequestPanel" role="tabpanel" aria-labelledby="supplyRequestTab" data-contact-request-panel="supply">
+          <header class="home-request-head"><h2>Заявка</h2></header>
+          <form class="form sym-request-home-form quick-request-form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-request-mode="supply" data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="source" value="contact">
+            <input type="hidden" name="items" data-request-items>
 
-        <div class="field file-field quick-file-field">
-          <span class="field-label">Спецификация или файл <span class="field-optional">(при наличии)</span></span>
-          <label class="upload-box" for="specification">
-            <svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg>
-            <span data-file-label>Прикрепить файл</span>
-          </label>
-          <input class="file-input" id="specification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
-          <div class="file-list" data-file-list hidden></div>
-        </div>
+            <div class="field"><label for="name">Имя</label><input id="name" name="name" placeholder="Как к вам обращаться" autocomplete="name" required></div>
+            <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div>
 
-        <label class="form-consent-check quick-consent">
-          <input type="checkbox" name="consent" value="1" required>
-          <span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener">Согласие</a></span>
-        </label>
-        <div class="home-request-actions">
-          <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-          <button class="btn quick-request-submit" type="submit">Отправить заявку →</button>
-          <small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small>
-        </div>
-      </form>
-    </article>
+            <div class="field contact-selected-items" data-contact-request-items hidden>
+              <div class="contact-selected-items-head">
+                <label>Выбранные позиции из каталога</label>
+                <span><b data-request-count>0</b> поз.</span>
+              </div>
+              <div class="mini-request-selected-list contact-selected-items-list" data-request-list>
+                Выберите тип продукции — здесь появится структура заявки из каталога.
+              </div>
+              <button class="btn ghost small" type="button" data-request-clear>Очистить выбор</button>
+            </div>
+
+            <div class="field"><label for="message">Комментарий</label><textarea id="message" name="message" placeholder="Что нужно подобрать? Укажите объект, город или сроки."></textarea></div>
+
+            <div class="field file-field quick-file-field">
+              <span class="field-label">Спецификация или файл <span class="field-optional">(при наличии)</span></span>
+              <label class="upload-box" for="specification">
+                <svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg>
+                <span data-file-label>Прикрепить файл</span>
+              </label>
+              <input class="file-input" id="specification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
+              <div class="file-list" data-file-list hidden></div>
+            </div>
+
+            <label class="form-consent-check quick-consent">
+              <input type="checkbox" name="consent" value="1" required>
+              <span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener">Согласие</a></span>
+            </label>
+            <div class="home-request-actions">
+              <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+              <button class="btn quick-request-submit" type="submit">Отправить заявку →</button>
+              <small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small>
+            </div>
+          </form>
+        </section>
+
+        <section class="contact-request-panel" id="cooperationRequestPanel" role="tabpanel" aria-labelledby="cooperationRequestTab" data-contact-request-panel="cooperation" hidden>
+          <header class="home-request-head cooperation-request-head">
+            <span class="home-request-kicker">Партнёрам и поставщикам</span>
+            <h2>Предложить сотрудничество</h2>
+          </header>
+          <form class="form sym-request-home-form quick-request-form cooperation-request-form" method="post" action="{% url 'api_cooperation_request' %}" data-lead-form data-request-mode="cooperation" data-lead-url="{% url 'api_cooperation_request' %}" data-submit-pending="Отправляем предложение..." data-submit-success="Предложение отправлено. Мы свяжемся с вами после рассмотрения." enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="source" value="cooperation">
+
+            <fieldset class="cooperation-role-field">
+              <legend>Кто вы? <span aria-hidden="true">*</span></legend>
+              <div class="cooperation-role-options">
+                <label class="cooperation-role-option">
+                  <input type="radio" name="proposer_type" value="manufacturer" required>
+                  <span>Производитель</span>
+                </label>
+                <label class="cooperation-role-option">
+                  <input type="radio" name="proposer_type" value="supplier" required>
+                  <span>Поставщик</span>
+                </label>
+                <label class="cooperation-role-option">
+                  <input type="radio" name="proposer_type" value="contractor" required>
+                  <span>Подрядчик</span>
+                </label>
+                <label class="cooperation-role-option">
+                  <input type="radio" name="proposer_type" value="other" required>
+                  <span>Другое</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field"><label for="cooperationCompany">Компания / контактное лицо *</label><input id="cooperationCompany" name="company" placeholder="Введите компанию или ФИО" autocomplete="organization" maxlength="220" required></div>
+
+            <div class="cooperation-contact-row">
+              <div class="field"><label for="cooperationPhone">Телефон *</label><input id="cooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div>
+              <div class="field"><label for="cooperationEmail">Email *</label><input id="cooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div>
+            </div>
+
+            <div class="field"><label for="cooperationMessage">Комментарий *</label><textarea id="cooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
+
+            <div class="field file-field quick-file-field">
+              <span class="field-label">Прайс или презентация <span class="field-optional">(при наличии)</span></span>
+              <label class="upload-box" for="cooperationFile">
+                <svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg>
+                <span data-file-label>Прикрепить файл</span>
+              </label>
+              <input class="file-input" id="cooperationFile" name="presentation" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
+              <div class="file-list" data-file-list hidden></div>
+            </div>
+
+            <label class="form-consent-check quick-consent">
+              <input type="checkbox" name="consent" value="1" required>
+              <span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener">Согласие</a></span>
+            </label>
+            <div class="home-request-actions">
+              <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+              <button class="btn quick-request-submit" type="submit">Отправить предложение →</button>
+              <small class="home-request-reassurance">Предложение поступит сотруднику, отвечающему за партнёрские обращения.</small>
+            </div>
+          </form>
+        </section>
+      </article>
     </div>
 
     <aside class="contact-mini">
