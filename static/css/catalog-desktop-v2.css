@@ -255,9 +255,9 @@
   .catalog-page .catalog-v2-toolbar {
     min-height: 51px;
     display: grid;
-    grid-template-columns: minmax(280px, 1fr) minmax(360px, 430px);
+    grid-template-columns: minmax(150px, .45fr) minmax(235px, .78fr) minmax(360px, 430px);
     align-items: center;
-    gap: 24px;
+    gap: 16px;
     margin-bottom: 18px;
   }
 
@@ -270,6 +270,51 @@
     line-height: 1.05;
     letter-spacing: 0;
     white-space: nowrap;
+  }
+
+  .catalog-page .catalog-v2-toolbar-request {
+    min-width: 0;
+    min-height: 51px;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 9px;
+    align-items: center;
+    padding: 8px 11px;
+    border: 1px solid rgba(224, 85, 132, .48);
+    border-radius: 8px;
+    background: linear-gradient(100deg, rgba(143, 33, 71, .27), rgba(31, 49, 78, .22));
+    box-shadow: inset 3px 0 0 #d33f73;
+  }
+
+  .catalog-page .catalog-v2-toolbar-request-icon {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 132, 171, .72);
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(145deg, #cb2d64, #8f2147);
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  .catalog-page .catalog-v2-toolbar-request strong,
+  .catalog-page .catalog-v2-toolbar-request small {
+    display: block;
+  }
+
+  .catalog-page .catalog-v2-toolbar-request strong {
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .catalog-page .catalog-v2-toolbar-request small {
+    margin-top: 2px;
+    color: rgba(221, 231, 244, .78);
+    font-size: 10px;
+    line-height: 1.25;
   }
 
   .catalog-page .catalog-v2-search {
@@ -1053,8 +1098,8 @@
     }
 
     .catalog-page .catalog-v2-toolbar {
-      grid-template-columns: minmax(250px, 1fr) minmax(340px, 400px);
-      gap: 18px;
+      grid-template-columns: minmax(135px, .45fr) minmax(220px, .78fr) minmax(290px, 1fr);
+      gap: 12px;
     }
 
     .catalog-page .catalog-v2-toolbar h1 {
@@ -1169,6 +1214,10 @@
     .catalog-page .catalog-v2-toolbar h1 {
       font-size: 30px;
       white-space: normal;
+    }
+
+    .catalog-page .catalog-v2-toolbar-request {
+      display: none;
     }
 
     .catalog-page .catalog-v2-search {
