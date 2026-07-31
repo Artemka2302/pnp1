@@ -6,7 +6,7 @@
 
 {% block extra_head %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260730-tree-spacing-v1">
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260730-catalog-request-guide-v1">
 {% endblock %}
 
 {% block content %}
@@ -28,6 +28,13 @@
     <div class="catalog-v2-workspace">
       <header class="catalog-v2-toolbar">
         <h1>Каталог</h1>
+        <div class="catalog-v2-toolbar-request" role="note" aria-label="Сбор заявки в каталоге">
+          <span class="catalog-v2-toolbar-request-icon" aria-hidden="true">+</span>
+          <span>
+            <strong>Соберите заявку в каталоге</strong>
+            <small>Выбранные позиции попадут в заявку</small>
+          </span>
+        </div>
         <div class="catalog-v2-search" data-catalog-v2-search-box>
           <button class="catalog-v2-search-button" type="button" aria-label="Перейти к поиску по каталогу" data-catalog-v2-search-button>
             <svg viewBox="0 0 24 24" aria-hidden="true">
