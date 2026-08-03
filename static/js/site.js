@@ -481,10 +481,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="support-chat-launcher">
         <div class="support-chat-channels" aria-label="Мессенджеры">
           <button class="support-chat-channel" type="button" data-support-channel="max" aria-label="MAX: открыть чат с менеджером" title="MAX">
-            <img src="/static/assets/img/messengers/max.svg" alt="" aria-hidden="true">
+            <img src="/static/assets/img/messengers/max.svg?v=20260803" alt="" aria-hidden="true">
           </button>
           <button class="support-chat-channel" type="button" data-support-channel="telegram" aria-label="Telegram: открыть чат с менеджером" title="Telegram">
-            <img src="/static/assets/img/messengers/telegram.svg" alt="" aria-hidden="true">
+            <img src="/static/assets/img/messengers/telegram.svg?v=20260803" alt="" aria-hidden="true">
           </button>
         </div>
         <button class="support-chat-toggle" type="button" data-support-toggle aria-expanded="false" aria-controls="supportChatPanel">
