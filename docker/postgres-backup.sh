@@ -14,7 +14,7 @@ esac
 if [ "$(id -u)" = "0" ]; then
     mkdir -p /backups
     chown postgres:postgres /backups
-    exec gosu postgres "$0" "$@"
+    exec gosu postgres /bin/sh "$0" "$@"
 fi
 
 while true; do
