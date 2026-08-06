@@ -4,3 +4,5 @@ Dockerfile text eol=lf
 Caddyfile* text eol=lf
 requirements.txt text eol=lf
 .env.example text eol=lf
+.dockerignore text eol=lf
+DOCKER.md text eol=lf

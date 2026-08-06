@@ -22,12 +22,12 @@ COPY --chown=app:app . /app
 
 RUN mkdir -p /app/staticfiles /app/media \
     && chown -R app:app /app/staticfiles /app/media \
-    && sed -i 's/\r$//' /app/docker/entrypoint.sh \
-    && chmod +x /app/docker/entrypoint.sh
+    && sed -i 's/\r$//' /app/docker/entrypoint.sh /app/docker/cleanup-loop.sh \
+    && chmod +x /app/docker/entrypoint.sh /app/docker/cleanup-loop.sh
 
 USER app
 
 EXPOSE 8000
 
 ENTRYPOINT ["/app/docker/entrypoint.sh"]
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "90", "--graceful-timeout", "30", "--access-logfile", "-", "--error-logfile", "-", "config.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "90", "--graceful-timeout", "30", "--max-requests", "1000", "--max-requests-jitter", "100", "--access-logfile", "-", "--error-logfile", "-", "config.wsgi:application"]

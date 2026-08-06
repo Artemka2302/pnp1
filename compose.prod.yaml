@@ -25,9 +25,56 @@ services:
         - -c
         - "import os, urllib.request; request = urllib.request.Request('http://127.0.0.1:8000/health/', headers={'Host': os.environ['SITE_DOMAIN'], 'X-Forwarded-Proto': 'https'}); urllib.request.urlopen(request, timeout=3)"
 
+  init:
+    environment:
+      DJANGO_DEBUG: "False"
+      HOME: /tmp
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  cleanup:
+    environment:
+      DJANGO_DEBUG: "False"
+      HOME: /tmp
+    read_only: true
+    tmpfs:
+      - /tmp
+
   db:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?Set POSTGRES_ADMIN_PASSWORD in .env}
+
+  backup:
+    image: postgres:18.3-alpine3.23
+    restart: unless-stopped
+    init: true
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: ${DB_NAME:-pnp1}
+      PGUSER: ${DB_USER:-pnp1_app}
+      PGPASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      BACKUP_RETENTION_DAYS: ${POSTGRES_BACKUP_RETENTION_DAYS:-7}
+      BACKUP_INTERVAL_SECONDS: ${POSTGRES_BACKUP_INTERVAL_SECONDS:-86400}
+    entrypoint: ["/bin/sh", "/scripts/postgres-backup.sh"]
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    networks:
+      - backend
+    pids_limit: 64
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - postgres_backups:/backups
+      - ./docker/postgres-backup.sh:/scripts/postgres-backup.sh:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
 
   caddy:
     image: caddy:2.11.4-alpine
@@ -41,11 +88,20 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+    networks:
+      - frontend
+    pids_limit: 128
     volumes:
       - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
       - static_data:/srv/static:ro
       - caddy_data:/data
       - caddy_config:/config
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:2019/config/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     logging:
       driver: json-file
       options:
@@ -55,3 +111,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  postgres_backups:
