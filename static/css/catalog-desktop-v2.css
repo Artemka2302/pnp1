@@ -538,32 +538,6 @@
     font-size: 23px;
   }
 
-  .catalog-page .catalog-v2-card-arrow {
-    position: absolute;
-    right: 12px;
-    bottom: 13px;
-    width: 31px;
-    height: 31px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255, 255, 255, .82);
-    border-radius: 50%;
-    color: #fff;
-    background: rgba(2, 9, 17, .45);
-    font-size: 22px;
-    line-height: 1;
-    transition: color .18s ease, background-color .18s ease, border-color .18s ease;
-  }
-
-  .catalog-page .catalog-v2-block-card:hover .catalog-v2-card-arrow,
-  .catalog-page .catalog-v2-block-card:focus-visible .catalog-v2-card-arrow,
-  .catalog-page .catalog-v2-system-card:hover .catalog-v2-card-arrow,
-  .catalog-page .catalog-v2-system-card:focus-visible .catalog-v2-card-arrow {
-    color: #fff;
-    border-color: #e95a8b;
-    background: #9c2851;
-  }
-
   .catalog-page .catalog-v2-popular {
     margin-top: 34px;
   }
@@ -639,7 +613,7 @@
   .catalog-page .catalog-v2-popular-overlay {
     position: absolute;
     inset: 0;
-    padding: 16px 52px 15px 14px;
+    padding: 16px 14px 15px;
     display: flex;
     align-items: flex-end;
     background:
@@ -657,30 +631,6 @@
     text-shadow: 0 2px 12px rgba(0, 0, 0, .76);
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-  }
-
-  .catalog-page .catalog-v2-popular-overlay i {
-    position: absolute;
-    right: 12px;
-    bottom: 12px;
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255, 255, 255, .82);
-    border-radius: 50%;
-    color: #fff;
-    background: rgba(2, 9, 17, .52);
-    font-size: 21px;
-    font-style: normal;
-    line-height: 1;
-    transition: border-color .18s ease, background-color .18s ease;
-  }
-
-  .catalog-page .catalog-v2-popular-card:hover .catalog-v2-popular-overlay i,
-  .catalog-page .catalog-v2-popular-card:focus-visible .catalog-v2-popular-overlay i {
-    border-color: #e95a8b;
-    background: #9c2851;
   }
 
   .catalog-page .catalog-v2-content {
@@ -824,7 +774,7 @@
   .catalog-page .catalog-v2-system-overlay {
     position: absolute;
     inset: 0;
-    padding: 15px 48px 15px 12px;
+    padding: 15px 12px;
     display: flex;
     align-items: flex-end;
     background:
@@ -844,14 +794,6 @@
     text-shadow: 0 2px 12px rgba(0, 0, 0, .76);
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-  }
-
-  .catalog-page .catalog-v2-system-card .catalog-v2-card-arrow {
-    right: 10px;
-    bottom: 10px;
-    width: 29px;
-    height: 29px;
-    font-size: 20px;
   }
 
   .catalog-page .catalog-v2-empty {

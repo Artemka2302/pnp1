@@ -65,37 +65,282 @@
       const prev = root.querySelector("[data-partner-logo-prev]");
       const next = root.querySelector("[data-partner-logo-next]");
       if (!track || !prev || !next) return;
-      root.dataset.partnerCarouselReady = "true";
 
-      const update = () => {
-        const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth - 2);
-        const atStart = track.scrollLeft <= 4;
-        const atEnd = track.scrollLeft >= maxScroll;
-        const canScroll = maxScroll > 0;
-        root.classList.toggle("is-at-start", atStart || !canScroll);
-        root.classList.toggle("is-at-end", atEnd || !canScroll);
-        root.classList.toggle("is-scrollable", canScroll);
-        prev.disabled = atStart || !canScroll;
-        next.disabled = atEnd || !canScroll;
-        prev.hidden = !canScroll;
-        next.hidden = !canScroll;
+      const section = root.closest(".home-brands-section");
+      const filterRoot = section?.querySelector("[data-home-brand-filter]");
+      const filterButtons = [...(filterRoot?.querySelectorAll("[data-brand-filter]") || [])];
+      const sourceCards = [...track.querySelectorAll("[data-home-brand-card]")];
+      const activeLabel = section?.querySelector("[data-home-brand-active-label]");
+      if (!filterButtons.length || !sourceCards.length) return;
+
+      const brandGroupsBySlug = {
+        "eltex": ["it", "engineering"],
+        "yadro": ["it"],
+        "orionsoft-zvirt": ["it"],
+        "gk-astra": ["it"],
+        "kiberprotekt": ["it"],
+        "kaspersky": ["it"],
+        "keyguard": ["security"],
+        "twinpro": ["security"],
+        "iss": ["security"],
+        "biosmart": ["security"],
+        "itbp": ["security"],
+        "visitorcontrol": ["security"],
+        "infomatika": ["security"],
+        "korf": ["engineering"],
+        "ned": ["engineering"],
+        "htl": ["engineering"],
+        "komset": ["engineering"],
       };
-      const step = () => Math.max(300, Math.floor(track.clientWidth * 0.72));
+      const groupDefinitions = filterButtons.map(button => ({
+        key: button.dataset.brandFilter,
+        label: button.textContent.trim(),
+        button,
+        cards: sourceCards.filter(card => (
+          brandGroupsBySlug[card.dataset.brandSlug]?.includes(button.dataset.brandFilter)
+        )),
+      })).filter(group => group.cards.length);
+
+      const createCycle = duplicate => {
+        const cycle = document.createElement("div");
+        cycle.className = "home-brand-marquee-cycle";
+        cycle.dataset.homeBrandCycle = duplicate ? "duplicate" : "primary";
+        if (duplicate) cycle.setAttribute("aria-hidden", "true");
+
+        groupDefinitions.forEach(groupDefinition => {
+          const group = document.createElement("div");
+          group.className = "home-brand-marquee-group";
+          group.dataset.homeBrandGroup = groupDefinition.key;
+          groupDefinition.cards.forEach(sourceCard => {
+            const card = sourceCard.cloneNode(true);
+            card.hidden = false;
+            card.dataset.brandGroup = groupDefinition.key;
+            if (duplicate) {
+              card.tabIndex = -1;
+              card.removeAttribute("aria-label");
+            }
+            group.append(card);
+          });
+          cycle.append(group);
+        });
+        return cycle;
+      };
+
+      const motion = document.createElement("div");
+      motion.className = "home-brand-marquee-motion";
+      const primaryCycle = createCycle(false);
+      const duplicateCycle = createCycle(true);
+      motion.append(primaryCycle, duplicateCycle);
+      track.replaceChildren(motion);
+
+      root.dataset.partnerCarouselReady = "true";
+      root.classList.remove("is-at-start", "is-at-end", "is-filter-switching", "is-autoplay-paused");
+      root.classList.add("is-continuous", "is-scrollable");
+      prev.hidden = false;
+      next.hidden = false;
+      prev.disabled = false;
+      next.disabled = false;
+
+      const pixelsPerSecond = 16;
+      const syncInterval = 80;
+      const manualTransitionDuration = 900;
+      const manualResumeDelay = 700;
+      let cycleWidth = 0;
+      let groupMetrics = [];
+      let activeGroupKey = "";
+      let currentPosition = 0;
+      let motionFrame = 0;
+      let manualFrame = 0;
+      let manualResumeTimer = 0;
+      let lastFrameTime = 0;
+      let lastUiSync = 0;
+      let isManualControl = false;
+
+      const normalizePosition = value => {
+        if (!cycleWidth) return 0;
+        return ((value % cycleWidth) + cycleWidth) % cycleWidth;
+      };
+
+      const positionFromAnimation = () => {
+        return currentPosition;
+      };
+
+      const setAnimationPosition = value => {
+        currentPosition = normalizePosition(value);
+        motion.style.transform = "translate3d(-" + currentPosition + "px, 0, 0)";
+      };
+
+      const measureGroups = () => {
+        cycleWidth = duplicateCycle.offsetLeft - primaryCycle.offsetLeft;
+        if (!cycleWidth) cycleWidth = primaryCycle.offsetWidth;
+        groupMetrics = groupDefinitions.map(groupDefinition => {
+          const group = primaryCycle.querySelector('[data-home-brand-group="' + groupDefinition.key + '"]');
+          const cards = [...(group?.querySelectorAll("[data-home-brand-card]") || [])];
+          return {
+            ...groupDefinition,
+            start: group ? group.offsetLeft - primaryCycle.offsetLeft : 0,
+            cards: cards.map(card => ({
+              start: card.offsetLeft - primaryCycle.offsetLeft,
+            })),
+          };
+        });
+        groupMetrics.forEach((group, index) => {
+          group.end = groupMetrics[index + 1]?.start ?? cycleWidth;
+        });
+      };
+
+      const groupForPosition = position => {
+        if (!groupMetrics.length) return null;
+        return [...groupMetrics].reverse().find(group => position >= group.start) || groupMetrics[0];
+      };
+
+      const setActiveGroup = group => {
+        if (!group || activeGroupKey === group.key) return;
+        activeGroupKey = group.key;
+        root.dataset.activeBrandFilter = group.key;
+        groupDefinitions.forEach(definition => {
+          const active = definition.key === group.key;
+          definition.button.setAttribute("aria-selected", String(active));
+          definition.button.tabIndex = active ? 0 : -1;
+        });
+        if (activeLabel) activeLabel.textContent = group.label;
+      };
+
+      const updateUi = position => {
+        const group = groupForPosition(position);
+        if (!group) return;
+        setActiveGroup(group);
+      };
+
+      const motionTick = timestamp => {
+        if (!lastFrameTime) lastFrameTime = timestamp;
+        const elapsed = Math.min(100, Math.max(0, timestamp - lastFrameTime));
+        lastFrameTime = timestamp;
+
+        if (!document.hidden && !isManualControl && cycleWidth) {
+          setAnimationPosition(currentPosition + (elapsed / 1000) * pixelsPerSecond);
+        }
+        if (timestamp - lastUiSync >= syncInterval) {
+          updateUi(currentPosition);
+          lastUiSync = timestamp;
+        }
+        motionFrame = window.requestAnimationFrame(motionTick);
+      };
+
+      const startMotion = position => {
+        if (!cycleWidth) return;
+        setAnimationPosition(position || 0);
+        lastFrameTime = 0;
+        if (!motionFrame) motionFrame = window.requestAnimationFrame(motionTick);
+      };
+
+      const resumeMotion = delayValue => {
+        const resumeDelay = typeof delayValue === "number" ? delayValue : manualResumeDelay;
+        window.clearTimeout(manualResumeTimer);
+        manualResumeTimer = window.setTimeout(() => {
+          root.classList.remove("is-manual-control");
+          isManualControl = false;
+          lastFrameTime = 0;
+        }, resumeDelay);
+      };
+
+      const animateToPosition = (targetPosition, duration = manualTransitionDuration) => {
+        if (!cycleWidth) return;
+        window.cancelAnimationFrame(manualFrame);
+        window.clearTimeout(manualResumeTimer);
+
+        const startPosition = positionFromAnimation();
+        let delta = targetPosition - startPosition;
+        if (delta > cycleWidth / 2) delta -= cycleWidth;
+        if (delta < -cycleWidth / 2) delta += cycleWidth;
+        const finalPosition = startPosition + delta;
+        isManualControl = true;
+        root.classList.add("is-manual-control");
+        let startedAt = null;
+
+        const frame = timestamp => {
+          if (startedAt === null) startedAt = timestamp;
+          const progress = Math.min(1, (timestamp - startedAt) / duration);
+          const eased = 0.5 - Math.cos(Math.PI * progress) / 2;
+          const position = normalizePosition(startPosition + delta * eased);
+          setAnimationPosition(position);
+          updateUi(position);
+          if (progress < 1) {
+            manualFrame = window.requestAnimationFrame(frame);
+            return;
+          }
+          setAnimationPosition(finalPosition);
+          updateUi(normalizePosition(finalPosition));
+          resumeMotion();
+        };
+        manualFrame = window.requestAnimationFrame(frame);
+      };
+
+      const moveToGroup = key => {
+        const group = groupMetrics.find(item => item.key === key);
+        if (group) animateToPosition(group.start, 1050);
+      };
+
+      const moveByCard = direction => {
+        const cards = groupMetrics.flatMap(group => group.cards);
+        const cardStep = cards.length > 1
+          ? Math.max(180, cards[1].start - cards[0].start)
+          : 180;
+        animateToPosition(positionFromAnimation() + direction * cardStep, 720);
+      };
+
+      groupDefinitions.forEach((group, index) => {
+        group.button.addEventListener("click", () => moveToGroup(group.key));
+        group.button.addEventListener("keydown", event => {
+          if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+          event.preventDefault();
+          const direction = event.key === "ArrowRight" ? 1 : -1;
+          const targetIndex = (index + direction + groupDefinitions.length) % groupDefinitions.length;
+          groupDefinitions[targetIndex].button.focus();
+          moveToGroup(groupDefinitions[targetIndex].key);
+        });
+      });
       prev.addEventListener("click", event => {
         event.preventDefault();
-        track.scrollBy({ left: -step(), behavior: "smooth" });
+        moveByCard(-1);
       });
       next.addEventListener("click", event => {
         event.preventDefault();
-        track.scrollBy({ left: step(), behavior: "smooth" });
+        moveByCard(1);
       });
-      track.addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
-      window.addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
-      requestAnimationFrame(update);
-      window.setTimeout(update, 500);
+      document.addEventListener("visibilitychange", () => {
+        lastFrameTime = 0;
+      });
+
+      const rebuildMotion = () => {
+        const previousPosition = positionFromAnimation();
+        const previousWidth = cycleWidth;
+        measureGroups();
+        if (!cycleWidth) return;
+        const proportionalPosition = previousWidth
+          ? (previousPosition / previousWidth) * cycleWidth
+          : 0;
+        startMotion(proportionalPosition);
+        updateUi(normalizePosition(proportionalPosition));
+      };
+
+      if ("ResizeObserver" in window) {
+        let observedWidth = 0;
+        const observer = new ResizeObserver(() => {
+          const nextWidth = Math.round(motion.scrollWidth);
+          if (nextWidth === observedWidth) return;
+          observedWidth = nextWidth;
+          rebuildMotion();
+        });
+        observer.observe(motion);
+      }
+
+      requestAnimationFrame(() => {
+        rebuildMotion();
+        updateUi(0);
+      });
     });
   };
-
   const workflowSteps = {
     project: {
       eyebrow: "01 · Проект",

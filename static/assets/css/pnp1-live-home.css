@@ -2983,6 +2983,9 @@ body.has-callback-modal{overflow:hidden}
 #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card__pill{
   min-height:22px;
   padding:5px 8px;
+  border-color:rgba(227,106,148,.45);
+  background:rgba(109,32,57,.3);
+  color:#f0b6ca;
   font-size:8px;
 }
 #why-pnp[data-why-variant="console"] .why-tech-grid .why-tech-card h3{
@@ -3049,14 +3052,20 @@ body.has-callback-modal{overflow:hidden}
   text-transform:uppercase;
 }
 .why-tech-console__pill{
-  padding:7px 10px;
+  display:inline-flex;
+  min-height:34px;
+  padding:7px 12px;
+  align-items:center;
+  justify-content:center;
   border:1px solid rgba(227,106,148,.36);
   border-radius:999px;
   background:rgba(109,32,57,.28);
   color:#f5dce5;
   font-size:9px;
   font-weight:900;
+  line-height:1.15;
   letter-spacing:.1em;
+  text-align:center;
   text-transform:uppercase;
 }
 .why-tech-console__title{
@@ -10959,6 +10968,27 @@ a[href*="wa.me"]{
   --client-motif-position:center,center,0 0,0 0;
   --client-motif-hover:translate3d(-6px,-4px,0) scale(1.018);
 }
+#clients [data-role-card="private"]{
+  --client-motif-opacity:.16;
+  --client-motif-image:
+    linear-gradient(rgba(169,194,222,.62) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(169,194,222,.62) 1px,transparent 1px),
+    radial-gradient(circle at 72% 62%,transparent 0 34px,rgba(214,168,185,.8) 35px 36px,transparent 37px),
+    radial-gradient(circle at 72% 62%,rgba(231,116,156,.8) 0 5px,transparent 6px);
+  --client-motif-size:38px 38px,38px 38px,100% 100%,100% 100%;
+  --client-motif-repeat:repeat,repeat,no-repeat,no-repeat;
+  --client-motif-position:0 0,0 0,center,center;
+}
+#clients [data-role-card="diy"]{
+  --client-motif-opacity:.17;
+  --client-motif-image:
+    linear-gradient(90deg,transparent 64%,rgba(214,168,185,.74) 64.4%,transparent 64.8%),
+    linear-gradient(0deg,transparent 58%,rgba(214,168,185,.66) 58.4%,transparent 58.8%),
+    repeating-radial-gradient(circle at 66% 58%,transparent 0 21px,rgba(169,194,222,.66) 22px 23px,transparent 24px 44px);
+  --client-motif-size:100% 100%,100% 100%,100% 100%;
+  --client-motif-repeat:no-repeat;
+  --client-motif-position:center;
+}
 #clients .role-entry-card:hover::before,
 #clients .role-entry-card:focus-within::before{
   opacity:calc(var(--client-motif-opacity) + .07);
@@ -11008,8 +11038,50 @@ a[href*="wa.me"]{
 
 /* Desktop alignment: shared content registers for partner and responsibility cards. */
 @media (min-width:1081px){
+  body.home-page #clients .role-entry-head p{
+    max-width:790px;
+  }
+  body.home-page #clients .role-entry-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:16px;
+  }
+  body.home-page #clients .role-entry-card{
+    grid-column:span 2;
+    min-height:283px;
+    padding:24px;
+    cursor:default;
+  }
+  body.home-page #clients #client-private{
+    grid-column:2 / span 2;
+  }
+  body.home-page #clients #client-diy{
+    grid-column:4 / span 2;
+  }
+  body.home-page #clients .role-entry-card-top{
+    margin-bottom:28px;
+  }
   body.home-page #clients .role-entry-card h3{
-    min-block-size:62px;
+    min-block-size:0;
+    font-size:clamp(23px,2vw,29px);
+    line-height:1.08;
+    letter-spacing:0;
+  }
+  body.home-page #clients .role-entry-card p{
+    min-block-size:0;
+    margin:16px 0 0;
+    font-size:14px;
+    line-height:1.55;
+  }
+  body.home-page #clients .role-entry-card:hover,
+  body.home-page #clients .role-entry-card:focus-within{
+    transform:none;
+    border-color:rgba(118,143,176,.34);
+    box-shadow:0 22px 60px rgba(0,0,0,.25);
+  }
+  body.home-page #clients .role-entry-card:hover::before,
+  body.home-page #clients .role-entry-card:focus-within::before{
+    opacity:var(--client-motif-opacity);
+    transform:none;
   }
   body.home-page #clients .role-entry-card>.role-entry-link.role-entry-link-action{
     align-self:flex-start;
@@ -12481,7 +12553,7 @@ a[href*="wa.me"]{
     min-height:46px!important;
   }
 
-  /* Brands: two clean rows, not a wall of logos. */
+  /* Brands: one calm horizontal ribbon. */
   body.home-page .home-brands-section .section-head{display:grid!important}
   body.home-page .home-brands-section .section-head>div:last-child{gap:10px!important}
   body.home-page .home-brands-section .section-head>div:last-child a:first-child{display:none!important}
@@ -12493,17 +12565,17 @@ a[href*="wa.me"]{
   }
   body.home-page .home-partner-logo-carousel .partner-logo-nav{width:44px!important}
   body.home-page .home-partner-logo-carousel .partner-logo-showcase{
-    grid-template-rows:repeat(2,64px)!important;
-    grid-auto-columns:132px!important;
-    gap:9px!important;
+    grid-template-rows:72px!important;
+    grid-auto-columns:148px!important;
+    gap:10px!important;
     padding:12px 42px!important;
   }
   body.home-page .home-partner-logo-carousel .partner-showcase-logo{
-    height:64px!important;
-    min-height:64px!important;
-    padding:9px 11px!important;
+    height:72px!important;
+    min-height:72px!important;
+    padding:10px 12px!important;
   }
-  body.home-page .home-partner-logo-carousel .partner-showcase-logo img{max-height:42px!important}
+  body.home-page .home-partner-logo-carousel .partner-showcase-logo img{max-height:46px!important}
 
   /* Footer: direct help and essential contacts only. */
   body.home-page .site-footer-cta{
@@ -12993,4 +13065,123 @@ body.home-page .home-supply-section-head{margin-bottom:22px!important}
   .home-supply-preview-actions .btn{width:100%}
   .home-supply-preview-actions .link-more{padding:9px 0;text-align:center}
   .home-supply-footer .btn{width:100%}
+}
+
+/* Homepage supply gallery. Desktop-only layout mirrors the approved 5 + 5 + 4 composition. */
+body.home-page .home-supply-gallery-head{
+  display:block;
+  margin-bottom:22px!important;
+}
+body.home-page .home-supply-gallery-head > div{
+  width:100%;
+}
+body.home-page .home-supply-gallery-head h2{
+  max-width:none;
+  margin:0;
+  color:#f7f9fd;
+  font-size:42px;
+  line-height:1.08;
+  letter-spacing:0;
+}
+body.home-page .home-supply-gallery-head p{
+  max-width:900px;
+  margin:14px 0 0;
+  color:#c8d3e1;
+  font-size:15px;
+  line-height:1.5;
+}
+.home-supply-gallery{
+  display:grid;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  grid-template-areas:
+    "architecture architecture constructive constructive it it lowcurrent lowcurrent tech tech"
+    "eom eom hvac hvac water water gas gas fire fire"
+    ". access access vertical vertical landscape landscape charging charging .";
+  gap:12px;
+  width:100%;
+}
+.home-supply-gallery-card{
+  position:relative;
+  isolation:isolate;
+  display:block;
+  min-width:0;
+  min-height:154px;
+  overflow:hidden;
+  border:1px solid rgba(148,174,205,.42);
+  border-radius:8px;
+  color:#fff;
+  background:#0a1829;
+  box-shadow:0 14px 30px rgba(0,0,0,.18);
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.home-supply-gallery-card:hover{
+  border-color:rgba(238,112,160,.82);
+  box-shadow:0 18px 36px rgba(0,0,0,.27),0 0 0 1px rgba(214,57,112,.16);
+  transform:translateY(-2px);
+}
+.home-supply-gallery-card:focus-visible{
+  outline:3px solid rgba(255,118,173,.88);
+  outline-offset:3px;
+}
+.home-supply-gallery-media,
+.home-supply-gallery-shade{
+  position:absolute;
+  inset:0;
+}
+.home-supply-gallery-media img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.90) saturate(1.02) contrast(1.05);
+  transform:scale(1.01);
+  transition:filter .35s ease,transform .45s ease;
+}
+.home-supply-gallery-card:hover .home-supply-gallery-media img{
+  filter:brightness(1) saturate(1.08) contrast(1.05);
+  transform:scale(1.035);
+}
+.home-supply-gallery-shade{
+  z-index:1;
+  background:linear-gradient(180deg,rgba(4,12,22,.02) 16%,rgba(4,12,22,.18) 54%,rgba(3,10,19,.76) 100%);
+}
+.home-supply-gallery-content{
+  position:absolute;
+  z-index:2;
+  right:12px;
+  bottom:11px;
+  left:13px;
+  display:block;
+}
+.home-supply-gallery-content strong{
+  display:block;
+  color:#fff;
+  font-size:16px;
+  font-weight:760;
+  line-height:1.18;
+  letter-spacing:0;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+.home-supply-gallery-card--architecture{grid-area:architecture}
+.home-supply-gallery-card--constructive{grid-area:constructive}
+.home-supply-gallery-card--it-infrastructure{grid-area:it}
+.home-supply-gallery-card--low-current{grid-area:lowcurrent}
+.home-supply-gallery-card--tech-equipment{grid-area:tech}
+.home-supply-gallery-card--eom{grid-area:eom}
+.home-supply-gallery-card--hvac{grid-area:hvac}
+.home-supply-gallery-card--water{grid-area:water}
+.home-supply-gallery-card--gas{grid-area:gas}
+.home-supply-gallery-card--fire{grid-area:fire}
+.home-supply-gallery-card--accessibility{grid-area:access}
+.home-supply-gallery-card--vertical-transport{grid-area:vertical}
+.home-supply-gallery-card--landscaping-and-site-improvement{grid-area:landscape}
+.home-supply-gallery-card--ev-charging-infrastructure{grid-area:charging}
+
+@media(max-width:1180px){
+  body.home-page .home-supply-gallery-head h2{font-size:36px}
+  .home-supply-gallery{gap:9px}
+  .home-supply-gallery-card{min-height:142px}
+  .home-supply-gallery-content{right:9px;bottom:9px;left:10px}
+  .home-supply-gallery-content strong{font-size:14px}
 }

@@ -6,7 +6,7 @@
 
 {% block extra_head %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260730-catalog-request-guide-v1">
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260805-no-card-arrows-v1">
 {% endblock %}
 
 {% block content %}
@@ -63,31 +63,31 @@
         <div class="catalog-v2-popular-grid">
           <a class="catalog-v2-popular-card" href="/catalog/building-materials/architecture/" data-catalog-v2-target="direction:architecture">
             <img src="{% static 'assets/img/catalog/generated/direction-architecture.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>Архитектурные решения</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>Архитектурные решения</strong></span>
           </a>
           <a class="catalog-v2-popular-card" href="/catalog/building-materials/constructive/" data-catalog-v2-target="direction:constructive">
             <img src="{% static 'assets/img/catalog/generated/direction-constructive.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>Конструктивные решения</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>Конструктивные решения</strong></span>
           </a>
           <a class="catalog-v2-popular-card" href="/catalog/engineering-equipment/hvac/" data-catalog-v2-target="direction:hvac">
             <img src="{% static 'assets/img/catalog/generated/direction-hvac.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>ОВиК и тепловые сети</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>ОВиК и тепловые сети</strong></span>
           </a>
           <a class="catalog-v2-popular-card" href="/catalog/engineering-equipment/low-current/" data-catalog-v2-target="direction:low-current">
             <img src="{% static 'assets/img/catalog/generated/direction-low-current.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>Слаботочные сети и связь</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>Слаботочные сети и связь</strong></span>
           </a>
           <a class="catalog-v2-popular-card" href="/catalog/it-equipment-and-software/it-infrastructure/" data-catalog-v2-target="direction:it-infrastructure">
             <img src="{% static 'assets/img/catalog/generated/direction-it-infrastructure.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>IT-инфраструктура</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>IT-инфраструктура</strong></span>
           </a>
           <a class="catalog-v2-popular-card" href="/catalog/tech-equipment/tech-equipment/" data-catalog-v2-target="direction:tech-equipment">
             <img src="{% static 'assets/img/catalog/generated/direction-tech-equipment.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>Технологическое оборудование</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>Технологическое оборудование</strong></span>
           </a>
           <a class="catalog-v2-popular-card" href="/catalog/energy/eom/" data-catalog-v2-target="direction:eom">
             <img src="{% static 'assets/img/catalog/generated/direction-eom.webp' %}" alt="" loading="lazy">
-            <span class="catalog-v2-popular-overlay"><strong>ЭОМ</strong><i aria-hidden="true">›</i></span>
+            <span class="catalog-v2-popular-overlay"><strong>ЭОМ</strong></span>
           </a>
         </div>
       </section>
@@ -111,5 +111,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260730-popular-sections-v2"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260805-no-card-arrows-v1"></script>
 {% endblock %}

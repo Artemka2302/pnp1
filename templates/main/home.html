@@ -4,9 +4,9 @@
 {% block body_class %}home-page pnp-live-home{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20260730-2" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20260805-4" media="(min-width: 1081px)">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260727" media="(min-width: 1081px)">
-  <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260728" media="(min-width: 1081px)">
+  <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260805-9" media="(min-width: 1081px)">
 {% endblock %}
 
 {% block content %}
@@ -66,30 +66,34 @@
       <div>
         <div class="eyebrow">С кем работаем</div>
         <h2>Наши партнёры</h2>
-        <p>Помогаем проектировщикам, генподрядчикам, подрядчикам и субподрядчикам подбирать решения, рассчитывать поставку и комплектовать объекты.</p>
+        <p>Помогаем участникам проектирования и строительства, частным заказчикам и DIY-проектам подобрать материалы, оборудование и решения под конкретную задачу.</p>
       </div>
     </div>
     <div class="role-entry-grid">
       <article class="role-entry-card" id="client-designers" data-role-card="designer">
         <div class="role-entry-card-top"><span class="role-entry-tag">Проектирование</span></div>
         <h3>Проектировщики</h3>
-        <p>Подбираем решения по требованиям проекта, проверяем применимость и доступность материалов для спецификации.</p>
-        <ul><li>Технический подбор</li><li>Проверка аналогов</li><li>Документы производителей по запросу</li></ul>
-        <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=designer&amp;request_type=technical_selection&amp;project_stage=design#request-form">Начать технический подбор <span aria-hidden="true">→</span></a>
+        <p>Помогаем подобрать решения по техническому заданию, проверить применимость материалов и получить документы для согласования.</p>
       </article>
-      <article class="role-entry-card role-entry-card-accent" id="client-contractors" data-role-card="general_contractor">
+      <article class="role-entry-card" id="client-construction" data-role-card="general_contractor">
         <div class="role-entry-card-top"><span class="role-entry-tag">Комплектация</span></div>
-        <h3>Генподрядчики</h3>
-        <p>Разбираем ведомость, подбираем варианты комплектации и готовим коммерческое предложение по объекту.</p>
-        <ul><li>Разбор ведомости</li><li>Подбор производителей и замен</li><li>Коммерческое предложение</li></ul>
-        <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=general_contractor&amp;request_type=specification_review#request-form">Передать ведомость на расчёт <span aria-hidden="true">→</span></a>
+        <h3>Строительные организации</h3>
+        <p>Комплектуем объект по разделам, работаем с ведомостями, заменами, сроками и коммерческими предложениями.</p>
       </article>
       <article class="role-entry-card" id="client-institutes" data-role-card="procurement">
-        <div class="role-entry-card-top"><span class="role-entry-tag">Снабжение участка</span></div>
-        <h3>Подрядчики и субподрядчики</h3>
-        <p>Подбираем материалы и оборудование под работы на объекте, готовим варианты замены и расчёт для согласования.</p>
-        <ul><li>Подбор под вид работ</li><li>Замены по требованиям проекта</li><li>КП и документы для согласования</li></ul>
-        <a class="role-entry-link role-entry-link-action" href="{% url 'contacts' %}?role=procurement&amp;request_type=commercial_offer&amp;project_stage=construction#request-form">Отправить список материалов <span aria-hidden="true">→</span></a>
+        <div class="role-entry-card-top"><span class="role-entry-tag">Проектные решения</span></div>
+        <h3>Проектные институты</h3>
+        <p>Сопоставляем решения с требованиями проекта, подбираем аналоги и помогаем собрать документацию по позициям.</p>
+      </article>
+      <article class="role-entry-card" id="client-private" data-role-card="private">
+        <div class="role-entry-card-top"><span class="role-entry-tag">Частный объект</span></div>
+        <h3>Физические лица</h3>
+        <p>Помогаем подобрать материалы и оборудование для частного строительства, ремонта и благоустройства.</p>
+      </article>
+      <article class="role-entry-card" id="client-diy" data-role-card="diy">
+        <div class="role-entry-card-top"><span class="role-entry-tag">Самостоятельные проекты</span></div>
+        <h3>DIY-проекты</h3>
+        <p>Подбираем понятные материалы, комплектующие и оборудование для самостоятельной реализации конкретной задачи.</p>
       </article>
     </div>
   </div>
@@ -133,33 +137,34 @@
 
 <section class="section home-supply-section home-directions-section home-desktop-only" aria-labelledby="homeSupplyTitle">
   <div class="container">
-    <div class="section-head home-supply-section-head"><div><div class="section-eyebrow">Комплектация по проекту</div><h2 id="homeSupplyTitle">Закрываем все разделы проекта</h2></div></div>
+    <div class="section-head home-supply-section-head home-supply-gallery-head">
+      <div>
+        <div class="section-eyebrow">Комплектация по проекту</div>
+        <h2 id="homeSupplyTitle">Комплектуем объект по всем разделам проекта</h2>
+        <p>Подбираем и поставляем материалы, оборудование и комплексные решения по всем ключевым направлениям.</p>
+      </div>
+    </div>
     <div id="homeCategories">
-      <div class="home-supply-map" data-pnp-live-supply>
-        <div class="home-supply-columns">
-          {% for block in blocks %}
-            <article class="home-supply-sphere {% if forloop.first %}is-mobile-expanded{% endif %}" data-home-supply-sphere="{{ block.slug }}">
-              <div class="home-supply-sphere-head">
-                <span class="home-supply-sphere-index">{{ forloop.counter|stringformat:"02d" }}</span>
-                <h3>{{ block.title }}</h3>
-                <button class="home-supply-sphere-mobile-toggle" type="button" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Показать направления: {{ block.title }}"><span></span></button>
-              </div>
-              <div class="home-supply-direction-list" aria-label="{{ block.title }}">
-                {% for direction in block.directions.all %}
-                  <a class="home-supply-direction" href="{{ direction.get_absolute_url }}"
-                    data-live-supply-direction="{{ direction.slug }}"
-                    aria-label="Открыть направление: {{ direction.title }}">
-                    <span class="home-supply-direction-icon" data-live-supply-icon></span>
-                    <span class="home-supply-direction-name">{{ direction.title }}</span>
-                    <span class="home-supply-direction-arrow" aria-hidden="true">→</span>
-                  </a>
-                {% empty %}
-                  <a class="home-supply-direction" href="{{ block.get_absolute_url }}"><span class="home-supply-direction-name">Открыть блок</span><span class="home-supply-direction-arrow">→</span></a>
-                {% endfor %}
-              </div>
-            </article>
+      <div class="home-supply-gallery" aria-label="Разделы комплектации объекта">
+        {% for block in blocks %}
+          {% for direction in block.directions.all %}
+            <a class="home-supply-gallery-card home-supply-gallery-card--{{ direction.slug }}"
+              href="{{ direction.get_absolute_url }}"
+              aria-label="Открыть раздел: {{ direction.title }}">
+              <span class="home-supply-gallery-media" aria-hidden="true">
+                {% if direction.image %}
+                  <img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">
+                {% elif block.image %}
+                  <img src="{% static block.image %}" alt="" loading="lazy" decoding="async">
+                {% endif %}
+              </span>
+              <span class="home-supply-gallery-shade" aria-hidden="true"></span>
+              <span class="home-supply-gallery-content">
+                <strong>{{ direction.title }}</strong>
+              </span>
+            </a>
           {% endfor %}
-        </div>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -181,14 +186,24 @@
 
 <section class="section compact home-brands-section home-desktop-only">
   <div class="container">
-    <div class="section-head"><div><div class="eyebrow home-desktop-eyebrow">Проверенные производители</div><h2>Популярные бренды</h2></div></div>
+    <div class="section-head home-brand-section-head">
+      <div><div class="eyebrow home-desktop-eyebrow">Проверенные производители</div><h2>Популярные бренды</h2></div>
+      <span class="home-brand-active-label" data-home-brand-active-label>IT-инфраструктура и ПО</span>
+    </div>
+    <div class="home-brand-filter" data-home-brand-filter>
+      <div class="home-brand-filter-tabs" role="tablist" aria-label="Фильтр брендов по разделам">
+        <button class="home-brand-filter-tab" type="button" role="tab" aria-selected="true" data-brand-filter="it">IT-инфраструктура и ПО</button>
+        <button class="home-brand-filter-tab" type="button" role="tab" aria-selected="false" data-brand-filter="security">Слаботочные сети и связь</button>
+        <button class="home-brand-filter-tab" type="button" role="tab" aria-selected="false" data-brand-filter="engineering">Инженерные системы</button>
+      </div>
+    </div>
     <div class="partners-preview popular-logo-grid" id="featuredPartnersHome">
       <div class="partner-logo-carousel home-partner-logo-carousel is-at-start" data-partner-logo-carousel aria-label="Популярные бренды и партнёры">
         <button class="partner-logo-nav partner-logo-nav-prev" type="button" aria-label="Листать логотипы назад" data-partner-logo-prev>‹</button>
-        <div class="partner-logo-showcase home-partner-logo-showcase" tabindex="0" aria-label="Логотипы производителей">
+        <div class="partner-logo-showcase home-partner-logo-showcase" id="homeBrandLogoTrack" tabindex="0" aria-label="Логотипы производителей">
           {% for partner in featured_partners %}
             {% if partner.show_on_home and partner.logo %}
-              <a class="mega-logo-card mega-partner-logo-card partner-showcase-logo" href="{% url 'vendors' %}?vendors={{ partner.slug }}" aria-label="{{ partner.name }}">
+              <a class="mega-logo-card mega-partner-logo-card partner-showcase-logo" href="{% url 'vendors' %}?vendors={{ partner.slug }}" aria-label="{{ partner.name }}" data-home-brand-card data-brand-slug="{{ partner.slug }}" data-brand-category="{{ partner.category }}">
                 <img src="{% static partner.logo %}" alt="{{ partner.name }}" loading="lazy" decoding="async">
               </a>
             {% endif %}
@@ -311,5 +326,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/home-pnp1-live.js' %}?v=20260728-2"></script>
+  <script src="{% static 'js/home-pnp1-live.js' %}?v=20260805-13"></script>
 {% endblock %}
