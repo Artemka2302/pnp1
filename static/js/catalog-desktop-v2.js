@@ -179,7 +179,6 @@
           <img src="${escapeHtml(imageFor(block))}" alt="" loading="${index === 0 ? "eager" : "lazy"}">
           <span class="catalog-v2-block-overlay">
             <h2>${escapeHtml(block.title)}</h2>
-            <span class="catalog-v2-card-arrow" aria-hidden="true">›</span>
           </span>
         </a>`;
     }).join("");
@@ -190,7 +189,6 @@
       <img src="${escapeHtml(imageFor(node))}" alt="" loading="lazy">
       <span class="catalog-v2-system-overlay">
         <h3>${escapeHtml(node.title)}</h3>
-        <span class="catalog-v2-card-arrow" aria-hidden="true">›</span>
       </span>
     </a>`;
 

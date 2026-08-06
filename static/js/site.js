@@ -490,9 +490,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="support-chat-toggle" type="button" data-support-toggle aria-expanded="false" aria-controls="supportChatPanel">
           <span class="support-chat-toggle-mobile">Помощь</span>
           <span class="support-chat-toggle-desktop" aria-hidden="true">
-            <svg class="support-chat-launch-icon" viewBox="0 0 24 24">
-              <path d="M20 11.5a7.5 7.5 0 0 1-8 7.47 8.8 8.8 0 0 1-3.15-.75L4 20l1.55-4.2A7.5 7.5 0 1 1 20 11.5Z"></path>
-            </svg>
             <span class="support-chat-toggle-copy"><small>AI-поддержка</small><strong>Помощник по комплектации</strong></span>
             <span class="support-chat-ai-badge">AI</span>
           </span>
