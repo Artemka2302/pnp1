@@ -478,6 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
     root.className = "support-chat-widget";
     root.dataset.supportChat = "";
     root.innerHTML = `
+      <div class="support-chat-notice" data-manager-chat-notice role="status" aria-live="polite" hidden></div>
       <div class="support-chat-launcher">
         <div class="support-chat-channels" aria-label="Мессенджеры">
           <button class="support-chat-channel" type="button" data-support-channel="max" aria-label="MAX: открыть чат с менеджером" title="MAX">
@@ -633,6 +634,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const draftMissing = root.querySelector("[data-ai-draft-missing]");
     const managerMessage = root.querySelector("[data-manager-message]");
     const managerReopen = root.querySelector("[data-manager-reopen]");
+    const managerChatNotice = root.querySelector("[data-manager-chat-notice]");
     const managerConsent = root.querySelector("[data-manager-consent]");
     const managerConsentLabel = root.querySelector("[data-manager-consent-label]");
     const aiConsent = root.querySelector("[data-ai-consent]");
@@ -655,7 +657,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let bitrixScriptPromise = null;
     let pendingManagerChatContext = null;
     let lastManagerChatContext = null;
+    let managerChatNoticeTimer = null;
     const configuredLiveChatWidgets = new WeakSet();
+    const configuringLiveChatWidgets = new WeakSet();
+
+    const showManagerChatNotice = message => {
+      if (!managerChatNotice) return;
+      window.clearTimeout(managerChatNoticeTimer);
+      managerChatNotice.textContent = message;
+      managerChatNotice.hidden = false;
+      managerChatNoticeTimer = window.setTimeout(() => {
+        managerChatNotice.hidden = true;
+      }, 6000);
+    };
 
     const cleanLiveChatValue = (value, maxLength = 500) => String(value || "")
       .replace(/\s+/g, " ")
@@ -707,13 +721,79 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof widget?.addLocalize !== "function") return;
       try {
         widget.addLocalize({
+          BX_LIVECHAT_LOADING: "Подключаем чат с менеджером...",
           BX_LIVECHAT_TITLE: "Чат с менеджером ПНП",
           BX_LIVECHAT_USER: "менеджер",
           BX_LIVECHAT_OFFLINE_TITLE: "Оставьте сообщение для менеджера",
+          BX_LIVECHAT_ERROR_TITLE: "Не удалось подключить чат",
+          BX_LIVECHAT_ERROR_DESC: "Попробуйте открыть чат ещё раз или свяжитесь с нами по телефону.",
           BX_MESSENGER_TEXTAREA_PLACEHOLDER: "Напишите сообщение менеджеру...",
         });
       } catch {
         // Bitrix can reject localization until its configuration is loaded.
+      }
+    };
+
+    const subscribeToBitrixLiveChat = widget => {
+      if (!widget || configuredLiveChatWidgets.has(widget) || configuringLiveChatWidgets.has(widget)) return;
+      configuringLiveChatWidgets.add(widget);
+
+      const subscribe = attemptsLeft => {
+        const subscriptionTypes = window.BX?.LiveChatWidget?.SubscriptionType || {
+          configLoaded: "configLoaded",
+          sessionFinish: "sessionFinish",
+        };
+        if (typeof widget.subscribe !== "function") {
+          if (attemptsLeft > 0) {
+            window.setTimeout(() => subscribe(attemptsLeft - 1), 250);
+          } else {
+            configuringLiveChatWidgets.delete(widget);
+          }
+          return;
+        }
+
+        configuringLiveChatWidgets.delete(widget);
+        configuredLiveChatWidgets.add(widget);
+
+        const safelySubscribe = (type, callback) => {
+          if (!type) return;
+          try {
+            widget.subscribe({ type, callback });
+          } catch {
+            // The chat itself remains available if an optional event is unavailable.
+          }
+        };
+
+        safelySubscribe(subscriptionTypes.configLoaded, () => {
+          localizeBitrixLiveChat(widget);
+          if (!pendingManagerChatContext || typeof widget.open !== "function") return;
+          try {
+            widget.open();
+          } catch {
+            // The immediate open attempt remains the fallback.
+          }
+        });
+
+        safelySubscribe(subscriptionTypes.sessionFinish, () => {
+          pendingManagerChatContext = null;
+          lastManagerChatContext = null;
+          managerReopen.hidden = true;
+          if (typeof widget.close === "function") {
+            try {
+              widget.close();
+            } catch {
+              // The session is already finished; only the visual state remains.
+            }
+          }
+          showManagerChatNotice("Диалог завершён менеджером.");
+        });
+      };
+
+      try {
+        subscribe(20);
+      } catch {
+        configuringLiveChatWidgets.delete(widget);
+        // Opening the official widget does not depend on event subscriptions.
       }
     };
 
@@ -728,26 +808,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
       localizeBitrixLiveChat(widget);
-      if (configuredLiveChatWidgets.has(widget)) return;
-      configuredLiveChatWidgets.add(widget);
-      const configLoaded = window.BX?.LiveChatWidget?.SubscriptionType?.configLoaded;
-      if (!configLoaded || typeof widget.subscribe !== "function") return;
-      try {
-        widget.subscribe({
-          type: configLoaded,
-          callback: () => {
-            localizeBitrixLiveChat(widget);
-            if (!pendingManagerChatContext || typeof widget.open !== "function") return;
-            try {
-              widget.open();
-            } catch {
-              // The immediate open attempt remains the fallback.
-            }
-          },
-        });
-      } catch {
-        // Opening the official widget does not depend on custom localization.
-      }
+      subscribeToBitrixLiveChat(widget);
     };
 
     window.addEventListener("onBitrixLiveChat", event => {
@@ -800,7 +861,7 @@ document.addEventListener("DOMContentLoaded", () => {
             resolve(loaded);
           };
           script.async = true;
-          script.src = source;
+          script.src = `${source}${source.includes("?") ? "&" : "?"}${Math.floor(Date.now() / 60000)}`;
           script.dataset.pnpBitrixLivechat = "";
           script.referrerPolicy = "strict-origin-when-cross-origin";
           script.addEventListener("load", () => finish(true), { once: true });
@@ -835,6 +896,22 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch {
         return false;
       }
+    };
+
+    const launchManagerLiveChat = async trigger => {
+      if (trigger) trigger.disabled = true;
+      setStatus(status, "Открываем чат с менеджером...");
+      const opened = await openManagerLiveChat({ items: readItems() });
+      if (trigger) trigger.disabled = false;
+      if (opened) {
+        setStatus(status, "Чат с менеджером открыт.");
+        setOpen(false);
+        return;
+      }
+
+      setMode("manager");
+      setOpen(true);
+      setStatus(status, "Онлайн-чат сейчас недоступен. Оставьте контакты, и менеджер свяжется с вами.", true);
     };
 
     const cleanDraftValue = (value, maxLength) => String(value || "").trim().slice(0, maxLength);
@@ -995,13 +1072,16 @@ document.addEventListener("DOMContentLoaded", () => {
     toggle.addEventListener("click", () => setOpen(panel.hidden));
     closeButton.addEventListener("click", () => setOpen(false));
     root.querySelectorAll("[data-support-channel]").forEach(button => {
-      button.addEventListener("click", () => {
-        setMode("manager");
-        setOpen(true);
-      });
+      button.addEventListener("click", () => launchManagerLiveChat(button));
     });
     modeButtons.forEach(button => {
-      button.addEventListener("click", () => setMode(button.dataset.supportModeOption));
+      button.addEventListener("click", () => {
+        if (button.dataset.supportModeOption === "manager") {
+          launchManagerLiveChat(button);
+          return;
+        }
+        setMode(button.dataset.supportModeOption);
+      });
     });
     root.querySelectorAll("[data-support-prompt]").forEach(button => {
       button.addEventListener("click", () => {
@@ -1034,6 +1114,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.querySelectorAll("[data-footer-ai-button]").forEach(button => {
       button.addEventListener("click", () => {
+        if (button.dataset.footerAiMode === "manager") {
+          launchManagerLiveChat(button);
+          return;
+        }
         setMode(button.dataset.footerAiMode);
         setOpen(true);
       });
@@ -1107,6 +1191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     setMode(currentMode);
+    loadBitrixLiveChat();
   };
 
   const openTransferDb = () =>

@@ -17,7 +17,19 @@ from .ai import (
     normalize_lead_draft,
     parse_ai_result,
 )
-from .bitrix import bitrix_webhook_env_name, build_bitrix_comment, build_bitrix_payload
+from .bitrix import (
+    COOPERATION_COMMENT_FIELD,
+    COOPERATION_EMAIL_FIELD,
+    COOPERATION_ENTITY_TYPE_ID,
+    COOPERATION_PHONE_FIELD,
+    COOPERATION_PROPOSER_TYPE_FIELD,
+    attach_files_to_bitrix_item,
+    bitrix_method_url,
+    bitrix_webhook_env_name,
+    build_bitrix_comment,
+    build_bitrix_payload,
+    send_lead_to_bitrix,
+)
 from .middleware import CatalogCrawlThrottleMiddleware
 from .models import (
     CatalogBlock,
@@ -223,7 +235,7 @@ class MiniRequestApiTests(TestCase):
             "main.views.send_lead_to_bitrix",
             return_value={"configured": False, "sent": False},
         )
-        self.bitrix_patcher.start()
+        self.bitrix_mock = self.bitrix_patcher.start()
         self.addCleanup(self.bitrix_patcher.stop)
         block = CatalogBlock.objects.create(slug="building-materials", title="Строительные материалы")
         direction = Direction.objects.create(block=block, slug="constructive", title="Конструктив")
@@ -390,6 +402,27 @@ class MiniRequestApiTests(TestCase):
         self.assertIn("email", response.json()["error"].lower())
         self.assertEqual(Lead.objects.count(), 0)
 
+    def test_api_reports_configured_bitrix_delivery_failure(self):
+        self.bitrix_mock.return_value = {"configured": True, "sent": False, "error": "Access denied"}
+
+        response = self.client.post(
+            "/api/cooperation-request/",
+            data={
+                "proposer_type": "supplier",
+                "company": "ООО Поставщик",
+                "phone": "+7 900 000-00-00",
+                "email": "partner@example.com",
+                "message": "Предлагаем сотрудничество.",
+                "consent": "1",
+            },
+        )
+
+        self.assertEqual(response.status_code, 502)
+        self.assertFalse(response.json()["ok"])
+        self.assertFalse(response.json()["bitrix_sent"])
+        self.assertIn("не передана в CRM", response.json()["error"])
+        self.assertEqual(Lead.objects.get().status, Lead.STATUS_NEW)
+
     def test_contacts_page_contains_supply_and_cooperation_forms(self):
         response = self.client.get("/contacts/")
 
@@ -453,11 +486,94 @@ class BitrixPayloadTests(TestCase):
         comment = build_bitrix_comment(lead)
         payload = build_bitrix_payload(lead)
 
-        self.assertIn("Предложение о сотрудничестве", payload["fields"]["TITLE"])
+        self.assertEqual(payload["entityTypeId"], 1088)
+        self.assertEqual(payload["useOriginalUfNames"], "Y")
+        self.assertIn("Предложение о сотрудничестве", payload["fields"]["title"])
+        self.assertIn("ООО Производитель", payload["fields"]["title"])
+        self.assertEqual(payload["fields"][COOPERATION_PHONE_FIELD], "+79000000000")
+        self.assertEqual(payload["fields"][COOPERATION_EMAIL_FIELD], "partner@example.com")
+        self.assertEqual(payload["fields"][COOPERATION_COMMENT_FIELD], "Предлагаем сотрудничество.")
+        self.assertEqual(payload["fields"][COOPERATION_PROPOSER_TYPE_FIELD], 1333)
         self.assertIn("Кто обращается: Производитель", comment)
         self.assertIn("Предлагаем сотрудничество.", comment)
-        self.assertEqual(payload["fields"]["COMPANY_TITLE"], "ООО Производитель")
         self.assertEqual(bitrix_webhook_env_name(lead), "BITRIX_COOPERATION_WEBHOOK_URL")
+
+    def test_cooperation_proposer_types_use_bitrix_enumeration_ids(self):
+        expected_ids = {
+            Lead.COOPERATION_TYPE_SUPPLIER: 1330,
+            Lead.COOPERATION_TYPE_CONTRACTOR: 1331,
+            Lead.COOPERATION_TYPE_MANUFACTURER: 1333,
+            Lead.COOPERATION_TYPE_OTHER: 1332,
+        }
+
+        for proposer_type, expected_id in expected_ids.items():
+            with self.subTest(proposer_type=proposer_type):
+                lead = Lead(
+                    source=Lead.SOURCE_COOPERATION,
+                    phone="+79000000000",
+                    email="partner@example.com",
+                    message="Предложение",
+                    raw_payload={"proposer_type": proposer_type},
+                )
+                payload = build_bitrix_payload(lead)
+                self.assertEqual(payload["fields"][COOPERATION_PROPOSER_TYPE_FIELD], expected_id)
+
+    def test_bitrix_method_url_accepts_base_and_full_method_urls(self):
+        base_url = "https://example.bitrix24.ru/rest/1/token"
+        item_url = f"{base_url}/crm.item.add.json"
+
+        self.assertEqual(bitrix_method_url(base_url, "crm.lead.add"), f"{base_url}/crm.lead.add.json")
+        self.assertEqual(bitrix_method_url(item_url, "crm.item.add"), item_url)
+        self.assertEqual(
+            bitrix_method_url(item_url, "crm.timeline.comment.add"),
+            f"{base_url}/crm.timeline.comment.add.json",
+        )
+
+    @patch("main.bitrix.call_bitrix_method")
+    def test_cooperation_submission_creates_smart_process_item(self, call_bitrix_method_mock):
+        lead = Lead.objects.create(
+            source=Lead.SOURCE_COOPERATION,
+            company="ООО Поставщик",
+            phone="+79000000000",
+            email="partner@example.com",
+            message="Предлагаем поставку.",
+            raw_payload={"proposer_type": Lead.COOPERATION_TYPE_SUPPLIER},
+        )
+        call_bitrix_method_mock.return_value = {"result": {"item": {"id": 321}}}
+
+        with patch.dict(
+            "os.environ",
+            {"BITRIX_COOPERATION_WEBHOOK_URL": "https://example.bitrix24.ru/rest/1/token/crm.item.add.json"},
+        ):
+            result = send_lead_to_bitrix(lead)
+
+        self.assertTrue(result["sent"])
+        self.assertEqual(result["bitrix_id"], "321")
+        call_bitrix_method_mock.assert_called_once()
+        webhook_url, method, payload = call_bitrix_method_mock.call_args.args
+        self.assertEqual(webhook_url, "https://example.bitrix24.ru/rest/1/token/crm.item.add.json")
+        self.assertEqual(method, "crm.item.add")
+        self.assertEqual(payload["entityTypeId"], COOPERATION_ENTITY_TYPE_ID)
+        lead.refresh_from_db()
+        self.assertEqual(lead.bitrix_lead_id, "321")
+        self.assertEqual(lead.status, Lead.STATUS_SENT_TO_BITRIX)
+
+    @patch("main.bitrix.build_bitrix_file_payloads", return_value=[["offer.pdf", "ZmlsZQ=="]])
+    @patch("main.bitrix.call_bitrix_method", return_value={"result": 901})
+    def test_cooperation_files_attach_to_smart_process_timeline(self, call_bitrix_method_mock, _files_mock):
+        lead = Lead(source=Lead.SOURCE_COOPERATION)
+
+        result = attach_files_to_bitrix_item(
+            "https://example.bitrix24.ru/rest/1/token/crm.item.add.json",
+            lead,
+            "321",
+        )
+
+        self.assertTrue(result["sent"])
+        webhook_url, method, payload = call_bitrix_method_mock.call_args.args
+        self.assertEqual(method, "crm.timeline.comment.add")
+        self.assertEqual(payload["fields"]["ENTITY_ID"], 321)
+        self.assertEqual(payload["fields"]["ENTITY_TYPE"], "DYNAMIC_1088")
 
 
 class AiServiceTests(SimpleTestCase):

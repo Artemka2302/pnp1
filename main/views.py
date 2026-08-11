@@ -1342,20 +1342,25 @@ def lead_request_api(request, forced_source=None):
 
     bitrix_result = send_lead_to_bitrix(lead)
 
-    return JsonResponse(
-        {
-            "ok": True,
-            "lead_id": lead.pk,
-            "status": lead.status,
-            "items_count": created_items,
-            "uploaded_files_count": uploaded_count,
-            "bitrix_configured": bitrix_result["configured"],
-            "bitrix_sent": bitrix_result["sent"],
-            "bitrix_files_sent": bitrix_result.get("files_sent", False),
-            "bitrix_files_count": bitrix_result.get("files_count", 0),
-        },
-        status=201,
-    )
+    response_data = {
+        "ok": True,
+        "lead_id": lead.pk,
+        "status": lead.status,
+        "items_count": created_items,
+        "uploaded_files_count": uploaded_count,
+        "bitrix_configured": bitrix_result["configured"],
+        "bitrix_sent": bitrix_result["sent"],
+        "bitrix_files_sent": bitrix_result.get("files_sent", False),
+        "bitrix_files_count": bitrix_result.get("files_count", 0),
+    }
+    if bitrix_result["configured"] and not bitrix_result["sent"]:
+        response_data.update(
+            ok=False,
+            error="Заявка сохранена, но не передана в CRM. Попробуйте ещё раз или свяжитесь с нами по телефону.",
+        )
+        return JsonResponse(response_data, status=502)
+
+    return JsonResponse(response_data, status=201)
 
 
 @require_POST

@@ -1778,6 +1778,19 @@ button.vendor-chip.is-selected:focus-visible {
 }
 
 /* Unified AI and manager request widget. */
+.b24-widget-button-wrapper {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  .bx-livechat-wrapper.bx-livechat-position-bottom-right {
+    left: 8px !important;
+    right: 8px !important;
+    width: calc(100vw - 16px) !important;
+    max-width: none !important;
+  }
+}
+
 .support-chat-panel {
   width: min(500px, calc(100vw - 32px));
 }
@@ -5915,6 +5928,26 @@ a[href*="wa.me"] {
   color: #fff;
 }
 
+.support-chat-notice {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 13px 16px;
+  border: 1px solid rgba(219, 67, 119, .55);
+  border-radius: 8px;
+  background: #fff;
+  color: #17243a;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+  box-shadow: 0 18px 48px rgba(4, 10, 24, .28);
+}
+
+.support-chat-notice[hidden] {
+  display: none;
+}
+
 .support-chat-launcher {
   display: flex;
   align-items: flex-end;
@@ -6250,6 +6283,12 @@ a[href*="wa.me"] {
   .support-chat-widget {
     right: 12px;
     bottom: 82px;
+  }
+
+  .support-chat-notice {
+    right: 12px;
+    bottom: 146px;
+    width: calc(100vw - 24px);
   }
 
   .request-form-in-view .support-chat-widget:not(.is-open) {
