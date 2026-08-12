@@ -30,6 +30,7 @@ compose*.yaml
 tools
 docker/Caddyfile*
 docker/postgres-init.sh
+docker/postgres-backup.sh
 
 .DS_Store
 Thumbs.db

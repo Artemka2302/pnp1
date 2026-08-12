@@ -21,11 +21,20 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:${APP_PORT:-8000}:80"
+    networks:
+      - frontend
+    pids_limit: 128
     volumes:
       - ./docker/Caddyfile.local:/etc/caddy/Caddyfile:ro
       - static_data:/srv/static:ro
       - caddy_local_data:/data
       - caddy_local_config:/config
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:2019/config/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 volumes:
   caddy_local_data:

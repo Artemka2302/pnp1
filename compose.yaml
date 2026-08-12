@@ -1,33 +1,46 @@
 name: pnp1
 
+x-app-environment: &app-environment
+  DATABASE_URL: ""
+  DB_ENGINE: postgresql
+  DB_NAME: ${DB_NAME:-pnp1}
+  DB_USER: ${DB_USER:-pnp1_app}
+  DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+  DB_HOST: db
+  DB_PORT: "5432"
+  REDIS_URL: redis://redis:6379/1
+
+x-app-service: &app-service
+  image: pnp1-web:${APP_IMAGE_TAG:-local}
+  pull_policy: never
+  init: true
+  env_file:
+    - .env
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
 services:
   web:
+    <<: *app-service
     build:
       context: .
       dockerfile: Dockerfile
-    image: pnp1-web:${APP_IMAGE_TAG:-local}
     restart: unless-stopped
-    init: true
-    env_file:
-      - .env
     environment:
-      DATABASE_URL: ""
-      DB_ENGINE: postgresql
-      DB_NAME: ${DB_NAME:-pnp1}
-      DB_USER: ${DB_USER:-pnp1_app}
-      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
-      DB_HOST: db
-      DB_PORT: "5432"
-      REDIS_URL: redis://redis:6379/1
-      RUN_MIGRATIONS: "1"
-      RUN_COLLECTSTATIC: "1"
+      <<: *app-environment
+      RUN_MIGRATIONS: "0"
+      RUN_COLLECTSTATIC: "0"
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      init:
+        condition: service_completed_successfully
     expose:
       - "8000"
+    networks:
+      - frontend
+      - backend
+    pids_limit: 256
     volumes:
       - static_data:/app/staticfiles
       - media_data:/app/media
@@ -48,6 +61,54 @@ services:
         max-size: 10m
         max-file: "5"
 
+  init:
+    <<: *app-service
+    restart: "no"
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: "1"
+      RUN_COLLECTSTATIC: "1"
+    command: ["/bin/true"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+    pids_limit: 256
+    volumes:
+      - static_data:/app/staticfiles
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  cleanup:
+    <<: *app-service
+    restart: unless-stopped
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: "0"
+      RUN_COLLECTSTATIC: "0"
+      FILE_RETENTION_DAYS: ${FILE_RETENTION_DAYS:-30}
+      CLEANUP_INTERVAL_SECONDS: ${CLEANUP_INTERVAL_SECONDS:-86400}
+    command: ["/app/docker/cleanup-loop.sh"]
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    networks:
+      - backend
+    pids_limit: 128
+    volumes:
+      - media_data:/app/media
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
   db:
     image: postgres:18.3-alpine3.23
     restart: unless-stopped
@@ -61,8 +122,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./docker/postgres-init.sh:/docker-entrypoint-initdb.d/10-create-app-db.sh:ro
+    networks:
+      - backend
+    pids_limit: 256
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test:
+        - CMD-SHELL
+        - >-
+          PGPASSWORD="$${DB_PASSWORD}" psql --host=127.0.0.1
+          --username="$${DB_USER}" --dbname="$${DB_NAME}"
+          --tuples-only --command='SELECT 1' >/dev/null
       interval: 10s
       timeout: 5s
       retries: 10
@@ -76,7 +145,20 @@ services:
   redis:
     image: redis:8.8.1-alpine3.23
     restart: unless-stopped
-    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - ${REDIS_MAXMEMORY:-128mb}
+      - --maxmemory-policy
+      - allkeys-lru
+    networks:
+      - backend
+    mem_limit: ${REDIS_CONTAINER_MEMORY_LIMIT:-192m}
+    pids_limit: 128
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -93,3 +175,8 @@ volumes:
   postgres_data:
   static_data:
   media_data:
+
+networks:
+  frontend:
+  backend:
+    internal: true

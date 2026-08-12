@@ -10,6 +10,18 @@ from .models import Lead
 
 logger = logging.getLogger(__name__)
 
+COOPERATION_ENTITY_TYPE_ID = 1088
+COOPERATION_PHONE_FIELD = "UF_CRM_14_1786358602270"
+COOPERATION_EMAIL_FIELD = "UF_CRM_14_1786358632937"
+COOPERATION_COMMENT_FIELD = "UF_CRM_14_1786358640204"
+COOPERATION_PROPOSER_TYPE_FIELD = "UF_CRM_14_1786358572238"
+COOPERATION_PROPOSER_TYPE_IDS = {
+    Lead.COOPERATION_TYPE_SUPPLIER: 1330,
+    Lead.COOPERATION_TYPE_CONTRACTOR: 1331,
+    Lead.COOPERATION_TYPE_OTHER: 1332,
+    Lead.COOPERATION_TYPE_MANUFACTURER: 1333,
+}
+
 
 def bitrix_webhook_env_name(lead):
     if lead.source == Lead.SOURCE_COOPERATION:
@@ -28,8 +40,19 @@ def normalized_webhook_url(env_name="BITRIX_WEBHOOK_URL"):
     return webhook_url
 
 
+def bitrix_method_url(webhook_url, method):
+    parsed = urlparse(webhook_url)
+    path_parts = parsed.path.rstrip("/").split("/")
+    method_path = f"{method}.json"
+    if path_parts[-1].endswith(".json"):
+        path_parts[-1] = method_path
+    else:
+        path_parts.append(method_path)
+    return parsed._replace(path="/".join(path_parts)).geturl()
+
+
 def call_bitrix_method(webhook_url, method, payload):
-    url = f"{webhook_url}/{method}.json"
+    url = bitrix_method_url(webhook_url, method)
     body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
     req = Request(
         url,
@@ -93,7 +116,7 @@ def build_bitrix_file_payloads(lead):
     return files
 
 
-def attach_files_to_bitrix_lead(webhook_url, lead, bitrix_id):
+def attach_files_to_bitrix_item(webhook_url, lead, bitrix_id):
     files = build_bitrix_file_payloads(lead)
     if not files:
         return {"sent": False, "files_count": 0}
@@ -101,7 +124,11 @@ def attach_files_to_bitrix_lead(webhook_url, lead, bitrix_id):
     payload = {
         "fields": {
             "ENTITY_ID": int(bitrix_id) if str(bitrix_id).isdigit() else bitrix_id,
-            "ENTITY_TYPE": "lead",
+            "ENTITY_TYPE": (
+                f"DYNAMIC_{COOPERATION_ENTITY_TYPE_ID}"
+                if lead.source == Lead.SOURCE_COOPERATION
+                else "lead"
+            ),
             "COMMENT": f"Файлы из заявки #{lead.pk}",
             "FILES": files,
         },
@@ -116,15 +143,10 @@ def attach_files_to_bitrix_lead(webhook_url, lead, bitrix_id):
     return {"sent": True, "files_count": len(files), "comment_id": data.get("result")}
 
 
-def build_bitrix_payload(lead):
-    is_cooperation = lead.source == Lead.SOURCE_COOPERATION
+def build_bitrix_lead_payload(lead):
     fields = {
-        "TITLE": (
-            f"Предложение о сотрудничестве с сайта ПНП #{lead.pk}"
-            if is_cooperation
-            else f"Заявка с сайта ПНП #{lead.pk}"
-        ),
-        "NAME": lead.contact_name or lead.company or ("Партнёр сайта" if is_cooperation else "Клиент сайта"),
+        "TITLE": f"Заявка с сайта ПНП #{lead.pk}",
+        "NAME": lead.contact_name or lead.company or "Клиент сайта",
         "SOURCE_ID": "WEB",
         "OPENED": "Y",
         "COMMENTS": build_bitrix_comment(lead),
@@ -144,15 +166,63 @@ def build_bitrix_payload(lead):
     }
 
 
+def build_bitrix_cooperation_payload(lead):
+    proposer_type = str(lead.raw_payload.get("proposer_type", "")).strip()
+    proposer_type_id = COOPERATION_PROPOSER_TYPE_IDS.get(proposer_type)
+    if proposer_type_id is None:
+        raise ValueError("Unknown cooperation proposer_type")
+
+    title = f"Предложение о сотрудничестве с сайта ПНП #{lead.pk}"
+    if lead.company:
+        title = f"{title} — {lead.company}"
+
+    fields = {
+        "title": title[:255],
+        COOPERATION_PHONE_FIELD: lead.phone,
+        COOPERATION_EMAIL_FIELD: lead.email,
+        COOPERATION_COMMENT_FIELD: lead.message,
+        COOPERATION_PROPOSER_TYPE_FIELD: proposer_type_id,
+    }
+    return {
+        "entityTypeId": COOPERATION_ENTITY_TYPE_ID,
+        "useOriginalUfNames": "Y",
+        "fields": fields,
+    }
+
+
+def build_bitrix_payload(lead):
+    if lead.source == Lead.SOURCE_COOPERATION:
+        return build_bitrix_cooperation_payload(lead)
+    return build_bitrix_lead_payload(lead)
+
+
+def bitrix_create_method(lead):
+    if lead.source == Lead.SOURCE_COOPERATION:
+        return "crm.item.add"
+    return "crm.lead.add"
+
+
+def bitrix_created_item_id(lead, data):
+    result = data.get("result")
+    if lead.source != Lead.SOURCE_COOPERATION:
+        return result
+    if not isinstance(result, dict):
+        return None
+    item = result.get("item")
+    if not isinstance(item, dict):
+        return None
+    return item.get("id")
+
+
 def send_lead_to_bitrix(lead):
     try:
         webhook_url = normalized_webhook_url(bitrix_webhook_env_name(lead))
         if not webhook_url:
             return {"configured": False, "sent": False}
         payload = build_bitrix_payload(lead)
-        data = call_bitrix_method(webhook_url, "crm.lead.add", payload)
+        data = call_bitrix_method(webhook_url, bitrix_create_method(lead), payload)
     except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
-        logger.exception("Bitrix lead submit failed for lead_id=%s", lead.pk)
+        logger.exception("Bitrix CRM submit failed for lead_id=%s", lead.pk)
         lead.status = Lead.STATUS_FAILED
         lead.save(update_fields=["status"])
         return {"configured": True, "sent": False, "error": str(error)}
@@ -164,7 +234,7 @@ def send_lead_to_bitrix(lead):
         lead.save(update_fields=["status"])
         return {"configured": True, "sent": False, "error": error_text}
 
-    bitrix_id = data.get("result")
+    bitrix_id = bitrix_created_item_id(lead, data)
     if not bitrix_id:
         logger.error("Bitrix response without result for lead_id=%s: %s", lead.pk, data)
         lead.status = Lead.STATUS_FAILED
@@ -176,7 +246,7 @@ def send_lead_to_bitrix(lead):
     lead.save(update_fields=["bitrix_lead_id", "status"])
 
     try:
-        files_result = attach_files_to_bitrix_lead(webhook_url, lead, lead.bitrix_lead_id)
+        files_result = attach_files_to_bitrix_item(webhook_url, lead, lead.bitrix_lead_id)
     except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
         logger.exception("Bitrix file attach failed for lead_id=%s", lead.pk)
         files_result = {"sent": False, "files_count": lead.uploads.count(), "error": str(error)}
