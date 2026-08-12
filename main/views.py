@@ -150,7 +150,7 @@ def privacy(request):
 
 
 def consent(request):
-    return render(request, "main/consent.html")
+    return redirect("privacy", permanent=True)
 
 
 def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):

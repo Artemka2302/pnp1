@@ -457,7 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const aiEndpoint = document.body.dataset.aiChatEndpoint || "/api/ai-chat/";
     const liveChatSource = document.body.dataset.bitrixLivechatSrc || "";
     const privacyUrl = document.body.dataset.privacyUrl || "/privacy/";
-    const consentUrl = document.body.dataset.consentUrl || "/consent/";
     const csrfToken = getCookie("csrftoken") || document.querySelector("[name='csrfmiddlewaretoken']")?.value || "";
     const modes = {
       ai: {
@@ -534,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <label class="support-chat-consent support-chat-ai-consent">
               <input type="checkbox" name="consent" value="1" data-ai-consent required>
-              <span>Согласен на обработку сообщения AI-сервисом и персональных данных. <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="${consentUrl}" target="_blank" rel="noopener noreferrer">Согласие</a></span>
+              <span>Я даю согласие на обработку персональных данных в соответствии с <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.</span>
             </label>
             <p class="support-chat-ai-status" data-ai-status role="status" aria-live="polite"></p>
           </section>
@@ -608,7 +607,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <label class="support-chat-consent form-consent-check" data-manager-consent-label hidden>
               <input type="checkbox" name="consent" value="1" data-manager-consent required disabled>
-              <span>Согласен на обработку персональных данных. <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политика</a> · <a href="${consentUrl}" target="_blank" rel="noopener noreferrer">Согласие</a></span>
+              <span>Я даю согласие на обработку персональных данных в соответствии с <a href="${privacyUrl}" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.</span>
             </label>
             <button class="support-chat-submit" type="submit" data-support-submit>Отправить заявку</button>
             <p class="form-status support-chat-status" data-form-status role="status" aria-live="polite"></p>

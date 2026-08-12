@@ -82,7 +82,7 @@
 
             <label class="form-consent-check quick-consent">
               <input type="checkbox" name="consent" value="1" required>
-              <span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener">Согласие</a></span>
+              <span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span>
             </label>
             <div class="home-request-actions">
               <p class="form-status" data-form-status role="status" aria-live="polite"></p>
@@ -144,7 +144,7 @@
 
             <label class="form-consent-check quick-consent">
               <input type="checkbox" name="consent" value="1" required>
-              <span>Согласен на обработку персональных данных. <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политика</a> · <a href="{% url 'consent' %}" target="_blank" rel="noopener">Согласие</a></span>
+              <span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span>
             </label>
             <div class="home-request-actions">
               <p class="form-status" data-form-status role="status" aria-live="polite"></p>
@@ -158,8 +158,8 @@
 
     <aside class="contact-mini">
       <h3>Контакты компании</h3>
-      <div class="contact-line"><span>Телефон</span><a href="tel:+74951874950">+7 (495) 187-49-50</a></div>
-      <div class="contact-line"><span>Email</span><a href="mailto:info@proleans.ru">info@proleans.ru</a></div>
+      <div class="contact-line"><span>Телефон</span><a href="{{ CONTACT_PHONE_HREF }}">{{ CONTACT_PHONE_DISPLAY }}</a></div>
+      <div class="contact-line"><span>Email</span><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></div>
       <div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div>
       <div class="contact-line"><span>Адрес</span><b>г. Москва, ул. Подольских Курсантов, д. 3 стр. 2, помещ. 1/2</b></div>
     </aside>

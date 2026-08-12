@@ -86,6 +86,32 @@ class PublicRouteSmokeTests(TestCase):
             'data-bitrix-livechat-src="https://example.bitrix24.ru/upload/crm/site_button/loader_test.js"',
         )
 
+    def test_public_contacts_come_from_current_site_config(self):
+        for url in ("/", "/contacts/", "/privacy/"):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertContains(response, "+7 (495) 565-30-05")
+                self.assertContains(response, "info@pnp1.ru")
+                self.assertNotContains(response, "+7 (495) 187-49-50")
+                self.assertNotContains(response, "info@proleans.ru")
+
+    def test_privacy_is_the_only_public_consent_document(self):
+        privacy_response = self.client.get("/privacy/")
+        consent_response = self.client.get("/consent/")
+
+        self.assertEqual(privacy_response.status_code, 200)
+        self.assertContains(privacy_response, "Политика конфиденциальности")
+        self.assertContains(privacy_response, "ООО «ЛЕАНС»")
+        self.assertEqual(consent_response.status_code, 301)
+        self.assertEqual(consent_response["Location"], "/privacy/")
+
+    def test_forms_link_consent_to_privacy_only(self):
+        for url in ("/", "/contacts/"):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertContains(response, "Политикой конфиденциальности")
+                self.assertNotContains(response, 'href="/consent/"')
+
     def test_vendor_ajax_filter_updates_cloud_and_rows(self):
         response = self.client.get(
             "/vendors/",
