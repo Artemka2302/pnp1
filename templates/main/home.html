@@ -146,24 +146,18 @@
     </div>
     <div id="homeCategories">
       <div class="home-supply-gallery" aria-label="Разделы комплектации объекта">
-        {% for block in blocks %}
-          {% for direction in block.directions.all %}
-            <a class="home-supply-gallery-card home-supply-gallery-card--{{ direction.slug }}"
-              href="{{ direction.get_absolute_url }}"
-              aria-label="Открыть раздел: {{ direction.title }}">
-              <span class="home-supply-gallery-media" aria-hidden="true">
-                {% if direction.image %}
-                  <img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">
-                {% elif block.image %}
-                  <img src="{% static block.image %}" alt="" loading="lazy" decoding="async">
-                {% endif %}
-              </span>
-              <span class="home-supply-gallery-shade" aria-hidden="true"></span>
-              <span class="home-supply-gallery-content">
-                <strong>{{ direction.title }}</strong>
-              </span>
-            </a>
-          {% endfor %}
+        {% for direction in directions %}
+          <a class="home-supply-gallery-card home-supply-gallery-card--{{ direction.slug }}"
+            href="{{ direction.get_absolute_url }}"
+            aria-label="Открыть раздел: {{ direction.title }}">
+            <span class="home-supply-gallery-media" aria-hidden="true">
+              {% if direction.image %}<img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">{% endif %}
+            </span>
+            <span class="home-supply-gallery-shade" aria-hidden="true"></span>
+            <span class="home-supply-gallery-content">
+              <strong>{{ direction.title }}</strong>
+            </span>
+          </a>
         {% endfor %}
       </div>
     </div>
@@ -174,10 +168,10 @@
   <div class="container">
     <div class="section-head"><div><h2>Основные направления поставки</h2></div><a class="link-more" href="{% url 'catalog' %}">Смотреть все направления →</a></div>
     <div class="home-main-block-grid">
-      {% for block in blocks %}
-        <article class="home-main-block-card {% if forloop.counter <= 2 %}is-major{% endif %}">
-          <a class="home-main-block-media" href="{% url 'catalog_block' block.slug %}">{% if block.image %}<img src="{% static block.image %}" alt="{{ block.title }}">{% endif %}</a>
-          <div class="home-main-block-body"><em>{{ block.system_count }} систем · {{ block.group_count }} групп</em><h3>{{ block.title }}</h3><p>{{ block.summary }}</p><div class="home-main-block-chips">{% for direction in block.directions.all|slice:":3" %}<span>{{ direction.title }}</span>{% endfor %}{% if block.directions.count > 3 %}<span>+{{ block.directions.count|add:"-3" }}</span>{% endif %}</div><div class="category-actions"><a class="btn small" href="{% url 'catalog_block' block.slug %}">Открыть блок →</a><a class="btn ghost small" href="{% url 'contacts' %}#request-form">Запросить КП</a></div></div>
+      {% for direction in directions %}
+        <article class="home-main-block-card">
+          <a class="home-main-block-media" href="{{ direction.get_absolute_url }}">{% if direction.image %}<img src="{% static direction.image %}" alt="{{ direction.title }}">{% endif %}</a>
+          <div class="home-main-block-body"><em>{{ direction.system_count }} систем · {{ direction.group_count }} групп</em><h3>{{ direction.title }}</h3><p>{{ direction.purpose }}</p><div class="home-main-block-chips">{% for system in direction.catalog_systems|slice:":3" %}<span>{{ system.title }}</span>{% endfor %}</div><div class="category-actions"><a class="btn small" href="{{ direction.get_absolute_url }}">Открыть раздел →</a><a class="btn ghost small" href="{% url 'contacts' %}#request-form">Запросить КП</a></div></div>
         </article>
       {% endfor %}
     </div>
@@ -284,7 +278,7 @@
 </section>
 
 <section class="section compact home-mobile-only">
-  <div class="container"><div class="glass vendor-home-card"><div class="section-head"><div><h2>Комплексная комплектация объекта</h2></div><a class="btn ghost" href="{% url 'vendors' %}">Открыть справочник производителей →</a></div><div class="vendor-stats"><div class="stat"><strong>{{ stats.blocks }}</strong><span>блоков поставки</span></div><div class="stat"><strong>{{ stats.directions }}</strong><span>направлений каталога</span></div><div class="stat"><strong>{{ stats.groups }}</strong><span>товарных групп</span></div><div class="stat"><strong>{{ stats.vendors }}</strong><span>производителей в базе</span></div></div></div></div>
+  <div class="container"><div class="glass vendor-home-card"><div class="section-head"><div><h2>Комплексная комплектация объекта</h2></div><a class="btn ghost" href="{% url 'vendors' %}">Открыть справочник производителей →</a></div><div class="vendor-stats"><div class="stat"><strong>{{ stats.directions }}</strong><span>разделов проекта</span></div><div class="stat"><strong>{{ stats.systems }}</strong><span>систем каталога</span></div><div class="stat"><strong>{{ stats.groups }}</strong><span>товарных групп</span></div><div class="stat"><strong>{{ stats.vendors }}</strong><span>производителей в базе</span></div></div></div></div>
 </section>
 
 <section class="section compact home-request-form-band home-mobile-only">

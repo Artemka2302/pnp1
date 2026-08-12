@@ -22,9 +22,8 @@
 
   const indexList = rootElement.querySelector("[data-catalog-v2-index]");
   const indexToggle = rootElement.querySelector("[data-catalog-v2-index-toggle]");
-  const blockSection = rootElement.querySelector("[data-catalog-v2-block-section]");
-  const blockGrid = rootElement.querySelector("[data-catalog-v2-blocks]");
-  const popularSection = rootElement.querySelector("[data-catalog-v2-popular]");
+  const directionSection = rootElement.querySelector("[data-catalog-v2-direction-section]");
+  const directionGrid = rootElement.querySelector("[data-catalog-v2-directions]");
   const contentSection = rootElement.querySelector("[data-catalog-v2-content-section]");
   const content = rootElement.querySelector("[data-catalog-v2-content]");
   const contentTitle = rootElement.querySelector("[data-catalog-v2-title]");
@@ -65,14 +64,13 @@
 
   const nodeById = target => nodes.get(target);
   const rootNode = nodeById(rootTarget);
-  const blockTargets = () => (rootNode?.children || []).filter(target => nodeById(target)?.kind === "block");
+  const directionTargets = () => (rootNode?.children || []).filter(target => nodeById(target)?.kind === "direction");
   const childTargets = target => (nodeById(target)?.children || []).filter(child => nodes.has(child));
   const imageFor = node => node?.image || "/static/assets/img/catalog/empty-photo-placeholder.svg";
   const urlFor = node => node?.url || "/catalog/";
 
   const state = {
     currentTarget: initialData.initialTarget || rootTarget,
-    activeBlockTarget: blockTargets()[0] || "",
     searchController: null,
     searchTimer: null,
   };
@@ -119,8 +117,6 @@
     return path.reverse();
   };
 
-  const activeBlockFor = target => pathTargets(target).find(id => nodeById(id)?.kind === "block") || blockTargets()[0] || "";
-
   const collapseBranch = target => {
     expandedTargets.delete(target);
     childTargets(target).forEach(collapseBranch);
@@ -166,19 +162,18 @@
 
   const renderIndex = () => {
     if (!indexList) return;
-    indexList.innerHTML = blockTargets().map(treeNodeHtml).join("");
+    indexList.innerHTML = directionTargets().map(treeNodeHtml).join("");
   };
 
-  const renderBlockCards = () => {
-    if (!blockGrid) return;
-    blockGrid.innerHTML = blockTargets().map((target, index) => {
-      const block = nodeById(target);
-      const active = state.activeBlockTarget === target && state.currentTarget !== rootTarget;
+  const renderDirectionCards = () => {
+    if (!directionGrid) return;
+    directionGrid.innerHTML = directionTargets().map((target, index) => {
+      const direction = nodeById(target);
       return `
-        <a class="catalog-v2-block-card${active ? " is-active" : ""}" href="${escapeHtml(urlFor(block))}" data-catalog-v2-target="${escapeHtml(target)}"${active ? ' aria-current="true"' : ""}>
-          <img src="${escapeHtml(imageFor(block))}" alt="" loading="${index === 0 ? "eager" : "lazy"}">
-          <span class="catalog-v2-block-overlay">
-            <h2>${escapeHtml(block.title)}</h2>
+        <a class="catalog-v2-direction-card" href="${escapeHtml(urlFor(direction))}" data-catalog-v2-target="${escapeHtml(target)}">
+          <img src="${escapeHtml(imageFor(direction))}" alt="" loading="${index === 0 ? "eager" : "lazy"}">
+          <span class="catalog-v2-direction-overlay">
+            <h2>${escapeHtml(direction.title)}</h2>
           </span>
         </a>`;
     }).join("");
@@ -357,20 +352,18 @@
       const node = await ensureNode(target);
       if (!node) return;
       state.currentTarget = target;
-      state.activeBlockTarget = activeBlockFor(target);
       expandPath(target);
       renderIndex();
-      renderBlockCards();
+      renderDirectionCards();
 
       if (target === rootTarget) {
-        if (blockSection) blockSection.hidden = false;
-        if (popularSection) popularSection.hidden = false;
+        if (directionSection) directionSection.hidden = false;
         if (contentSection) contentSection.hidden = true;
         updateHistory(node, historyMode);
         return;
       }
 
-      if (popularSection) popularSection.hidden = true;
+      if (directionSection) directionSection.hidden = true;
       if (contentSection) contentSection.hidden = false;
       if (contentTitle) contentTitle.textContent = headingFor(node);
       if (contentKicker) {
@@ -503,6 +496,6 @@
   });
 
   renderIndex();
-  renderBlockCards();
+  renderDirectionCards();
   renderTarget(state.currentTarget, { historyMode: "replace" });
 })();

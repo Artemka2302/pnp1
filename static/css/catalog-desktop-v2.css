@@ -248,7 +248,7 @@
 
   .catalog-page .catalog-v2-status[hidden],
   .catalog-page .catalog-v2-content[hidden],
-  .catalog-page .catalog-v2-blocks[hidden] {
+  .catalog-page .catalog-v2-directions[hidden] {
     display: none !important;
   }
 
@@ -447,49 +447,40 @@
     line-height: 1.45;
   }
 
-  .catalog-page .catalog-v2-block-grid {
-    display: flex;
-    gap: 8px;
+  .catalog-page .catalog-v2-direction-grid {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 10px;
     min-width: 0;
   }
 
-  .catalog-page .catalog-v2-block-card {
+  .catalog-page .catalog-v2-direction-card {
     position: relative;
-    flex: 1 1 0;
+    grid-column: span 2;
     min-width: 0;
-    height: 226px;
+    height: 158px;
     display: block;
     overflow: hidden;
     border: 1px solid rgba(178, 198, 224, .33);
     border-radius: 9px;
     background: #071422;
     box-shadow: 0 18px 42px rgba(0, 0, 0, .2);
-    transition: flex-grow .24s ease, border-color .2s ease, transform .2s ease;
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
   }
 
-  .catalog-page .catalog-v2-block-card.is-active {
-    flex-grow: 1.35;
-    border-color: rgba(224, 78, 127, .82);
+  .catalog-page .catalog-v2-direction-card:nth-child(11) {
+    grid-column: 2 / span 2;
   }
 
-  .catalog-page .catalog-v2-block-card.is-active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #d12d67, #ef5b8b);
-  }
-
-  .catalog-page .catalog-v2-block-card:hover,
-  .catalog-page .catalog-v2-block-card:focus-visible {
+  .catalog-page .catalog-v2-direction-card:hover,
+  .catalog-page .catalog-v2-direction-card:focus-visible {
     border-color: rgba(226, 100, 144, .76);
     transform: translateY(-2px);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, .26);
     outline: none;
   }
 
-  .catalog-page .catalog-v2-block-card img,
+  .catalog-page .catalog-v2-direction-card img,
   .catalog-page .catalog-v2-system-card img,
   .catalog-page .catalog-v2-product-hero img {
     position: absolute;
@@ -500,137 +491,41 @@
     object-fit: cover;
   }
 
-  .catalog-page .catalog-v2-block-card img {
-    filter: saturate(.86) contrast(1.07) brightness(.82);
+  .catalog-page .catalog-v2-direction-card img {
+    filter: saturate(.92) contrast(1.07) brightness(.84);
     transition: transform .32s ease, filter .24s ease;
   }
 
-  .catalog-page .catalog-v2-block-card:hover img,
-  .catalog-page .catalog-v2-block-card:focus-visible img {
+  .catalog-page .catalog-v2-direction-card:hover img,
+  .catalog-page .catalog-v2-direction-card:focus-visible img {
     transform: scale(1.035);
-    filter: saturate(1) contrast(1.08) brightness(.9);
+    filter: saturate(1.04) contrast(1.08) brightness(.94);
   }
 
-  .catalog-page .catalog-v2-block-overlay {
+  .catalog-page .catalog-v2-direction-overlay {
     position: absolute;
     inset: 0;
-    padding: 20px 15px 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background:
-      linear-gradient(180deg, rgba(3, 10, 18, .48) 0%, rgba(3, 10, 18, .2) 48%, rgba(3, 10, 18, .86) 100%),
-      linear-gradient(90deg, rgba(3, 10, 18, .72), transparent 78%);
-  }
-
-  .catalog-page .catalog-v2-block-card h2 {
-    max-width: 100%;
-    margin: 0;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 850;
-    line-height: 1.14;
-    letter-spacing: 0;
-    overflow-wrap: normal;
-  }
-
-  .catalog-page .catalog-v2-block-card.is-active h2 {
-    font-size: 23px;
-  }
-
-  .catalog-page .catalog-v2-popular {
-    margin-top: 34px;
-  }
-
-  .catalog-page .catalog-v2-popular[hidden] {
-    display: none !important;
-  }
-
-  .catalog-page .catalog-v2-popular-head {
-    margin-bottom: 15px;
-  }
-
-  .catalog-page .catalog-v2-popular-head h2 {
-    margin: 0;
-    color: #f7f9fd;
-    font-size: 27px;
-    font-weight: 850;
-    line-height: 1.08;
-    letter-spacing: 0;
-  }
-
-  .catalog-page .catalog-v2-popular-grid {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .catalog-page .catalog-v2-popular-card {
-    position: relative;
-    grid-column: span 4;
-    min-width: 0;
-    height: 168px;
-    display: block;
-    overflow: hidden;
-    border: 1px solid rgba(178, 198, 224, .31);
-    border-radius: 8px;
-    color: #fff;
-    background: #071422;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, .16);
-    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
-  }
-
-  .catalog-page .catalog-v2-popular-card:nth-child(n + 4) {
-    grid-column: span 3;
-    height: 158px;
-  }
-
-  .catalog-page .catalog-v2-popular-card:hover,
-  .catalog-page .catalog-v2-popular-card:focus-visible {
-    border-color: rgba(230, 102, 146, .72);
-    transform: translateY(-2px);
-    box-shadow: 0 24px 50px rgba(0, 0, 0, .25);
-    outline: none;
-  }
-
-  .catalog-page .catalog-v2-popular-card img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    filter: saturate(.88) contrast(1.06) brightness(.8);
-    transition: transform .32s ease, filter .24s ease;
-  }
-
-  .catalog-page .catalog-v2-popular-card:hover img,
-  .catalog-page .catalog-v2-popular-card:focus-visible img {
-    transform: scale(1.035);
-    filter: saturate(1.02) contrast(1.08) brightness(.9);
-  }
-
-  .catalog-page .catalog-v2-popular-overlay {
-    position: absolute;
-    inset: 0;
-    padding: 16px 14px 15px;
+    padding: 14px 12px;
     display: flex;
     align-items: flex-end;
     background:
-      linear-gradient(180deg, rgba(2, 8, 15, .08) 24%, rgba(2, 8, 15, .9) 100%),
-      linear-gradient(90deg, rgba(2, 8, 15, .48), transparent 82%);
+      linear-gradient(180deg, rgba(3, 10, 18, .12) 20%, rgba(3, 10, 18, .9) 100%),
+      linear-gradient(90deg, rgba(3, 10, 18, .46), transparent 82%);
   }
 
-  .catalog-page .catalog-v2-popular-overlay strong {
-    display: -webkit-box;
-    overflow: hidden;
+  .catalog-page .catalog-v2-direction-card h2 {
+    max-width: 100%;
+    margin: 0;
     color: #fff;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 850;
     line-height: 1.16;
+    letter-spacing: 0;
+    overflow: hidden;
     text-shadow: 0 2px 12px rgba(0, 0, 0, .76);
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
   }
 
   .catalog-page .catalog-v2-content {
@@ -1048,17 +943,8 @@
       font-size: 30px;
     }
 
-    .catalog-page .catalog-v2-block-card {
-      height: 218px;
-    }
-
-    .catalog-page .catalog-v2-block-card h2,
-    .catalog-page .catalog-v2-block-card.is-active h2 {
-      font-size: 17px;
-    }
-
-    .catalog-page .catalog-v2-block-overlay {
-      padding-inline: 12px;
+    .catalog-page .catalog-v2-direction-card {
+      height: 150px;
     }
 
     .catalog-page .catalog-v2-system-grid {
@@ -1178,24 +1064,16 @@
       max-height: 60vh;
     }
 
-    .catalog-page .catalog-v2-block-grid {
+    .catalog-page .catalog-v2-direction-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
 
-    .catalog-page .catalog-v2-block-card {
-      height: 180px;
-    }
-
-    .catalog-page .catalog-v2-popular-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .catalog-page .catalog-v2-popular-card,
-    .catalog-page .catalog-v2-popular-card:nth-child(n + 4) {
+    .catalog-page .catalog-v2-direction-card,
+    .catalog-page .catalog-v2-direction-card:nth-child(11) {
       grid-column: auto;
-      height: 158px;
+      height: 180px;
     }
 
     .catalog-page .catalog-v2-content {
@@ -1253,18 +1131,17 @@
   }
 
   @media (max-width: 620px) {
-    .catalog-page .catalog-v2-block-grid,
-    .catalog-page .catalog-v2-system-grid,
-    .catalog-page .catalog-v2-popular-grid {
+    .catalog-page .catalog-v2-direction-grid,
+    .catalog-page .catalog-v2-system-grid {
       grid-template-columns: 1fr;
     }
 
-    .catalog-page .catalog-v2-block-card,
+    .catalog-page .catalog-v2-direction-card,
     .catalog-page .catalog-v2-system-grid {
       grid-auto-rows: auto;
     }
 
-    .catalog-page .catalog-v2-block-card,
+    .catalog-page .catalog-v2-direction-card,
     .catalog-page .catalog-v2-system-card {
       min-height: 168px;
     }

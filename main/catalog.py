@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Case, Count, IntegerField, Prefetch, Q, Value, When
 from django.http import Http404
 from django.templatetags.static import static
 from django.urls import reverse
@@ -8,7 +8,35 @@ from .models import CatalogBlock, CatalogSystem, Direction, ProductGroup, Vendor
 
 
 CATALOG_CACHE_TTL = 15 * 60
-CATALOG_CACHE_VERSION_KEY = "pnp:catalog:version"
+CATALOG_CACHE_VERSION_KEY = "pnp:catalog:public-v2:version"
+
+PUBLIC_DIRECTION_SLUGS = (
+    "architecture",
+    "constructive",
+    "it-infrastructure",
+    "low-current",
+    "tech-equipment",
+    "eom",
+    "hvac",
+    "water",
+    "gas",
+    "fire",
+    "accessibility",
+    "vertical-transport",
+    "landscaping-and-site-improvement",
+    "ev-charging-infrastructure",
+)
+
+
+def public_direction_order_expression(field_name="slug"):
+    return Case(
+        *[
+            When(**{field_name: slug}, then=Value(position))
+            for position, slug in enumerate(PUBLIC_DIRECTION_SLUGS)
+        ],
+        default=Value(len(PUBLIC_DIRECTION_SLUGS)),
+        output_field=IntegerField(),
+    )
 
 
 def catalog_cache_version():
@@ -49,8 +77,8 @@ def root_node():
         "id": "root",
         "kind": "root",
         "level": "Каталог",
-        "title": "Каталог поставки",
-        "summary": "Выберите раздел проекта, затем направление, систему и товарную группу.",
+        "title": "Каталог",
+        "summary": "Выберите раздел проекта, затем систему и товарную группу.",
         "url": reverse("catalog"),
         "parent": "",
         "breadcrumbs": [],
@@ -87,20 +115,18 @@ def block_payload(block):
 
 def direction_payload(direction):
     systems = list(getattr(direction, "catalog_systems", []))
-    block = direction.block
     target = catalog_node_id("direction", direction.slug)
     return {
         "id": target,
         "kind": "direction",
-        "level": "Направление",
+        "level": "Раздел проекта",
         "title": direction.title,
         "summary": direction.purpose,
         "image": catalog_image_url(direction.image),
         "url": direction.get_absolute_url(),
-        "parent": catalog_node_id("block", block.slug),
+        "parent": "root",
         "breadcrumbs": [
             {"title": "Каталог", "target": "root", "url": reverse("catalog")},
-            {"title": block.title, "target": catalog_node_id("block", block.slug), "url": block.get_absolute_url()},
             {"title": direction.title, "target": target, "url": direction.get_absolute_url()},
         ],
         "children": [],
@@ -117,7 +143,6 @@ def direction_payload(direction):
 def system_payload(system):
     groups = list(getattr(system, "catalog_groups", []))
     direction = system.direction
-    block = direction.block
     target = catalog_node_id("system", system.slug)
     return {
         "id": target,
@@ -130,7 +155,6 @@ def system_payload(system):
         "parent": catalog_node_id("direction", direction.slug),
         "breadcrumbs": [
             {"title": "Каталог", "target": "root", "url": reverse("catalog")},
-            {"title": block.title, "target": catalog_node_id("block", block.slug), "url": block.get_absolute_url()},
             {"title": direction.title, "target": catalog_node_id("direction", direction.slug), "url": direction.get_absolute_url()},
             {"title": system.title, "target": target, "url": system.get_absolute_url()},
         ],
@@ -148,7 +172,6 @@ def system_payload(system):
 def group_payload(group):
     system = group.system
     direction = system.direction
-    block = direction.block
     product_types = list(group.types.all())
     vendor_links = list(getattr(group, "catalog_vendor_links", []))
     vendors = [link.vendor for link in vendor_links]
@@ -165,7 +188,6 @@ def group_payload(group):
         "parent": catalog_node_id("system", system.slug),
         "breadcrumbs": [
             {"title": "Каталог", "target": "root", "url": reverse("catalog")},
-            {"title": block.title, "target": catalog_node_id("block", block.slug), "url": block.get_absolute_url()},
             {"title": direction.title, "target": catalog_node_id("direction", direction.slug), "url": direction.get_absolute_url()},
             {"title": system.title, "target": catalog_node_id("system", system.slug), "url": system.get_absolute_url()},
             {"title": group.title, "target": target, "url": group.get_absolute_url()},
@@ -197,7 +219,6 @@ def group_payload(group):
 def group_card_payload(group):
     system = group.system
     direction = system.direction
-    block = direction.block
     target = catalog_node_id("group", group.slug)
     return {
         "id": target,
@@ -211,7 +232,6 @@ def group_card_payload(group):
         "parent": catalog_node_id("system", system.slug),
         "breadcrumbs": [
             {"title": "Каталог", "target": "root", "url": reverse("catalog")},
-            {"title": block.title, "target": catalog_node_id("block", block.slug), "url": block.get_absolute_url()},
             {"title": direction.title, "target": catalog_node_id("direction", direction.slug), "url": direction.get_absolute_url()},
             {"title": system.title, "target": catalog_node_id("system", system.slug), "url": system.get_absolute_url()},
             {"title": group.title, "target": target, "url": group.get_absolute_url()},
@@ -251,6 +271,15 @@ def direction_queryset():
             queryset=CatalogSystem.objects.only("id", "direction_id", "slug", "title", "sort_order").order_by("sort_order", "title"),
             to_attr="catalog_systems",
         )
+    )
+
+
+def public_direction_queryset():
+    return (
+        direction_queryset()
+        .filter(slug__in=PUBLIC_DIRECTION_SLUGS)
+        .annotate(public_order=public_direction_order_expression())
+        .order_by("public_order", "title")
     )
 
 
@@ -322,7 +351,7 @@ def _ancestor_chain(node):
 
 def build_catalog_node(target):
     if target == "root":
-        children = [block_payload(block) for block in block_queryset().order_by("sort_order", "title")]
+        children = [direction_payload(direction) for direction in public_direction_queryset()]
         return {"node": _with_children(root_node(), children), "children": children, "ancestors": []}
 
     kind, separator, slug = target.partition(":")

@@ -151,10 +151,40 @@ class PublicRouteSmokeTests(TestCase):
         self.assertEqual(root_response.status_code, 200)
         root_data = root_response.json()
         self.assertEqual(root_data["node"]["id"], "root")
-        self.assertEqual(len(root_data["children"]), 5)
-        self.assertTrue(all(child["kind"] == "block" for child in root_data["children"]))
+        self.assertEqual(len(root_data["children"]), 14)
+        self.assertEqual(
+            [child["id"] for child in root_data["children"]],
+            [
+                "direction:architecture",
+                "direction:constructive",
+                "direction:it-infrastructure",
+                "direction:low-current",
+                "direction:tech-equipment",
+                "direction:eom",
+                "direction:hvac",
+                "direction:water",
+                "direction:gas",
+                "direction:fire",
+                "direction:accessibility",
+                "direction:vertical-transport",
+                "direction:landscaping-and-site-improvement",
+                "direction:ev-charging-infrastructure",
+            ],
+        )
+        self.assertTrue(all(child["kind"] == "direction" for child in root_data["children"]))
+        self.assertTrue(all(child["parent"] == "root" for child in root_data["children"]))
         self.assertTrue(all(child["children"] == [] for child in root_data["children"]))
 
+        direction_response = self.client.get("/api/catalog-node/", {"id": "direction:architecture"})
+        self.assertEqual(direction_response.status_code, 200)
+        direction_data = direction_response.json()
+        self.assertEqual(direction_data["node"]["kind"], "direction")
+        self.assertEqual(direction_data["node"]["parent"], "root")
+        self.assertTrue(direction_data["children"])
+        self.assertTrue(all(child["kind"] == "system" for child in direction_data["children"]))
+
+        # Старый уровень остается доступным для совместимости сохраненных URL,
+        # но больше не публикуется в корне каталога.
         block_response = self.client.get("/api/catalog-node/", {"id": "block:building-materials"})
         self.assertEqual(block_response.status_code, 200)
         block_data = block_response.json()

@@ -54,7 +54,15 @@ from .compliance import (
     COOKIE_TEXT_VERSION,
     PRIVACY_VERSION,
 )
-from .catalog import catalog_cache_key, catalog_initial_data, catalog_node_id, get_catalog_node
+from .catalog import (
+    PUBLIC_DIRECTION_SLUGS,
+    catalog_cache_key,
+    catalog_initial_data,
+    catalog_node_id,
+    get_catalog_node,
+    public_direction_order_expression,
+    public_direction_queryset,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -103,34 +111,14 @@ def first_existing_static_path(*paths):
     return ""
 
 
-def catalog_queryset():
-    return CatalogBlock.objects.prefetch_related(
-        Prefetch(
-            "directions",
-            queryset=Direction.objects.prefetch_related(
-                Prefetch(
-                    "systems",
-                    queryset=CatalogSystem.objects.prefetch_related("product_groups"),
-                )
-            ),
-        )
-    )
-
-
 def homepage_context():
-    blocks = catalog_queryset().annotate(
-        direction_count=Count("directions", distinct=True),
-        system_count=Count("directions__systems", distinct=True),
-        group_count=Count("directions__systems__product_groups", distinct=True),
-    )
     partners_qs = Partner.objects.order_by("-show_on_home", "name")
 
     return {
-        "blocks": blocks,
+        "directions": public_direction_queryset(),
         "featured_partners": partners_qs,
         "featured_vendors": Vendor.objects.filter(vendorproductgroup__show_on_home=True).distinct()[:24],
         "stats": {
-            "blocks": CatalogBlock.objects.count(),
             "directions": Direction.objects.count(),
             "systems": CatalogSystem.objects.count(),
             "groups": ProductGroup.objects.count(),
@@ -183,7 +171,6 @@ def catalog(request):
 
 def group_path_parts(group):
     return [
-        group.system.direction.block.title,
         group.system.direction.title,
         group.system.title,
         group.title,
@@ -276,7 +263,7 @@ def catalog_vendor_result(vendor):
     return catalog_result_item(
         "Производитель",
         vendor.name,
-        [group_path_parts(groups[0])[1] if groups else "Производители"],
+        [group_path_parts(groups[0])[0] if groups else "Производители"],
         f"{reverse('vendors')}?{urlencode([('vendors', vendor.slug)])}#vendorRowsSection",
         summary=vendor.notes or "Связанный производитель из базы каталога.",
         related_groups=related_groups,
@@ -290,57 +277,43 @@ def catalog_search_groups(query):
         return []
 
     section_items = []
-    blocks = (
-        CatalogBlock.objects.filter(Q(title__icontains=query) | Q(summary__icontains=query))
-        .annotate(child_count=Count("directions", distinct=True))
-        .order_by("sort_order", "title")[:3]
-    )
-    for block in blocks:
-        section_items.append(
-            catalog_result_item(
-                "Блок",
-                block.title,
-                [block.title],
-                reverse("catalog_block", args=[block.slug]),
-                summary=block.summary,
-                target=catalog_node_id("block", block.slug),
-            )
-        )
-
     directions = (
         Direction.objects.select_related("block")
-        .filter(Q(title__icontains=query) | Q(purpose__icontains=query) | Q(block__title__icontains=query))
+        .filter(slug__in=PUBLIC_DIRECTION_SLUGS)
+        .filter(Q(title__icontains=query) | Q(purpose__icontains=query))
         .distinct()
-        .order_by("block__sort_order", "sort_order", "title")[:4]
+        .annotate(public_order=public_direction_order_expression())
+        .order_by("public_order", "title")[:6]
     )
     for direction in directions:
         section_items.append(
             catalog_result_item(
-                "Направление",
+                "Раздел проекта",
                 direction.title,
-                [direction.block.title, direction.title],
+                [direction.title],
                 reverse("catalog_direction", args=[direction.block.slug, direction.slug]),
-                summary=direction.purpose or direction.block.title,
+                summary=direction.purpose,
                 target=catalog_node_id("direction", direction.slug),
             )
         )
 
     systems = (
         CatalogSystem.objects.select_related("direction__block")
+        .filter(direction__slug__in=PUBLIC_DIRECTION_SLUGS)
         .filter(
             Q(title__icontains=query)
             | Q(direction__title__icontains=query)
-            | Q(direction__block__title__icontains=query)
         )
         .distinct()
-        .order_by("direction__block__sort_order", "direction__sort_order", "sort_order", "title")[:5]
+        .annotate(public_order=public_direction_order_expression("direction__slug"))
+        .order_by("public_order", "direction__sort_order", "sort_order", "title")[:5]
     )
     for system in systems:
         section_items.append(
             catalog_result_item(
                 "Система",
                 system.title,
-                [system.direction.block.title, system.direction.title, system.title],
+                [system.direction.title, system.title],
                 reverse(
                     "catalog_system",
                     args=[system.direction.block.slug, system.direction.slug, system.slug],
@@ -353,24 +326,26 @@ def catalog_search_groups(query):
     product_groups = (
         ProductGroup.objects.select_related("system__direction__block")
         .prefetch_related("vendors")
+        .filter(system__direction__slug__in=PUBLIC_DIRECTION_SLUGS)
         .filter(
             Q(title__icontains=query)
             | Q(crm_category__icontains=query)
             | Q(crm_comment_hint__icontains=query)
             | Q(system__title__icontains=query)
             | Q(system__direction__title__icontains=query)
-            | Q(system__direction__block__title__icontains=query)
             | Q(types__title__icontains=query)
             | Q(attributes__title__icontains=query)
             | Q(vendors__name__icontains=query)
         )
         .distinct()
-        .order_by("system__direction__block__sort_order", "system__direction__sort_order", "system__sort_order", "sort_order", "title")[:7]
+        .annotate(public_order=public_direction_order_expression("system__direction__slug"))
+        .order_by("public_order", "system__direction__sort_order", "system__sort_order", "sort_order", "title")[:7]
     )
     group_items = [catalog_group_result(group) for group in product_groups]
 
     product_types = (
         ProductType.objects.select_related("product_group__system__direction__block")
+        .filter(product_group__system__direction__slug__in=PUBLIC_DIRECTION_SLUGS)
         .filter(
             Q(title__icontains=query)
             | Q(product_group__title__icontains=query)
@@ -378,8 +353,9 @@ def catalog_search_groups(query):
             | Q(product_group__system__direction__title__icontains=query)
         )
         .distinct()
+        .annotate(public_order=public_direction_order_expression("product_group__system__direction__slug"))
         .order_by(
-            "product_group__system__direction__block__sort_order",
+            "public_order",
             "product_group__system__direction__sort_order",
             "product_group__system__sort_order",
             "product_group__sort_order",
