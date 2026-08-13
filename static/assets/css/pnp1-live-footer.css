@@ -467,7 +467,7 @@
 
 @media (max-width: 780px) {
   .site-footer {
-    padding-top: 26px;
+    padding-top: 18px;
   }
 
   .site-footer .site-footer-container {
@@ -476,27 +476,59 @@
 
   .site-footer-cta {
     grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 22px;
-    border-radius: 16px;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .site-footer-customer-cta {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0;
+  }
+
+  .site-footer-partner-cta {
+    min-height: 0;
+    padding: 14px 0 0;
   }
 
   .site-footer-cta h2 {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  .site-footer-cta-copy > p,
+  .site-footer-partner-cta > p,
+  .site-footer-button small {
+    display: none;
   }
 
   .site-footer-cta-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
     min-width: 0;
   }
 
   .site-footer-button {
     width: 100%;
-    min-height: 48px;
+    min-height: 54px;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .site-footer-button strong {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .site-footer-partner-button {
+    min-height: 44px;
   }
 
   .site-footer-main {
-    padding: 28px 0 22px;
+    padding: 20px 0 16px;
   }
 
   .site-footer--compact .site-footer-main {
@@ -505,7 +537,29 @@
 
   .site-footer-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 0;
+  }
+
+  .site-footer-brand {
+    padding-bottom: 14px;
+  }
+
+  .site-footer-description {
+    display: none;
+  }
+
+  .site-footer-logo img {
+    max-width: 112px;
+  }
+
+  .site-footer-tagline {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .site-footer-contacts {
+    margin-top: 10px;
+    gap: 2px;
   }
 
   .site-footer-description,
@@ -514,7 +568,7 @@
   }
 
   .site-footer .site-footer-contact-link {
-    min-height: 44px !important;
+    min-height: 38px !important;
   }
 
   .site-footer-group {
@@ -522,7 +576,7 @@
   }
 
   .site-footer-group summary {
-    min-height: 52px;
+    min-height: 48px;
     cursor: pointer;
   }
 
@@ -540,20 +594,31 @@
 
   .site-footer-bottom {
     display: grid;
-    gap: 10px;
-    padding-top: 18px;
+    gap: 4px;
+    padding: 12px 0 18px;
   }
 
   .site-footer-legal {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-items: start;
     justify-content: stretch;
-    gap: 0;
+    gap: 0 14px;
   }
 
   .site-footer-legal a,
   .site-footer-legal button {
-    min-height: 44px !important;
+    min-height: 40px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .site-footer-cta-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer-button {
+    min-height: 44px;
   }
 }
 

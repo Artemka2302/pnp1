@@ -1,8 +1,48 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const initMobileFooter = () => {
+    const groups = [...document.querySelectorAll(".shared-desktop-footer .site-footer-group")];
+    if (!groups.length) return;
+
+    const mobileFooter = window.matchMedia("(max-width: 780px)");
+    const syncFooterGroups = () => {
+      groups.forEach(group => {
+        group.open = !mobileFooter.matches;
+      });
+    };
+
+    groups.forEach(group => {
+      group.addEventListener("toggle", () => {
+        if (!mobileFooter.matches || !group.open) return;
+        groups.forEach(other => {
+          if (other !== group) other.open = false;
+        });
+      });
+    });
+
+    syncFooterGroups();
+    mobileFooter.addEventListener?.("change", syncFooterGroups);
+  };
   const menuBtn = document.querySelector("#menuBtn");
   const mainNav = document.querySelector("#mainNav");
   if (menuBtn && mainNav) {
-    menuBtn.addEventListener("click", () => mainNav.classList.toggle("open"));
+    const closeMenu = () => {
+      mainNav.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+    };
+
+    menuBtn.addEventListener("click", () => {
+      const isOpen = mainNav.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+    mainNav.addEventListener("click", event => {
+      if (event.target.closest("a")) closeMenu();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && mainNav.classList.contains("open")) {
+        closeMenu();
+        menuBtn.focus();
+      }
+    });
   }
 
   const contactMenu = document.querySelector("[data-header-contact]");
@@ -2046,6 +2086,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  initMobileFooter();
   initVendorFilters();
   initPartnersFilter();
   initHomeBrandCarousel();

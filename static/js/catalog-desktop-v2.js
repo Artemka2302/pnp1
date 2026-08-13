@@ -455,6 +455,10 @@
     if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     if (searchResults) searchResults.hidden = true;
+    if (window.matchMedia("(max-width: 1080px)").matches) {
+      rootElement.classList.remove("is-index-open");
+      indexToggle?.setAttribute("aria-expanded", "false");
+    }
     await renderTarget(link.dataset.catalogV2Target);
   });
 
