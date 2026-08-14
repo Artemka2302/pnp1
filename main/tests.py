@@ -789,10 +789,20 @@ class BitrixPayloadTests(TestCase):
         self.assertTrue(result["files_sent"])
         self.assertEqual(result["files_count"], 3)
         self.assertEqual(result["bitrix_id"], "901")
-        call_bitrix_method_mock.assert_called_once()
-        webhook_url, method, payload = call_bitrix_method_mock.call_args.args
+        self.assertEqual(call_bitrix_method_mock.call_count, 2)
+        webhook_url, method, payload = call_bitrix_method_mock.call_args_list[0].args
         self.assertEqual(webhook_url, "https://example.bitrix24.ru/rest/1/token/crm.item.add.json")
         self.assertEqual(method, "crm.item.add")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["company_card"]][0], "company-card.pdf")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]][0], "catalog.pptx")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["price_list"]][0], "price.xlsx")
+
+        webhook_url, method, payload = call_bitrix_method_mock.call_args_list[1].args
+        self.assertEqual(webhook_url, "https://example.bitrix24.ru/rest/1/token/crm.item.add.json")
+        self.assertEqual(method, "crm.item.update")
+        self.assertEqual(payload["entityTypeId"], COOPERATION_ENTITY_TYPE_ID)
+        self.assertEqual(payload["id"], 901)
+        self.assertEqual(payload["useOriginalUfNames"], "Y")
         self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["company_card"]][0], "company-card.pdf")
         self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]][0], "catalog.pptx")
         self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["price_list"]][0], "price.xlsx")

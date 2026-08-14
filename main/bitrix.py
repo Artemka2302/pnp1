@@ -224,6 +224,19 @@ def build_bitrix_cooperation_payload(lead):
     }
 
 
+def build_bitrix_cooperation_file_update_payload(lead, bitrix_id):
+    file_fields = build_bitrix_cooperation_file_fields(lead)
+    if not file_fields:
+        return None
+
+    return {
+        "entityTypeId": COOPERATION_ENTITY_TYPE_ID,
+        "id": int(bitrix_id) if str(bitrix_id).isdigit() else bitrix_id,
+        "useOriginalUfNames": "Y",
+        "fields": file_fields,
+    }
+
+
 def build_bitrix_payload(lead):
     if lead.source == Lead.SOURCE_COOPERATION:
         return build_bitrix_cooperation_payload(lead)
@@ -246,6 +259,21 @@ def bitrix_created_item_id(lead, data):
     if not isinstance(item, dict):
         return None
     return item.get("id")
+
+
+def attach_cooperation_files_to_bitrix_item(webhook_url, lead, bitrix_id):
+    payload = build_bitrix_cooperation_file_update_payload(lead, bitrix_id)
+    if not payload:
+        return {"sent": False, "files_count": 0}
+
+    data = call_bitrix_method(webhook_url, "crm.item.update", payload)
+    if data.get("error"):
+        return {
+            "sent": False,
+            "files_count": len(payload["fields"]),
+            "error": data.get("error_description") or data.get("error"),
+        }
+    return {"sent": True, "files_count": len(payload["fields"])}
 
 
 def send_lead_to_bitrix(lead):
@@ -280,10 +308,11 @@ def send_lead_to_bitrix(lead):
     lead.save(update_fields=["bitrix_lead_id", "status"])
 
     if lead.source == Lead.SOURCE_COOPERATION:
-        cooperation_uploads = [
-            upload for upload in lead.uploads.all() if upload.field_name in COOPERATION_FILE_FIELDS
-        ]
-        files_result = {"sent": bool(cooperation_uploads), "files_count": len(cooperation_uploads)}
+        try:
+            files_result = attach_cooperation_files_to_bitrix_item(webhook_url, lead, lead.bitrix_lead_id)
+        except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
+            logger.exception("Bitrix cooperation file update failed for lead_id=%s", lead.pk)
+            files_result = {"sent": False, "files_count": lead.uploads.count(), "error": str(error)}
     else:
         try:
             files_result = attach_files_to_bitrix_item(webhook_url, lead, lead.bitrix_lead_id)
