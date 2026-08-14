@@ -132,14 +132,25 @@
 
             <div class="field"><label for="cooperationMessage">Комментарий *</label><textarea id="cooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
 
-            <div class="field file-field quick-file-field">
-              <span class="field-label">Прайс или презентация <span class="field-optional">(при наличии)</span></span>
-              <label class="upload-box" for="cooperationFile">
-                <svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg>
-                <span data-file-label>Прикрепить файл</span>
-              </label>
-              <input class="file-input" id="cooperationFile" name="presentation" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple>
-              <div class="file-list" data-file-list hidden></div>
+            <div class="cooperation-files-grid" aria-label="Файлы для предложения">
+              <div class="field file-field cooperation-file-card quick-file-field">
+                <span class="field-label">Карточка компании <span class="field-optional">(при наличии)</span></span>
+                <label class="upload-box" for="cooperationCompanyCard"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label>
+                <input class="file-input" id="cooperationCompanyCard" name="company_card" type="file" accept=".pdf,.docx">
+                <small>PDF, DOCX</small><div class="file-list" data-file-list hidden></div>
+              </div>
+              <div class="field file-field cooperation-file-card quick-file-field">
+                <span class="field-label">Каталог / презентация <span class="field-optional">(при наличии)</span></span>
+                <label class="upload-box" for="cooperationCatalogPresentation"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label>
+                <input class="file-input" id="cooperationCatalogPresentation" name="catalog_presentation" type="file" accept=".pdf,.pptx">
+                <small>PDF, PPTX</small><div class="file-list" data-file-list hidden></div>
+              </div>
+              <div class="field file-field cooperation-file-card quick-file-field">
+                <span class="field-label">Прайс-лист <span class="field-optional">(при наличии)</span></span>
+                <label class="upload-box" for="cooperationPriceList"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label>
+                <input class="file-input" id="cooperationPriceList" name="price_list" type="file" accept=".xlsx,.pdf">
+                <small>XLSX, PDF</small><div class="file-list" data-file-list hidden></div>
+              </div>
             </div>
 
             <label class="form-consent-check quick-consent">

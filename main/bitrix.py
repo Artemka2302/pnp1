@@ -21,6 +21,13 @@ COOPERATION_PROPOSER_TYPE_IDS = {
     Lead.COOPERATION_TYPE_OTHER: 1332,
     Lead.COOPERATION_TYPE_MANUFACTURER: 1333,
 }
+COOPERATION_FILE_FIELDS = {
+    "company_card": "UF_CRM_14_1786700346614",
+    "catalog_presentation": "UF_CRM_14_1786700362431",
+    "price_list": "UF_CRM_14_1786700373180",
+    # Keep old cached pages working while they are being replaced in browsers.
+    "presentation": "UF_CRM_14_1786700362431",
+}
 
 
 def bitrix_webhook_env_name(lead):
@@ -116,6 +123,32 @@ def build_bitrix_file_payloads(lead):
     return files
 
 
+def build_bitrix_file_data(upload):
+    if not upload.file:
+        return None
+    upload.file.open("rb")
+    try:
+        encoded_content = base64.b64encode(upload.file.read()).decode("ascii")
+    finally:
+        upload.file.close()
+    return [upload.original_name, encoded_content]
+
+
+def build_bitrix_cooperation_file_fields(lead):
+    if not lead.pk:
+        return {}
+
+    fields = {}
+    for upload in lead.uploads.all():
+        bitrix_field = COOPERATION_FILE_FIELDS.get(upload.field_name)
+        if not bitrix_field or bitrix_field in fields:
+            continue
+        file_data = build_bitrix_file_data(upload)
+        if file_data:
+            fields[bitrix_field] = file_data
+    return fields
+
+
 def attach_files_to_bitrix_item(webhook_url, lead, bitrix_id):
     files = build_bitrix_file_payloads(lead)
     if not files:
@@ -183,6 +216,7 @@ def build_bitrix_cooperation_payload(lead):
         COOPERATION_COMMENT_FIELD: lead.message,
         COOPERATION_PROPOSER_TYPE_FIELD: proposer_type_id,
     }
+    fields.update(build_bitrix_cooperation_file_fields(lead))
     return {
         "entityTypeId": COOPERATION_ENTITY_TYPE_ID,
         "useOriginalUfNames": "Y",
@@ -245,11 +279,17 @@ def send_lead_to_bitrix(lead):
     lead.status = Lead.STATUS_SENT_TO_BITRIX
     lead.save(update_fields=["bitrix_lead_id", "status"])
 
-    try:
-        files_result = attach_files_to_bitrix_item(webhook_url, lead, lead.bitrix_lead_id)
-    except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
-        logger.exception("Bitrix file attach failed for lead_id=%s", lead.pk)
-        files_result = {"sent": False, "files_count": lead.uploads.count(), "error": str(error)}
+    if lead.source == Lead.SOURCE_COOPERATION:
+        cooperation_uploads = [
+            upload for upload in lead.uploads.all() if upload.field_name in COOPERATION_FILE_FIELDS
+        ]
+        files_result = {"sent": bool(cooperation_uploads), "files_count": len(cooperation_uploads)}
+    else:
+        try:
+            files_result = attach_files_to_bitrix_item(webhook_url, lead, lead.bitrix_lead_id)
+        except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
+            logger.exception("Bitrix file attach failed for lead_id=%s", lead.pk)
+            files_result = {"sent": False, "files_count": lead.uploads.count(), "error": str(error)}
 
     if files_result.get("error"):
         logger.error("Bitrix file attach failed for lead_id=%s: %s", lead.pk, files_result["error"])

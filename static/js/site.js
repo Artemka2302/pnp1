@@ -316,6 +316,20 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok || !data.ok) {
         throw new Error(data.error || "Не удалось отправить заявку.");
       }
+      if (data.bitrix_configured === false) {
+        setStatus(
+          statusElement,
+          `Заявка #${data.lead_id} сохранена локально, но Bitrix на этом сервере не настроен.`,
+          true,
+        );
+        form.reset();
+        resetFilePicker(form);
+        if (form.matches("[data-lead-form]") || form.querySelector("[data-request-items]")) {
+          writeItems([]);
+          renderRequest();
+        }
+        return data;
+      }
       setStatus(
         statusElement,
         form.dataset.submitSuccess || `Заявка #${data.lead_id} сохранена.`,
@@ -382,7 +396,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const setInputFiles = (fileInput, files) => {
     if (!fileInput || typeof DataTransfer === "undefined") return;
     const transfer = new DataTransfer();
-    Array.from(files || []).forEach(file => transfer.items.add(file));
+    const nextFiles = fileInput.multiple ? Array.from(files || []) : Array.from(files || []).slice(-1);
+    nextFiles.forEach(file => transfer.items.add(file));
     fileInput.files = transfer.files;
   };
 
@@ -398,98 +413,109 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const initFilePicker = form => {
-    const fileInput = form.querySelector("input[type='file']");
-    const fileLabel = form.querySelector("[data-file-label]");
-    let fileList = form.querySelector("[data-file-list]");
-    if (!fileInput) return;
-    const state = {
-      files: Array.from(fileInput.files || []),
-      initialLabel: fileLabel?.textContent || defaultFileLabel,
-      reset: null,
-    };
-    filePickerState.set(fileInput, state);
+    form.querySelectorAll("input[type='file']").forEach(fileInput => {
+      const fileField = fileInput.closest(".file-field") || fileInput.parentElement || form;
+      const fileLabel = fileField?.querySelector("[data-file-label]") || null;
+      let fileList = fileField?.querySelector("[data-file-list]") || null;
+      if (!fileLabel) return;
 
-    if (!fileList) {
-      fileList = document.createElement("div");
-      fileList.className = "file-list";
-      fileList.dataset.fileList = "";
-      fileList.hidden = true;
-      fileInput.after(fileList);
-    }
+      const state = {
+        files: Array.from(fileInput.files || []),
+        initialLabel: fileLabel.textContent || defaultFileLabel,
+        reset: null,
+      };
+      filePickerState.set(fileInput, state);
 
-    const renderFiles = () => {
-      const files = state.files;
-      updateFileLabel(fileLabel, files.length, state.initialLabel);
-      fileList.innerHTML = "";
-      fileList.hidden = !files.length;
+      if (!fileList) {
+        fileList = document.createElement("div");
+        fileList.className = "file-list";
+        fileList.dataset.fileList = "";
+        fileList.hidden = true;
+        fileInput.after(fileList);
+      }
 
-      files.forEach((file, index) => {
-        const item = document.createElement("div");
-        item.className = "file-list-item";
+      const renderFiles = () => {
+        const files = state.files;
+        updateFileLabel(fileLabel, files.length, state.initialLabel);
+        fileList.innerHTML = "";
+        fileList.hidden = !files.length;
 
-        const meta = document.createElement("span");
-        meta.className = "file-list-meta";
-        meta.textContent = `${file.name} В· ${formatFileSize(file.size)}`;
+        files.forEach((file, index) => {
+          const item = document.createElement("div");
+          item.className = "file-list-item";
 
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "file-list-remove";
-        remove.dataset.fileRemove = String(index);
-        remove.setAttribute("aria-label", `Удалить ${file.name}`);
-        remove.textContent = "Г—";
+          const meta = document.createElement("span");
+          meta.className = "file-list-meta";
+          meta.textContent = `${file.name} · ${formatFileSize(file.size)}`;
 
-        item.append(meta, remove);
-        fileList.append(item);
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "file-list-remove";
+          remove.dataset.fileRemove = String(index);
+          remove.setAttribute("aria-label", `Удалить ${file.name}`);
+          remove.textContent = "×";
+
+          item.append(meta, remove);
+          fileList.append(item);
+        });
+      };
+
+      const syncFiles = () => {
+        setInputFiles(fileInput, state.files);
+        renderFiles();
+      };
+
+      state.reset = () => {
+        state.files = [];
+        syncFiles();
+      };
+
+      fileInput.addEventListener("change", () => {
+        const selectedFiles = Array.from(fileInput.files || []);
+        if (!fileInput.multiple) {
+          state.files = selectedFiles.slice(-1);
+          syncFiles();
+          return;
+        }
+
+        const existing = new Set(state.files.map(fileSignature));
+        selectedFiles.forEach(file => {
+          const signature = fileSignature(file);
+          if (existing.has(signature)) return;
+          existing.add(signature);
+          state.files.push(file);
+        });
+        syncFiles();
       });
-    };
 
-    const syncFiles = () => {
-      setInputFiles(fileInput, state.files);
-      renderFiles();
-    };
-
-    state.reset = () => {
-      state.files = [];
-      syncFiles();
-    };
-
-    fileInput.addEventListener("change", () => {
-      const existing = new Set(state.files.map(fileSignature));
-      Array.from(fileInput.files || []).forEach(file => {
-        const signature = fileSignature(file);
-        if (existing.has(signature)) return;
-        existing.add(signature);
-        state.files.push(file);
+      fileList.addEventListener("click", event => {
+        const remove = event.target.closest("[data-file-remove]");
+        if (!remove) return;
+        const removeIndex = Number(remove.dataset.fileRemove);
+        state.files = state.files.filter((_, index) => index !== removeIndex);
+        syncFiles();
       });
+
       syncFiles();
     });
-
-    fileList.addEventListener("click", event => {
-      const remove = event.target.closest("[data-file-remove]");
-      if (!remove) return;
-      const removeIndex = Number(remove.dataset.fileRemove);
-      state.files = state.files.filter((_, index) => index !== removeIndex);
-      syncFiles();
-    });
-
-    syncFiles();
   };
 
   const resetFilePicker = form => {
-    const fileInput = form.querySelector("input[type='file']");
-    if (!fileInput) return;
-    const state = filePickerState.get(fileInput);
-    if (state?.reset) {
-      state.reset();
-      return;
-    }
-    fileInput.value = "";
-    updateFileLabel(form.querySelector("[data-file-label]"), 0);
-    const fileList = form.querySelector("[data-file-list]");
-    if (fileList) {
-      fileList.innerHTML = "";
-      fileList.hidden = true;
-    }
+    form.querySelectorAll("input[type='file']").forEach(fileInput => {
+      const fileField = fileInput.closest(".file-field") || fileInput.parentElement || form;
+      const state = filePickerState.get(fileInput);
+      if (state?.reset) {
+        state.reset();
+        return;
+      }
+      fileInput.value = "";
+      updateFileLabel(fileField?.querySelector("[data-file-label]"), 0);
+      const fileList = fileField?.querySelector("[data-file-list]");
+      if (fileList) {
+        fileList.innerHTML = "";
+        fileList.hidden = true;
+      }
+    });
   };
 
   const initSupportChatWidget = () => {

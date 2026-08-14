@@ -66,7 +66,7 @@ from .catalog import (
 
 logger = logging.getLogger(__name__)
 
-ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".doc", ".docx", ".xls", ".xlsx", ".dwg", ".jpg", ".jpeg", ".png", ".zip"}
+ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".doc", ".docx", ".xls", ".xlsx", ".pptx", ".dwg", ".jpg", ".jpeg", ".png", ".zip"}
 MAX_UPLOAD_FILES = 5
 MAX_UPLOAD_FILE_SIZE = 30 * 1024 * 1024
 MAX_UPLOAD_TOTAL_SIZE = 60 * 1024 * 1024
@@ -1033,7 +1033,7 @@ def upload_signature_allowed(extension, uploaded_file):
         return head.startswith(b"\xff\xd8\xff")
     if extension == ".png":
         return head.startswith(b"\x89PNG\r\n\x1a\n")
-    if extension in {".zip", ".docx", ".xlsx"}:
+    if extension in {".zip", ".docx", ".xlsx", ".pptx"}:
         return head.startswith((b"PK\x03\x04", b"PK\x05\x06", b"PK\x07\x08"))
     if extension in {".doc", ".xls"}:
         return head.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1")
@@ -1066,11 +1066,15 @@ def validate_uploaded_files(uploaded_files):
     return ""
 
 
-def request_files(request):
-    files = []
+def request_file_entries(request):
+    entries = []
     for field_name in request.FILES:
-        files.extend(request.FILES.getlist(field_name))
-    return files
+        entries.extend((field_name, uploaded_file) for uploaded_file in request.FILES.getlist(field_name))
+    return entries
+
+
+def request_files(request):
+    return [uploaded_file for _, uploaded_file in request_file_entries(request)]
 
 
 def check_phone(phone):
@@ -1194,7 +1198,8 @@ def lead_request_api(request, forced_source=None):
     product_group_slug = payload_value(payload, "product_group_slug", max_length=140)
     product_group_title = payload_value(payload, "product_group_title", max_length=220)
     items = parse_request_items(payload_value(payload, "items"))
-    uploaded_files = request_files(request)
+    uploaded_file_entries = request_file_entries(request)
+    uploaded_files = [uploaded_file for _, uploaded_file in uploaded_file_entries]
     consent_value = payload_bool(payload, "consent")
 
     allowed_sources = {choice[0] for choice in Lead.SOURCE_CHOICES}
@@ -1292,9 +1297,10 @@ def lead_request_api(request, forced_source=None):
             created_items = 1
 
         uploaded_count = 0
-        for uploaded_file in uploaded_files:
+        for field_name, uploaded_file in uploaded_file_entries:
             UploadedFile.objects.create(
                 lead=lead,
+                field_name=field_name[:80],
                 file=uploaded_file,
                 original_name=Path(uploaded_file.name or "file").name[:255],
                 content_type=(uploaded_file.content_type or "")[:120],

@@ -1,3 +1,4 @@
+import base64
 import json
 import shutil
 import tempfile
@@ -19,11 +20,11 @@ from .ai import (
 )
 from .bitrix import (
     COOPERATION_COMMENT_FIELD,
+    COOPERATION_FILE_FIELDS,
     COOPERATION_EMAIL_FIELD,
     COOPERATION_ENTITY_TYPE_ID,
     COOPERATION_PHONE_FIELD,
     COOPERATION_PROPOSER_TYPE_FIELD,
-    attach_files_to_bitrix_item,
     bitrix_method_url,
     bitrix_webhook_env_name,
     build_bitrix_comment,
@@ -41,6 +42,7 @@ from .models import (
     LeadItem,
     ProductGroup,
     ProductType,
+    UploadedFile,
     Vendor,
 )
 
@@ -442,6 +444,48 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(lead.raw_payload["proposer_type"], "manufacturer")
         self.assertEqual(ConsentLog.objects.get().form_type, Lead.SOURCE_COOPERATION)
 
+    def test_cooperation_api_preserves_file_field_names(self):
+        company_card = SimpleUploadedFile(
+            "company-card.pdf",
+            b"%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF",
+            content_type="application/pdf",
+        )
+        catalog = SimpleUploadedFile(
+            "catalog.pptx",
+            b"PK\x03\x04pptx",
+            content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        )
+        price_list = SimpleUploadedFile(
+            "price.xlsx",
+            b"PK\x03\x04xlsx",
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+
+        response = self.client.post(
+            "/api/cooperation-request/",
+            data={
+                "source": "contact",
+                "proposer_type": "supplier",
+                "company": "ООО Поставщик",
+                "phone": "+7 900 000-00-00",
+                "email": "partner@example.com",
+                "message": "Предлагаем материалы и каталог.",
+                "consent": "1",
+                "company_card": company_card,
+                "catalog_presentation": catalog,
+                "price_list": price_list,
+            },
+        )
+
+        self.assertEqual(response.status_code, 201)
+        lead = Lead.objects.get()
+        self.assertEqual(lead.uploads.count(), 3)
+        self.assertCountEqual(
+            lead.uploads.values_list("field_name", flat=True),
+            ["company_card", "catalog_presentation", "price_list"],
+        )
+        self.bitrix_mock.assert_called_once()
+
     def test_cooperation_api_requires_all_contact_fields(self):
         response = self.client.post(
             "/api/cooperation-request/",
@@ -554,6 +598,73 @@ class BitrixPayloadTests(TestCase):
         self.assertIn("Предлагаем сотрудничество.", comment)
         self.assertEqual(bitrix_webhook_env_name(lead), "BITRIX_COOPERATION_WEBHOOK_URL")
 
+    def test_cooperation_payload_includes_file_uf_fields(self):
+        media_root = tempfile.mkdtemp()
+        payload = None
+        try:
+            with override_settings(MEDIA_ROOT=media_root):
+                lead = Lead.objects.create(
+                    source=Lead.SOURCE_COOPERATION,
+                    company="ООО Поставщик",
+                    phone="+79000000000",
+                    email="partner@example.com",
+                    message="Предлагаем сотрудничество.",
+                    raw_payload={"proposer_type": Lead.COOPERATION_TYPE_SUPPLIER},
+                )
+                company_bytes = b"%PDF-1.4\ncompany-card"
+                catalog_bytes = b"PK\x03\x04catalog-presentation"
+                price_bytes = b"PK\x03\x04price-list"
+                UploadedFile.objects.create(
+                    lead=lead,
+                    field_name="company_card",
+                    file=SimpleUploadedFile("company-card.pdf", company_bytes, content_type="application/pdf"),
+                    original_name="company-card.pdf",
+                    content_type="application/pdf",
+                    size=len(company_bytes),
+                )
+                UploadedFile.objects.create(
+                    lead=lead,
+                    field_name="catalog_presentation",
+                    file=SimpleUploadedFile(
+                        "catalog.pptx",
+                        catalog_bytes,
+                        content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    ),
+                    original_name="catalog.pptx",
+                    content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    size=len(catalog_bytes),
+                )
+                UploadedFile.objects.create(
+                    lead=lead,
+                    field_name="price_list",
+                    file=SimpleUploadedFile(
+                        "price.xlsx",
+                        price_bytes,
+                        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    ),
+                    original_name="price.xlsx",
+                    content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    size=len(price_bytes),
+                )
+
+                payload = build_bitrix_payload(lead)
+        finally:
+            shutil.rmtree(media_root, ignore_errors=True)
+
+        self.assertIsNotNone(payload)
+        self.assertEqual(
+            payload["fields"][COOPERATION_FILE_FIELDS["company_card"]],
+            ["company-card.pdf", base64.b64encode(company_bytes).decode("ascii")],
+        )
+        self.assertEqual(
+            payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]],
+            ["catalog.pptx", base64.b64encode(catalog_bytes).decode("ascii")],
+        )
+        self.assertEqual(
+            payload["fields"][COOPERATION_FILE_FIELDS["price_list"]],
+            ["price.xlsx", base64.b64encode(price_bytes).decode("ascii")],
+        )
+
     def test_cooperation_proposer_types_use_bitrix_enumeration_ids(self):
         expected_ids = {
             Lead.COOPERATION_TYPE_SUPPLIER: 1330,
@@ -614,22 +725,77 @@ class BitrixPayloadTests(TestCase):
         self.assertEqual(lead.bitrix_lead_id, "321")
         self.assertEqual(lead.status, Lead.STATUS_SENT_TO_BITRIX)
 
-    @patch("main.bitrix.build_bitrix_file_payloads", return_value=[["offer.pdf", "ZmlsZQ=="]])
-    @patch("main.bitrix.call_bitrix_method", return_value={"result": 901})
-    def test_cooperation_files_attach_to_smart_process_timeline(self, call_bitrix_method_mock, _files_mock):
-        lead = Lead(source=Lead.SOURCE_COOPERATION)
+    @patch("main.bitrix.call_bitrix_method")
+    def test_cooperation_files_are_sent_in_payload(self, call_bitrix_method_mock):
+        media_root = tempfile.mkdtemp()
+        result = None
+        try:
+            with override_settings(MEDIA_ROOT=media_root):
+                lead = Lead.objects.create(
+                    source=Lead.SOURCE_COOPERATION,
+                    company="ООО Поставщик",
+                    phone="+79000000000",
+                    email="partner@example.com",
+                    message="Предлагаем сотрудничество.",
+                    raw_payload={"proposer_type": Lead.COOPERATION_TYPE_SUPPLIER},
+                )
+                company_bytes = b"%PDF-1.4\ncompany-card"
+                catalog_bytes = b"PK\x03\x04catalog-presentation"
+                price_bytes = b"PK\x03\x04price-list"
+                UploadedFile.objects.create(
+                    lead=lead,
+                    field_name="company_card",
+                    file=SimpleUploadedFile("company-card.pdf", company_bytes, content_type="application/pdf"),
+                    original_name="company-card.pdf",
+                    content_type="application/pdf",
+                    size=len(company_bytes),
+                )
+                UploadedFile.objects.create(
+                    lead=lead,
+                    field_name="catalog_presentation",
+                    file=SimpleUploadedFile(
+                        "catalog.pptx",
+                        catalog_bytes,
+                        content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    ),
+                    original_name="catalog.pptx",
+                    content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    size=len(catalog_bytes),
+                )
+                UploadedFile.objects.create(
+                    lead=lead,
+                    field_name="price_list",
+                    file=SimpleUploadedFile(
+                        "price.xlsx",
+                        price_bytes,
+                        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    ),
+                    original_name="price.xlsx",
+                    content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    size=len(price_bytes),
+                )
 
-        result = attach_files_to_bitrix_item(
-            "https://example.bitrix24.ru/rest/1/token/crm.item.add.json",
-            lead,
-            "321",
-        )
+                call_bitrix_method_mock.return_value = {"result": {"item": {"id": 901}}}
 
-        self.assertTrue(result["sent"])
+                with patch.dict(
+                    "os.environ",
+                    {"BITRIX_COOPERATION_WEBHOOK_URL": "https://example.bitrix24.ru/rest/1/token/crm.item.add.json"},
+                ):
+                    result = send_lead_to_bitrix(lead)
+        finally:
+            shutil.rmtree(media_root, ignore_errors=True)
+
+        self.assertIsNotNone(result)
+        self.assertTrue(result["files_sent"])
+        self.assertEqual(result["files_count"], 3)
+        self.assertEqual(result["bitrix_id"], "901")
+        call_bitrix_method_mock.assert_called_once()
         webhook_url, method, payload = call_bitrix_method_mock.call_args.args
-        self.assertEqual(method, "crm.timeline.comment.add")
-        self.assertEqual(payload["fields"]["ENTITY_ID"], 321)
-        self.assertEqual(payload["fields"]["ENTITY_TYPE"], "DYNAMIC_1088")
+        self.assertEqual(webhook_url, "https://example.bitrix24.ru/rest/1/token/crm.item.add.json")
+        self.assertEqual(method, "crm.item.add")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["company_card"]][0], "company-card.pdf")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]][0], "catalog.pptx")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["price_list"]][0], "price.xlsx")
 
 
 class AiServiceTests(SimpleTestCase):

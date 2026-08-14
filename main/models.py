@@ -311,6 +311,7 @@ class LeadItem(TimeStampedModel):
 
 class UploadedFile(TimeStampedModel):
     lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name="uploads")
+    field_name = models.CharField(max_length=80, blank=True)
     file = models.FileField(upload_to=lead_upload_path)
     original_name = models.CharField(max_length=255)
     content_type = models.CharField(max_length=120, blank=True)
