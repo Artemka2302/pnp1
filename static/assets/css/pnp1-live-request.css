@@ -2000,7 +2000,7 @@
 
 .cooperation-file-card .field-label {
   display: block;
-  min-height: 0;
+  min-height: 48px;
   color: rgba(255, 255, 255, .84);
   font-size: 11px;
   line-height: 1.35;
