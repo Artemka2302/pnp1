@@ -71,6 +71,23 @@ def call_bitrix_method(webhook_url, method, payload):
         return json.loads(response.read().decode("utf-8"))
 
 
+def bitrix_http_error_text(error):
+    """Extract Bitrix's JSON error body so local/server logs show the cause."""
+    try:
+        body = error.read().decode("utf-8", errors="replace")
+    except (AttributeError, OSError):
+        body = ""
+    if not body:
+        return str(error)
+    try:
+        data = json.loads(body)
+    except json.JSONDecodeError:
+        return body[:500]
+    if isinstance(data, dict):
+        return data.get("error_description") or data.get("error") or body[:500]
+    return body[:500]
+
+
 def build_bitrix_comment(lead):
     if lead.source == Lead.SOURCE_COOPERATION:
         proposer_type = str(lead.raw_payload.get("proposer_type", "")).strip()
@@ -145,7 +162,9 @@ def build_bitrix_cooperation_file_fields(lead):
             continue
         file_data = build_bitrix_file_data(upload)
         if file_data:
-            fields[bitrix_field] = file_data
+            # Bitrix multiple-file UF fields expect an array of file values.
+            # Keep the filename/base64 pair nested as one value.
+            fields[bitrix_field] = [file_data]
     return fields
 
 
@@ -216,7 +235,6 @@ def build_bitrix_cooperation_payload(lead):
         COOPERATION_COMMENT_FIELD: lead.message,
         COOPERATION_PROPOSER_TYPE_FIELD: proposer_type_id,
     }
-    fields.update(build_bitrix_cooperation_file_fields(lead))
     return {
         "entityTypeId": COOPERATION_ENTITY_TYPE_ID,
         "useOriginalUfNames": "Y",
@@ -283,7 +301,13 @@ def send_lead_to_bitrix(lead):
             return {"configured": False, "sent": False}
         payload = build_bitrix_payload(lead)
         data = call_bitrix_method(webhook_url, bitrix_create_method(lead), payload)
-    except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
+    except HTTPError as error:
+        error_text = bitrix_http_error_text(error)
+        logger.exception("Bitrix CRM submit failed for lead_id=%s: %s", lead.pk, error_text)
+        lead.status = Lead.STATUS_FAILED
+        lead.save(update_fields=["status"])
+        return {"configured": True, "sent": False, "error": error_text}
+    except (URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as error:
         logger.exception("Bitrix CRM submit failed for lead_id=%s", lead.pk)
         lead.status = Lead.STATUS_FAILED
         lead.save(update_fields=["status"])

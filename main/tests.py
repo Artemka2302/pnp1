@@ -28,6 +28,7 @@ from .bitrix import (
     bitrix_method_url,
     bitrix_webhook_env_name,
     build_bitrix_comment,
+    build_bitrix_cooperation_file_update_payload,
     build_bitrix_payload,
     send_lead_to_bitrix,
 )
@@ -598,7 +599,7 @@ class BitrixPayloadTests(TestCase):
         self.assertIn("Предлагаем сотрудничество.", comment)
         self.assertEqual(bitrix_webhook_env_name(lead), "BITRIX_COOPERATION_WEBHOOK_URL")
 
-    def test_cooperation_payload_includes_file_uf_fields(self):
+    def test_cooperation_file_update_payload_uses_multiple_file_format(self):
         media_root = tempfile.mkdtemp()
         payload = None
         try:
@@ -648,21 +649,25 @@ class BitrixPayloadTests(TestCase):
                 )
 
                 payload = build_bitrix_payload(lead)
+                update_payload = build_bitrix_cooperation_file_update_payload(lead, 901)
         finally:
             shutil.rmtree(media_root, ignore_errors=True)
 
         self.assertIsNotNone(payload)
+        self.assertNotIn(COOPERATION_FILE_FIELDS["company_card"], payload["fields"])
+        self.assertNotIn(COOPERATION_FILE_FIELDS["catalog_presentation"], payload["fields"])
+        self.assertNotIn(COOPERATION_FILE_FIELDS["price_list"], payload["fields"])
         self.assertEqual(
-            payload["fields"][COOPERATION_FILE_FIELDS["company_card"]],
-            ["company-card.pdf", base64.b64encode(company_bytes).decode("ascii")],
+            update_payload["fields"][COOPERATION_FILE_FIELDS["company_card"]],
+            [["company-card.pdf", base64.b64encode(company_bytes).decode("ascii")]],
         )
         self.assertEqual(
-            payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]],
-            ["catalog.pptx", base64.b64encode(catalog_bytes).decode("ascii")],
+            update_payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]],
+            [["catalog.pptx", base64.b64encode(catalog_bytes).decode("ascii")]],
         )
         self.assertEqual(
-            payload["fields"][COOPERATION_FILE_FIELDS["price_list"]],
-            ["price.xlsx", base64.b64encode(price_bytes).decode("ascii")],
+            update_payload["fields"][COOPERATION_FILE_FIELDS["price_list"]],
+            [["price.xlsx", base64.b64encode(price_bytes).decode("ascii")]],
         )
 
     def test_cooperation_proposer_types_use_bitrix_enumeration_ids(self):
@@ -793,9 +798,9 @@ class BitrixPayloadTests(TestCase):
         webhook_url, method, payload = call_bitrix_method_mock.call_args_list[0].args
         self.assertEqual(webhook_url, "https://example.bitrix24.ru/rest/1/token/crm.item.add.json")
         self.assertEqual(method, "crm.item.add")
-        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["company_card"]][0], "company-card.pdf")
-        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]][0], "catalog.pptx")
-        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["price_list"]][0], "price.xlsx")
+        self.assertNotIn(COOPERATION_FILE_FIELDS["company_card"], payload["fields"])
+        self.assertNotIn(COOPERATION_FILE_FIELDS["catalog_presentation"], payload["fields"])
+        self.assertNotIn(COOPERATION_FILE_FIELDS["price_list"], payload["fields"])
 
         webhook_url, method, payload = call_bitrix_method_mock.call_args_list[1].args
         self.assertEqual(webhook_url, "https://example.bitrix24.ru/rest/1/token/crm.item.add.json")
@@ -803,9 +808,9 @@ class BitrixPayloadTests(TestCase):
         self.assertEqual(payload["entityTypeId"], COOPERATION_ENTITY_TYPE_ID)
         self.assertEqual(payload["id"], 901)
         self.assertEqual(payload["useOriginalUfNames"], "Y")
-        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["company_card"]][0], "company-card.pdf")
-        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]][0], "catalog.pptx")
-        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["price_list"]][0], "price.xlsx")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["company_card"]][0][0], "company-card.pdf")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["catalog_presentation"]][0][0], "catalog.pptx")
+        self.assertEqual(payload["fields"][COOPERATION_FILE_FIELDS["price_list"]][0][0], "price.xlsx")
 
 
 class AiServiceTests(SimpleTestCase):
