@@ -6566,6 +6566,89 @@ a[href*="wa.me"] {
   }
 }
 
+/* Mobile contact MVP: one clear entry point for messengers and support modes. */
+@media (max-width: 680px) {
+  .header-contact-dropdown {
+    max-height: min(76vh, 520px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .header-contact-support-list {
+    display: grid;
+    gap: 4px;
+    margin: 0 0 8px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid rgba(166, 184, 216, .18);
+  }
+
+  .header-contact-support-item {
+    appearance: none;
+    width: 100%;
+    min-height: 54px;
+    margin: 0;
+    padding: 9px 12px;
+    border: 1px solid transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .header-contact-support-item:hover,
+  .header-contact-support-item:focus-visible {
+    border-color: rgba(239, 145, 178, .52);
+    background: rgba(167, 39, 91, .18);
+  }
+
+  .header-contact-messenger-icon {
+    display: grid;
+    place-items: center;
+  }
+
+  .header-contact-messenger-icon img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+  }
+
+  .header-contact-text-icon {
+    display: grid;
+    width: 25px;
+    height: 25px;
+    place-items: center;
+    color: #fff;
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+
+  .support-chat-toggle-mobile {
+    display: grid;
+    min-width: 42px;
+    min-height: 42px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    overflow: hidden;
+    color: #fff;
+    font-size: 0;
+    place-items: center;
+  }
+
+  .support-chat-toggle-mobile::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    color: #fff;
+    box-sizing: border-box;
+  }
+}
+
 /* Mobile shell: use the same approved footer content as desktop. */
 @media (max-width: 1080px) {
   .shared-desktop-footer {
@@ -6920,5 +7003,82 @@ a[href*="wa.me"] {
   .vendors-hero .hero-actions,
   .about-hero-v13 .hero-actions {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile MVP guardrails: keep approved content readable without changing desktop. */
+@media (max-width: 680px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .topbar .container {
+    width: calc(100% - 24px);
+    min-width: 0;
+    padding-inline: 0;
+  }
+
+  .home-page .home-supply-gallery {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .home-page .home-supply-gallery-card {
+    min-height: 164px !important;
+  }
+
+  .home-page .home-supply-gallery-content strong {
+    max-width: 85%;
+    overflow-wrap: anywhere;
+  }
+
+  .home-page .home-brand-filter-tabs {
+    margin-inline: -2px;
+    padding-inline: 2px;
+  }
+
+  .home-page .home-brand-filter-tab {
+    flex-basis: min(82vw, 280px);
+  }
+
+  .home-page .home-mobile-request-card,
+  .home-page .quick-request-form,
+  .home-page .quick-request-form .form-row,
+  .home-page .quick-request-form .field,
+  .home-page .quick-request-form input,
+  .home-page .quick-request-form textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .home-page .home-request-consent {
+    align-items: flex-start;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .home-page .home-request-consent input {
+    flex: 0 0 18px;
+    margin-top: 2px;
+  }
+
+  .shared-desktop-footer .site-footer-cta-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .shared-desktop-footer .site-footer-button {
+    min-height: 48px !important;
+  }
+
+  .support-chat-widget {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .support-chat-panel {
+    width: min(100vw - 24px, 420px);
+    max-height: calc(100dvh - 84px);
   }
 }

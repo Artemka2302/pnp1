@@ -58,6 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
       contactMenu.classList.remove("is-open");
       contactToggle.setAttribute("aria-expanded", "false");
     });
+    contactMenu.querySelectorAll("[data-contact-support]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.dispatchEvent(new CustomEvent("pnp:open-support", {
+          detail: { mode: button.dataset.contactSupport },
+        }));
+        contactMenu.classList.remove("is-open");
+        contactToggle.setAttribute("aria-expanded", "false");
+      });
+    });
   }
 
   const storageKey = "pnp_catalog_request_items";
@@ -759,7 +768,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .join(", ");
       const pageUrl = `${window.location.origin}${window.location.pathname}`;
       const rows = [
-        ["Канал", "Чат с менеджером на сайте"],
+        ["Канал", context.channelLabel || "Чат с менеджером на сайте"],
         ["Заявка на сайте", context.leadId ? `#${context.leadId}` : ""],
         ["Телефон", context.phone],
         ["Вопрос", context.message],
@@ -966,7 +975,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const launchManagerLiveChat = async trigger => {
       if (trigger) trigger.disabled = true;
       setStatus(status, "Открываем чат с менеджером...");
-      const opened = await openManagerLiveChat({ items: readItems() });
+      const channel = trigger?.dataset?.supportChannel || "";
+      const channelLabel = channel === "telegram" ? "Telegram" : channel === "max" ? "MAX" : "Чат с менеджером на сайте";
+      const opened = await openManagerLiveChat({ items: readItems(), channel, channelLabel });
       if (trigger) trigger.disabled = false;
       if (opened) {
         setStatus(status, "Чат с менеджером открыт.");
@@ -1138,6 +1149,16 @@ document.addEventListener("DOMContentLoaded", () => {
     closeButton.addEventListener("click", () => setOpen(false));
     root.querySelectorAll("[data-support-channel]").forEach(button => {
       button.addEventListener("click", () => launchManagerLiveChat(button));
+    });
+    document.addEventListener("pnp:open-support", event => {
+      const mode = event.detail?.mode;
+      if (mode === "telegram" || mode === "max") {
+        const channelButton = root.querySelector(`[data-support-channel="${mode}"]`);
+        launchManagerLiveChat(channelButton);
+        return;
+      }
+      setMode(mode === "manager" ? "manager" : "ai");
+      setOpen(true);
     });
     modeButtons.forEach(button => {
       button.addEventListener("click", () => {

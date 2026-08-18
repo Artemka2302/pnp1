@@ -46,6 +46,24 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9.5 12 14l5-4.5 1.2 1.3L12 16.4l-6.2-5.6L7 9.5Z"/></svg>
             </button>
             <div class="header-contact-dropdown" role="menu" aria-label="Способы связи">
+              <div class="header-contact-support-list" role="group" aria-label="Онлайн-связь">
+                <button class="header-contact-item header-contact-support-item" type="button" data-contact-support="telegram" role="menuitem">
+                  <span class="header-contact-icon header-contact-messenger-icon"><img src="{% static 'assets/img/messengers/telegram.svg' %}" alt="" aria-hidden="true"></span>
+                  <span class="header-contact-text"><b>Telegram</b><small>Написать менеджеру</small></span>
+                </button>
+                <button class="header-contact-item header-contact-support-item" type="button" data-contact-support="max" role="menuitem">
+                  <span class="header-contact-icon header-contact-messenger-icon"><img src="{% static 'assets/img/messengers/max.svg' %}" alt="" aria-hidden="true"></span>
+                  <span class="header-contact-text"><b>MAX</b><small>Написать менеджеру</small></span>
+                </button>
+                <button class="header-contact-item header-contact-support-item" type="button" data-contact-support="ai" role="menuitem">
+                  <span class="header-contact-icon header-contact-text-icon" aria-hidden="true">AI</span>
+                  <span class="header-contact-text"><b>AI-помощник</b><small>Собрать запрос</small></span>
+                </button>
+                <button class="header-contact-item header-contact-support-item" type="button" data-contact-support="manager" role="menuitem">
+                  <span class="header-contact-icon header-contact-text-icon" aria-hidden="true">ЧАТ</span>
+                  <span class="header-contact-text"><b>Чат с менеджером</b><small>Задать вопрос специалисту</small></span>
+                </button>
+              </div>
               <a class="header-contact-item" href="{{ CONTACT_PHONE_HREF }}" role="menuitem">
                 <span class="header-contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 2.9 9.3 2c.7-.2 1.4.1 1.7.8l1.2 2.8c.3.6.1 1.3-.4 1.7l-1.5 1.2c1 2 2.6 3.6 4.6 4.6l1.2-1.5c.4-.5 1.1-.7 1.7-.4l2.8 1.2c.7.3 1 1 .8 1.7l-.9 2.7c-.2.7-.8 1.1-1.5 1.1C10.1 18 4 11.9 4 4.5c0-.7.5-1.3 1.1-1.5l1.5-.1Z"/></svg></span>
                 <span class="header-contact-text"><b>Позвонить</b><small>{{ CONTACT_PHONE_DISPLAY }}</small></span>
