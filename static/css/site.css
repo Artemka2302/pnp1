@@ -6928,6 +6928,15 @@ a[href*="wa.me"] {
     line-height: 1.25;
   }
 
+  .vendors-hero .feature-mini span,
+  .partners-hero .feature-mini span,
+  .about-hero-v13 .feature-mini span {
+    min-width: 0;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
   .vendors-hero .feature-mini i,
   .partners-hero .feature-mini i,
   .about-hero-v13 .feature-mini i {
