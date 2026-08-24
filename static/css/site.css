@@ -6569,6 +6569,12 @@ a[href*="wa.me"] {
 /* Mobile contact MVP: one clear entry point for messengers and support modes. */
 @media (max-width: 680px) {
   .header-contact-dropdown {
+    position: fixed !important;
+    top: 78px !important;
+    right: 12px !important;
+    left: auto !important;
+    width: min(312px, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
     max-height: min(76vh, 520px);
     overflow-y: auto;
     overscroll-behavior: contain;
