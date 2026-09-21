@@ -1,0 +1,28 @@
+www.proleans.ru {
+	redir https://proleans.ru{uri} permanent
+}
+
+proleans.ru {
+	encode zstd gzip
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+	}
+
+	handle_path /static/* {
+		root * /srv/leans-static
+		header Cache-Control "public, max-age=604800"
+		file_server
+	}
+
+	# Lead files are intentionally private and available to staff only.
+	handle /media/* {
+		respond 404
+	}
+
+	handle {
+		reverse_proxy leans-web:8000
+	}
+}

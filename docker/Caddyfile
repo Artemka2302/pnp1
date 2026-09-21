@@ -22,6 +22,12 @@ www.{$SITE_DOMAIN} {
 	}
 
 	handle {
-		reverse_proxy web:8000
+		# Keep PNP1 on a unique container name: the shared proxy network also
+		# contains the LEANS web service, which has its own `web` alias.
+		reverse_proxy pnp1-web-1:8000
 	}
 }
+
+# Additional sites are isolated into their own virtual-host files. They share
+# the one public Caddy instance but never bind their own 80/443 ports.
+import /etc/caddy/sites/*.caddy

@@ -93,7 +93,9 @@ services:
     pids_limit: 128
     volumes:
       - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./docker/caddy-sites:/etc/caddy/sites:ro
       - static_data:/srv/static:ro
+      - leans_static_data:/srv/leans-static:ro
       - caddy_data:/data
       - caddy_config:/config
     healthcheck:
@@ -112,3 +114,6 @@ volumes:
   caddy_data:
   caddy_config:
   postgres_backups:
+  leans_static_data:
+    external: true
+    name: leans_static_data
