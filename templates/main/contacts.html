@@ -25,12 +25,20 @@
 {% endblock %}
 
 {% block content %}
-<section class="hero hero-small contacts-hero">
+<section class="hero hero-small contacts-hero pnp-mobile-standard-hero">
   <div class="vertical-accent"></div>
   <div class="container">
     <div class="eyebrow">Контакты</div>
-    <h1>Запросить <span class="accent-word">коммерческое предложение</span></h1>
+    <h1 aria-label="Запросить коммерческое предложение">
+      <span class="pnp-mobile-hero-line">Запросить</span>
+      <span class="pnp-mobile-hero-line accent-word">коммерческое</span>
+      <span class="pnp-mobile-hero-line">предложение</span>
+    </h1>
     <p class="hero-subtitle">Опишите задачу, прикрепите спецификацию или предложите сотрудничество. Заявки клиентов и предложения партнёров попадут к нужным специалистам.</p>
+    <div class="hero-actions pnp-mobile-only-actions">
+      <a class="btn pnp-btn-primary" href="#request-form">Отправить заявку</a>
+      <a class="btn ghost pnp-btn-secondary" href="?form=cooperation#request-form">Сотрудничество</a>
+    </div>
   </div>
 </section>
 
@@ -86,7 +94,7 @@
             </label>
             <div class="home-request-actions">
               <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-              <button class="btn quick-request-submit" type="submit">Отправить заявку →</button>
+              <button class="btn quick-request-submit" type="submit">Отправить заявку</button>
               <small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small>
             </div>
           </form>
@@ -159,7 +167,7 @@
             </label>
             <div class="home-request-actions">
               <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-              <button class="btn quick-request-submit" type="submit">Отправить предложение →</button>
+              <button class="btn quick-request-submit" type="submit">Отправить предложение</button>
               <small class="home-request-reassurance">Предложение поступит сотруднику, отвечающему за партнёрские обращения.</small>
             </div>
           </form>

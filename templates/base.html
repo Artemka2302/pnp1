@@ -11,8 +11,10 @@
   <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260824-mobile-content-v5">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-footer.css' %}?v=20260812-mobile-footer-v3">
   {% block extra_head %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/pnp-leans-parity.css' %}?v=20260925-ux-parity-v2" media="(max-width: 1080px)">
+  <link rel="stylesheet" href="{% static 'css/pnp-mobile-brand.css' %}?v=20260925-brand-atmosphere-v3" media="(max-width: 1080px)">
 </head>
-<body class="{% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-ai-chat-endpoint="/api/ai-chat/" data-bitrix-livechat-src="{{ BITRIX_SITE_BUTTON_URL }}" data-privacy-url="{% url 'privacy' %}">
+<body class="pnp-ux-parity {% block body_class %}{% endblock %}" data-consent-version="{{ CONSENT_VERSION }}" data-privacy-version="{{ PRIVACY_VERSION }}" data-cookie-version="{{ COOKIE_TEXT_VERSION }}" data-lead-endpoint="{% url 'api_catalog_request' %}" data-ai-chat-endpoint="/api/ai-chat/" data-bitrix-livechat-src="{{ BITRIX_SITE_BUTTON_URL }}" data-privacy-url="{% url 'privacy' %}">
   <div class="page">
     <header class="topbar">
       <div class="container topbar-inner">
@@ -114,7 +116,7 @@
             <span class="site-footer-eyebrow">Поставщикам</span>
             <h2 id="siteFooterPartnerTitle">Предложить сотрудничество</h2>
             <p>Производителям, поставщикам и подрядчикам.</p>
-            <a class="site-footer-partner-button" href="{% url 'contacts' %}?form=cooperation#request-form">Стать партнёром <span aria-hidden="true">→</span></a>
+            <a class="site-footer-partner-button" href="{% url 'contacts' %}?form=cooperation#request-form">Стать партнёром</a>
           </aside>
         </section>
 
@@ -192,7 +194,7 @@
       <button class="btn ghost small" type="button" data-cookie-reject>Отклонить необязательные</button>
     </div>
   </section>
-  <script src="{% static 'js/site.js' %}?v=20260812-mobile-shell-v3"></script>
+  <script src="{% static 'js/site.js' %}?v=20260825-mobile-hero-shell-v2"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

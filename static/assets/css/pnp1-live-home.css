@@ -12697,6 +12697,147 @@ a[href*="wa.me"]{
   body.home-page .home-main-block-grid{scroll-behavior:auto!important}
 }
 
+/* Mobile "С кем работаем": compact PNP list, without the legacy carousel. */
+.role-entry-mobile-icon{display:none}
+@media (max-width:680px){
+  body.home-page #clients{
+    padding-top:30px!important;
+    padding-bottom:34px!important;
+  }
+  body.home-page #clients .role-entry-head{
+    display:block!important;
+    margin-bottom:17px!important;
+  }
+  body.home-page #clients .role-entry-head h2{
+    max-width:280px;
+    font-size:30px!important;
+    line-height:1.02!important;
+    letter-spacing:-.04em!important;
+  }
+  body.home-page #clients .role-entry-head p{
+    display:-webkit-box!important;
+    max-width:340px;
+    margin-top:10px!important;
+    overflow:hidden;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    color:rgba(198,211,228,.74)!important;
+    font-size:12px!important;
+    line-height:1.42!important;
+  }
+  body.home-page #clients .role-entry-grid{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+  body.home-page #clients .role-entry-card,
+  body.home-page #clients .role-entry-card:last-child{
+    display:grid!important;
+    grid-template-columns:34px minmax(0,1fr)!important;
+    grid-template-areas:
+      "icon tag"
+      "icon title"
+      "icon copy";
+    align-items:center!important;
+    column-gap:11px!important;
+    width:100%!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:12px 12px 12px 13px!important;
+    border-radius:15px!important;
+    border-color:rgba(116,143,178,.28)!important;
+    background:
+      linear-gradient(135deg,rgba(27,46,73,.96),rgba(11,24,42,.98))!important;
+    box-shadow:0 10px 26px rgba(0,0,0,.2)!important;
+    scroll-snap-align:none!important;
+    transform:none!important;
+  }
+  body.home-page #clients .role-entry-card::before{
+    content:""!important;
+    position:static!important;
+    grid-area:icon!important;
+    width:31px!important;
+    height:31px!important;
+    border:1px solid rgba(214,168,185,.5)!important;
+    border-radius:50%!important;
+    background:linear-gradient(145deg,rgba(157,46,84,.9),rgba(102,31,61,.82))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 5px 14px rgba(157,46,84,.25)!important;
+    opacity:1!important;
+    transform:none!important;
+  }
+  body.home-page #clients .role-entry-card::after{
+    content:""!important;
+    position:absolute!important;
+    inset:auto 12px 0 12px!important;
+    width:auto!important;
+    height:1px!important;
+    background:linear-gradient(90deg,transparent,rgba(214,168,185,.42),transparent)!important;
+  }
+  body.home-page #clients .role-entry-card-top{
+    display:contents!important;
+  }
+  body.home-page #clients .role-entry-card-top::before{
+    display:none!important;
+  }
+  body.home-page #clients .role-entry-mobile-icon{
+    grid-area:icon!important;
+    z-index:2;
+    display:grid!important;
+    place-items:center;
+    width:31px;
+    height:31px;
+    pointer-events:none;
+  }
+  body.home-page #clients .role-entry-mobile-icon svg{
+    display:block;
+    width:18px;
+    height:18px;
+    fill:none;
+    stroke:#f7d8e3;
+    stroke-width:1.55;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  body.home-page #clients .role-entry-tag{
+    grid-area:tag!important;
+    justify-self:start;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:none!important;
+    color:rgba(199,213,231,.68)!important;
+    font-size:9px!important;
+    line-height:1.1!important;
+    letter-spacing:.1em!important;
+  }
+  body.home-page #clients .role-entry-card h3{
+    grid-area:title!important;
+    min-width:0;
+    margin:2px 0 0!important;
+    color:#f5f7fb!important;
+    font-size:15px!important;
+    line-height:1.12!important;
+    letter-spacing:-.015em!important;
+  }
+  body.home-page #clients .role-entry-card p{
+    grid-area:copy!important;
+    min-width:0;
+    display:-webkit-box!important;
+    margin:3px 0 0!important;
+    overflow:hidden;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    color:rgba(190,205,224,.7)!important;
+    font-size:10.5px!important;
+    line-height:1.28!important;
+  }
+}
+
 /* CTA palette. The approved bright-burgundy brand treatment is the production
    default; ?cta-variant=1|2|3|brand remains available for local comparison. */
 :root{
@@ -13188,4 +13329,121 @@ body.home-page .home-supply-gallery-head p{
   .home-supply-gallery-card{min-height:142px}
   .home-supply-gallery-content{right:9px;bottom:9px;left:10px}
   .home-supply-gallery-content strong{font-size:14px}
+}
+
+/* Mobile parity: keep the shared brand/workflow interactions alive on small screens. */
+@media(max-width:680px){
+  body.home-page .home-brand-filter-tabs{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;
+    width:100%!important;
+    overflow:visible!important;
+    padding:0!important;
+  }
+  body.home-page .home-brand-filter-tab{
+    width:100%!important;
+    min-width:0!important;
+    min-height:52px!important;
+    padding:8px 6px!important;
+    justify-content:center!important;
+    text-align:center!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    font-size:10.5px!important;
+    line-height:1.15!important;
+  }
+  body.home-page .home-partner-logo-carousel .partner-logo-showcase{
+    display:block!important;
+    position:relative!important;
+    width:100%!important;
+    max-width:none!important;
+    overflow:hidden!important;
+    padding:12px 42px!important;
+    box-sizing:border-box!important;
+  }
+  body.home-page .home-brand-marquee-motion,
+  body.home-page .home-brand-marquee-cycle,
+  body.home-page .home-brand-marquee-group{
+    display:flex!important;
+    align-items:center!important;
+    width:max-content!important;
+    flex:0 0 auto!important;
+  }
+  body.home-page .home-brand-marquee-motion{
+    gap:12px!important;
+    will-change:transform;
+  }
+  body.home-page .home-brand-marquee-cycle{gap:12px!important}
+  body.home-page .home-brand-marquee-group{gap:8px!important}
+  body.home-page .home-partner-logo-carousel .partner-showcase-logo{
+    flex:0 0 148px!important;
+    width:148px!important;
+    height:72px!important;
+    min-height:72px!important;
+    padding:10px 12px!important;
+  }
+  body.home-page .home-partner-logo-carousel .partner-showcase-logo img{
+    max-width:92%!important;
+    max-height:46px!important;
+  }
+
+  /* The mobile header needs a clear text CTA; the dropdown remains the single contact route. */
+  body.home-page .header-mobile-contact-actions .header-contact-toggle{
+    width:auto!important;
+    min-width:100px!important;
+    height:40px!important;
+    padding:0 13px!important;
+    border-radius:10px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:7px!important;
+    border-color:rgba(255,220,232,.78)!important;
+    background:linear-gradient(135deg,#a32850 0%,#c93c6a 54%,#cc3f6e 100%)!important;
+    box-shadow:0 12px 28px rgba(163,40,80,.42),inset 0 1px 0 rgba(255,255,255,.18)!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-toggle span{
+    position:static!important;
+    width:auto!important;
+    height:auto!important;
+    overflow:visible!important;
+    clip:auto!important;
+    color:#fff!important;
+    font-size:12px!important;
+    font-weight:800!important;
+    line-height:1!important;
+    letter-spacing:.01em!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-toggle:before{display:none!important}
+  body.home-page .header-mobile-contact-actions .header-contact-toggle svg{
+    position:static!important;
+    display:block!important;
+    width:13px!important;
+    height:13px!important;
+    flex:0 0 13px!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-dropdown > .header-contact-item:not(.header-contact-support-item){
+    display:none!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-support-list{
+    display:grid!important;
+    gap:4px!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-support-item{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#fff!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-support-item:hover,
+  body.home-page .header-mobile-contact-actions .header-contact-support-item:focus-visible{
+    background:rgba(167,39,91,.24)!important;
+    color:#fff!important;
+  }
+  body.home-page .header-mobile-contact-actions .header-contact-support-item[data-contact-support="ai"]{order:1}
+  body.home-page .header-mobile-contact-actions .header-contact-support-item[data-contact-support="manager"]{order:2}
+  body.home-page .header-mobile-contact-actions .header-contact-support-item[data-contact-support="telegram"]{order:3}
+  body.home-page .header-mobile-contact-actions .header-contact-support-item[data-contact-support="max"]{order:4}
+  body.home-page .support-chat-toggle{display:none!important}
 }

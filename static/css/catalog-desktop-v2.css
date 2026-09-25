@@ -1131,17 +1131,14 @@
   }
 
   @media (max-width: 620px) {
-    .catalog-page .catalog-v2-direction-grid,
     .catalog-page .catalog-v2-system-grid {
       grid-template-columns: 1fr;
     }
 
-    .catalog-page .catalog-v2-direction-card,
     .catalog-page .catalog-v2-system-grid {
       grid-auto-rows: auto;
     }
 
-    .catalog-page .catalog-v2-direction-card,
     .catalog-page .catalog-v2-system-card {
       min-height: 168px;
     }
@@ -1306,21 +1303,41 @@
       line-height: 1.25;
     }
 
-    .catalog-page .catalog-v2-direction-grid,
-    .catalog-page .catalog-v2-system-grid,
-    .catalog-page .catalog-v2-vendor-grid {
-      grid-template-columns: 1fr;
+    .catalog-page .catalog-v2-direction-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
     }
 
-    .catalog-page .catalog-v2-direction-card,
+    .catalog-page .catalog-v2-system-grid,
+    .catalog-page .catalog-v2-vendor-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .catalog-page .catalog-v2-direction-card {
+      height: clamp(116px, 30vw, 138px);
+      min-height: 116px;
+      aspect-ratio: auto;
+      border-radius: 12px;
+    }
+
     .catalog-page .catalog-v2-system-card {
-      min-height: 156px;
+      min-height: 124px;
     }
 
     .catalog-page .catalog-v2-direction-card h2,
     .catalog-page .catalog-v2-system-card h3 {
-      max-width: 86%;
-      overflow-wrap: anywhere;
+      max-width: 100%;
+      font-size: clamp(11px, 3vw, 13px);
+      line-height: 1.15;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
+      text-wrap: balance;
+    }
+
+    .catalog-page .catalog-v2-direction-overlay {
+      padding: 10px;
+      background: linear-gradient(180deg, rgba(3, 10, 18, .04) 10%, rgba(3, 10, 18, .25) 46%, rgba(3, 10, 18, .96) 100%);
     }
 
     .catalog-page .catalog-v2-content-head h2 {

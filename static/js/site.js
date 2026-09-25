@@ -69,6 +69,60 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  /*
+   * Mobile homepage header orchestration. The existing menu and support
+   * handlers remain the source of truth; this layer only keeps their open
+   * states mutually exclusive and changes the transparent header after the
+   * hero starts scrolling away.
+   */
+  if (document.body.classList.contains("home-page")) {
+    const syncHomeHeaderState = () => {
+      const menuOpen = Boolean(mainNav?.classList.contains("open"));
+      const contactOpen = Boolean(contactMenu?.classList.contains("is-open"));
+      document.body.classList.toggle("home-mobile-menu-open", menuOpen);
+      document.body.classList.toggle("home-mobile-contact-open", contactOpen);
+      document.body.classList.toggle("home-mobile-header-scrolled", window.scrollY > 18);
+    };
+
+    menuBtn?.addEventListener("click", () => {
+      if (mainNav?.classList.contains("open") && contactMenu?.classList.contains("is-open")) {
+        contactMenu.classList.remove("is-open");
+        contactToggle?.setAttribute("aria-expanded", "false");
+      }
+      syncHomeHeaderState();
+    });
+
+    contactToggle?.addEventListener("click", () => {
+      if (contactMenu?.classList.contains("is-open") && mainNav?.classList.contains("open")) {
+        mainNav.classList.remove("open");
+        menuBtn?.setAttribute("aria-expanded", "false");
+      }
+      syncHomeHeaderState();
+    });
+
+    document.addEventListener("click", event => {
+      if (
+        mainNav?.classList.contains("open")
+        && !mainNav.contains(event.target)
+        && !menuBtn?.contains(event.target)
+      ) {
+        mainNav.classList.remove("open");
+        menuBtn?.setAttribute("aria-expanded", "false");
+      }
+      syncHomeHeaderState();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape") return;
+      contactMenu?.classList.remove("is-open");
+      contactToggle?.setAttribute("aria-expanded", "false");
+      syncHomeHeaderState();
+    });
+
+    window.addEventListener("scroll", syncHomeHeaderState, { passive: true });
+    syncHomeHeaderState();
+  }
+
   const storageKey = "pnp_catalog_request_items";
 
   const readItems = () => {
@@ -1141,6 +1195,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const setOpen = isOpen => {
       panel.hidden = !isOpen;
       root.classList.toggle("is-open", isOpen);
+      if (document.body.classList.contains("home-page")) {
+        document.body.classList.toggle("home-mobile-support-open", isOpen);
+      }
       toggle.setAttribute("aria-expanded", String(isOpen));
       if (isOpen) setTimeout(() => (currentMode === "ai" ? aiInput : managerMessage).focus(), 60);
     };
@@ -1619,10 +1676,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const rows = document.querySelector("[data-vendor-rows]");
     const selectedList = form.querySelector("[data-selected-vendors]");
     const suggestions = form.querySelector("[data-vendor-suggestions]");
+    const mobileFilterToggle = form.querySelector("[data-vendor-mobile-filter-toggle]");
+    const advancedFilters = form.querySelector("[data-vendor-advanced-filters]");
     const vendorOptionsData = document.querySelector("#vendorOptionsData");
     const vendorOptions = vendorOptionsData ? JSON.parse(vendorOptionsData.textContent || "[]") : [];
     const selectedVendors = new Map();
     let controller = null;
+
+    const setMobileFiltersOpen = open => {
+      if (!mobileFilterToggle || !advancedFilters) return;
+      form.classList.toggle("is-mobile-filters-open", open);
+      mobileFilterToggle.setAttribute("aria-expanded", String(open));
+      const action = mobileFilterToggle.querySelector(".vendor-mobile-filter-toggle-action");
+      if (action?.firstChild) action.firstChild.textContent = open ? "Закрыть " : "Открыть ";
+    };
+
+    mobileFilterToggle?.addEventListener("click", () => {
+      setMobileFiltersOpen(!form.classList.contains("is-mobile-filters-open"));
+    });
 
     const normalizeVendor = value => String(value || "").trim().toLowerCase().replaceAll("ё", "е");
 
@@ -1875,6 +1946,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", event => {
       event.preventDefault();
       hideSuggestions();
+      setMobileFiltersOpen(false);
       updateVendors();
     });
 
@@ -1940,6 +2012,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!event.target.closest(".vendor-custom-select")) closeCustomSelects();
       if (form.contains(event.target)) return;
       hideSuggestions();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape" || !form.classList.contains("is-mobile-filters-open")) return;
+      setMobileFiltersOpen(false);
+      mobileFilterToggle?.focus();
     });
 
     document.querySelectorAll("[data-vendor-direction-card]").forEach(link => {

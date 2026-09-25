@@ -6,7 +6,7 @@
 
 {% block extra_head %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260812-mobile-catalog-v2">
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260925-mobile-catalog-parity-v1">
 {% endblock %}
 
 {% block content %}
@@ -16,10 +16,15 @@
   <div class="catalog-v2-frame">
     <aside class="catalog-v2-index" aria-label="Разделы каталога">
       <div class="catalog-v2-index-head">
-        <span>Структура каталога</span>
         <button type="button" data-catalog-v2-index-toggle aria-expanded="false" aria-controls="catalogV2IndexList">
-          <span>Разделы</span>
-          <i aria-hidden="true"></i>
+          <span class="catalog-v2-index-head-copy">
+            <small>Структура каталога</small>
+            <strong>Все разделы</strong>
+          </span>
+          <span class="catalog-v2-index-head-action" aria-hidden="true">
+            <span>Открыть</span>
+            <i></i>
+          </span>
         </button>
       </div>
       <ul class="catalog-v2-index-list" id="catalogV2IndexList" data-catalog-v2-index role="tree"></ul>
@@ -64,7 +69,7 @@
             <h2 data-catalog-v2-title></h2>
           </div>
           <button class="catalog-v2-back" type="button" data-catalog-v2-back hidden>
-            <span aria-hidden="true">←</span> Назад
+            Назад
           </button>
         </div>
         <div class="catalog-v2-system-grid" data-catalog-v2-content></div>
@@ -75,5 +80,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260812-mobile-catalog-v2"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260925-mobile-catalog-parity-v1"></script>
 {% endblock %}

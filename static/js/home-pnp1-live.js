@@ -1,8 +1,7 @@
 (() => {
   "use strict";
 
-  const desktop = window.matchMedia("(min-width: 1081px)");
-  if (!desktop.matches || !document.body.classList.contains("pnp-live-home")) return;
+  if (!document.body.classList.contains("pnp-live-home")) return;
 
   const supplyIcons = {
     architecture: '<path d="M4 20h16M6 20V8l6-4 6 4v12M9 20v-5h6v5M9 10h.01M15 10h.01"/>',

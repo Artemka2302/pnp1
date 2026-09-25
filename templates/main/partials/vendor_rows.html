@@ -14,7 +14,10 @@
         {% endfor %}
       </div>
       <div class="vendor-row-actions">
-        <a class="link-more" href="{% url 'product_group' group.system.direction.block.slug group.system.direction.slug group.system.slug group.slug %}">Открыть товарную группу →</a>
+        <a class="link-more" href="{% url 'product_group' group.system.direction.block.slug group.system.direction.slug group.system.slug group.slug %}">
+          <span class="vendor-row-action-desktop">Открыть товарную группу</span>
+          <span class="vendor-row-action-mobile">Открыть группу</span>
+        </a>
       </div>
     </div>
   </article>

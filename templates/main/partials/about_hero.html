@@ -1,12 +1,17 @@
-<section class="hero hero-small about-hero-v11 about-hero-v13">
+<section class="hero hero-small about-hero-v11 about-hero-v13 about-mobile-standard-hero">
   <div class="vertical-accent"></div>
   <div class="container">
     <div class="eyebrow">О компании</div>
-    <h1>ПНП — центр <span class="accent-word">комплектации</span> строительных объектов</h1>
+    <h1 aria-label="ПНП — центр комплектации строительных объектов">
+      <span class="about-mobile-hero-line">ПНП — центр</span>
+      <span class="about-mobile-hero-line accent-word">комплектации</span>
+      <span class="about-mobile-hero-line">строительных</span>
+      <span class="about-mobile-hero-line">объектов</span>
+    </h1>
     <p class="hero-subtitle">Работаем со спецификациями и задачами проекта: подбираем материалы и оборудование, сопоставляем варианты производителей, запрашиваем технические документы и сопровождаем заявку до поставки.</p>
     <div class="hero-actions">
       <a class="btn pnp-btn-primary" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
-      <a class="btn ghost pnp-btn-secondary" href="{% url 'catalog' %}">Перейти в каталог →</a>
+      <a class="btn ghost pnp-btn-secondary" href="{% url 'catalog' %}">Перейти в каталог</a>
     </div>
     <div class="hero-features hero-features-v11">
       <div class="feature-mini"><i aria-hidden="true">16</i><span>16 лет<br>на рынке</span></div>
