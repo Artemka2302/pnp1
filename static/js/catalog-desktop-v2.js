@@ -22,6 +22,7 @@
 
   const indexList = rootElement.querySelector("[data-catalog-v2-index]");
   const indexToggle = rootElement.querySelector("[data-catalog-v2-index-toggle]");
+  const indexPanel = rootElement.querySelector(".catalog-v2-index");
   const directionSection = rootElement.querySelector("[data-catalog-v2-direction-section]");
   const directionGrid = rootElement.querySelector("[data-catalog-v2-directions]");
   const contentSection = rootElement.querySelector("[data-catalog-v2-content-section]");
@@ -73,6 +74,13 @@
     currentTarget: initialData.initialTarget || rootTarget,
     searchController: null,
     searchTimer: null,
+  };
+
+  const setIndexOpen = open => {
+    rootElement.classList.toggle("is-index-open", open);
+    indexToggle?.setAttribute("aria-expanded", String(open));
+    const actionLabel = indexToggle?.querySelector(".catalog-v2-index-head-action > span");
+    if (actionLabel) actionLabel.textContent = open ? "Закрыть" : "Открыть";
   };
 
   const setStatus = (message = "", isError = false) => {
@@ -456,8 +464,7 @@
     event.preventDefault();
     if (searchResults) searchResults.hidden = true;
     if (window.matchMedia("(max-width: 1080px)").matches) {
-      rootElement.classList.remove("is-index-open");
-      indexToggle?.setAttribute("aria-expanded", "false");
+      setIndexOpen(false);
     }
     await renderTarget(link.dataset.catalogV2Target);
   });
@@ -468,12 +475,15 @@
   });
 
   indexToggle?.addEventListener("click", () => {
-    const open = rootElement.classList.toggle("is-index-open");
-    indexToggle.setAttribute("aria-expanded", String(open));
+    setIndexOpen(!rootElement.classList.contains("is-index-open"));
   });
 
-  searchButton?.addEventListener("click", () => searchInput?.focus());
+  searchButton?.addEventListener("click", () => {
+    setIndexOpen(false);
+    searchInput?.focus();
+  });
   searchInput?.addEventListener("input", () => {
+    setIndexOpen(false);
     clearTimeout(state.searchTimer);
     state.searchTimer = setTimeout(requestSearch, 260);
   });
@@ -492,6 +502,15 @@
 
   document.addEventListener("click", event => {
     if (!searchBox?.contains(event.target) && searchResults) searchResults.hidden = true;
+    if (rootElement.classList.contains("is-index-open") && !indexPanel?.contains(event.target)) {
+      setIndexOpen(false);
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && rootElement.classList.contains("is-index-open")) {
+      setIndexOpen(false);
+      indexToggle?.focus();
+    }
   });
   document.addEventListener("pnp:request-items-changed", syncRequestUi);
   window.addEventListener("popstate", event => {

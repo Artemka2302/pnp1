@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Производители под требования проекта — ПНП{% endblock %}
+{% block body_class %}vendors-page{% endblock %}
 
 {% block extra_head %}
   <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{% url 'vendors' %}">
@@ -9,15 +10,19 @@
 {% endblock %}
 
 {% block content %}
-<section class="hero hero-small vendors-hero">
+<section class="hero hero-small vendors-hero pnp-mobile-standard-hero">
   <div class="vertical-accent"></div>
   <div class="container">
     <div class="eyebrow">Производители</div>
-    <h1>Производители <span class="accent-word">под требования проекта</span></h1>
+    <h1 aria-label="Производители под требования проекта">
+      <span class="pnp-mobile-hero-line">Производители</span>
+      <span class="pnp-mobile-hero-line accent-word">под требования</span>
+      <span class="pnp-mobile-hero-line">проекта</span>
+    </h1>
     <p class="hero-subtitle">Работаем с широким перечнем брендов и заводов: от архитектурных и конструктивных решений до инженерных систем, ЭОМ, слаботочных сетей, ОВиК, водоснабжения, технологического оборудования и доступной среды.</p>
     <div class="hero-actions">
       <a class="btn pnp-btn-primary" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
-      <a class="btn ghost pnp-btn-secondary" href="#allManufacturers">Подобрать производителей →</a>
+      <a class="btn ghost pnp-btn-secondary" href="#allManufacturers">Подобрать производителей</a>
     </div>
     <div class="hero-features vendor-hero-features">
       <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Zm7 1.5V8h3.5M9 12h6M9 16h6"/></svg></i><span>комплектация по разделам<br>документации</span></div>
@@ -33,7 +38,7 @@
     <div class="section-head"><div><h2>Основные разделы поставки</h2></div></div>
     <div class="vendor-direction-grid">
       {% for direction in direction_cards %}
-        <article class="vendor-direction-card" {% if direction.image %}style="--direction-photo: url('{% static direction.image %}')"{% endif %}>
+        <article class="vendor-direction-card" data-direction-slug="{{ direction.slug }}" {% if direction.image %}style="--direction-photo: url('{% static direction.image %}')"{% endif %}>
           <div class="vendor-direction-top">
             <i>{% if direction.vendor_icon %}<img src="{% static direction.vendor_icon %}" alt="{{ direction.title }}">{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</i>
             <span>{{ direction.vendor_count }} производителей</span>
@@ -57,7 +62,10 @@
               <span class="vendor-chip vendor-chip-empty">Производители уточняются</span>
             {% endfor %}
           </div>
-          <a class="link-more" href="{% url 'vendors' %}?direction={{ direction.slug }}#vendorRowsSection" data-vendor-direction-card="{{ direction.slug }}">Смотреть производителей →</a>
+          <a class="link-more" href="{% url 'vendors' %}?direction={{ direction.slug }}#vendorRowsSection" data-vendor-direction-card="{{ direction.slug }}">
+            <span class="vendor-direction-cta-desktop">Смотреть производителей</span>
+            <span class="vendor-direction-cta-mobile">Смотреть производителей</span>
+          </a>
         </article>
       {% endfor %}
     </div>
@@ -72,7 +80,7 @@
         <h2>Все производители</h2>
         <p>Быстро найдите бренд, производителя, направление или товарную группу. Если нужной позиции нет в списке, отправьте спецификацию — подберём решение или корректную замену под требования проекта.</p>
         <div class="vendor-master-actions">
-          <a class="btn light" href="{% url 'contacts' %}#request-form">Отправить список позиций →</a>
+          <a class="btn light" href="{% url 'contacts' %}#request-form">Отправить список позиций</a>
           <a class="btn ghost" href="{% url 'catalog' %}">Выбрать направление</a>
         </div>
       </div>
@@ -81,10 +89,24 @@
           <div class="field vendor-search-field">
             <label for="vendorSearch">Поиск по бренду / производителю / типу оборудования</label>
             <div class="vendor-search-control">
+              <button class="vendor-search-submit" type="submit" aria-label="Найти производителя">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                  <path d="m16 16 4.3 4.3"></path>
+                </svg>
+              </button>
               <input id="vendorSearch" name="q" value="{{ query }}" placeholder="Например: Eltex, DEPO, фанера, насосы, фасад, СКУД" autocomplete="off">
               <div class="vendor-suggestions" data-vendor-suggestions hidden></div>
             </div>
           </div>
+          <button class="vendor-mobile-filter-toggle" type="button" data-vendor-mobile-filter-toggle aria-expanded="false" aria-controls="vendorAdvancedFilters">
+            <span>
+              <small>Точная настройка</small>
+              <strong>Фильтры каталога</strong>
+            </span>
+            <span class="vendor-mobile-filter-toggle-action" aria-hidden="true">Открыть <i></i></span>
+          </button>
+          <div class="vendor-advanced-filters" id="vendorAdvancedFilters" data-vendor-advanced-filters>
           <div class="field vendor-block-field">
             <label for="vendorBlock">Блок</label>
             <select id="vendorBlock" name="block" data-vendor-filter>
@@ -124,6 +146,7 @@
           <div class="vendor-actions-field">
             <button class="btn vendor-submit" type="submit">Найти</button>
             <button class="btn ghost vendor-clear" type="button" data-vendor-clear>Очистить</button>
+          </div>
           </div>
           <div class="vendor-selected-fields" data-selected-vendors>
             {% for vendor in selected_vendors %}

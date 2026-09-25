@@ -1131,17 +1131,14 @@
   }
 
   @media (max-width: 620px) {
-    .catalog-page .catalog-v2-direction-grid,
     .catalog-page .catalog-v2-system-grid {
       grid-template-columns: 1fr;
     }
 
-    .catalog-page .catalog-v2-direction-card,
     .catalog-page .catalog-v2-system-grid {
       grid-auto-rows: auto;
     }
 
-    .catalog-page .catalog-v2-direction-card,
     .catalog-page .catalog-v2-system-card {
       min-height: 168px;
     }
@@ -1241,5 +1238,144 @@
       transition-duration: .01ms !important;
       animation-duration: .01ms !important;
       animation-iteration-count: 1 !important;
+    }
+  }
+
+  /* Mobile MVP guardrails: readable tree, cards and request flow. */
+  @media (max-width: 680px) {
+    .catalog-page .catalog-v2-frame {
+      width: calc(100% - 20px);
+    }
+
+    .catalog-page .catalog-v2-index {
+      border-radius: 10px;
+    }
+
+    .catalog-page .catalog-v2-tree-row {
+      width: 100%;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 8px;
+      padding-inline: 3px 6px;
+    }
+
+    .catalog-page .catalog-v2-tree-toggle,
+    .catalog-page .catalog-v2-tree-marker {
+      width: 30px;
+      height: 30px;
+    }
+
+    .catalog-page .catalog-v2-tree-link {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .catalog-page .catalog-v2-tree-label {
+      font-size: 12px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .catalog-page .catalog-v2-tree-link small {
+      display: none;
+    }
+
+    .catalog-page .catalog-v2-toolbar {
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .catalog-page .catalog-v2-toolbar h1 {
+      font-size: 28px;
+    }
+
+    .catalog-page .catalog-v2-toolbar-request {
+      min-height: 52px;
+      border-radius: 8px;
+    }
+
+    .catalog-page .catalog-v2-toolbar-request strong {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .catalog-page .catalog-v2-toolbar-request small {
+      font-size: 10px;
+      line-height: 1.25;
+    }
+
+    .catalog-page .catalog-v2-direction-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .catalog-page .catalog-v2-system-grid,
+    .catalog-page .catalog-v2-vendor-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .catalog-page .catalog-v2-direction-card {
+      height: clamp(116px, 30vw, 138px);
+      min-height: 116px;
+      aspect-ratio: auto;
+      border-radius: 12px;
+    }
+
+    .catalog-page .catalog-v2-system-card {
+      min-height: 124px;
+    }
+
+    .catalog-page .catalog-v2-direction-card h2,
+    .catalog-page .catalog-v2-system-card h3 {
+      max-width: 100%;
+      font-size: clamp(11px, 3vw, 13px);
+      line-height: 1.15;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
+      text-wrap: balance;
+    }
+
+    .catalog-page .catalog-v2-direction-overlay {
+      padding: 10px;
+      background: linear-gradient(180deg, rgba(3, 10, 18, .04) 10%, rgba(3, 10, 18, .25) 46%, rgba(3, 10, 18, .96) 100%);
+    }
+
+    .catalog-page .catalog-v2-content-head h2 {
+      font-size: 23px;
+      line-height: 1.1;
+    }
+
+    .catalog-page .catalog-v2-back {
+      width: 100%;
+    }
+
+    .catalog-page .catalog-v2-product-hero > img {
+      height: 170px;
+    }
+
+    .catalog-page .catalog-v2-product-hero-copy {
+      min-width: 0;
+      padding: 18px;
+    }
+
+    .catalog-page .catalog-v2-product-hero-copy h2 {
+      font-size: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    .catalog-page .catalog-v2-passport-panel {
+      min-width: 0;
+      overflow: hidden;
+      padding: 14px;
+    }
+
+    .catalog-page .catalog-v2-request-guide {
+      min-width: 0;
+      padding: 12px;
+    }
+
+    .catalog-page .catalog-v2-request-guide strong,
+    .catalog-page .catalog-v2-request-guide small {
+      overflow-wrap: anywhere;
     }
   }
