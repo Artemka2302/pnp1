@@ -70,12 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /*
-   * Mobile homepage header orchestration. The existing menu and support
-   * handlers remain the source of truth; this layer only keeps their open
-   * states mutually exclusive and changes the transparent header after the
-   * hero starts scrolling away.
+   * Shared mobile header orchestration. The existing menu and support
+   * handlers remain the source of truth; this layer keeps their open states
+   * mutually exclusive and changes the transparent header after the first
+   * screen starts scrolling away on every PNP page.
    */
-  if (document.body.classList.contains("home-page")) {
+  if (document.body.classList.contains("pnp-ux-parity")) {
     const syncHomeHeaderState = () => {
       const menuOpen = Boolean(mainNav?.classList.contains("open"));
       const contactOpen = Boolean(contactMenu?.classList.contains("is-open"));

@@ -376,6 +376,104 @@
   }
 }
 
+/* Review corrections: keep inactive controls readable and give the mobile hero
+   the intended editorial rhythm without moving its fixed action buttons. */
+@media (max-width: 1080px) {
+  html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:not(.is-active):not([aria-selected="true"]) {
+    border-color: rgba(118, 143, 176, .42) !important;
+    background: linear-gradient(145deg, rgba(32, 44, 71, .98), rgba(18, 31, 53, .98)) !important;
+    color: #fefefe !important;
+    opacity: 1 !important;
+  }
+
+  html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:not(.is-active):not([aria-selected="true"]) .home-request-stage-copy strong {
+    color: #fefefe !important;
+    opacity: 1 !important;
+  }
+
+  html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:not(.is-active):not([aria-selected="true"]) .home-request-stage-copy small {
+    color: rgba(254, 254, 254, .72) !important;
+    opacity: 1 !important;
+  }
+
+  html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:not(.is-active):not([aria-selected="true"]) .home-request-stage-node {
+    border-color: rgba(254, 254, 254, .30) !important;
+    background: #fefefe !important;
+    color: #202c47 !important;
+  }
+
+  html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:is(.is-active, [aria-selected="true"]) {
+    border-color: rgba(214, 168, 185, .56) !important;
+    background: linear-gradient(145deg, #9a294e, #7d1f40) !important;
+    color: #fefefe !important;
+  }
+
+  html body.pnp-ux-parity:is(.home-page, .contacts-page) :is(
+    article#home-request-form.home-request-card,
+    article#home-mobile-request-form.home-mobile-request-card,
+    article#request-form.contact-request-card
+  ) button.contact-request-tab:not(.is-active):not([aria-selected="true"]) {
+    border: 1px solid rgba(118, 143, 176, .38) !important;
+    background: rgba(8, 20, 38, .72) !important;
+    color: rgba(254, 254, 254, .88) !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: rgba(254, 254, 254, .88) !important;
+  }
+
+  html body.pnp-ux-parity:is(.home-page, .contacts-page) :is(
+    article#home-request-form.home-request-card,
+    article#home-mobile-request-form.home-mobile-request-card,
+    article#request-form.contact-request-card
+  ) button.contact-request-tab:is(.is-active, [aria-selected="true"]) {
+    border-color: rgba(214, 168, 185, .44) !important;
+    background: linear-gradient(145deg, #9a294e, #7d1f40) !important;
+    color: #fefefe !important;
+    -webkit-text-fill-color: #fefefe !important;
+  }
+}
+
+@media (max-width: 680px) {
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .home-mobile-hero-content {
+    justify-content: flex-start !important;
+  }
+
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .home-mobile-hero-content > h1 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: clamp(8px, 1.7vw, 12px) !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: clamp(150px, 20svh, 220px) 0 0 !important;
+  }
+
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .home-mobile-hero-line {
+    width: max-content !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: clamp(42px, 10.5vw, 64px) !important;
+    line-height: .92 !important;
+  }
+
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .home-mobile-hero-content > h1::after {
+    margin-top: clamp(6px, 1.5vw, 10px) !important;
+  }
+
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .hero-subtitle {
+    margin-top: clamp(14px, 2.5svh, 24px) !important;
+  }
+}
+
+@media (max-width: 680px) and (max-height: 850px) {
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .home-mobile-hero-content > h1 {
+    gap: 7px !important;
+    margin-top: clamp(108px, 15svh, 128px) !important;
+  }
+
+  html body.home-page.pnp-ux-parity section#top-mobile.hero-v13 .home-mobile-hero-line {
+    font-size: clamp(39px, 10vw, 48px) !important;
+  }
+}
+
 @media (max-width: 680px) {
   /* Preserve the explicitly approved first screen. */
   html body.home-page.pnp-ux-parity #top-mobile.hero-v13 {
@@ -529,5 +627,83 @@
 
   html body.home-page.pnp-ux-parity footer.site-footer.shared-desktop-footer :is(.site-footer-group, .site-footer-bottom) {
     border-color: rgba(118, 143, 176, .22) !important;
+  }
+}
+
+/* Shared mobile header: internal pages use the exact approved homepage shell. */
+@media (max-width: 680px) {
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page, .catalog-page):not(.home-mobile-header-scrolled):not(.home-mobile-menu-open):not(.home-mobile-contact-open) .topbar {
+    border-bottom-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle,
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #menuBtn.menu-btn {
+    border: 1px solid rgba(254, 254, 254, .86) !important;
+    border-radius: 8px !important;
+    background: rgba(8, 20, 38, .28) !important;
+    color: #fefefe !important;
+    box-shadow: inset 0 0 0 1px rgba(254, 254, 254, .08), 0 8px 22px rgba(1, 8, 17, .18) !important;
+    backdrop-filter: blur(5px) !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle:focus-visible,
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #menuBtn.menu-btn:focus-visible {
+    outline: 2px solid rgba(254, 254, 254, .82) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Internal first screens follow the approved homepage text grid exactly. */
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero > .container {
+    padding: calc(var(--home-mobile-header-height) + env(safe-area-inset-top) + 18px)
+      var(--home-mobile-gutter)
+      max(48px, calc(env(safe-area-inset-bottom) + 28px)) !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero h1 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: clamp(8px, 1.7vw, 12px) !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: clamp(150px, 20svh, 220px) 0 0 !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero .pnp-mobile-hero-line,
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero h1 .pnp-mobile-hero-line.accent-word {
+    width: max-content !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: clamp(42px, 10.5vw, 64px) !important;
+    line-height: .92 !important;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, .34) !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero h1::after {
+    margin-top: clamp(6px, 1.5vw, 10px) !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero .hero-subtitle {
+    max-width: 310px !important;
+    margin-top: clamp(14px, 2.5svh, 24px) !important;
+    font-size: clamp(16px, 4.05vw, 18px) !important;
+    font-weight: 450 !important;
+    line-height: 1.42 !important;
+    letter-spacing: -.01em !important;
+    text-shadow: 0 3px 14px rgba(0, 0, 0, .44) !important;
+  }
+}
+
+@media (max-width: 680px) and (max-height: 850px) {
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero h1 {
+    gap: 7px !important;
+    margin-top: clamp(108px, 15svh, 128px) !important;
+  }
+
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero .pnp-mobile-hero-line,
+  html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page) .hero.hero-small.pnp-mobile-standard-hero h1 .pnp-mobile-hero-line.accent-word {
+    font-size: clamp(39px, 10vw, 48px) !important;
   }
 }

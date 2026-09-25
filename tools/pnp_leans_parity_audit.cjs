@@ -25,6 +25,7 @@ const requiredViewports = [
   { name: "390x844", width: 390, height: 844 },
   { name: "430x932", width: 430, height: 932 },
   { name: "543x1020", width: 543, height: 1020 },
+  { name: "614x1020", width: 614, height: 1020 },
   { name: "768x1024", width: 768, height: 1024 },
   { name: "1440x900", width: 1440, height: 900 },
 ];
@@ -201,6 +202,22 @@ const collectMetrics = client => evaluate(client, `(() => {
   }).map(describe).slice(0, 30);
   const brokenImages = [...document.images].filter(image => image.complete && image.naturalWidth === 0).map(describe).slice(0, 30);
   const h1 = document.querySelector("h1");
+  const topbar = document.querySelector(".topbar");
+  const contactToggle = document.querySelector("[data-header-contact-toggle]");
+  const menuToggle = document.querySelector("#menuBtn");
+  const heroTitle = document.querySelector("#top-mobile h1, .pnp-mobile-standard-hero h1");
+  const heroTitleLine = heroTitle?.querySelector(".home-mobile-hero-line, .pnp-mobile-hero-line");
+  const heroSubtitle = document.querySelector("#top-mobile .hero-subtitle, .pnp-mobile-standard-hero .hero-subtitle");
+  const headerStyle = element => {
+    if (!element) return null;
+    const style = getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      borderRadius: style.borderRadius,
+      borderTopWidth: style.borderTopWidth,
+      boxShadow: style.boxShadow,
+    };
+  };
   return {
     url: location.href,
     title: document.title,
@@ -212,6 +229,21 @@ const collectMetrics = client => evaluate(client, `(() => {
     brokenImages,
     h1: h1 ? describe(h1) : null,
     bodyClasses: document.body.className,
+    header: {
+      topbar: headerStyle(topbar),
+      contactToggle: headerStyle(contactToggle),
+      menuToggle: headerStyle(menuToggle),
+    },
+    heroComposition: heroTitle && heroTitleLine ? {
+      titleTop: Math.round(heroTitle.getBoundingClientRect().top),
+      titleLeft: Math.round(heroTitle.getBoundingClientRect().left),
+      lineFontSize: getComputedStyle(heroTitleLine).fontSize,
+      lineFontWeight: getComputedStyle(heroTitleLine).fontWeight,
+      lineHeight: getComputedStyle(heroTitleLine).lineHeight,
+      subtitleFontSize: heroSubtitle ? getComputedStyle(heroSubtitle).fontSize : null,
+      subtitleFontWeight: heroSubtitle ? getComputedStyle(heroSubtitle).fontWeight : null,
+      subtitleLetterSpacing: heroSubtitle ? getComputedStyle(heroSubtitle).letterSpacing : null,
+    } : null,
   };
 })()`);
 
@@ -381,7 +413,11 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
     }
     for (const site of sites) {
       for (const viewport of requiredViewports.filter(item => item.name !== "390x844")) {
-        results.push(await captureState(client, site, routes[0], viewport));
+        const isReviewViewport = viewport.name === "614x1020";
+        results.push(await captureState(client, site, routes[0], viewport, {
+          fullPage: isReviewViewport,
+          interactions: isReviewViewport,
+        }));
       }
     }
   } finally {
@@ -390,12 +426,39 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
   }
 
   const failures = [];
+  const pnpHomeMobile = results.find(result => result.site === "pnp" && result.route === "home" && result.viewport === "390x844");
   for (const result of results) {
     const prefix = `${result.site}/${result.route}/${result.viewport}`;
     if (result.metrics.horizontalOverflow) failures.push(`${prefix}: horizontal overflow`);
     if (result.metrics.clippedInteractive.length) failures.push(`${prefix}: clipped interactive controls`);
     if (result.metrics.brokenImages.length) failures.push(`${prefix}: broken images`);
     if (result.errors.length) failures.push(`${prefix}: runtime errors`);
+    if (
+      result.site === "pnp"
+      && result.viewport === "390x844"
+      && ["home", "catalog", "vendors", "partners", "contacts"].includes(result.route)
+    ) {
+      const header = result.metrics.header || {};
+      if (header.topbar?.backgroundColor !== "rgba(0, 0, 0, 0)") failures.push(`${prefix}: mobile header is not transparent at page top`);
+      if (header.contactToggle?.borderRadius !== "8px") failures.push(`${prefix}: contact control differs from homepage header`);
+      if (header.menuToggle?.borderRadius !== "8px") failures.push(`${prefix}: menu control differs from homepage header`);
+    }
+    if (
+      result.site === "pnp"
+      && result.viewport === "390x844"
+      && ["vendors", "partners", "contacts"].includes(result.route)
+      && pnpHomeMobile?.metrics.heroComposition
+    ) {
+      const reference = pnpHomeMobile.metrics.heroComposition;
+      const current = result.metrics.heroComposition;
+      if (!current || Math.abs(current.titleTop - reference.titleTop) > 1) failures.push(`${prefix}: hero title vertical position differs from homepage`);
+      if (!current || current.titleLeft !== reference.titleLeft) failures.push(`${prefix}: hero title horizontal position differs from homepage`);
+      if (!current || current.lineFontSize !== reference.lineFontSize) failures.push(`${prefix}: hero title size differs from homepage`);
+      if (!current || current.lineFontWeight !== reference.lineFontWeight) failures.push(`${prefix}: hero title weight differs from homepage`);
+      if (!current || current.subtitleFontSize !== reference.subtitleFontSize) failures.push(`${prefix}: hero subtitle size differs from homepage`);
+      if (!current || current.subtitleFontWeight !== reference.subtitleFontWeight) failures.push(`${prefix}: hero subtitle weight differs from homepage`);
+      if (!current || current.subtitleLetterSpacing !== reference.subtitleLetterSpacing) failures.push(`${prefix}: hero subtitle spacing differs from homepage`);
+    }
     for (const [name, state] of Object.entries(result.interactions)) {
       if (state.available && state.expanded !== "true") failures.push(`${prefix}: ${name} did not expose expanded state`);
       if (state.available && state.closedExpanded !== "false") failures.push(`${prefix}: ${name} did not close cleanly`);
