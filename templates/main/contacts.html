@@ -56,7 +56,7 @@
         </div>
 
         <section class="contact-request-panel" id="supplyRequestPanel" role="tabpanel" aria-labelledby="supplyRequestTab" data-contact-request-panel="supply">
-          <header class="home-request-head"><h2>Заявка</h2></header>
+          <header class="home-request-head"><span class="home-request-kicker">Быстрая заявка</span><h2>Заявка</h2></header>
           <form class="form sym-request-home-form quick-request-form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-request-mode="supply" data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="source" value="contact">
@@ -94,7 +94,7 @@
             </label>
             <div class="home-request-actions">
               <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-              <button class="btn quick-request-submit" type="submit">Отправить заявку</button>
+              <button class="btn quick-request-submit" type="submit">Отправить заявку →</button>
               <small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small>
             </div>
           </form>
@@ -167,7 +167,7 @@
             </label>
             <div class="home-request-actions">
               <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-              <button class="btn quick-request-submit" type="submit">Отправить предложение</button>
+              <button class="btn quick-request-submit" type="submit">Отправить предложение →</button>
               <small class="home-request-reassurance">Предложение поступит сотруднику, отвечающему за партнёрские обращения.</small>
             </div>
           </form>

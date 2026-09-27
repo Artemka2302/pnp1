@@ -24,7 +24,7 @@
         <p class="hero-subtitle">Берём на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
         <div class="hero-actions">
           <a class="btn hero-primary-cta" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
-          <a class="btn ghost hero-commercial-cta" href="{% url 'contacts' %}#request-form">Запросить коммерческое предложение</a>
+          <a class="btn ghost hero-commercial-cta" href="{% url 'catalog' %}">Перейти в каталог</a>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
       </p>
       <div class="hero-actions">
         <a class="btn" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
-        <a class="btn ghost" href="{% url 'catalog' %}">Посмотреть каталог</a>
+        <a class="btn ghost" href="{% url 'catalog' %}">Перейти в каталог</a>
       </div>
     </div>
   </div>
@@ -70,37 +70,37 @@
     </div>
     <div class="role-entry-grid">
       <article class="role-entry-card" id="client-designers" data-role-card="designer">
-        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 5h16v14H4zM8 5v14M4 10h16M12 5v5"/></svg></span>
+        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><path d="M4.5 4.5h18v18h-18zM11 4.5V12h11.5M4.5 16.5H11v6M15.5 12v5h7"/><path class="icon-detail" d="m16.5 26 8.9-8.9 2.8 2.8-8.9 8.9-3.8 1 1-3.8Zm7.5-7.5 2.8 2.8"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Проектирование</span></div>
         <h3>Проектировщики</h3>
         <span class="role-entry-mobile-summary">Решения и документы по техническому заданию</span>
         <p>Помогаем подобрать решения по техническому заданию, проверить применимость материалов и получить документы для согласования.</p>
       </article>
       <article class="role-entry-card" id="client-construction" data-role-card="general_contractor">
-        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 16c0-4.4 3.6-8 8-8s8 3.6 8 8M3 16h18M7 16v2h10v-2M8 8l1-2h6l1 2"/></svg></span>
+        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 21V4h2v17M3 7h16M7 4h8l4 3M3 21h9"/><path class="icon-detail" d="M16 7v7M13.5 14h5v3h-5z"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Комплектация</span></div>
         <h3>Строительные организации</h3>
         <span class="role-entry-mobile-summary">Комплектация объекта по разделам проекта</span>
         <p>Комплектуем объект по разделам, работаем с ведомостями, заменами, сроками и коммерческими предложениями.</p>
       </article>
       <article class="role-entry-card" id="client-institutes" data-role-card="procurement">
-        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 20h16M6 20V8l6-4 6 4v12M9 10v3M12 10v3M15 10v3"/></svg></span>
+        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m3 8.5 9-5 9 5H3ZM4.5 17.5h15M3 20.5h18"/><path class="icon-detail" d="M6.5 9v8.5M10.2 9v8.5M13.8 9v8.5M17.5 9v8.5"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Проектные решения</span></div>
         <h3>Проектные институты</h3>
         <span class="role-entry-mobile-summary">Аналоги и документация для согласования</span>
         <p>Сопоставляем решения с требованиями проекта, подбираем аналоги и помогаем собрать документацию по позициям.</p>
       </article>
       <article class="role-entry-card" id="client-private" data-role-card="private">
-        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m4 11 8-7 8 7v8H4zM9 19v-5h6v5"/></svg></span>
+        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m3 11.5 9-7.5 9 7.5M5 10v10h14V10"/><path class="icon-detail" d="M12 11a2.35 2.35 0 1 1 0 4.7A2.35 2.35 0 0 1 12 11Zm-4 9c.35-2.25 1.75-3.45 4-3.45s3.65 1.2 4 3.45"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Частный объект</span></div>
         <h3>Физические лица</h3>
         <span class="role-entry-mobile-summary">Материалы и оборудование для частного объекта</span>
         <p>Помогаем подобрать материалы и оборудование для частного строительства, ремонта и благоустройства.</p>
       </article>
       <article class="role-entry-card" id="client-diy" data-role-card="diy">
-        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M14 6a4 4 0 0 0 4.7 5.7l-8.1 8.1a2.1 2.1 0 1 1-3-3l8.1-8.1A4 4 0 0 0 14 6Z"/></svg></span>
+        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><path d="M4 9h14l5 4-5 4H4V9Zm5 8-1 10h5l2-10"/><path class="icon-detail" d="M18 11h2.5v4H18M4 12.2h7M9.8 21.5h3.7M23 12h5v2h-5"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Самостоятельные проекты</span></div>
-        <h3>DIY-проекты</h3>
+        <h3>DIY</h3>
         <span class="role-entry-mobile-summary">Понятный подбор для самостоятельных работ</span>
         <p>Подбираем понятные материалы, комплектующие и оборудование для самостоятельной реализации конкретной задачи.</p>
       </article>
@@ -264,7 +264,7 @@
           <div class="field sym-request-message-field"><label for="homeLiveMessage">Комментарий</label><textarea id="homeLiveMessage" name="message" placeholder="Что нужно подобрать? Укажите объект, город или сроки."></textarea></div>
           <div class="field file-field sym-request-upload-field quick-file-field"><span class="field-label">Спецификация или файл <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeLiveSpecification"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeLiveSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div></div>
           <label class="form-consent form-consent-check quick-consent home-request-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.</span></label>
-          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить заявку</button><small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small></div>
+          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить заявку →</button><small class="home-request-reassurance">Менеджер получит материалы и свяжется по указанному номеру.</small></div>
         </form>
       </section>
 
@@ -283,7 +283,7 @@
             <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Прайс-лист <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeCooperationPriceList"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeCooperationPriceList" name="price_list" type="file" accept=".xlsx,.pdf"><small>XLSX, PDF</small><div class="file-list" data-file-list hidden></div></div>
           </div>
           <label class="form-consent-check quick-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span></label>
-          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить предложение</button><small class="home-request-reassurance">Предложение поступит сотруднику, отвечающему за партнёрские обращения.</small></div>
+          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить предложение →</button><small class="home-request-reassurance">Предложение поступит сотруднику, отвечающему за партнёрские обращения.</small></div>
         </form>
       </section>
     </article>
@@ -310,7 +310,7 @@
           <div class="field"><label for="homeMobileMessage">Комментарий</label><textarea id="homeMobileMessage" name="message" placeholder="Опишите задачу или добавьте список позиций"></textarea></div>
           <div class="field file-field quick-file-field"><span class="field-label">Спецификация или файл <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeMobileSpecification"><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeMobileSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div></div>
           <label class="form-consent form-consent-check quick-consent home-request-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.</span></label>
-          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить заявку</button></div>
+          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить заявку →</button></div>
         </form>
       </section>
       <section class="contact-request-panel" id="homeMobileCooperationRequestPanel" role="tabpanel" aria-labelledby="homeMobileCooperationRequestTab" data-contact-request-panel="cooperation" hidden>
@@ -327,7 +327,7 @@
             <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Прайс-лист <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeMobileCooperationPriceList"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeMobileCooperationPriceList" name="price_list" type="file" accept=".xlsx,.pdf"><small>XLSX, PDF</small><div class="file-list" data-file-list hidden></div></div>
           </div>
           <label class="form-consent-check quick-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span></label>
-          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить предложение</button></div>
+          <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить предложение →</button></div>
         </form>
       </section>
     </article>

@@ -23,9 +23,9 @@
 
     {% for item in pagination.items %}
       {% if item.ellipsis %}
-        <span class="partner-page-current">...</span>
+        <span class="partner-page-gap" aria-hidden="true">...</span>
       {% elif item.is_current %}
-        <span class="partner-page-current">{{ item.number }}</span>
+        <span class="partner-page-current" aria-current="page">{{ item.number }}</span>
       {% else %}
         <a class="partner-page-link" href="{{ item.url }}" data-partner-page-link>{{ item.number }}</a>
       {% endif %}

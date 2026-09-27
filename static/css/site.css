@@ -1308,7 +1308,8 @@ button.partner-category-chip {
 }
 
 .partner-page-link,
-.partner-page-current {
+.partner-page-current,
+.partner-page-gap {
   min-width: 44px;
   min-height: 42px;
   display: inline-flex;
@@ -1335,9 +1336,16 @@ button.partner-category-chip {
 }
 
 .partner-page-current {
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.055);
-  color: var(--muted);
+  border: 1px solid rgba(232,116,157,.78);
+  background: linear-gradient(145deg, #a42650 0%, #741c3b 100%);
+  color: #fff;
+  box-shadow:
+    0 0 0 3px rgba(164,38,80,.14),
+    0 8px 20px rgba(60,9,29,.24);
+}
+
+.partner-page-gap {
+  color: rgba(255,255,255,.52);
 }
 
 .vendor-row,
@@ -7095,5 +7103,85 @@ a[href*="wa.me"] {
   .support-chat-panel {
     width: min(100vw - 24px, 420px);
     max-height: calc(100dvh - 84px);
+  }
+}
+
+/* Vendors desktop isolation: mobile helpers must not participate in desktop layout. */
+@media (min-width: 1081px) {
+  body.vendors-page .vendor-direction-cta-mobile,
+  body.vendors-page .vendor-row-action-mobile,
+  body.vendors-page .vendor-search-submit,
+  body.vendors-page .vendor-mobile-filter-toggle {
+    display: none !important;
+  }
+
+  body.vendors-page .vendor-direction-cta-desktop,
+  body.vendors-page .vendor-row-action-desktop {
+    display: inline !important;
+  }
+
+  body.vendors-page .vendor-master-card {
+    grid-template-columns: minmax(360px, .78fr) minmax(0, 1.22fr);
+  }
+
+  body.vendors-page .vendor-master-panel {
+    min-width: 0;
+    padding: 28px;
+  }
+
+  body.vendors-page .vendor-toolbar.vendor-toolbar-main {
+    display: block !important;
+    margin-bottom: 18px;
+  }
+
+  body.vendors-page .vendor-toolbar-main .vendor-search-field {
+    margin-bottom: 18px;
+  }
+
+  body.vendors-page .vendor-toolbar-main label {
+    min-height: 0;
+    margin-bottom: 7px;
+  }
+
+  body.vendors-page .vendor-toolbar-main .vendor-search-control,
+  body.vendors-page .vendor-toolbar-main .vendor-search-control input {
+    width: 100%;
+  }
+
+  body.vendors-page .vendor-toolbar-main .vendor-search-control input,
+  body.vendors-page .vendor-master-panel .vendor-select-button,
+  body.vendors-page .vendor-advanced-filters .vendor-actions-field .btn {
+    height: 52px;
+    min-height: 52px;
+  }
+
+  body.vendors-page .vendor-advanced-filters {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  body.vendors-page .vendor-advanced-filters .vendor-actions-field {
+    display: grid !important;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  body.vendors-page .vendor-toolbar-main .vendor-count {
+    margin-top: 14px;
+  }
+
+  body.vendors-page .all-manufacturer-cloud {
+    max-height: 156px;
+  }
+
+  body.vendors-page #vendorRows .vendor-row {
+    grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
+  }
+
+  body.vendors-page #vendorRows .vendor-row-actions .link-more {
+    display: inline-flex;
+    align-items: center;
   }
 }

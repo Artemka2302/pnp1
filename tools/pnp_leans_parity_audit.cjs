@@ -20,6 +20,10 @@ const routes = [
   { name: "partners", path: "/partners/" },
   { name: "contacts", path: "/contacts/" },
 ];
+const pnpCatalogDetailRoute = {
+  name: "catalog-detail",
+  path: "/catalog/building-materials/architecture/ceilings/ceiling-systems/",
+};
 const requiredViewports = [
   { name: "360x800", width: 360, height: 800 },
   { name: "390x844", width: 390, height: 844 },
@@ -208,6 +212,9 @@ const collectMetrics = client => evaluate(client, `(() => {
   const heroTitle = document.querySelector("#top-mobile h1, .pnp-mobile-standard-hero h1");
   const heroTitleLine = heroTitle?.querySelector(".home-mobile-hero-line, .pnp-mobile-hero-line");
   const heroSubtitle = document.querySelector("#top-mobile .hero-subtitle, .pnp-mobile-standard-hero .hero-subtitle");
+  const requestSubmit = document.querySelector("#home-request-form .quick-request-submit");
+  const requestForm = document.querySelector("#home-request-form, #home-mobile-request-form, article#request-form.contact-request-card");
+  const searchInput = document.querySelector("#catalogV2Search, #vendorSearch");
   const headerStyle = element => {
     if (!element) return null;
     const style = getComputedStyle(element);
@@ -216,6 +223,21 @@ const collectMetrics = client => evaluate(client, `(() => {
       borderRadius: style.borderRadius,
       borderTopWidth: style.borderTopWidth,
       boxShadow: style.boxShadow,
+    };
+  };
+  const surfaceStyle = element => {
+    if (!element) return null;
+    const style = getComputedStyle(element);
+    const rect = element.getBoundingClientRect();
+    return {
+      backgroundColor: style.backgroundColor,
+      backgroundImage: style.backgroundImage,
+      borderColor: style.borderColor,
+      borderRadius: style.borderRadius,
+      borderWidth: style.borderWidth,
+      boxShadow: style.boxShadow,
+      color: style.color,
+      height: Math.round(rect.height),
     };
   };
   return {
@@ -243,6 +265,85 @@ const collectMetrics = client => evaluate(client, `(() => {
       subtitleFontSize: heroSubtitle ? getComputedStyle(heroSubtitle).fontSize : null,
       subtitleFontWeight: heroSubtitle ? getComputedStyle(heroSubtitle).fontWeight : null,
       subtitleLetterSpacing: heroSubtitle ? getComputedStyle(heroSubtitle).letterSpacing : null,
+    } : null,
+    requestSubmit: requestSubmit ? (() => {
+      const style = getComputedStyle(requestSubmit);
+      const rect = requestSubmit.getBoundingClientRect();
+      return {
+        backgroundImage: style.backgroundImage,
+        backgroundColor: style.backgroundColor,
+        borderColor: style.borderColor,
+        borderRadius: style.borderRadius,
+        boxShadow: style.boxShadow,
+        color: style.color,
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+      };
+    })() : null,
+    requestForm: requestForm ? (() => {
+      const read = selector => {
+        const element = requestForm.querySelector(selector);
+        if (!element) return null;
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return {
+          text: (element.textContent || "").trim().replace(/\\s+/g, " "),
+          backgroundColor: style.backgroundColor,
+          backgroundImage: style.backgroundImage,
+          borderColor: style.borderColor,
+          borderRadius: style.borderRadius,
+          boxShadow: style.boxShadow,
+          color: style.color,
+          fontFamily: style.fontFamily,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          height: Math.round(rect.height),
+        };
+      };
+      const style = getComputedStyle(requestForm);
+      return {
+        root: {
+          backgroundImage: style.backgroundImage,
+          borderColor: style.borderColor,
+          borderRadius: style.borderRadius,
+          boxShadow: style.boxShadow,
+          fontFamily: style.fontFamily,
+          padding: style.padding,
+        },
+        activeTab: read(".contact-request-tab.is-active, .contact-request-tab[aria-selected='true']"),
+        inactiveTab: read(".contact-request-tab:not(.is-active):not([aria-selected='true'])"),
+        kicker: read(".home-request-kicker"),
+        title: read(".home-request-head h2"),
+        input: read("input:not([type='hidden']):not([type='file']):not([type='checkbox'])"),
+        textarea: read("textarea"),
+        upload: read(".upload-box"),
+        consent: read(".quick-consent span"),
+        consentLink: read(".quick-consent a"),
+        submit: read("button.quick-request-submit"),
+      };
+    })() : null,
+    searchInput: searchInput ? (() => {
+      const style = getComputedStyle(searchInput);
+      const placeholderStyle = getComputedStyle(searchInput, "::placeholder");
+      const rect = searchInput.getBoundingClientRect();
+      return {
+        backgroundColor: style.backgroundColor,
+        borderColor: style.borderColor,
+        borderRadius: style.borderRadius,
+        color: style.color,
+        placeholderColor: placeholderStyle.color,
+        fontSize: style.fontSize,
+        height: Math.round(rect.height),
+      };
+    })() : null,
+    vendorPalette: document.body.classList.contains("vendors-page") ? {
+      masterPrimary: surfaceStyle(document.querySelector(".vendor-master-actions .btn.light")),
+      masterSecondary: surfaceStyle(document.querySelector(".vendor-master-actions .btn.ghost")),
+      filterToggle: surfaceStyle(document.querySelector(".vendor-mobile-filter-toggle")),
+      select: surfaceStyle(document.querySelector(".vendor-select-button")),
+      find: surfaceStyle(document.querySelector(".vendor-actions-field .vendor-submit")),
+      clear: surfaceStyle(document.querySelector(".vendor-actions-field .vendor-clear")),
+      footerPartner: surfaceStyle(document.querySelector(".site-footer-partner-button")),
     } : null,
   };
 })()`);
@@ -288,15 +389,65 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
       }
     }
 
+    functionalChecks.headerContactMenu = await evaluate(client, `(() => {
+      const dropdown = document.querySelector(".header-contact-dropdown");
+      if (!dropdown) return { available: false };
+      return {
+        available: true,
+        primaryLabels: [...dropdown.querySelectorAll(".header-contact-direct-list .header-contact-item b")].map(item => item.textContent.trim()),
+        supportModes: [...dropdown.querySelectorAll("[data-contact-support]")].map(item => item.dataset.contactSupport),
+      };
+    })()`);
+
     if (route.name === "home") {
       functionalChecks.workflow = await evaluate(client, `(() => {
         const tabs = [...document.querySelectorAll("[data-home-request-step]")];
         if (tabs.length < 2) return { available: false };
         tabs[1].click();
+        const root = document.querySelector("[data-pnp-live-workflow]");
+        const rail = root?.querySelector(".home-request-stage-rail");
+        const runner = root?.querySelector("[data-home-request-runner]");
+        const nodes = tabs.map(tab => tab.querySelector(".home-request-stage-node")).filter(Boolean);
+        const railRect = rail?.getBoundingClientRect();
+        const nodeRects = nodes.map(node => node.getBoundingClientRect());
+        const nodeCenters = nodeRects.map(rect => ({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }));
+        const railCenterY = railRect ? railRect.top + railRect.height / 2 : 0;
+        const railStartDelta = railRect && nodeCenters.length ? Math.abs(railRect.left - nodeCenters[0].x) : null;
+        const railEndDelta = railRect && nodeCenters.length ? Math.abs(railRect.right - nodeCenters[nodeCenters.length - 1].x) : null;
+        const railCenterDelta = railRect && nodeCenters.length
+          ? Math.max(...nodeCenters.map(point => Math.abs(point.y - railCenterY)))
+          : null;
         const result = {
           available: true,
           selected: tabs[1].getAttribute("aria-selected"),
           title: document.querySelector("[data-home-request-title]")?.textContent?.trim() || "",
+          selectedCount: tabs.filter(tab => tab.getAttribute("aria-selected") === "true").length,
+          ready: root?.dataset.homeRequestWorkflowReady || "false",
+          railVisible: Boolean(rail && getComputedStyle(rail).display !== "none" && getComputedStyle(rail).opacity !== "0"),
+          runnerAvailable: Boolean(runner),
+          railStartDelta,
+          railEndDelta,
+          railCenterDelta,
+          railConnectsNodes: Boolean(
+            railRect
+            && nodeCenters.length === 4
+            && railStartDelta <= 2
+            && railEndDelta <= 2
+            && railCenterDelta <= 2
+          ),
+          railStyle: rail ? {
+            background: getComputedStyle(rail).backgroundColor,
+            height: getComputedStyle(rail).height,
+            zIndex: getComputedStyle(rail).zIndex,
+          } : null,
+          stageStyles: tabs.map(tab => ({
+            className: tab.className,
+            background: getComputedStyle(tab).backgroundImage,
+            zIndex: getComputedStyle(tab).zIndex,
+            nodeBackground: getComputedStyle(tab.querySelector(".home-request-stage-node")).backgroundImage,
+            nodeBackgroundColor: getComputedStyle(tab.querySelector(".home-request-stage-node")).backgroundColor,
+            nodeZIndex: getComputedStyle(tab.querySelector(".home-request-stage-node")).zIndex,
+          })),
         };
         tabs[0].click();
         return result;
@@ -311,7 +462,11 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
       functionalChecks.brandTabs = await evaluate(client, `(() => {
         const tabs = [...document.querySelectorAll("[data-home-brand-filter] [role=tab]")];
         if (tabs.length < 2) return { available: false };
-        const result = { available: ${brandTabsAvailable}, selected: tabs[1].getAttribute("aria-selected") };
+        const result = {
+          available: ${brandTabsAvailable},
+          selected: tabs[1].getAttribute("aria-selected"),
+          selectedCount: tabs.filter(tab => tab.getAttribute("aria-selected") === "true").length,
+        };
         tabs[0].click();
         return result;
       })()`);
@@ -329,6 +484,72 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
         supply.click();
         return result;
       })()`);
+    }
+
+    if (route.name === "catalog-detail") {
+      const rowPoint = await evaluate(client, `(() => {
+        const row = document.querySelector(".catalog-v2-type-row");
+        if (!row) return null;
+        row.scrollIntoView({ block: "center" });
+        const rect = row.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      })()`);
+      if (rowPoint) {
+        await client.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: rowPoint.x, y: rowPoint.y });
+        await delay(260);
+        const hover = await evaluate(client, `(() => {
+          const row = document.querySelector(".catalog-v2-type-row");
+          const title = row?.querySelector("b");
+          const note = row?.querySelector("small");
+          if (!row || !title || !note) return null;
+          const style = getComputedStyle(row);
+          return {
+            hovered: row.matches(":hover"),
+            backgroundImage: style.backgroundImage,
+            borderColor: style.borderColor,
+            color: style.color,
+            titleColor: getComputedStyle(title).color,
+            noteColor: getComputedStyle(note).color,
+          };
+        })()`);
+        await screenshot(client, path.join(reportRoot, `${label}-hover.png`));
+        const selected = await evaluate(client, `(() => {
+          const row = document.querySelector(".catalog-v2-type-row");
+          const panel = document.querySelector(".catalog-mini-request");
+          if (!row || !panel) return null;
+          row.click();
+          const rowStyle = getComputedStyle(row);
+          const panelStyle = getComputedStyle(panel);
+          const panelTitle = panel.querySelector("h3");
+          const clear = panel.querySelector("[data-request-clear]");
+          const list = panel.querySelector("[data-request-list]");
+          const selectedChip = list?.querySelector("span");
+          const cta = panel.querySelector(".mini-request-actions .btn.light");
+          const result = {
+            pressed: row.getAttribute("aria-pressed"),
+            selectedCount: document.querySelectorAll(".catalog-v2-type-row.is-selected").length,
+            rowBackgroundImage: rowStyle.backgroundImage,
+            rowColor: rowStyle.color,
+            panelBackgroundImage: panelStyle.backgroundImage,
+            panelBorderColor: panelStyle.borderColor,
+            panelBorderRadius: panelStyle.borderRadius,
+            panelTitleColor: panelTitle ? getComputedStyle(panelTitle).color : null,
+            clearBackgroundColor: clear ? getComputedStyle(clear).backgroundColor : null,
+            clearColor: clear ? getComputedStyle(clear).color : null,
+            listBackgroundColor: list ? getComputedStyle(list).backgroundColor : null,
+            listColor: list ? getComputedStyle(list).color : null,
+            selectedChipBackgroundImage: selectedChip ? getComputedStyle(selectedChip).backgroundImage : null,
+            selectedChipColor: selectedChip ? getComputedStyle(selectedChip).color : null,
+            ctaBackgroundImage: cta ? getComputedStyle(cta).backgroundImage : null,
+            ctaColor: cta ? getComputedStyle(cta).color : null,
+          };
+          row.click();
+          return result;
+        })()`);
+        functionalChecks.catalogDetail = { available: true, hover, selected };
+      } else {
+        functionalChecks.catalogDetail = { available: false };
+      }
     }
 
     if (route.name === "catalog") {
@@ -411,6 +632,8 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
         results.push(await captureState(client, site, route, pairedViewport, { fullPage: true, interactions: true }));
       }
     }
+    const pnpSite = sites.find(site => site.name === "pnp");
+    results.push(await captureState(client, pnpSite, pnpCatalogDetailRoute, pairedViewport, { fullPage: true, interactions: true }));
     for (const site of sites) {
       for (const viewport of requiredViewports.filter(item => item.name !== "390x844")) {
         const isReviewViewport = viewport.name === "614x1020";
@@ -459,14 +682,141 @@ const captureState = async (client, site, route, viewport, { fullPage = false, i
       if (!current || current.subtitleFontWeight !== reference.subtitleFontWeight) failures.push(`${prefix}: hero subtitle weight differs from homepage`);
       if (!current || current.subtitleLetterSpacing !== reference.subtitleLetterSpacing) failures.push(`${prefix}: hero subtitle spacing differs from homepage`);
     }
+    if (
+      result.site === "pnp"
+      && result.viewport === "390x844"
+      && ["home", "contacts"].includes(result.route)
+    ) {
+      const form = result.metrics.requestForm;
+      const expectedGradient = "linear-gradient(145deg, rgb(155, 40, 80), rgb(121, 38, 70) 58%, rgb(45, 50, 77))";
+      const expectedSubmitGradient = "linear-gradient(135deg, rgb(163, 40, 80) 0%, rgb(201, 60, 106) 54%, rgb(204, 63, 110) 100%)";
+      const parityOk = Boolean(
+        form
+        && form.root.backgroundImage.includes(expectedGradient)
+        && form.root.borderColor === "rgba(236, 124, 163, 0.58)"
+        && form.root.borderRadius === "16px"
+        && form.root.padding === "21px 17px 19px"
+        && form.root.fontFamily.startsWith("Inter")
+        && form.activeTab?.backgroundColor === "rgb(200, 55, 109)"
+        && form.activeTab?.backgroundImage === "none"
+        && form.activeTab?.borderColor === "rgba(255, 186, 211, 0.44)"
+        && form.inactiveTab?.backgroundColor === "rgba(0, 0, 0, 0)"
+        && form.inactiveTab?.borderColor === "rgba(0, 0, 0, 0)"
+        && form.inactiveTab?.color === "rgba(255, 255, 255, 0.68)"
+        && form.kicker?.color === "rgb(243, 190, 209)"
+        && form.title?.fontSize === "32px"
+        && form.input?.backgroundColor === "rgba(5, 17, 31, 0.45)"
+        && form.input?.borderRadius === "7px"
+        && form.textarea?.height === 82
+        && form.upload?.backgroundColor === "rgba(5, 17, 31, 0.28)"
+        && form.upload?.borderColor === "rgba(255, 255, 255, 0.3)"
+        && form.upload?.color === "rgb(255, 255, 255)"
+        && form.upload?.height === 48
+        && form.consent?.color === "rgba(255, 255, 255, 0.68)"
+        && form.consentLink?.color === "rgb(240, 162, 189)"
+        && form.submit?.backgroundImage === expectedSubmitGradient
+        && form.submit?.borderRadius === "3px"
+        && form.submit?.height === 52
+        && form.submit?.text.endsWith("→")
+      );
+      if (!parityOk) failures.push(`${prefix}: request form differs from the approved production-mobile palette`);
+    }
+    if (
+      result.site === "pnp"
+      && result.viewport === "390x844"
+      && ["catalog", "vendors"].includes(result.route)
+    ) {
+      const search = result.metrics.searchInput;
+      const searchStyleOk = Boolean(
+        search
+        && search.backgroundColor === "rgba(5, 17, 31, 0.45)"
+        && search.borderColor === "rgba(255, 255, 255, 0.2)"
+        && search.borderRadius === "7px"
+        && search.color === "rgb(255, 255, 255)"
+        && search.placeholderColor === "rgba(255, 255, 255, 0.44)"
+        && search.fontSize === "16px"
+        && search.height >= 48
+        && search.height <= 52
+      );
+      if (!searchStyleOk) failures.push(`${prefix}: search field differs from the approved dark inset mobile style`);
+    }
+    if (result.site === "pnp" && result.route === "catalog-detail" && result.viewport === "390x844") {
+      const detail = result.functionalChecks.catalogDetail;
+      const hover = detail?.hover;
+      const selected = detail?.selected;
+      const detailStyleOk = Boolean(
+        detail?.available
+        && hover?.hovered
+        && hover.backgroundImage.includes("rgb(127, 41, 75)")
+        && hover.borderColor === "rgba(239, 107, 156, 0.76)"
+        && hover.color === "rgb(254, 254, 254)"
+        && hover.titleColor === "rgb(254, 254, 254)"
+        && hover.noteColor === "rgb(254, 254, 254)"
+        && selected?.pressed === "true"
+        && selected.selectedCount === 1
+        && selected.rowBackgroundImage.includes("rgb(163, 40, 85)")
+        && selected.rowColor === "rgb(254, 254, 254)"
+        && selected.panelBackgroundImage.includes("rgb(155, 40, 80)")
+        && selected.panelBackgroundImage.includes("rgb(109, 32, 57)")
+        && selected.panelBorderColor === "rgba(236, 124, 163, 0.58)"
+        && selected.panelBorderRadius === "16px"
+        && selected.panelTitleColor === "rgb(254, 254, 254)"
+        && selected.clearBackgroundColor === "rgba(5, 17, 31, 0.45)"
+        && selected.clearColor === "rgb(254, 254, 254)"
+        && selected.listBackgroundColor === "rgba(5, 17, 31, 0.4)"
+        && selected.listColor === "rgba(255, 255, 255, 0.72)"
+        && selected.selectedChipBackgroundImage.includes("rgba(32, 44, 71, 0.92)")
+        && selected.selectedChipColor === "rgb(254, 254, 254)"
+        && selected.ctaBackgroundImage.includes("rgb(216, 48, 112)")
+        && selected.ctaColor === "rgb(254, 254, 254)"
+      );
+      if (!detailStyleOk) failures.push(`${prefix}: catalog item states or inline request palette regressed`);
+    }
+    if (result.site === "pnp" && result.route === "vendors" && result.viewport === "390x844") {
+      const palette = result.metrics.vendorPalette;
+      const vendorPaletteOk = Boolean(
+        palette
+        && palette.masterPrimary?.backgroundImage.includes("rgb(216, 48, 112)")
+        && palette.masterPrimary?.color === "rgb(254, 254, 254)"
+        && palette.masterSecondary?.backgroundImage.includes("rgb(32, 44, 71)")
+        && palette.masterSecondary?.color === "rgb(254, 254, 254)"
+        && palette.filterToggle?.backgroundImage.includes("rgb(32, 44, 71)")
+        && palette.filterToggle?.color === "rgb(254, 254, 254)"
+        && palette.select?.backgroundImage.includes("rgba(32, 44, 71, 0.96)")
+        && palette.select?.color === "rgb(254, 254, 254)"
+        && palette.find?.backgroundImage.includes("rgb(163, 40, 85)")
+        && palette.find?.color === "rgb(254, 254, 254)"
+        && palette.clear?.backgroundImage.includes("rgb(32, 44, 71)")
+        && palette.clear?.color === "rgb(254, 254, 254)"
+        && palette.footerPartner?.backgroundImage.includes("rgb(216, 48, 112)")
+        && palette.footerPartner?.color === "rgb(254, 254, 254)"
+        && palette.footerPartner?.height >= 44
+      );
+      if (!vendorPaletteOk) failures.push(`${prefix}: vendor controls returned to the high-glare palette`);
+    }
     for (const [name, state] of Object.entries(result.interactions)) {
       if (state.available && state.expanded !== "true") failures.push(`${prefix}: ${name} did not expose expanded state`);
       if (state.available && state.closedExpanded !== "false") failures.push(`${prefix}: ${name} did not close cleanly`);
     }
     const checks = result.functionalChecks || {};
-    if (checks.workflow?.available && (checks.workflow.selected !== "true" || !checks.workflow.title)) failures.push(`${prefix}: workflow tabs failed`);
-    if (checks.brandTabs?.available && checks.brandTabs.selected !== "true") failures.push(`${prefix}: brand tabs failed`);
+    if (checks.workflow?.available && (
+      checks.workflow.selected !== "true"
+      || !checks.workflow.title
+      || checks.workflow.selectedCount !== 1
+      || (result.site === "pnp" && (
+        checks.workflow.ready !== "true"
+        || !checks.workflow.railVisible
+        || !checks.workflow.runnerAvailable
+        || !checks.workflow.railConnectsNodes
+      ))
+    )) failures.push(`${prefix}: workflow tabs or animated rail failed`);
+    if (checks.brandTabs?.available && (checks.brandTabs.selected !== "true" || checks.brandTabs.selectedCount !== 1)) failures.push(`${prefix}: brand tabs failed`);
     if (checks.requestTabs?.available && (checks.requestTabs.selected !== "true" || checks.requestTabs.panelHidden)) failures.push(`${prefix}: request tabs failed`);
+    if (result.site === "pnp" && checks.headerContactMenu?.available) {
+      const expectedPrimary = ["Позвонить", "Написать", "Отправить заявку", "Сотрудничать"];
+      if (JSON.stringify(checks.headerContactMenu.primaryLabels) !== JSON.stringify(expectedPrimary)) failures.push(`${prefix}: header contact actions differ from the approved order`);
+      if (checks.headerContactMenu.supportModes.includes("telegram") || checks.headerContactMenu.supportModes.includes("max")) failures.push(`${prefix}: removed messenger remains in header contact menu`);
+    }
     if (result.route === "catalog" && checks.search?.available && (checks.search.hidden || checks.search.count < 1)) failures.push(`${prefix}: catalog search failed`);
     if (result.route === "vendors" && checks.search?.available && checks.search.rowCount < 1) failures.push(`${prefix}: vendor search failed`);
   }
