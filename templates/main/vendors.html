@@ -33,14 +33,14 @@
   </div>
 </section>
 
-<section class="section compact">
+<section class="section compact" id="vendorDirections">
   <div class="container">
     <div class="section-head"><div><h2>Основные разделы поставки</h2></div></div>
     <div class="vendor-direction-grid">
       {% for direction in direction_cards %}
         <article class="vendor-direction-card" data-direction-slug="{{ direction.slug }}" {% if direction.image %}style="--direction-photo: url('{% static direction.image %}')"{% endif %}>
           <div class="vendor-direction-top">
-            <i>{% if direction.vendor_icon %}<img src="{% static direction.vendor_icon %}" alt="{{ direction.title }}">{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</i>
+            <i>{% if direction.vendor_icon %}<img src="{% static direction.vendor_icon %}?v=20260927-direction-icons-v9" alt="{{ direction.title }}">{% else %}{{ forloop.counter|stringformat:"02d" }}{% endif %}</i>
             <span>{{ direction.vendor_count }} производителей</span>
           </div>
           <h3>{{ direction.title }}</h3>
