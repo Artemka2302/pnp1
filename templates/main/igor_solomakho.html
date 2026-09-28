@@ -1,4 +1,5 @@
-{% load static %}\n<!doctype html>
+{% load static %}
+<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
@@ -189,45 +190,186 @@
       font-weight: 600;
     }
 
-    .contact-help {
-      display: none;
-      margin-top: 10px;
+    body.contact-modal-open { overflow: hidden; }
+
+    .contact-modal[hidden] { display: none; }
+
+    .contact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
       padding: 12px;
-      border: 1px solid rgba(255, 255, 255, .11);
-      background: rgba(255, 255, 255, .035);
-      color: rgba(244, 243, 238, .72);
-      font-size: 12px;
-      line-height: 1.4;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+
+    .contact-modal.is-open { opacity: 1; }
+
+    .contact-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .78);
+      backdrop-filter: blur(7px);
+    }
+
+    .contact-dialog {
       position: relative;
-      z-index: 1;
+      width: min(100%, 430px);
+      max-height: calc(100dvh - 24px);
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-top: 3px solid var(--accent);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, .055), transparent 42%),
+        #11110f;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, .68);
+      transform: translateY(10px) scale(.985);
+      transition: transform .18s ease;
     }
 
-    .contact-help.is-visible { display: block; }
+    .contact-modal.is-open .contact-dialog { transform: translateY(0) scale(1); }
 
-    .contact-help-actions {
+    .contact-dialog-head {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
     }
 
-    .contact-help button,
-    .contact-help a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 32px;
-      padding: 0 10px;
-      border: 1px solid rgba(255, 255, 255, .13);
-      background: rgba(255, 255, 255, .04);
+    .contact-dialog-kicker {
+      margin: 0 0 8px;
+      color: #c55b82;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .contact-dialog h2 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.15;
+      font-weight: 400;
+    }
+
+    .contact-dialog-close {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .035);
       color: var(--text);
-      text-decoration: none;
       font: inherit;
-      font-size: 12px;
+      font-size: 25px;
+      line-height: 1;
       cursor: pointer;
     }
 
-    .contact-help [hidden] { display: none; }
+    .contact-dialog-close:hover,
+    .contact-dialog-close:focus-visible {
+      border-color: rgba(255, 255, 255, .48);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .contact-dialog-person {
+      margin: 22px 0 20px;
+      padding: 17px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-dialog-person strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .contact-dialog-person span,
+    .contact-dialog-person a {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      text-decoration: none;
+    }
+
+    .contact-dialog-person a {
+      width: max-content;
+      margin-top: 3px;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .contact-dialog-actions {
+      display: grid;
+      gap: 9px;
+    }
+
+    .contact-dialog-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .035);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .contact-dialog-action.primary {
+      border-color: var(--white);
+      background: var(--white);
+      color: #070707;
+    }
+
+    .contact-dialog-action:hover,
+    .contact-dialog-action:focus-visible {
+      border-color: rgba(255, 255, 255, .5);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .contact-dialog-action.primary:hover,
+    .contact-dialog-action.primary:focus-visible { background: #fff; }
+
+    .contact-dialog-note {
+      margin: 18px 0 0;
+      color: rgba(244, 243, 238, .7);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .contact-dialog-telegram {
+      margin-top: 17px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+
+    .contact-dialog-telegram strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .contact-dialog-status {
+      min-height: 18px;
+      margin: 12px 0 0;
+      color: #d57a9c;
+      font-size: 12px;
+      line-height: 1.4;
+    }
 
     @media (max-width: 520px) {
       body {
@@ -252,6 +394,17 @@
       }
 
       .actions { grid-template-columns: 1fr; }
+
+      .contact-dialog {
+        padding: 20px 18px;
+      }
+
+      .contact-dialog h2 { font-size: 23px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contact-modal,
+      .contact-dialog { transition: none; }
     }
   </style>
 </head>
@@ -279,24 +432,52 @@
         <a class="button" href="tel:+79857760299">Позвонить</a>
         <a class="button" href="https://www.pnp1.ru/">Открыть сайт</a>
       </nav>
-
-      <div id="contact-help" class="contact-help" data-contact-help>
-        На Android браузер может не открыть карточку контакта напрямую. Используйте системное меню: выберите «Контакты» или «Google Contacts».
-        <div class="contact-help-actions">
-          <button type="button" data-share-contact hidden>Поделиться контактом</button>
-          <button type="button" data-copy-phone>Скопировать номер</button>
-          <a href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}">Открыть vCard</a>
-        </div>
-      </div>
     </section>
   </main>
+
+  <div class="contact-modal" data-contact-modal hidden>
+    <div class="contact-modal-backdrop" data-close-contact></div>
+    <section class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="contact-dialog-title" tabindex="-1" data-contact-dialog>
+      <header class="contact-dialog-head">
+        <div>
+          <p class="contact-dialog-kicker">Электронная визитка</p>
+          <h2 id="contact-dialog-title">Сохранить контакт</h2>
+        </div>
+        <button class="contact-dialog-close" type="button" aria-label="Закрыть" data-close-contact>×</button>
+      </header>
+
+      <div class="contact-dialog-person">
+        <strong>Игорь Леонидович Соломахо</strong>
+        <span>Акционер · Первый Национальный Поставщик</span>
+        <a href="tel:+79857760299">+7 (985) 776-02-99</a>
+      </div>
+
+      <div class="contact-dialog-actions">
+        <a class="contact-dialog-action primary" href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}" data-open-contact>Открыть контакт</a>
+        <button class="contact-dialog-action" type="button" data-share-contact>Поделиться контактом</button>
+        <button class="contact-dialog-action" type="button" data-copy-phone>Скопировать номер</button>
+      </div>
+
+      <p class="contact-dialog-note">Откройте файл контакта и подтвердите его добавление в адресную книгу. Если контакт сохранился в загрузки, откройте файл оттуда.</p>
+
+      <div class="contact-dialog-telegram">
+        <strong>Открыли ссылку в Telegram?</strong>
+        <p class="contact-dialog-note">Если файл не открывается, выберите в меню встроенного браузера «Открыть в браузере» и повторите действие. На Android также можно импортировать файл в приложении «Контакты».</p>
+      </div>
+
+      <p class="contact-dialog-status" role="status" aria-live="polite" data-contact-status></p>
+    </section>
+  </div>
   <script>
     (() => {
       const addContact = document.querySelector("[data-add-contact]");
       if (!addContact) return;
-      const helpPanel = document.querySelector("[data-contact-help]");
+      const modal = document.querySelector("[data-contact-modal]");
+      const dialog = document.querySelector("[data-contact-dialog]");
+      const closeButtons = document.querySelectorAll("[data-close-contact]");
       const copyPhone = document.querySelector("[data-copy-phone]");
       const shareContact = document.querySelector("[data-share-contact]");
+      const contactStatus = document.querySelector("[data-contact-status]");
       const contact = {
         "name": "Игорь Леонидович Соломахо",
         "phone": "+79857760299",
@@ -304,25 +485,16 @@
         "title": "Акционер",
         "url": "https://www.pnp1.ru/",
         "cardUrl": "https://www.pnp1.ru/igor-solomakho"
-};
-
-      const userAgent = navigator.userAgent || "";
-      const isAndroid = /Android/i.test(userAgent);
-      const inAppBrowser = /Telegram|FBAN|FBAV|Instagram|Line|WhatsApp|MicroMessenger|YaApp|YaBrowser|YaSearchBrowser/i.test(userAgent);
-
-      const showHelp = () => {
-        if (helpPanel) helpPanel.classList.add("is-visible");
       };
 
       const contactText = ["Игорь Леонидович Соломахо", "Акционер", "Первый Национальный Поставщик", "+7 (985) 776-02-99", "https://www.pnp1.ru/igor-solomakho"].join("\n");
       const vcardUrl = new URL(addContact.getAttribute("href"), window.location.href).href;
       let cachedVCardFile = null;
       let vcardPreparePromise = null;
+      let lastFocusedElement = null;
 
-      const setAndroidContactReady = (isReady) => {
-        if (!isAndroid || !navigator.share || !navigator.canShare || !window.File) return;
-        addContact.toggleAttribute("aria-disabled", !isReady);
-        addContact.textContent = isReady ? "Добавить контакт" : "Готовим контакт...";
+      const setStatus = (message) => {
+        if (contactStatus) contactStatus.textContent = message;
       };
 
       const prepareVCardFile = async () => {
@@ -334,7 +506,6 @@
           if (!response.ok) throw new Error("VCF is unavailable");
           const blob = await response.blob();
           cachedVCardFile = new File([blob], "igor-solomakho.vcf", { type: "text/vcard" });
-          setAndroidContactReady(true);
           return cachedVCardFile;
         })();
 
@@ -353,59 +524,82 @@
         return true;
       };
 
-      if (isAndroid && navigator.share && navigator.canShare && window.File) {
-        setAndroidContactReady(false);
-      }
-
-      if (navigator.share && navigator.canShare && window.File) {
-        prepareVCardFile().catch(() => {
-          cachedVCardFile = null;
-          setAndroidContactReady(true);
+      const openModal = () => {
+        if (!modal || !dialog) return;
+        lastFocusedElement = document.activeElement;
+        modal.hidden = false;
+        document.body.classList.add("contact-modal-open");
+        setStatus("");
+        window.requestAnimationFrame(() => {
+          modal.classList.add("is-open");
+          dialog.focus({ preventScroll: true });
         });
-      }
+      };
 
-      if (new URLSearchParams(window.location.search).has("contactFallback")) {
-        showHelp();
-      }
-
-      if (shareContact && navigator.share && navigator.canShare && window.File) {
-        shareContact.hidden = false;
-        shareContact.addEventListener("click", async () => {
-          try {
-            if (!(await shareVCard())) showHelp();
-          } catch (_error) {
-            showHelp();
-          }
-        });
-      }
-
-      addContact.addEventListener("click", async (event) => {
-        if (isAndroid) {
-          event.preventDefault();
-
-          try {
-            if (await shareVCard()) return;
-          } catch (_error) {
-            if (_error?.name === "AbortError") return;
-          }
-
-          showHelp();
-          return;
-        }
-
+      const closeModal = () => {
+        if (!modal || modal.hidden) return;
+        modal.classList.remove("is-open");
+        document.body.classList.remove("contact-modal-open");
         window.setTimeout(() => {
-          if (!document.hidden && inAppBrowser) showHelp();
-        }, 1200);
+          modal.hidden = true;
+          lastFocusedElement?.focus?.({ preventScroll: true });
+        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180);
+      };
+
+      addContact.addEventListener("click", (event) => {
+        event.preventDefault();
+        openModal();
+      });
+
+      closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal && !modal.hidden) closeModal();
+      });
+
+      prepareVCardFile().catch(() => {
+        cachedVCardFile = null;
+      });
+
+      shareContact?.addEventListener("click", async () => {
+        setStatus("");
+        try {
+          if (await shareVCard()) return;
+
+          if (navigator.share) {
+            await navigator.share({
+              title: contact.name,
+              text: contactText,
+              url: contact.cardUrl
+            });
+            return;
+          }
+
+          await navigator.clipboard.writeText(contactText);
+          setStatus("Данные контакта скопированы. Их можно вставить в сообщение.");
+        } catch (error) {
+          if (error?.name !== "AbortError") {
+            setStatus("Не удалось открыть системное меню. Используйте кнопку «Открыть контакт».");
+          }
+        }
       });
 
       copyPhone?.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(contact.phone);
           copyPhone.textContent = "Номер скопирован";
+          setStatus("Телефон скопирован в буфер обмена.");
+          window.setTimeout(() => {
+            copyPhone.textContent = "Скопировать номер";
+          }, 1800);
         } catch (_error) {
-          copyPhone.textContent = contact.phone;
+          setStatus(`Скопируйте номер вручную: ${contact.phone}`);
         }
       });
+
+      if (new URLSearchParams(window.location.search).has("contactFallback")) {
+        openModal();
+      }
     })();
   </script>
 </body>
