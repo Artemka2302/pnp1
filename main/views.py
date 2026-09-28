@@ -153,6 +153,10 @@ def consent(request):
     return redirect("privacy", permanent=True)
 
 
+def igor_solomakho(request):
+    return render(request, "main/igor_solomakho.html")
+
+
 def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):
     return render(
         request,

@@ -1,0 +1,414 @@
+{% load static %}\n<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050505">
+  <title>Игорь Леонидович Соломахо | ПНП</title>
+  <meta name="description" content="Электронная визитка: Игорь Леонидович Соломахо, Первый Национальный Поставщик.">
+  <link rel="canonical" href="https://www.pnp1.ru/igor-solomakho">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Игорь Леонидович Соломахо | ПНП">
+  <meta property="og:description" content="Электронная визитка: Игорь Леонидович Соломахо, Первый Национальный Поставщик.">
+  <meta property="og:url" content="https://www.pnp1.ru/igor-solomakho">
+  <meta property="og:image" content="https://www.pnp1.ru/assets/img/brand/pnp-logo-header-white-clean.png">
+  <meta name="twitter:card" content="summary">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --panel: #10100f;
+      --panel-soft: #171715;
+      --text: #f4f3ee;
+      --muted: #b8b8b0;
+      --line: rgba(255, 255, 255, .15);
+      --accent: #9d1b49;
+      --white: #f3f1ea;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, .12), transparent 32%),
+        radial-gradient(circle at 100% 100%, rgba(157, 27, 73, .18), transparent 36%),
+        linear-gradient(180deg, #11110f 0%, #050505 58%, #020202 100%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .shell { width: min(100%, 390px); }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--panel-soft), var(--panel));
+      border: 1px solid var(--line);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, .52);
+      padding: 26px 26px 22px;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 34%;
+      background:
+        linear-gradient(90deg, transparent, rgba(255, 255, 255, .025)),
+        linear-gradient(180deg, transparent, rgba(157, 27, 73, .08));
+      pointer-events: none;
+    }
+
+    .logo {
+      display: block;
+      width: 176px;
+      max-width: 82%;
+      height: auto;
+      margin: 2px 0 34px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 29px;
+      line-height: 1.12;
+      font-weight: 300;
+      letter-spacing: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .rule {
+      width: 52px;
+      height: 1px;
+      background: var(--white);
+      margin: 24px 0 18px;
+      opacity: .82;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-link {
+      display: block;
+      width: max-content;
+      max-width: 100%;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 17px;
+      line-height: 1.4;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-link + .contact-link { margin-top: 3px; }
+
+    .scope-groups {
+      margin: 28px 0 0;
+      padding: 20px 0 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 9px;
+      color: #d8d7d0;
+      line-height: 1.28;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scope-group {
+      min-width: 0;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-left: 3px solid rgba(157, 27, 73, .88);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .018)),
+        rgba(11, 22, 38, .48);
+      color: var(--text);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .scope-group:nth-child(even) {
+      background:
+        linear-gradient(135deg, rgba(157, 27, 73, .12), rgba(255, 255, 255, .018)),
+        rgba(15, 20, 34, .5);
+    }
+
+    .actions {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .03);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+
+    .button:focus-visible,
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, .32);
+      background: rgba(255, 255, 255, .055);
+    }
+
+    .button.primary {
+      grid-column: 1 / -1;
+      background: var(--white);
+      border-color: var(--white);
+      color: #070707;
+      font-weight: 600;
+    }
+
+    .contact-help {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, .11);
+      background: rgba(255, 255, 255, .035);
+      color: rgba(244, 243, 238, .72);
+      font-size: 12px;
+      line-height: 1.4;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-help.is-visible { display: block; }
+
+    .contact-help-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .contact-help button,
+    .contact-help a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid rgba(255, 255, 255, .13);
+      background: rgba(255, 255, 255, .04);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .contact-help [hidden] { display: none; }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 10px 8px;
+        place-items: start center;
+      }
+
+      .shell {
+        width: calc(100vw - 16px);
+        max-width: 344px;
+      }
+
+      .card { padding: 24px 18px 20px; }
+      h1 { font-size: 27px; }
+      .contact-link { font-size: 16px; }
+      .scope-groups { gap: 6px; }
+
+      .scope-group {
+        min-height: 44px;
+        padding: 9px 10px;
+        font-size: 12.5px;
+      }
+
+      .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-label="Электронная визитка">
+    <section class="card">
+      <img class="logo" src="{% static 'assets/img/brand/pnp-logo-header-white-clean.png' %}" alt="ПНП, Первый Национальный Поставщик">
+
+      <h1>Игорь Леонидович<br>Соломахо</h1>
+      <div class="rule" aria-hidden="true"></div>
+
+      <a class="contact-link" href="tel:+79857760299">+7 (985) 776-02-99</a>
+      <a class="contact-link" href="https://www.pnp1.ru/">pnp1.ru</a>
+
+      <section class="scope-groups" aria-label="Направления">
+        <article class="scope-group">Строительные материалы</article>
+        <article class="scope-group">Инженерное оборудование</article>
+        <article class="scope-group">Энергетика</article>
+        <article class="scope-group">IT оборудование и ПО</article>
+        <article class="scope-group">ТХ оборудование</article>
+      </section>
+
+      <nav class="actions" aria-label="Действия">
+        <a class="button primary" href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}" data-add-contact>Добавить контакт</a>
+        <a class="button" href="tel:+79857760299">Позвонить</a>
+        <a class="button" href="https://www.pnp1.ru/">Открыть сайт</a>
+      </nav>
+
+      <div id="contact-help" class="contact-help" data-contact-help>
+        На Android браузер может не открыть карточку контакта напрямую. Используйте системное меню: выберите «Контакты» или «Google Contacts».
+        <div class="contact-help-actions">
+          <button type="button" data-share-contact hidden>Поделиться контактом</button>
+          <button type="button" data-copy-phone>Скопировать номер</button>
+          <a href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}">Открыть vCard</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const addContact = document.querySelector("[data-add-contact]");
+      if (!addContact) return;
+      const helpPanel = document.querySelector("[data-contact-help]");
+      const copyPhone = document.querySelector("[data-copy-phone]");
+      const shareContact = document.querySelector("[data-share-contact]");
+      const contact = {
+        "name": "Игорь Леонидович Соломахо",
+        "phone": "+79857760299",
+        "company": "Первый Национальный Поставщик",
+        "title": "Акционер",
+        "url": "https://www.pnp1.ru/",
+        "cardUrl": "https://www.pnp1.ru/igor-solomakho"
+};
+
+      const userAgent = navigator.userAgent || "";
+      const isAndroid = /Android/i.test(userAgent);
+      const inAppBrowser = /Telegram|FBAN|FBAV|Instagram|Line|WhatsApp|MicroMessenger|YaApp|YaBrowser|YaSearchBrowser/i.test(userAgent);
+
+      const showHelp = () => {
+        if (helpPanel) helpPanel.classList.add("is-visible");
+      };
+
+      const contactText = ["Игорь Леонидович Соломахо", "Акционер", "Первый Национальный Поставщик", "+7 (985) 776-02-99", "https://www.pnp1.ru/igor-solomakho"].join("\n");
+      const vcardUrl = new URL(addContact.getAttribute("href"), window.location.href).href;
+      let cachedVCardFile = null;
+      let vcardPreparePromise = null;
+
+      const setAndroidContactReady = (isReady) => {
+        if (!isAndroid || !navigator.share || !navigator.canShare || !window.File) return;
+        addContact.toggleAttribute("aria-disabled", !isReady);
+        addContact.textContent = isReady ? "Добавить контакт" : "Готовим контакт...";
+      };
+
+      const prepareVCardFile = async () => {
+        if (cachedVCardFile || !window.File) return cachedVCardFile;
+        if (vcardPreparePromise) return vcardPreparePromise;
+
+        vcardPreparePromise = (async () => {
+          const response = await fetch(vcardUrl, { cache: "no-store" });
+          if (!response.ok) throw new Error("VCF is unavailable");
+          const blob = await response.blob();
+          cachedVCardFile = new File([blob], "igor-solomakho.vcf", { type: "text/vcard" });
+          setAndroidContactReady(true);
+          return cachedVCardFile;
+        })();
+
+        return vcardPreparePromise;
+      };
+
+      const shareVCard = async () => {
+        if (!navigator.share || !navigator.canShare || !cachedVCardFile) return false;
+        if (!navigator.canShare({ files: [cachedVCardFile] })) return false;
+
+        await navigator.share({
+          title: contact.name,
+          text: "Контакт ПНП",
+          files: [cachedVCardFile]
+        });
+        return true;
+      };
+
+      if (isAndroid && navigator.share && navigator.canShare && window.File) {
+        setAndroidContactReady(false);
+      }
+
+      if (navigator.share && navigator.canShare && window.File) {
+        prepareVCardFile().catch(() => {
+          cachedVCardFile = null;
+          setAndroidContactReady(true);
+        });
+      }
+
+      if (new URLSearchParams(window.location.search).has("contactFallback")) {
+        showHelp();
+      }
+
+      if (shareContact && navigator.share && navigator.canShare && window.File) {
+        shareContact.hidden = false;
+        shareContact.addEventListener("click", async () => {
+          try {
+            if (!(await shareVCard())) showHelp();
+          } catch (_error) {
+            showHelp();
+          }
+        });
+      }
+
+      addContact.addEventListener("click", async (event) => {
+        if (isAndroid) {
+          event.preventDefault();
+
+          try {
+            if (await shareVCard()) return;
+          } catch (_error) {
+            if (_error?.name === "AbortError") return;
+          }
+
+          showHelp();
+          return;
+        }
+
+        window.setTimeout(() => {
+          if (!document.hidden && inAppBrowser) showHelp();
+        }, 1200);
+      });
+
+      copyPhone?.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(contact.phone);
+          copyPhone.textContent = "Номер скопирован";
+        } catch (_error) {
+          copyPhone.textContent = contact.phone;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+
+

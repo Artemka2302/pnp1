@@ -12,6 +12,8 @@ urlpatterns = [
     path("contacts/", views.contacts, name="contacts"),
     path("privacy/", views.privacy, name="privacy"),
     path("consent/", views.consent, name="consent"),
+    path("igor-solomakho/", views.igor_solomakho, name="igor_solomakho"),
+    path("igor-solomakho", views.igor_solomakho),
     path("catalog/", views.catalog, name="catalog"),
     path("catalog/<slug:block_slug>/", views.catalog_block, name="catalog_block"),
     path(
