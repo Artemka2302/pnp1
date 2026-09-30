@@ -318,6 +318,18 @@
     color: var(--pnp-brand-white) !important;
   }
 
+  html body.vendors-page.pnp-ux-parity #vendorRows .vendor-rows-page-current {
+    border-color: rgba(236, 124, 163, .72) !important;
+    background: linear-gradient(145deg, #9b2850 0%, #6d2039 68%, #45233a 100%) !important;
+    color: var(--pnp-brand-white) !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: var(--pnp-brand-white) !important;
+    box-shadow:
+      0 0 0 3px rgba(155, 40, 80, .14),
+      0 9px 20px rgba(35, 5, 18, .26),
+      inset 0 1px 0 rgba(254, 254, 254, .12) !important;
+  }
+
   html body.vendors-page.pnp-ux-parity .vendor-master-panel :is(input, select, .vendor-select-button) {
     border-color: rgba(118, 143, 176, .38) !important;
     background: rgba(254, 254, 254, .96) !important;
@@ -550,8 +562,70 @@
   }
 
   html body.catalog-page.pnp-ux-parity .catalog-v2-search-field input#catalogV2Search::-webkit-search-cancel-button {
-    opacity: .72 !important;
-    filter: invert(1) !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background: center / 20px 20px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='9' fill='%236d2039'/%3E%3Cpath d='M6.7 6.7l6.6 6.6m0-6.6l-6.6 6.6' fill='none' stroke='%23fefefe' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    opacity: 0 !important;
+    filter: none !important;
+    pointer-events: none !important;
+    cursor: pointer !important;
+    transform: scale(.76) !important;
+    transition: opacity .16s ease, transform .16s ease !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-search-field input#catalogV2Search:is(:hover, :focus)::-webkit-search-cancel-button {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+  }
+
+  /* Keep live catalog results on an opaque, isolated layer. Without this,
+     headings and cards below the toolbar show through the result rows. */
+  html body.catalog-page.pnp-ux-parity .catalog-v2-toolbar {
+    position: relative !important;
+    z-index: 80 !important;
+    overflow: visible !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-search {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-search-field input#catalogV2Search {
+    background: #071426 !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-search-results {
+    z-index: 90 !important;
+    isolation: isolate !important;
+    overflow-x: hidden !important;
+    border-color: rgba(118, 143, 176, .38) !important;
+    background: #081426 !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .58) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-search-result {
+    position: relative !important;
+    z-index: 1 !important;
+    background: #0c1a2d !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-search-result + .catalog-v2-search-result {
+    margin-top: 4px !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity :is(.catalog-v2-directions, .catalog-v2-content) {
+    position: relative !important;
+    z-index: 1 !important;
   }
 }
 
@@ -1082,6 +1156,26 @@
   }
 }
 
+@media (max-width: 1080px) {
+  html body.pnp-ux-parity .header-mobile-contact-actions .header-contact-support-item {
+    border-color: rgba(118, 143, 176, .34) !important;
+    background:
+      radial-gradient(circle at 100% 0, rgba(214, 168, 185, .12), transparent 42%),
+      linear-gradient(135deg, rgba(32, 44, 71, .98), rgba(8, 20, 38, .98)) !important;
+    color: #fefefe !important;
+    box-shadow: inset 3px 0 0 rgba(214, 168, 185, .72), 0 8px 18px rgba(1, 8, 17, .18) !important;
+  }
+
+  html body.pnp-ux-parity .header-mobile-contact-actions .header-contact-support-item:is(:hover, :focus-visible) {
+    border-color: rgba(214, 168, 185, .58) !important;
+    background:
+      radial-gradient(circle at 100% 0, rgba(254, 254, 254, .10), transparent 44%),
+      linear-gradient(135deg, rgba(109, 32, 57, .96), rgba(52, 32, 57, .98)) !important;
+    color: #fefefe !important;
+    box-shadow: inset 3px 0 0 #d6a8b9, 0 10px 24px rgba(73, 16, 39, .28) !important;
+  }
+}
+
 @media (max-width: 680px) {
   /* Preserve the explicitly approved first screen. */
   html body.home-page.pnp-ux-parity #top-mobile.hero-v13 {
@@ -1111,6 +1205,87 @@
 
   html body.catalog-page.pnp-ux-parity :is(.catalog-v2-index-head-action, .catalog-v2-tree-toggle, .catalog-v2-tree-marker) {
     color: var(--pnp-brand-pink) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-row {
+    padding-left: 10px !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-index-list {
+    background:
+      radial-gradient(circle at 92% 8%, rgba(109, 32, 57, .18), transparent 34%),
+      linear-gradient(180deg, #0b182a 0%, #081426 100%) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-children {
+    border-left-color: rgba(214, 168, 185, .48) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-link,
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-link small {
+    color: rgba(237, 243, 252, .82) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-toggle,
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-marker {
+    border-color: rgba(118, 143, 176, .46) !important;
+    background: rgba(32, 44, 71, .72) !important;
+    color: var(--pnp-brand-pink) !important;
+    box-shadow: inset 0 1px 0 rgba(254, 254, 254, .06) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-row:is(:hover, :focus-within) {
+    border-color: rgba(214, 168, 185, .42) !important;
+    background: rgba(109, 32, 57, .22) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-item.is-selected > .catalog-v2-tree-row {
+    border-color: rgba(236, 124, 163, .68) !important;
+    background:
+      radial-gradient(circle at 92% 12%, rgba(254, 254, 254, .10), transparent 30%),
+      linear-gradient(135deg, #8b2a4b 0%, #6d2039 62%, #45233a 100%) !important;
+    box-shadow:
+      inset 3px 0 0 #ec7ca3,
+      0 10px 24px rgba(31, 5, 16, .28) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-item.is-selected > .catalog-v2-tree-row > .catalog-v2-tree-link,
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-item.is-selected > .catalog-v2-tree-row > .catalog-v2-tree-link small {
+    color: var(--pnp-brand-white) !important;
+  }
+
+  html body.catalog-page.pnp-ux-parity .catalog-v2-tree-item.is-selected > .catalog-v2-tree-row > :is(.catalog-v2-tree-toggle, .catalog-v2-tree-marker) {
+    border-color: rgba(254, 254, 254, .40) !important;
+    background: var(--pnp-brand-navy) !important;
+    color: var(--pnp-brand-white) !important;
+    box-shadow: 0 5px 14px rgba(8, 20, 38, .34) !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity #vendorDirections .vendor-direction-card .link-more,
+  html body.vendors-page.pnp-ux-parity #vendorDirections .vendor-direction-card .link-more:is(:hover, :focus-visible) {
+    width: fit-content !important;
+    min-height: 0 !important;
+    justify-self: start !important;
+    justify-content: flex-start !important;
+    margin-top: auto !important;
+    padding: 3px 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: rgba(214, 168, 185, .86) !important;
+    font-size: 9px !important;
+    font-weight: 600 !important;
+    line-height: 1.15 !important;
+    letter-spacing: .035em !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity #vendorDirections .vendor-direction-card .link-more:is(:hover, :focus-visible) {
+    color: var(--pnp-brand-white) !important;
+    transform: translateX(2px) !important;
   }
 }
 

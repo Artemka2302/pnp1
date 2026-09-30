@@ -2815,6 +2815,7 @@ button.vendor-chip.is-selected:focus-visible {
 .vendor-direction-card {
   position: relative !important;
   isolation: isolate;
+  cursor: pointer;
   min-height: 348px !important;
   padding: 16px !important;
   overflow: hidden;
@@ -3038,6 +3039,11 @@ button.vendor-chip.is-selected:focus-visible {
   color: #ffe0ea !important;
   text-decoration: none !important;
   backdrop-filter: blur(8px);
+}
+
+.vendor-direction-card:has(.link-more:focus-visible) {
+  outline: 2px solid rgba(236, 124, 163, .86);
+  outline-offset: 3px;
 }
 
 @media (max-width: 1180px) {
