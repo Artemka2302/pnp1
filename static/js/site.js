@@ -2034,6 +2034,12 @@ document.addEventListener("DOMContentLoaded", () => {
         syncCustomSelects();
         updateVendors({ scroll: true, rowsHash: "#vendorRowsSection" });
       });
+
+      const card = link.closest(".vendor-direction-card");
+      card?.addEventListener("click", event => {
+        if (event.defaultPrevented || event.target.closest("a, button, input, select, textarea")) return;
+        link.click();
+      });
     });
 
     syncVendorChipState();
