@@ -4391,11 +4391,40 @@ body.contacts-page .brand-spine {
   z-index: 80;
 }
 
+@media (min-width: 1081px) {
+  .topbar {
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Repaint the header's one-pixel bottom rule while leaving the brand rail
+     uninterrupted. The transparent border still keeps the original geometry. */
+  .topbar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      rgba(118, 143, 176, .34) 0,
+      rgba(118, 143, 176, .34) var(--pnp-spine-left),
+      var(--brand-burgundy, #6d2039) var(--pnp-spine-left),
+      var(--brand-burgundy, #6d2039) calc(var(--pnp-spine-left) + var(--pnp-spine-width)),
+      rgba(118, 143, 176, .34) calc(var(--pnp-spine-left) + var(--pnp-spine-width)),
+      rgba(118, 143, 176, .34) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
 /* The header rail and the hero rail are one continuous brand axis. Keep the
    overlap fully opaque and on the same burgundy so no colour seam appears at
    the header boundary. */
 .topbar::before {
-  bottom: -4px !important;
+  bottom: 0 !important;
   background: var(--brand-burgundy, #6d2039) !important;
   opacity: 1 !important;
 }
@@ -4407,9 +4436,9 @@ body.contacts-page .brand-spine {
   position: relative;
 }
 
-/* The header shadow darkens the first part of the hero rail. Mask that shadow
-   with a short continuation owned by the scrolling document, not by the fixed
-   header, so the continuation naturally leaves the viewport on scroll. */
+/* Fill only the three-pixel layout gap below the 77px header. This bridge is
+   below the fixed header (z-index 2000), so it can never cross the logo while
+   scrolling; the former 72px / z-index 2001 bridge could and caused flicker. */
 @media (min-width: 1081px) {
   .page > main::before {
     content: "";
@@ -4417,19 +4446,10 @@ body.contacts-page .brand-spine {
     top: -3px;
     left: var(--pnp-spine-left);
     width: var(--pnp-spine-width);
-    height: 72px;
+    height: 3px;
     background: var(--brand-burgundy, #6d2039);
-    opacity: 1;
     pointer-events: none;
-    z-index: 2001;
-  }
-
-  body.home-mobile-header-scrolled .page > main::before {
-    display: none;
-  }
-
-  body.home-mobile-header-scrolled .topbar::before {
-    bottom: 0 !important;
+    z-index: 1999;
   }
 }
 
