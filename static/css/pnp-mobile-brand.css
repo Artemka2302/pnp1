@@ -1415,6 +1415,12 @@
 
 /* Shared mobile header: internal pages use the exact approved homepage shell. */
 @media (max-width: 680px) {
+  html body.pnp-ux-parity .topbar > .container.topbar-inner {
+    /* Match the controls' right clearance to the visible logo artwork,
+       accounting for the transparent 86/816 inset in the source PNG. */
+    max-width: calc(100% - 18.5px) !important;
+  }
+
   html body.pnp-ux-parity:is(.vendors-page, .partners-page, .contacts-page, .catalog-page):not(.home-mobile-header-scrolled):not(.home-mobile-menu-open):not(.home-mobile-contact-open) .topbar {
     border-bottom-color: transparent !important;
     background: transparent !important;
@@ -1517,9 +1523,9 @@
   }
 }
 
-/* Mobile workflow v13: preserve the desktop timeline geometry on narrow
-   screens. The rail is painted above the stage backgrounds and below the
-   nodes, so it remains continuous and meets every circle edge-to-edge. */
+/* Mobile workflow v14: preserve the desktop timeline geometry on narrow
+   screens. The rail runs below each node and beneath its dark isolation ring,
+   so the visible line stops cleanly at the ring instead of touching the circle. */
 @media (max-width: 680px) {
   html body.home-page.pnp-ux-parity #homeRequest .home-request-stage-tabs {
     position: relative !important;
@@ -1664,10 +1670,11 @@
     border-radius: 50% !important;
     background: #0c223c !important;
     color: rgba(235, 242, 251, .94) !important;
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif !important;
     font-size: 8px !important;
     font-weight: 850 !important;
-    line-height: 1 !important;
-    box-shadow: 0 0 12px rgba(40, 91, 143, .18) !important;
+    line-height: normal !important;
+    box-shadow: 0 0 0 5px rgba(12, 34, 60, .96), 0 0 12px rgba(40, 91, 143, .18) !important;
     transform: none !important;
   }
 
@@ -1675,28 +1682,28 @@
     border-color: rgba(223, 103, 147, .78) !important;
     background: linear-gradient(145deg, rgba(135, 38, 73, .96), rgba(74, 33, 61, .98)) !important;
     color: #ffd7e5 !important;
-    box-shadow: 0 0 15px rgba(216, 75, 128, .26) !important;
+    box-shadow: 0 0 0 5px rgba(12, 34, 60, .96), 0 0 15px rgba(216, 75, 128, .26) !important;
   }
 
   html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:not(.is-active):not([aria-selected="true"]) .home-request-stage-node {
     border-color: rgba(153, 187, 225, .52) !important;
     background: #0c223c !important;
     color: rgba(235, 242, 251, .94) !important;
-    box-shadow: 0 0 12px rgba(40, 91, 143, .18) !important;
+    box-shadow: 0 0 0 5px rgba(12, 34, 60, .96), 0 0 12px rgba(40, 91, 143, .18) !important;
   }
 
   html body.home-page.pnp-ux-parity #homeRequest button.home-request-stage:not(.is-active):not([aria-selected="true"]).is-complete .home-request-stage-node {
     border-color: rgba(223, 103, 147, .78) !important;
     background: #0c223c !important;
     color: #ffd7e5 !important;
-    box-shadow: 0 0 15px rgba(216, 75, 128, .26) !important;
+    box-shadow: 0 0 0 5px rgba(12, 34, 60, .96), 0 0 15px rgba(216, 75, 128, .26) !important;
   }
 
   html body.home-page.pnp-ux-parity #homeRequest .home-request-stage:is(.is-active, [aria-selected="true"]) .home-request-stage-node {
     border-color: rgba(255, 205, 223, .96) !important;
     background: linear-gradient(145deg, #ad315e, #7d2346) !important;
     color: #fefefe !important;
-    box-shadow: 0 0 0 3px rgba(225, 83, 136, .18), 0 0 22px rgba(225, 83, 136, .62) !important;
+    box-shadow: 0 0 0 5px rgba(12, 34, 60, .96), 0 0 22px rgba(225, 83, 136, .62) !important;
   }
 
   html body.home-page.pnp-ux-parity #homeRequest .home-request-stage-copy {
