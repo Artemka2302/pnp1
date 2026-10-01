@@ -4377,8 +4377,27 @@ a[href*="wa.me"] {
     0 26px 90px rgba(143, 33, 71, .16);
 }
 
+/* Keep the brand axis inside the header and hero only. These pages already
+   render both parts independently, so the page-wide spine must not leak into
+   the second content section. */
+body.home-page .brand-spine,
+body.vendors-page .brand-spine,
+body.partners-page .brand-spine,
+body.contacts-page .brand-spine {
+  display: none;
+}
+
 .topbar {
   z-index: 80;
+}
+
+/* The header rail and the hero rail are one continuous brand axis. Keep the
+   overlap fully opaque and on the same burgundy so no colour seam appears at
+   the header boundary. */
+.topbar::before {
+  bottom: -4px !important;
+  background: var(--brand-burgundy, #6d2039) !important;
+  opacity: 1 !important;
 }
 
 .topbar,
@@ -4386,6 +4405,32 @@ a[href*="wa.me"] {
 .footer,
 .mobile-call {
   position: relative;
+}
+
+/* The header shadow darkens the first part of the hero rail. Mask that shadow
+   with a short continuation owned by the scrolling document, not by the fixed
+   header, so the continuation naturally leaves the viewport on scroll. */
+@media (min-width: 1081px) {
+  .page > main::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: var(--pnp-spine-left);
+    width: var(--pnp-spine-width);
+    height: 72px;
+    background: var(--brand-burgundy, #6d2039);
+    opacity: 1;
+    pointer-events: none;
+    z-index: 2001;
+  }
+
+  body.home-mobile-header-scrolled .page > main::before {
+    display: none;
+  }
+
+  body.home-mobile-header-scrolled .topbar::before {
+    bottom: 0 !important;
+  }
 }
 
 .hero .vertical-accent,
@@ -4402,11 +4447,12 @@ a[href*="wa.me"] {
   background:
     linear-gradient(
       180deg,
-      rgba(143, 33, 71, .98) 0,
-      rgba(143, 33, 71, .98) 72%,
-      rgba(143, 33, 71, 0) 100%
+      var(--brand-burgundy, #6d2039) 0,
+      var(--brand-burgundy, #6d2039) 72%,
+      rgba(109, 32, 57, 0) 100%
     ) !important;
-  opacity: .96 !important;
+  opacity: 1 !important;
+  z-index: 1 !important;
 }
 
 @media (max-width: 680px) {

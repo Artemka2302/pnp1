@@ -6114,11 +6114,11 @@ p,
 }
 
 /* PNP header logo rail lock 2026-06-08:
-   The clean old logo is centered by the middle PNP mark, while the burgundy rail stays a separate site element.
-   Render-verified optical axis: central PNP mark aligns to the rail at 225 / 816 of image width. */
+   The clean old logo is centered by the geometric axis of its graphic mark, while the burgundy rail stays a separate site element.
+   Render-verified graphic bounds: x=86..355 in the 816px source image. */
 :root{
   --pnp-header-logo-width:220px;
-  --pnp-header-logo-axis-shift:-40.19px;
+  --pnp-header-logo-axis-shift:-38.14px;
   --pnp-site-rail-left:max(18px,calc((100vw - var(--max))/2));
   --pnp-site-rail-width:26px;
 }
