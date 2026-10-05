@@ -1,0 +1,82 @@
+/* Shared three-item hero strip, matching the approved Solutions page. */
+@media (min-width: 681px) {
+  html body.pnp-ux-parity .hero .hero-features.pnp-hero-features {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0 !important;
+    width: 100% !important;
+    margin: 44px 0 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(118, 143, 176, .28) !important;
+    border-bottom: 1px solid rgba(118, 143, 176, .28) !important;
+    border-radius: 0 !important;
+    background: rgba(3, 10, 19, .38) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(3px) !important;
+  }
+
+  html body.pnp-ux-parity .hero .pnp-hero-features .feature-mini {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+    min-height: 92px !important;
+    padding: 18px !important;
+    border: 0 !important;
+    border-right: 1px solid rgba(118, 143, 176, .28) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #fff !important;
+  }
+
+  html body.pnp-ux-parity .hero .pnp-hero-features .feature-mini:last-child {
+    border-right: 0 !important;
+  }
+
+  html body.pnp-ux-parity .hero .pnp-hero-features .feature-mini i {
+    display: grid !important;
+    place-items: center !important;
+    flex: 0 0 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid rgba(109, 32, 57, .55) !important;
+    border-radius: 12px !important;
+    background: rgba(109, 32, 57, .18) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+  }
+
+  html body.pnp-ux-parity .hero .pnp-hero-features .feature-mini svg {
+    width: 20px !important;
+    height: 20px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 1.6 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+  }
+
+  html body.pnp-ux-parity .hero .pnp-hero-features .feature-mini span {
+    min-width: 0 !important;
+    margin: 0 !important;
+    color: #fff !important;
+    font: 850 12.5px/16px var(--sans) !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+}
+
+/* Preserve the approved mobile hero composition without a benefits footer. */
+@media (max-width: 680px) {
+  html body.pnp-ux-parity .hero .hero-features.pnp-hero-features {
+    display: none !important;
+  }
+}

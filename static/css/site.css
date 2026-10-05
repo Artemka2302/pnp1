@@ -6100,7 +6100,7 @@ body.contacts-page .brand-spine {
     min-height: 72px !important;
     padding: 13px 16px;
     align-items: flex-start !important;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 4px;
     border-radius: 8px;
     text-align: left;
@@ -6118,6 +6118,8 @@ body.contacts-page .brand-spine {
   .shared-desktop-footer .site-footer-button strong {
     font-size: 14px;
     line-height: 1.25;
+    /* Equal two-line title slots align both headings and descriptions. */
+    min-height: 2.5em;
   }
 
   .shared-desktop-footer .site-footer-button small {
@@ -6170,6 +6172,11 @@ body.contacts-page .brand-spine {
 .support-chat-channels,
 .support-chat-toggle-desktop {
   display: none;
+}
+
+/* Keep launcher messengers hidden at every breakpoint, including keyboard navigation. */
+.support-chat-launcher .support-chat-channels[hidden] {
+  display: none !important;
 }
 
 .support-chat-toggle-mobile {

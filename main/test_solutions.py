@@ -48,6 +48,21 @@ class SolutionLibraryTests(SimpleTestCase):
             with self.subTest(path=path):
                 self.assertEqual(self.client.get(path).status_code, 404)
 
+    def test_no_duplicate_help_blocks_anywhere_in_solution_library(self):
+        urls = ['/solutions/']
+        for vendor in solution_vendors():
+            urls.append(vendor['url'])
+            urls.extend(document['url'] for document in solution_documents(vendor))
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertNotContains(response, 'class="solution-help"')
+                self.assertNotContains(response, 'Как применить решение на вашем объекте?')
+                self.assertContains(response, 'id="siteFooterCtaTitle"')
+        for template in (Path(settings.BASE_DIR) / 'templates').rglob('*.html'):
+            with self.subTest(template=template.name):
+                self.assertNotIn('class="solution-help"', template.read_text(encoding='utf-8'))
+
     def test_search_is_server_side_and_escaped(self):
         self.assertContains(self.client.get("/solutions/", {"q": "банки"}), '/solutions/eltex/')
         response = self.client.get("/solutions/", {"q": '<script>alert(1)</script>'})

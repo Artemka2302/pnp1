@@ -608,7 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
     root.innerHTML = `
       <div class="support-chat-notice" data-manager-chat-notice role="status" aria-live="polite" hidden></div>
       <div class="support-chat-launcher">
-        <div class="support-chat-channels" aria-label="Мессенджеры">
+        <div class="support-chat-channels" aria-label="Мессенджеры" hidden>
           <button class="support-chat-channel" type="button" data-support-channel="max" aria-label="MAX: открыть чат с менеджером" title="MAX">
             <img src="/static/assets/img/messengers/max.svg?v=20260803" alt="" aria-hidden="true">
           </button>
