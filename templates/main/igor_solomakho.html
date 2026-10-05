@@ -1,0 +1,606 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050505">
+  <title>Игорь Леонидович Соломахо | ПНП</title>
+  <meta name="description" content="Электронная визитка: Игорь Леонидович Соломахо, Первый Национальный Поставщик.">
+  <link rel="canonical" href="https://www.pnp1.ru/igor-solomakho">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Игорь Леонидович Соломахо | ПНП">
+  <meta property="og:description" content="Электронная визитка: Игорь Леонидович Соломахо, Первый Национальный Поставщик.">
+  <meta property="og:url" content="https://www.pnp1.ru/igor-solomakho">
+  <meta property="og:image" content="https://www.pnp1.ru/assets/img/brand/pnp-logo-header-white-clean.png">
+  <meta name="twitter:card" content="summary">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --panel: #10100f;
+      --panel-soft: #171715;
+      --text: #f4f3ee;
+      --muted: #b8b8b0;
+      --line: rgba(255, 255, 255, .15);
+      --accent: #9d1b49;
+      --white: #f3f1ea;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, .12), transparent 32%),
+        radial-gradient(circle at 100% 100%, rgba(157, 27, 73, .18), transparent 36%),
+        linear-gradient(180deg, #11110f 0%, #050505 58%, #020202 100%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .shell { width: min(100%, 390px); }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--panel-soft), var(--panel));
+      border: 1px solid var(--line);
+      box-shadow: 0 32px 90px rgba(0, 0, 0, .52);
+      padding: 26px 26px 22px;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 34%;
+      background:
+        linear-gradient(90deg, transparent, rgba(255, 255, 255, .025)),
+        linear-gradient(180deg, transparent, rgba(157, 27, 73, .08));
+      pointer-events: none;
+    }
+
+    .logo {
+      display: block;
+      width: 176px;
+      max-width: 82%;
+      height: auto;
+      margin: 2px 0 34px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 29px;
+      line-height: 1.12;
+      font-weight: 300;
+      letter-spacing: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .rule {
+      width: 52px;
+      height: 1px;
+      background: var(--white);
+      margin: 24px 0 18px;
+      opacity: .82;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-link {
+      display: block;
+      width: max-content;
+      max-width: 100%;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 17px;
+      line-height: 1.4;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-link + .contact-link { margin-top: 3px; }
+
+    .scope-groups {
+      margin: 28px 0 0;
+      padding: 20px 0 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 9px;
+      color: #d8d7d0;
+      line-height: 1.28;
+      position: relative;
+      z-index: 1;
+    }
+
+    .scope-group {
+      min-width: 0;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-left: 3px solid rgba(157, 27, 73, .88);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .018)),
+        rgba(11, 22, 38, .48);
+      color: var(--text);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .scope-group:nth-child(even) {
+      background:
+        linear-gradient(135deg, rgba(157, 27, 73, .12), rgba(255, 255, 255, .018)),
+        rgba(15, 20, 34, .5);
+    }
+
+    .actions {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .03);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+
+    .button:focus-visible,
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, .32);
+      background: rgba(255, 255, 255, .055);
+    }
+
+    .button.primary {
+      grid-column: 1 / -1;
+      background: var(--white);
+      border-color: var(--white);
+      color: #070707;
+      font-weight: 600;
+    }
+
+    body.contact-modal-open { overflow: hidden; }
+
+    .contact-modal[hidden] { display: none; }
+
+    .contact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+
+    .contact-modal.is-open { opacity: 1; }
+
+    .contact-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .78);
+      backdrop-filter: blur(7px);
+    }
+
+    .contact-dialog {
+      position: relative;
+      width: min(100%, 430px);
+      max-height: calc(100dvh - 24px);
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-top: 3px solid var(--accent);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, .055), transparent 42%),
+        #11110f;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, .68);
+      transform: translateY(10px) scale(.985);
+      transition: transform .18s ease;
+    }
+
+    .contact-modal.is-open .contact-dialog { transform: translateY(0) scale(1); }
+
+    .contact-dialog-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .contact-dialog-kicker {
+      margin: 0 0 8px;
+      color: #c55b82;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .contact-dialog h2 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.15;
+      font-weight: 400;
+    }
+
+    .contact-dialog-close {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .035);
+      color: var(--text);
+      font: inherit;
+      font-size: 25px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .contact-dialog-close:hover,
+    .contact-dialog-close:focus-visible {
+      border-color: rgba(255, 255, 255, .48);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .contact-dialog-person {
+      margin: 22px 0 20px;
+      padding: 17px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .contact-dialog-person strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .contact-dialog-person span,
+    .contact-dialog-person a {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      text-decoration: none;
+    }
+
+    .contact-dialog-person a {
+      width: max-content;
+      margin-top: 3px;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .contact-dialog-actions {
+      display: grid;
+      gap: 9px;
+    }
+
+    .contact-dialog-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .035);
+      color: var(--text);
+      text-decoration: none;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .contact-dialog-action.primary {
+      border-color: var(--white);
+      background: var(--white);
+      color: #070707;
+    }
+
+    .contact-dialog-action:hover,
+    .contact-dialog-action:focus-visible {
+      border-color: rgba(255, 255, 255, .5);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .contact-dialog-action.primary:hover,
+    .contact-dialog-action.primary:focus-visible { background: #fff; }
+
+    .contact-dialog-note {
+      margin: 18px 0 0;
+      color: rgba(244, 243, 238, .7);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .contact-dialog-telegram {
+      margin-top: 17px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+
+    .contact-dialog-telegram strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .contact-dialog-status {
+      min-height: 18px;
+      margin: 12px 0 0;
+      color: #d57a9c;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 10px 8px;
+        place-items: start center;
+      }
+
+      .shell {
+        width: calc(100vw - 16px);
+        max-width: 344px;
+      }
+
+      .card { padding: 24px 18px 20px; }
+      h1 { font-size: 27px; }
+      .contact-link { font-size: 16px; }
+      .scope-groups { gap: 6px; }
+
+      .scope-group {
+        min-height: 44px;
+        padding: 9px 10px;
+        font-size: 12.5px;
+      }
+
+      .actions { grid-template-columns: 1fr; }
+
+      .contact-dialog {
+        padding: 20px 18px;
+      }
+
+      .contact-dialog h2 { font-size: 23px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .contact-modal,
+      .contact-dialog { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-label="Электронная визитка">
+    <section class="card">
+      <img class="logo" src="{% static 'assets/img/brand/pnp-logo-header-white-clean.png' %}" alt="ПНП, Первый Национальный Поставщик">
+
+      <h1>Игорь Леонидович<br>Соломахо</h1>
+      <div class="rule" aria-hidden="true"></div>
+
+      <a class="contact-link" href="tel:+79857760299">+7 (985) 776-02-99</a>
+      <a class="contact-link" href="https://www.pnp1.ru/">pnp1.ru</a>
+
+      <section class="scope-groups" aria-label="Направления">
+        <article class="scope-group">Строительные материалы</article>
+        <article class="scope-group">Инженерное оборудование</article>
+        <article class="scope-group">Энергетика</article>
+        <article class="scope-group">IT оборудование и ПО</article>
+        <article class="scope-group">ТХ оборудование</article>
+      </section>
+
+      <nav class="actions" aria-label="Действия">
+        <a class="button primary" href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}" data-add-contact>Добавить контакт</a>
+        <a class="button" href="tel:+79857760299">Позвонить</a>
+        <a class="button" href="https://www.pnp1.ru/">Открыть сайт</a>
+      </nav>
+    </section>
+  </main>
+
+  <div class="contact-modal" data-contact-modal hidden>
+    <div class="contact-modal-backdrop" data-close-contact></div>
+    <section class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="contact-dialog-title" tabindex="-1" data-contact-dialog>
+      <header class="contact-dialog-head">
+        <div>
+          <p class="contact-dialog-kicker">Электронная визитка</p>
+          <h2 id="contact-dialog-title">Сохранить контакт</h2>
+        </div>
+        <button class="contact-dialog-close" type="button" aria-label="Закрыть" data-close-contact>×</button>
+      </header>
+
+      <div class="contact-dialog-person">
+        <strong>Игорь Леонидович Соломахо</strong>
+        <span>Акционер · Первый Национальный Поставщик</span>
+        <a href="tel:+79857760299">+7 (985) 776-02-99</a>
+      </div>
+
+      <div class="contact-dialog-actions">
+        <a class="contact-dialog-action primary" href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}" data-open-contact>Открыть контакт</a>
+        <button class="contact-dialog-action" type="button" data-share-contact>Поделиться контактом</button>
+        <button class="contact-dialog-action" type="button" data-copy-phone>Скопировать номер</button>
+      </div>
+
+      <p class="contact-dialog-note">Откройте файл контакта и подтвердите его добавление в адресную книгу. Если контакт сохранился в загрузки, откройте файл оттуда.</p>
+
+      <div class="contact-dialog-telegram">
+        <strong>Открыли ссылку в Telegram?</strong>
+        <p class="contact-dialog-note">Если файл не открывается, выберите в меню встроенного браузера «Открыть в браузере» и повторите действие. На Android также можно импортировать файл в приложении «Контакты».</p>
+      </div>
+
+      <p class="contact-dialog-status" role="status" aria-live="polite" data-contact-status></p>
+    </section>
+  </div>
+  <script>
+    (() => {
+      const addContact = document.querySelector("[data-add-contact]");
+      if (!addContact) return;
+      const modal = document.querySelector("[data-contact-modal]");
+      const dialog = document.querySelector("[data-contact-dialog]");
+      const closeButtons = document.querySelectorAll("[data-close-contact]");
+      const copyPhone = document.querySelector("[data-copy-phone]");
+      const shareContact = document.querySelector("[data-share-contact]");
+      const contactStatus = document.querySelector("[data-contact-status]");
+      const contact = {
+        "name": "Игорь Леонидович Соломахо",
+        "phone": "+79857760299",
+        "company": "Первый Национальный Поставщик",
+        "title": "Акционер",
+        "url": "https://www.pnp1.ru/",
+        "cardUrl": "https://www.pnp1.ru/igor-solomakho"
+      };
+
+      const contactText = ["Игорь Леонидович Соломахо", "Акционер", "Первый Национальный Поставщик", "+7 (985) 776-02-99", "https://www.pnp1.ru/igor-solomakho"].join("\n");
+      const vcardUrl = new URL(addContact.getAttribute("href"), window.location.href).href;
+      let cachedVCardFile = null;
+      let vcardPreparePromise = null;
+      let lastFocusedElement = null;
+
+      const setStatus = (message) => {
+        if (contactStatus) contactStatus.textContent = message;
+      };
+
+      const prepareVCardFile = async () => {
+        if (cachedVCardFile || !window.File) return cachedVCardFile;
+        if (vcardPreparePromise) return vcardPreparePromise;
+
+        vcardPreparePromise = (async () => {
+          const response = await fetch(vcardUrl, { cache: "no-store" });
+          if (!response.ok) throw new Error("VCF is unavailable");
+          const blob = await response.blob();
+          cachedVCardFile = new File([blob], "igor-solomakho.vcf", { type: "text/vcard" });
+          return cachedVCardFile;
+        })();
+
+        return vcardPreparePromise;
+      };
+
+      const shareVCard = async () => {
+        if (!navigator.share || !navigator.canShare || !cachedVCardFile) return false;
+        if (!navigator.canShare({ files: [cachedVCardFile] })) return false;
+
+        await navigator.share({
+          title: contact.name,
+          text: "Контакт ПНП",
+          files: [cachedVCardFile]
+        });
+        return true;
+      };
+
+      const openModal = () => {
+        if (!modal || !dialog) return;
+        lastFocusedElement = document.activeElement;
+        modal.hidden = false;
+        document.body.classList.add("contact-modal-open");
+        setStatus("");
+        window.requestAnimationFrame(() => {
+          modal.classList.add("is-open");
+          dialog.focus({ preventScroll: true });
+        });
+      };
+
+      const closeModal = () => {
+        if (!modal || modal.hidden) return;
+        modal.classList.remove("is-open");
+        document.body.classList.remove("contact-modal-open");
+        window.setTimeout(() => {
+          modal.hidden = true;
+          lastFocusedElement?.focus?.({ preventScroll: true });
+        }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180);
+      };
+
+      addContact.addEventListener("click", (event) => {
+        event.preventDefault();
+        openModal();
+      });
+
+      closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal && !modal.hidden) closeModal();
+      });
+
+      prepareVCardFile().catch(() => {
+        cachedVCardFile = null;
+      });
+
+      shareContact?.addEventListener("click", async () => {
+        setStatus("");
+        try {
+          if (await shareVCard()) return;
+
+          if (navigator.share) {
+            await navigator.share({
+              title: contact.name,
+              text: contactText,
+              url: contact.cardUrl
+            });
+            return;
+          }
+
+          await navigator.clipboard.writeText(contactText);
+          setStatus("Данные контакта скопированы. Их можно вставить в сообщение.");
+        } catch (error) {
+          if (error?.name !== "AbortError") {
+            setStatus("Не удалось открыть системное меню. Используйте кнопку «Открыть контакт».");
+          }
+        }
+      });
+
+      copyPhone?.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(contact.phone);
+          copyPhone.textContent = "Номер скопирован";
+          setStatus("Телефон скопирован в буфер обмена.");
+          window.setTimeout(() => {
+            copyPhone.textContent = "Скопировать номер";
+          }, 1800);
+        } catch (_error) {
+          setStatus(`Скопируйте номер вручную: ${contact.phone}`);
+        }
+      });
+
+      if (new URLSearchParams(window.location.search).has("contactFallback")) {
+        openModal();
+      }
+    })();
+  </script>
+</body>
+</html>

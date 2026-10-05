@@ -16,6 +16,8 @@ urlpatterns = [
     path("solutions/sitemap.xml", views.solutions_sitemap, name="solutions_sitemap"),
     path("solutions/<slug:vendor_slug>/", views.solution_vendor, name="solution_vendor"),
     path("solutions/<slug:vendor_slug>/<slug:document_slug>/", views.solution_document, name="solution_document"),
+    path("igor-solomakho/", views.igor_solomakho, name="igor_solomakho"),
+    path("igor-solomakho", views.igor_solomakho),
     path("catalog/", views.catalog, name="catalog"),
     path("catalog/<slug:block_slug>/", views.catalog_block, name="catalog_block"),
     path(

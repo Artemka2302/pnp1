@@ -201,6 +201,10 @@ def solutions_sitemap(request):
     }, content_type="application/xml")
 
 
+def igor_solomakho(request):
+    return render(request, "main/igor_solomakho.html")
+
+
 def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):
     return render(
         request,
