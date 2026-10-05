@@ -12,6 +12,10 @@ urlpatterns = [
     path("contacts/", views.contacts, name="contacts"),
     path("privacy/", views.privacy, name="privacy"),
     path("consent/", views.consent, name="consent"),
+    path("solutions/", views.solutions, name="solutions"),
+    path("solutions/sitemap.xml", views.solutions_sitemap, name="solutions_sitemap"),
+    path("solutions/<slug:vendor_slug>/", views.solution_vendor, name="solution_vendor"),
+    path("solutions/<slug:vendor_slug>/<slug:document_slug>/", views.solution_document, name="solution_document"),
     path("catalog/", views.catalog, name="catalog"),
     path("catalog/<slug:block_slug>/", views.catalog_block, name="catalog_block"),
     path(

@@ -1,0 +1,52 @@
+{% extends "main/solutions_base.html" %}
+{% load static %}
+{% block title %}Решения для вашего бизнеса — ПНП{% endblock %}
+{% block body_class %}solutions-page solutions-index-page{% endblock %}
+{% block footer_customer_eyebrow %}{% endblock %}
+{% block description %}Отраслевые решения производителей: сети, Wi-Fi и корпоративная связь. Презентации Eltex для банков, ритейла, нефтегаза и промышленности — просмотр PDF на сайте.{% endblock %}
+{% block content %}
+<section class="hero hero-small solutions-hero pnp-mobile-standard-hero">
+  <div class="vertical-accent" aria-hidden="true"></div>
+  <div class="container">
+    <div class="eyebrow">Отраслевые решения</div>
+    <h1><span class="pnp-mobile-hero-line">Решения для</span><br class="solutions-desktop-break"><span class="pnp-mobile-hero-line accent-word">вашего бизнеса</span></h1>
+    <p class="hero-subtitle">От задачи к технологии. Изучите решения производителей для вашей отрасли, откройте презентацию прямо на сайте и обсудите её применение на вашем объекте.</p>
+    <div class="hero-actions">
+      <a class="btn pnp-btn-primary" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
+      <a class="btn ghost pnp-btn-secondary" href="#solutionManufacturers">Посмотреть решения</a>
+    </div>
+    <div class="hero-features vendor-hero-features solutions-features">
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></i><span>Решения<br>по отраслям</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Zm7 1.5V8h3.5M9 12h6M9 16h6"/></svg></i><span>Материалы<br>производителей</span></div>
+      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></i><span>Просмотр PDF<br>прямо на сайте</span></div>
+    </div>
+  </div>
+</section>
+<section class="section solution-library" id="solutionManufacturers">
+  <div class="container">
+    <div class="section-head solutions-section-head">
+      <div><div class="eyebrow">Выберите производителя</div><h2>Решения производителей</h2><p>Отраслевые презентации и технологии для вашего проекта.</p></div>
+      <form class="solutions-search" action="{% url 'solutions' %}#solutionManufacturers" method="get" role="search">
+        <label class="solutions-sr-only" for="solutionSearch">Найти производителя или отрасль</label>
+        <input id="solutionSearch" name="q" type="search" value="{{ solution_query }}" placeholder="Производитель или отрасль" maxlength="100">
+        <button type="submit" aria-label="Найти"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg></button>
+      </form>
+    </div>
+    <div class="partners-grid solution-vendor-grid">
+      {% for vendor in solution_vendors %}
+      <a class="partner-card partner-card-link solution-vendor-card" href="{{ vendor.url }}">
+        <div class="logo-tile partner-logo-tile"><img src="{% static vendor.logo %}" alt="{{ vendor.name }}" width="250" height="100" loading="lazy"></div>
+        <div class="solution-vendor-card-body">
+          <div class="solution-card-heading"><h3>{{ vendor.name }}</h3><span>{{ vendor.documents|length }} PDF-презентации</span></div>
+          <p>{{ vendor.description }}</p>
+          <p class="partner-meta">{% for document in vendor.documents %}{{ document.title }}{% if not forloop.last %} · {% endif %}{% endfor %}</p>
+          <span class="partner-card-action solution-card-link">Смотреть решения</span>
+        </div>
+      </a>
+      {% empty %}
+      <div class="solution-empty"><h3>Материалы не найдены</h3><p>Попробуйте название производителя или отрасли: например, Eltex или банки.</p><a class="btn ghost" href="{% url 'solutions' %}#solutionManufacturers">Все решения</a></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

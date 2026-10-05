@@ -6,6 +6,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
+from .solutions import solution_ai_context
+
 
 logger = logging.getLogger(__name__)
 
@@ -179,6 +181,9 @@ def build_ai_messages(message, history=None, lead_draft=None, catalog_items=None
         "selected_catalog_items": safe_items,
         "page": safe_page,
     }
+    solutions = solution_ai_context(safe_page)
+    if solutions:
+        context["manufacturer_presentations"] = solutions
     system_content = (
         f"{SYSTEM_PROMPT}\n\n"
         "Контекст текущего обращения в формате JSON:\n"

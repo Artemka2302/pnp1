@@ -1,0 +1,43 @@
+{% extends "main/solutions_base.html" %}
+{% load static %}
+{% block body_class %}solutions-page solution-document-page{% endblock %}
+{% block title %}{{ solution_document.title }} — презентация {{ solution_vendor.name }} — ПНП{% endblock %}
+{% block description %}{{ solution_document.description }} Презентация {{ solution_vendor.name }}, {{ solution_document.pages }} страниц. Просмотр и скачивание PDF.{% endblock %}
+{% block content %}
+<section class="section solution-reader-section">
+  <div class="container">
+    <nav class="solution-breadcrumbs" aria-label="Хлебные крошки"><a href="{% url 'solutions' %}">Решения</a><span aria-hidden="true">/</span><a href="{% url 'solution_vendor' solution_vendor.slug %}">{{ solution_vendor.name }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ solution_document.title }}</span></nav>
+    <a class="solution-back" href="{% url 'solution_vendor' solution_vendor.slug %}#presentations">← Все презентации {{ solution_vendor.name }}</a>
+    <div class="solution-reader" data-pdf-reader data-pdf-url="{% static solution_document.pdf %}" data-pdf-title="{{ solution_document.title }}" data-pdf-library="{% static 'vendor/pdfjs/pdf.mjs' %}" data-pdf-worker="{% static 'vendor/pdfjs/pdf.worker.mjs' %}" data-pdf-assets="{% static 'vendor/pdfjs/' %}">
+      <header class="solution-reader-header">
+        <div class="solution-reader-heading"><img src="{% static solution_vendor.logo %}" alt="{{ solution_vendor.name }}" width="106" height="42"><div><h1>{{ solution_document.title }}</h1><p>Презентация {{ solution_vendor.name }} · {{ solution_document.pages }} стр.</p></div></div>
+        <div class="solution-reader-actions"><a href="{% static solution_document.pdf %}" download="Eltex-{{ solution_document.slug }}.pdf" data-solution-download>Скачать PDF</a><button type="button" data-pdf-fullscreen aria-label="Развернуть презентацию на весь экран" title="На весь экран">⛶</button><a class="solution-reader-close" href="{% url 'solution_vendor' solution_vendor.slug %}#presentations" aria-label="Закрыть презентацию">×</a></div>
+      </header>
+      <div class="solution-reader-body">
+        <aside class="solution-reader-thumbnails" data-pdf-thumbnails aria-label="Страницы презентации"></aside>
+        <div class="solution-reader-main">
+          <nav class="solution-reader-toolbar" aria-label="Управление презентацией">
+            <button type="button" data-pdf-prev aria-label="Предыдущая страница" disabled>‹</button>
+            <label class="solution-page-control"><span class="solutions-sr-only">Номер страницы</span><input type="number" data-pdf-page value="1" min="1" max="{{ solution_document.pages }}" inputmode="numeric" disabled><span>/ <span data-pdf-total>{{ solution_document.pages }}</span></span></label>
+            <button type="button" data-pdf-next aria-label="Следующая страница" disabled>›</button>
+            <span class="solution-toolbar-divider" aria-hidden="true"></span>
+            <button type="button" data-pdf-zoom-out aria-label="Уменьшить масштаб" disabled>−</button>
+            <button type="button" data-pdf-fit aria-label="Вписать страницу в область просмотра" disabled><span data-pdf-zoom>100%</span></button>
+            <button type="button" data-pdf-zoom-in aria-label="Увеличить масштаб" disabled>+</button>
+          </nav>
+          <div class="solution-reader-stage" data-pdf-stage tabindex="0" aria-label="Презентация. Переключение страниц стрелками влево и вправо" aria-busy="true">
+            <p class="solution-reader-status" data-pdf-status role="status">Загружаем презентацию…</p>
+            <canvas data-pdf-canvas hidden role="img" aria-label="Страница презентации"></canvas>
+          </div>
+          <div class="solution-reader-fallback" data-pdf-fallback hidden><p>Встроенный просмотр недоступен. Вы можете открыть или скачать оригинальный PDF.</p><a class="btn ghost" href="{% static solution_document.pdf %}" target="_blank" rel="noopener">Открыть PDF</a></div>
+        </div>
+      </div>
+      <footer class="solution-reader-footer"><a href="{% url 'solution_vendor' solution_vendor.slug %}#presentations">Все презентации {{ solution_vendor.name }} →</a><span>По материалам {{ solution_vendor.name }}</span></footer>
+    </div>
+    <noscript><p>Для просмотра страниц включите JavaScript или <a href="{% static solution_document.pdf %}">откройте оригинальный PDF</a>.</p></noscript>
+    <details class="solution-page-text"><summary>Текст текущей страницы</summary><p data-pdf-text>Текст появится после загрузки презентации.</p></details>
+    <div class="solution-reader-description"><p>{{ solution_document.description }}</p><a href="{% url 'contacts' %}#request-form">Обсудить решение со специалистом ПНП ↗</a></div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_scripts %}<script type="module" src="{% static 'js/solutions.js' %}?v=20261005-v2"></script>{% endblock %}

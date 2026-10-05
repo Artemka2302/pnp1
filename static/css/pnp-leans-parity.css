@@ -2918,7 +2918,7 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
 
 @media (max-width: 680px) {
   /* Internal-page header parity with the approved homepage header. */
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) {
     --home-mobile-white: #fefefe;
     --home-mobile-navy: #202c47;
     --home-mobile-deep: #081426;
@@ -2930,11 +2930,11 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     overflow-x: clip;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .page {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .page {
     padding-top: 0 !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .topbar {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .topbar {
     position: fixed !important;
     inset: 0 0 auto !important;
     z-index: 2500 !important;
@@ -2946,7 +2946,7 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     backdrop-filter: none !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .topbar > .container.topbar-inner {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .topbar > .container.topbar-inner {
     box-sizing: border-box !important;
     width: 100% !important;
     height: calc(var(--home-mobile-header-height) + env(safe-area-inset-top)) !important;
@@ -2959,8 +2959,8 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     gap: 0 !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .brand-pnp-clean,
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .brand-pnp-clean-img {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .brand-pnp-clean,
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .brand-pnp-clean-img {
     width: clamp(160px, 45vw, 176px) !important;
     min-width: 160px !important;
     max-width: 176px !important;
@@ -2970,28 +2970,28 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     filter: none !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-desktop-direct-actions {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-desktop-direct-actions {
     display: none !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions,
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-menu,
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle,
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #menuBtn.menu-btn {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions,
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-menu,
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-toggle,
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) #menuBtn.menu-btn {
     width: 40px !important;
     min-width: 40px !important;
     height: 44px !important;
     min-height: 44px !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions {
     display: flex !important;
     flex: 0 0 auto !important;
     margin: 0 0 0 auto !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle,
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #menuBtn.menu-btn {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-toggle,
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) #menuBtn.menu-btn {
     appearance: none !important;
     box-sizing: border-box !important;
     display: grid !important;
@@ -3006,7 +3006,7 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     transform: none !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #menuBtn.menu-btn {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) #menuBtn.menu-btn {
     position: relative !important;
     margin: 0 0 0 8px !important;
     overflow: visible !important;
@@ -3014,7 +3014,7 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     line-height: 0 !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle span {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-toggle span {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -3026,11 +3026,11 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     border: 0 !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle svg {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-toggle svg {
     display: none !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle::before {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-toggle::before {
     content: "" !important;
     display: block !important;
     position: static !important;
@@ -3045,12 +3045,12 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.78a2 2 0 0 1-.45 2.11L8.08 9.88a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.33 1.82.56 2.78.69A2 2 0 0 1 22 16.92Z'/%3E%3C/svg%3E") center / contain no-repeat !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) .header-mobile-contact-actions .header-contact-toggle::after {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) .header-mobile-contact-actions .header-contact-toggle::after {
     content: none !important;
     display: none !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #menuBtn.menu-btn::before {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) #menuBtn.menu-btn::before {
     content: "" !important;
     display: block !important;
     position: absolute !important;
@@ -3066,7 +3066,7 @@ body.pnp-ux-parity .pnp-mobile-only-actions {
     transform: translate(-50%, calc(-50% + 2px)) !important;
   }
 
-  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page) #mainNav.main-nav.open {
+  body:is(.vendors-page, .partners-page, .contacts-page, .catalog-page, .solutions-page) #mainNav.main-nav.open {
     top: calc(var(--home-mobile-header-height) + env(safe-area-inset-top) + 4px) !important;
     right: 15px !important;
     left: 15px !important;

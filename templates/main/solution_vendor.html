@@ -1,0 +1,32 @@
+{% extends "main/solutions_base.html" %}
+{% load static %}
+{% block body_class %}solutions-page solution-vendor-page{% endblock %}
+{% block title %}Отраслевые решения {{ solution_vendor.name }} — ПНП{% endblock %}
+{% block description %}{{ solution_vendor.description }} Отраслевые презентации для банков, ритейла, нефтегаза и промышленности. Смотрите PDF прямо на сайте ПНП.{% endblock %}
+{% block content %}
+<section class="section solution-vendor-intro">
+  <div class="container">
+    <nav class="solution-breadcrumbs" aria-label="Хлебные крошки"><a href="{% url 'index' %}">Главная</a><span aria-hidden="true">/</span><a href="{% url 'solutions' %}">Решения</a><span aria-hidden="true">/</span><span aria-current="page">{{ solution_vendor.name }}</span></nav>
+    <a class="solution-back" href="{% url 'solutions' %}#solutionManufacturers">← Все производители</a>
+    <div class="solution-vendor-profile">
+      <div class="solution-logo"><img src="{% static solution_vendor.logo %}" alt="{{ solution_vendor.name }}" width="250" height="100"></div>
+      <div><div class="eyebrow">Решения производителя</div><h1>{{ solution_vendor.name }}</h1><p>{{ solution_vendor.intro }}</p><div class="solution-tags">{% for tag in solution_vendor.tags %}<span>{{ tag }}</span>{% endfor %}</div></div>
+    </div>
+  </div>
+</section>
+<section class="section solution-documents" id="presentations">
+  <div class="container">
+    <div class="solutions-section-head"><div><h2>Решения для вашей отрасли</h2><p>Презентации {{ solution_vendor.name }}. Выберите задачу и изучите материал прямо на сайте.</p></div><span class="solution-section-count">{{ solution_documents|length }} PDF-презентации</span></div>
+    <div class="solution-document-grid">
+      {% for document in solution_documents %}
+      <a class="solution-document-card" href="{{ document.url }}" data-solution-document="{{ document.slug }}">
+        <div class="solution-document-cover"><img src="{% static document.cover %}" alt="Обложка презентации {{ solution_vendor.name }}: {{ document.title }}" width="960" height="540" loading="lazy"><span class="solution-cover-open" aria-hidden="true">Открыть ↗</span></div>
+        <div class="solution-document-copy"><span class="solution-document-meta">PDF <span aria-hidden="true">·</span> {{ document.pages }} стр.</span><h3>{{ document.title }}</h3><p>{{ document.description }}</p><span class="solution-card-link">Смотреть презентацию <span aria-hidden="true">↗</span></span></div>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="solution-source-note">Материалы предоставлены производителем {{ solution_vendor.name }}. Применимость оборудования и состав решения уточняются под требования вашего проекта.</p>
+    <aside class="solution-help"><div><span class="eyebrow">Помощь с подбором</span><h3>Как применить решение на вашем объекте?</h3><p>Обсудим задачу и поможем подобрать оборудование {{ solution_vendor.name }}.</p></div><a class="btn" href="{% url 'contacts' %}#request-form">Обсудить задачу <span aria-hidden="true">↗</span></a></aside>
+  </div>
+</section>
+{% endblock %}

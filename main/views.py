@@ -35,6 +35,7 @@ from .models import (
     Vendor,
 )
 from .bitrix import send_lead_to_bitrix
+from .solutions import find_solution_vendor, solution_documents, solution_vendors
 from .ai import (
     AiConfigurationError,
     AiProviderError,
@@ -99,6 +100,7 @@ Allow: /
 Disallow: /api/
 Disallow: /*?
 """
+    content += f"\nSitemap: {request.build_absolute_uri(reverse('solutions_sitemap'))}\n"
     response = HttpResponse(content, content_type="text/plain; charset=utf-8")
     response["Cache-Control"] = "public, max-age=86400"
     return response
@@ -151,6 +153,52 @@ def privacy(request):
 
 def consent(request):
     return redirect("privacy", permanent=True)
+
+
+@require_GET
+def solutions(request):
+    vendors = solution_vendors()
+    query = request.GET.get("q", "").strip()[:100]
+    if query:
+        needle = query.casefold()
+        vendors = [vendor for vendor in vendors if needle in json.dumps(vendor, ensure_ascii=False).casefold()]
+    return render(request, "main/solutions.html", {"solution_vendors": vendors, "solution_query": query})
+
+
+@require_GET
+def solution_vendor(request, vendor_slug):
+    vendor = find_solution_vendor(vendor_slug)
+    if vendor is None:
+        raise Http404("Manufacturer not found")
+    return render(request, "main/solution_vendor.html", {
+        "solution_vendor": vendor,
+        "solution_documents": solution_documents(vendor),
+    })
+
+
+@require_GET
+def solution_document(request, vendor_slug, document_slug):
+    vendor = find_solution_vendor(vendor_slug)
+    if vendor is None:
+        raise Http404("Manufacturer not found")
+    document = next((item for item in solution_documents(vendor) if item["slug"] == document_slug), None)
+    if document is None:
+        raise Http404("Presentation not found")
+    return render(request, "main/solution_document.html", {
+        "solution_vendor": vendor,
+        "solution_document": document,
+    })
+
+
+@require_GET
+def solutions_sitemap(request):
+    locations = [reverse("solutions")]
+    for vendor in solution_vendors():
+        locations.append(vendor["url"])
+        locations.extend(item["url"] for item in solution_documents(vendor))
+    return render(request, "main/solutions_sitemap.xml", {
+        "locations": [request.build_absolute_uri(location) for location in locations],
+    }, content_type="application/xml")
 
 
 def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):
