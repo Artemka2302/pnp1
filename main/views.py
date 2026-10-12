@@ -35,7 +35,7 @@ from .models import (
     Vendor,
 )
 from .bitrix import send_lead_to_bitrix
-from .solutions import find_solution_vendor, solution_documents, solution_vendors
+from .solutions import find_solution_vendor, solution_documents, solution_sections, solution_vendors
 from .ai import (
     AiConfigurationError,
     AiProviderError,
@@ -173,6 +173,7 @@ def solution_vendor(request, vendor_slug):
     return render(request, "main/solution_vendor.html", {
         "solution_vendor": vendor,
         "solution_documents": solution_documents(vendor),
+        "solution_sections": solution_sections(vendor),
     })
 
 

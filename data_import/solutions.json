@@ -54,6 +54,332 @@
           "source_filename": "Eltex_Решения_в_секторе_Промышленность.pdf"
         }
       ]
+    },
+    {
+      "slug": "yadro",
+      "name": "YADRO",
+      "logo": "assets/img/logos/approved-top/yadro.png",
+      "reader_logo_on_light": true,
+      "description": "Серверы, хранение данных, сети и инженерная инфраструктура для бизнеса.",
+      "intro": "От рабочих мест до центров обработки данных: серверы, системы хранения, корпоративные сети, охлаждение и управление оборудованием. Изучите презентации YADRO и обсудите применение решений в вашем проекте.",
+      "section_title": "Решения для вашей инфраструктуры",
+      "tags": ["Серверы и СХД", "Корпоративные сети", "Инфраструктура ЦОД"],
+      "documents": [
+        {
+          "slug": "borey",
+          "title": "BOREY",
+          "description": "Охлаждение серверных и ЦОД: кондиционеры, чиллеры, мини-ЦОДы и контейнерные решения.",
+          "summary": "Обзор продуктовых семейств BOREY: внутрирядные и шкафные кондиционеры, мини-ЦОДы, чиллеры и контейнерные ЦОДы. Рассматриваются сценарии применения и инженерная инфраструктура охлаждения.",
+          "tags": ["Охлаждение", "Кондиционирование", "ЦОД"],
+          "pdf": "assets/solutions/yadro/borey.pdf",
+          "cover": "assets/solutions/yadro/borey-cover.webp",
+          "pages": 31,
+          "source_filename": "YADRO_BOREY_Product_Line_RUS.pdf"
+        },
+        {
+          "slug": "kornfeld-se",
+          "title": "KORNFELD SE",
+          "description": "Корпоративные сети офисов, филиалов, кампусов и производственных площадок.",
+          "summary": "Презентация решений KORNFELD SE для доступа, агрегации и ядра корпоративных сетей. Представлены серии коммутаторов, питание периферии PoE, безопасность, отказоустойчивость и управление; сроки доступности моделей следует уточнять отдельно.",
+          "tags": ["Сети", "Коммутаторы", "PoE", "Офисы"],
+          "pdf": "assets/solutions/yadro/kornfeld-se.pdf",
+          "cover": "assets/solutions/yadro/kornfeld-se-cover.webp",
+          "pages": 39,
+          "source_filename": "YADRO_KORNFELD_SE_PS_RUS.pdf"
+        },
+        {
+          "slug": "kvadra",
+          "title": "Экосистема KVADRA",
+          "description": "Продукты, сервисы и сценарии применения оборудования для рабочих мест.",
+          "summary": "Презентация экосистемы продуктов и сервисов KVADRA: оборудование для рабочих мест, планшеты, программные возможности и сценарии использования. Включает кейсы финансового сектора, страхования, ритейла и нефтегазовой отрасли.",
+          "tags": ["Рабочие места", "Планшеты", "Банки", "Ритейл"],
+          "pdf": "assets/solutions/yadro/kvadra.pdf",
+          "cover": "assets/solutions/yadro/kvadra-cover.webp",
+          "pages": 67,
+          "source_filename": "Экосистема_продуктов_и_сервисов_KVADRA.pdf"
+        },
+        {
+          "slug": "suprim",
+          "title": "YADRO СУПРИМ 5.0",
+          "description": "Групповое управление, ввод в эксплуатацию и мониторинг оборудования YADRO.",
+          "summary": "Обзор программного пакета YADRO СУПРИМ версии 5.0 для группового управления устройствами в дата-центрах. Описываются архитектура и задачи ввода в эксплуатацию, обслуживания и сбора информации об оборудовании YADRO.",
+          "tags": ["Управление", "Мониторинг", "ЦОД"],
+          "pdf": "assets/solutions/yadro/suprim.pdf",
+          "cover": "assets/solutions/yadro/suprim-cover.webp",
+          "pages": 17,
+          "source_filename": "360a3c7f-ac2f-4aa5-9dbf-2e54706dd323.pdf"
+        },
+        {
+          "slug": "h225-g4",
+          "title": "YADRO H225 G4",
+          "description": "Сервер для облачных платформ, микросервисов и высоконагруженных баз данных.",
+          "summary": "Презентация двухсокетного сервера YADRO H225 G4 на базе AMD EPYC 9004/9005. Рассматриваются аппаратная платформа и применение для горизонтально масштабируемых приложений, облачных платформ, микросервисов и баз данных.",
+          "tags": ["Серверы", "Облачные платформы", "Базы данных"],
+          "pdf": "assets/solutions/yadro/h225-g4.pdf",
+          "cover": "assets/solutions/yadro/h225-g4-cover.webp",
+          "pages": 16,
+          "source_filename": "YADRO_H225_G4_PS_RUS.pdf"
+        },
+        {
+          "slug": "vegman-r215-g4",
+          "title": "VEGMAN R215 G4",
+          "description": "Сервер для контейнерных платформ, SDS, HCI, баз данных и аналитики.",
+          "summary": "Презентация односокетного сервера VEGMAN R215 G4 на базе AMD EPYC для масштабируемых приложений и обработки данных. Представлены аппаратная платформа и сценарии контейнерных платформ, программно-определяемого хранения, гиперконвергентной инфраструктуры и аналитики.",
+          "tags": ["Серверы", "Контейнеры", "SDS", "HCI"],
+          "pdf": "assets/solutions/yadro/vegman-r215-g4.pdf",
+          "cover": "assets/solutions/yadro/vegman-r215-g4-cover.webp",
+          "pages": 25,
+          "source_filename": "fd34dbbe-fe73-4d0f-a349-3abc7a578688.pdf"
+        },
+        {
+          "slug": "tatlin-afa",
+          "title": "TATLIN.AFA",
+          "description": "All-NVMe хранение данных для критически важных приложений и крупного бизнеса.",
+          "summary": "Презентация системы хранения данных TATLIN.AFA: аппаратная платформа, защита целостности данных, производительность, управление, совместимость и сервисная поддержка. Содержит планы развития; доступность конкретных функций и конфигураций уточняется при подборе.",
+          "tags": ["СХД", "NVMe", "Хранение данных", "ЦОД"],
+          "pdf": "assets/solutions/yadro/tatlin-afa.pdf",
+          "cover": "assets/solutions/yadro/tatlin-afa-cover.webp",
+          "pages": 56,
+          "source_filename": "YADRO_TATLIN_AFA_Presentation_RUS.pdf"
+        }
+      ]
+    },
+    {
+      "slug": "iss",
+      "name": "ISS",
+      "logo": "assets/img/logos/approved-top/iss.png",
+      "reader_logo_on_light": true,
+      "description": "Видеоаналитика, комплексная безопасность и автоматизация для города, транспорта и промышленности.",
+      "intro": "От безопасного города до промышленного предприятия: видеонаблюдение, транспортная аналитика, охрана труда и ситуационный контроль на базе SecurOS. Выберите направление и изучите материалы ISS прямо на сайте.",
+      "section_title": "Отраслевые решения ISS",
+      "sections": [
+        {
+          "slug": "safe-city",
+          "title": "Безопасный город",
+          "documents": ["safe-city"]
+        },
+        {
+          "slug": "road-transport",
+          "title": "Дорожно-транспортная инфраструктура",
+          "children": [
+            {
+              "slug": "its",
+              "title": "Интеллектуальные транспортные системы",
+              "documents": ["soffit", "its", "avc", "its-crossroads"]
+            },
+            {"slug": "roads", "title": "Дороги", "documents": ["roads"]},
+            {"slug": "metro", "title": "Метрополитен", "documents": ["metro"]},
+            {"slug": "airport", "title": "Аэропорт", "documents": ["airport"]}
+          ]
+        },
+        {
+          "slug": "industry",
+          "title": "Промышленные предприятия",
+          "documents": ["weigh-station", "helmet-detector", "food-industry", "enterprise", "situation-center"]
+        }
+      ],
+      "tags": [
+        "Безопасный город",
+        "Транспортные системы",
+        "Промышленная безопасность"
+      ],
+      "documents": [
+        {
+          "slug": "safe-city",
+          "title": "Безопасный город",
+          "description": "Городское видеонаблюдение, видеоаналитика и ситуационный контроль.",
+          "summary": "Решения ISS для АПК «Безопасный город»: городское видеонаблюдение, видеоаналитика и распределённые системы безопасности. Материал описывает сценарии контроля городской инфраструктуры и работы ситуационных центров.",
+          "tags": [
+            "Город",
+            "Регион",
+            "Видеоаналитика"
+          ],
+          "pdf": "assets/solutions/iss/safe-city.pdf",
+          "cover": "assets/solutions/iss/safe-city-cover.webp",
+          "pages": 47,
+          "source_filename": "iss-safe-city-ru.pdf"
+        },
+        {
+          "slug": "roads",
+          "title": "Дороги, мосты и тоннели",
+          "description": "Комплексная безопасность объектов дорожной инфраструктуры.",
+          "summary": "Презентация систем безопасности искусственных сооружений дорожной инфраструктуры. Рассматриваются интеграционная платформа SecurOS, диспетчеризация инцидентов, видеомониторинг и объединение территориально разделённых объектов.",
+          "tags": [
+            "Дороги",
+            "Мосты",
+            "Тоннели"
+          ],
+          "pdf": "assets/solutions/iss/roads.pdf",
+          "cover": "assets/solutions/iss/roads-cover.webp",
+          "pages": 21,
+          "source_filename": "iss-bridgestonnels-ru.pdf"
+        },
+        {
+          "slug": "metro",
+          "title": "Метрополитен",
+          "description": "Комплексная система безопасности станций и инфраструктуры метро.",
+          "summary": "Презентация комплексной системы безопасности метрополитена: видеомониторинг, интеграция подсистем и средства ситуационного контроля. Указанные в материале сертификаты и требования необходимо проверять отдельно для текущего проекта.",
+          "tags": [
+            "Метро",
+            "Транспорт",
+            "Безопасность"
+          ],
+          "pdf": "assets/solutions/iss/metro.pdf",
+          "cover": "assets/solutions/iss/metro-cover.webp",
+          "pages": 35,
+          "source_filename": "@iss-metro-ru-2019.pdf"
+        },
+        {
+          "slug": "airport",
+          "title": "Аэропорт",
+          "description": "Видеонаблюдение, интеграция систем и контроль безопасности аэропорта.",
+          "summary": "Презентация комплексной системы безопасности аэропорта на базе SecurOS. Описывает диспетчеризацию инцидентов, интеграцию систем, видеоаналитику, охрану труда и мониторинг распределённых объектов.",
+          "tags": [
+            "Аэропорт",
+            "Транспорт",
+            "Видеоаналитика"
+          ],
+          "pdf": "assets/solutions/iss/airport.pdf",
+          "cover": "assets/solutions/iss/airport-cover.webp",
+          "pages": 35,
+          "source_filename": "iss-airport-ru.pdf"
+        },
+        {
+          "slug": "soffit",
+          "title": "SecurOS Soffit",
+          "description": "Световое сопровождение пешеходов на нерегулируемых переходах.",
+          "summary": "Брошюра SecurOS Soffit: видеоаналитика обнаруживает пешехода, а прожектор сопровождает его светом через переход в тёмное время суток. Представлены принцип работы и сценарии применения; актуальную спецификацию уточняют у производителя.",
+          "tags": [
+            "Пешеходы",
+            "Переходы",
+            "ИТС"
+          ],
+          "pdf": "assets/solutions/iss/soffit.pdf",
+          "cover": "assets/solutions/iss/soffit-cover.webp",
+          "pages": 8,
+          "source_filename": "SecurOS-Soffit-brochure-web.pdf"
+        },
+        {
+          "slug": "its",
+          "title": "SecurOS ITS",
+          "description": "Мониторинг дорожной обстановки, потоков и транспортных инцидентов.",
+          "summary": "Презентация SecurOS ITS: мониторинг дорожной обстановки, анализ параметров транспортных потоков и централизованная обработка инцидентов. Видеоаналитика преобразует данные камер и сторонних средств ИТС в информацию для операторов и дорожных служб.",
+          "tags": [
+            "ИТС",
+            "Дорожное движение",
+            "Мониторинг"
+          ],
+          "pdf": "assets/solutions/iss/its.pdf",
+          "cover": "assets/solutions/iss/its-cover.webp",
+          "pages": 8,
+          "source_filename": "SecurOS-ITS-brochure-web.pdf"
+        },
+        {
+          "slug": "avc",
+          "title": "SecurOS AVC",
+          "description": "Классификация транспортных средств по осям и типу колёс.",
+          "summary": "Брошюра видеоаналитического модуля SecurOS AVC для автоматической классификации транспортных средств по числу осей и типу колёс. Рассматривается применение в барьерных и безбарьерных системах взимания платы и анализе транспортных потоков.",
+          "tags": [
+            "Классификация транспорта",
+            "Платные дороги",
+            "ИТС"
+          ],
+          "pdf": "assets/solutions/iss/avc.pdf",
+          "cover": "assets/solutions/iss/avc-cover.webp",
+          "pages": 4,
+          "source_filename": "SecurOS-AVC-brochure-web.pdf"
+        },
+        {
+          "slug": "its-crossroads",
+          "title": "SecurOS ITS Перекрёсток",
+          "description": "Видеоаналитика и автоматизированный мониторинг перекрёстков.",
+          "summary": "Брошюра платформы SecurOS ITS Перекрёсток: сбор транспортных метрик, фиксация инцидентов и опасных ситуаций, централизованный мониторинг. Описаны данные для оценки изменений и управления перекрёстками.",
+          "tags": [
+            "Перекрёстки",
+            "Транспортные потоки",
+            "ИТС"
+          ],
+          "pdf": "assets/solutions/iss/its-crossroads.pdf",
+          "cover": "assets/solutions/iss/its-crossroads-cover.webp",
+          "pages": 4,
+          "source_filename": "SecurOS-ITS-crossroads-brochure-web.pdf"
+        },
+        {
+          "slug": "weigh-station",
+          "title": "Весовой контроль",
+          "description": "Автоматизация взвешивания автомобильного и железнодорожного транспорта.",
+          "summary": "Решение ISS для автоматизированного весового контроля: распознавание номеров транспорта, получение показаний весов и интеграция с весоизмерительным оборудованием. Рассматриваются автомобильные и железнодорожные сценарии.",
+          "tags": [
+            "Весовой контроль",
+            "Автотранспорт",
+            "Железная дорога"
+          ],
+          "pdf": "assets/solutions/iss/weigh-station.pdf",
+          "cover": "assets/solutions/iss/weigh-station-cover.webp",
+          "pages": 12,
+          "source_filename": "iss-weigh-station-ru.pdf"
+        },
+        {
+          "slug": "helmet-detector",
+          "title": "SecurOS Helmet Detector",
+          "description": "Автоматическое выявление людей без защитной каски в зоне контроля.",
+          "summary": "Презентация SecurOS Helmet Detector для контроля соблюдения требований использования защитных касок. Описаны выявление людей без каски, регистрация событий, доказательная видеобаза, уведомления и отчёты.",
+          "tags": [
+            "Охрана труда",
+            "СИЗ",
+            "Каски"
+          ],
+          "pdf": "assets/solutions/iss/helmet-detector.pdf",
+          "cover": "assets/solutions/iss/helmet-detector-cover.webp",
+          "pages": 10,
+          "source_filename": "securos-helmet-detector-ru.pdf"
+        },
+        {
+          "slug": "food-industry",
+          "title": "Пищевая промышленность",
+          "description": "Контроль охраны труда и поддержка технологических процессов.",
+          "summary": "Решения ISS для предприятий пищевой промышленности: контроль охраны труда, поддержка технологических процессов и производственный контроль соблюдения санитарно-гигиенических норм. Материал рассматривает сценарии видеоаналитики и фиксации нарушений.",
+          "tags": [
+            "Пищевая промышленность",
+            "Охрана труда",
+            "Производство"
+          ],
+          "pdf": "assets/solutions/iss/food-industry.pdf",
+          "cover": "assets/solutions/iss/food-industry-cover.webp",
+          "pages": 13,
+          "source_filename": "iss-food-industry-ru.pdf"
+        },
+        {
+          "slug": "enterprise",
+          "title": "Промышленные предприятия",
+          "description": "Безопасность объектов, контроль процессов и охрана труда на производстве.",
+          "summary": "Презентация обеспечения безопасности промышленных предприятий и поддержки бизнес-процессов. Рассматривает охрану объектов и имущества, контроль технологических процессов, производственную безопасность и интеграцию подсистем на базе SecurOS.",
+          "tags": [
+            "Промышленность",
+            "Производство",
+            "Безопасность"
+          ],
+          "pdf": "assets/solutions/iss/enterprise.pdf",
+          "cover": "assets/solutions/iss/enterprise-cover.webp",
+          "pages": 36,
+          "source_filename": "iss-enterprise-ru.pdf"
+        },
+        {
+          "slug": "situation-center",
+          "title": "Ситуационный контроль",
+          "description": "Централизованный мониторинг и управление инцидентами на распределённых объектах.",
+          "summary": "Презентация централизованного ситуационного контроля и управления инцидентами на территориально распределённых объектах. Рассматриваются ситуационные центры, SecurOS MCC, Dispatcher и MCC PA, объединение данных локальных систем и инструменты работы операторов.",
+          "tags": [
+            "Ситуационный центр",
+            "MCC",
+            "Dispatcher"
+          ],
+          "pdf": "assets/solutions/iss/situation-center.pdf",
+          "cover": "assets/solutions/iss/situation-center-cover.webp",
+          "pages": 24,
+          "source_filename": "iss-mccdispathermcc-pa-2024.pdf"
+        }
+      ]
     }
   ]
 }

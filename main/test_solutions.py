@@ -7,7 +7,7 @@ from django.conf import settings
 from django.test import SimpleTestCase
 
 from .ai import build_ai_messages
-from .solutions import solution_documents, solution_vendors
+from .solutions import find_solution_vendor, solution_documents, solution_sections, solution_vendors
 
 
 class SolutionLibraryTests(SimpleTestCase):
@@ -75,19 +75,64 @@ class SolutionLibraryTests(SimpleTestCase):
         self.assertEqual(response.status_code, 200)
         root = ElementTree.fromstring(response.content)
         locations = root.findall('{http://www.sitemaps.org/schemas/sitemap/0.9}url')
-        self.assertEqual(len(locations), 6)
+        expected = 1 + sum(1 + len(vendor['documents']) for vendor in solution_vendors())
+        self.assertEqual(len(locations), expected)
+        urls = [item.find('{http://www.sitemaps.org/schemas/sitemap/0.9}loc').text for item in locations]
+        self.assertIn('http://testserver/solutions/yadro/', urls)
+        self.assertIn('http://testserver/solutions/yadro/tatlin-afa/', urls)
 
     def test_originals_and_knowledge_have_matching_hashes(self):
         root = Path(settings.BASE_DIR)
         knowledge = json.loads((root / 'data_import/solutions_knowledge.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(knowledge['documents']), 4)
+        manifest_documents = {
+            (vendor['slug'], document['slug']): document
+            for vendor in solution_vendors() for document in vendor['documents']
+        }
+        self.assertEqual(len(knowledge['documents']), len(manifest_documents))
+        self.assertEqual(
+            {(document['vendor_slug'], document['document_slug']) for document in knowledge['documents']},
+            set(manifest_documents),
+        )
         for document in knowledge['documents']:
             pdf = root / 'static' / document['pdf']
             self.assertTrue(pdf.read_bytes().startswith(b'%PDF-'))
             self.assertEqual(hashlib.sha256(pdf.read_bytes()).hexdigest(), document['sha256'])
-            manifest = next(item for item in solution_vendors()[0]['documents'] if item['slug'] == document['document_slug'])
+            manifest = manifest_documents[(document['vendor_slug'], document['document_slug'])]
             self.assertEqual(len(document['pages']), manifest['pages'])
             self.assertTrue((root / 'static' / manifest['cover']).is_file())
+
+    def test_yadro_materials_use_shared_pages_and_correct_download_names(self):
+        vendor = find_solution_vendor('yadro')
+        expected = {'borey': 31, 'kornfeld-se': 39, 'kvadra': 67, 'suprim': 17,
+                    'h225-g4': 16, 'vegman-r215-g4': 25, 'tatlin-afa': 56}
+        self.assertEqual({item['slug']: item['pages'] for item in vendor['documents']}, expected)
+        self.assertEqual(sum(expected.values()), 251)
+        self.assertEqual(vendor['logo'], 'assets/img/logos/approved-top/yadro.png')
+        self.assertTrue((Path(settings.BASE_DIR) / 'static' / vendor['logo']).is_file())
+        response = self.client.get('/solutions/yadro/')
+        self.assertContains(response, 'data-solution-document=', count=7)
+        self.assertContains(response, 'Решения для вашей инфраструктуры')
+        self.assertNotContains(response, 'Eltex')
+        for document in solution_documents(vendor):
+            with self.subTest(document=document['slug']):
+                response = self.client.get(document['url'])
+                self.assertContains(response, 'data-pdf-reader')
+                self.assertContains(response, document['pdf'])
+                self.assertContains(response, f'download="YADRO-{document["slug"]}.pdf"')
+                self.assertContains(response, 'class="solution-reader-logo-light"')
+                self.assertNotContains(response, 'download="Eltex-')
+
+    def test_yadro_search_and_ai_context(self):
+        for query in ('YADRO', 'BOREY', 'СУПРИМ', 'NVMe', 'охлаждение'):
+            with self.subTest(query=query):
+                response = self.client.get('/solutions/', {'q': query})
+                self.assertContains(response, '/solutions/yadro/')
+                self.assertNotContains(response, 'href="/solutions/eltex/"')
+        context = build_ai_messages('Подобрать охлаждение', page='/solutions/yadro/borey/')[0]['content']
+        self.assertIn('BOREY', context)
+        self.assertIn('охлаждения', context)
+        self.assertNotIn('KORNFELD SE', context)
+        self.assertNotIn('Eltex', context)
 
     def test_ai_context_is_restricted_to_current_document(self):
         messages = build_ai_messages('Подобрать сеть', page='/solutions/eltex/retail/#page=5')
@@ -96,3 +141,73 @@ class SolutionLibraryTests(SimpleTestCase):
         self.assertNotIn('Банковский сектор', context)
         context = build_ai_messages('Подобрать сеть', page='/catalog/')[0]['content']
         self.assertNotIn('manufacturer_presentations', context)
+
+    def test_iss_materials_preserve_supplied_order_and_use_shared_reader(self):
+        vendor = find_solution_vendor('iss')
+        expected = [('safe-city', 47), ('roads', 21), ('metro', 35), ('airport', 35),
+                    ('soffit', 8), ('its', 8), ('avc', 4), ('its-crossroads', 4),
+                    ('weigh-station', 12), ('helmet-detector', 10), ('food-industry', 13),
+                    ('enterprise', 36), ('situation-center', 24)]
+        self.assertEqual([(item['slug'], item['pages']) for item in vendor['documents']], expected)
+        self.assertEqual(sum(pages for _, pages in expected), 257)
+        self.assertEqual(vendor['logo'], 'assets/img/logos/approved-top/iss.png')
+        response = self.client.get('/solutions/iss/')
+        self.assertContains(response, 'data-solution-document=', count=13)
+        self.assertContains(response, 'Отраслевые решения ISS')
+        for document in solution_documents(vendor):
+            with self.subTest(document=document['slug']):
+                response = self.client.get(document['url'])
+                self.assertContains(response, 'data-pdf-reader')
+                self.assertContains(response, document['pdf'])
+                self.assertContains(response, f'download="ISS-{document["slug"]}.pdf"')
+                self.assertContains(response, 'class="solution-reader-logo-light"')
+        response = self.client.get('/solutions/sitemap.xml')
+        self.assertContains(response, 'http://testserver/solutions/iss/')
+        self.assertContains(response, 'http://testserver/solutions/iss/situation-center/')
+
+    def test_iss_search_and_ai_context(self):
+        for query in ('ISS', 'SecurOS', 'Перекрёстки', 'Весовой контроль', 'Каски'):
+            with self.subTest(query=query):
+                response = self.client.get('/solutions/', {'q': query})
+                self.assertContains(response, '/solutions/iss/')
+                self.assertNotContains(response, 'href="/solutions/eltex/"')
+                self.assertNotContains(response, 'href="/solutions/yadro/"')
+        context = build_ai_messages('Контроль защитных касок', page='/solutions/iss/helmet-detector/')[0]['content']
+        self.assertIn('SecurOS Helmet Detector', context)
+        self.assertIn('защитных касок', context)
+        self.assertNotIn('SecurOS AVC', context)
+        self.assertNotIn('BOREY', context)
+
+    def test_portrait_covers_keep_uniform_uncropped_card_area(self):
+        css = (Path(settings.BASE_DIR) / 'static/css/solutions.css').read_text(encoding='utf-8')
+        self.assertIn('aspect-ratio: 16 / 9;', css)
+        self.assertIn('.solution-document-cover img { width: 100%; height: 100%; object-fit: contain;', css)
+
+    def test_iss_hierarchy_has_three_sections_and_four_transport_subsections(self):
+        vendor = find_solution_vendor('iss')
+        sections = solution_sections(vendor)
+        self.assertEqual([section['slug'] for section in sections], ['safe-city', 'road-transport', 'industry'])
+        self.assertEqual([section['document_count'] for section in sections], [1, 7, 5])
+        transport = sections[1]['children']
+        self.assertEqual([section['slug'] for section in transport], ['its', 'roads', 'metro', 'airport'])
+        self.assertEqual([doc['slug'] for doc in transport[0]['documents']], ['soffit', 'its', 'avc', 'its-crossroads'])
+        self.assertEqual([doc['slug'] for doc in sections[2]['documents']],
+                         ['weigh-station', 'helmet-detector', 'food-industry', 'enterprise', 'situation-center'])
+        response = self.client.get('/solutions/iss/')
+        self.assertContains(response, 'class="solution-topic"', count=3)
+        self.assertContains(response, 'class="solution-subtopic"', count=4)
+        self.assertContains(response, 'data-solution-document=', count=13)
+        self.assertContains(response, 'href="#solution-iss-road-transport-its"')
+        self.assertContains(response, 'id="solution-iss-industry"')
+        for slug in ('eltex', 'yadro'):
+            self.assertEqual(solution_sections(find_solution_vendor(slug)), [])
+            self.assertNotContains(self.client.get(f'/solutions/{slug}/'), 'class="solution-topic"')
+
+    def test_solution_hierarchy_rejects_missing_unknown_and_repeated_documents(self):
+        for groups in ([{'slug': 'section', 'documents': []}],
+                       [{'slug': 'section', 'documents': ['missing']}],
+                       [{'slug': 'section', 'documents': ['doc', 'doc']}],
+                       [{'slug': 'section', 'documents': ['doc']}, {'slug': 'section', 'documents': []}],
+                       [{'slug': 'section', 'children': [{'slug': 'child', 'children': [{'slug': 'grandchild', 'documents': ['doc']}]}]}]):
+            with self.subTest(groups=groups), self.assertRaises(ValueError):
+                solution_sections({'slug': 'test', 'documents': [{'slug': 'doc'}], 'sections': groups})

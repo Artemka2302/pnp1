@@ -3,7 +3,7 @@
 {% block title %}Решения для вашего бизнеса — ПНП{% endblock %}
 {% block body_class %}solutions-page solutions-index-page{% endblock %}
 {% block footer_customer_eyebrow %}{% endblock %}
-{% block description %}Отраслевые решения производителей: сети, Wi-Fi и корпоративная связь. Презентации Eltex для банков, ритейла, нефтегаза и промышленности — просмотр PDF на сайте.{% endblock %}
+{% block description %}Решения Eltex, YADRO и ISS для бизнеса: сети, ИТ-инфраструктура, видеоаналитика и безопасность. Презентации производителей — просмотр PDF на сайте.{% endblock %}
 {% block content %}
 <section class="hero hero-small solutions-hero pnp-mobile-standard-hero">
   <div class="vertical-accent" aria-hidden="true"></div>
@@ -37,7 +37,7 @@
       <a class="partner-card partner-card-link solution-vendor-card" href="{{ vendor.url }}">
         <div class="logo-tile partner-logo-tile"><img src="{% static vendor.logo %}" alt="{{ vendor.name }}" width="250" height="100" loading="lazy"></div>
         <div class="solution-vendor-card-body">
-          <div class="solution-card-heading"><h3>{{ vendor.name }}</h3><span>{{ vendor.documents|length }} PDF-презентации</span></div>
+          <div class="solution-card-heading"><h3>{{ vendor.name }}</h3><span>{{ vendor.documents|length }} PDF</span></div>
           <p>{{ vendor.description }}</p>
           <p class="partner-meta">{% for document in vendor.documents %}{{ document.title }}{% if not forloop.last %} · {% endif %}{% endfor %}</p>
           <span class="partner-card-action solution-card-link">Смотреть решения</span>

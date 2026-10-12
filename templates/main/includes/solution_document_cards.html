@@ -1,0 +1,9 @@
+{% load static %}
+<div class="solution-document-grid">
+  {% for document in documents %}
+  <a class="solution-document-card" href="{{ document.url }}" data-solution-document="{{ document.slug }}">
+    <div class="solution-document-cover"><img src="{% static document.cover %}" alt="Обложка презентации {{ solution_vendor.name }}: {{ document.title }}" width="960" height="540" loading="lazy"><span class="solution-cover-open" aria-hidden="true">Открыть ↗</span></div>
+    <div class="solution-document-copy"><span class="solution-document-meta">PDF <span aria-hidden="true">·</span> {{ document.pages }} стр.</span><{{ document_heading|default:"h3" }}>{{ document.title }}</{{ document_heading|default:"h3" }}><p>{{ document.description }}</p><span class="solution-card-link">Смотреть презентацию <span aria-hidden="true">↗</span></span></div>
+  </a>
+  {% endfor %}
+</div>

@@ -37,6 +37,38 @@ def solution_documents(vendor):
     ]
 
 
+def solution_sections(vendor):
+    """Optional two-level grouping; preserve all existing document URLs."""
+    sections = vendor.get("sections", [])
+    if not sections:
+        return []
+    documents = {document["slug"]: document for document in solution_documents(vendor)}
+    used_documents = set()
+    used_anchors = set()
+
+    def resolve(section, parent="", depth=0):
+        if depth > 1:
+            raise ValueError("Solution sections support at most two levels")
+        anchor = f"{parent}-{section['slug']}" if parent else f"solution-{vendor['slug']}-{section['slug']}"
+        if anchor in used_anchors:
+            raise ValueError(f"Duplicate solution section: {anchor}")
+        used_anchors.add(anchor)
+        resolved = []
+        for slug in section.get("documents", []):
+            if slug not in documents or slug in used_documents:
+                raise ValueError(f"Unknown or repeated section document: {slug}")
+            used_documents.add(slug)
+            resolved.append(documents[slug])
+        children = [resolve(child, anchor, depth + 1) for child in section.get("children", [])]
+        return {**section, "anchor": anchor, "documents": resolved, "children": children,
+                "document_count": len(resolved) + sum(child["document_count"] for child in children)}
+
+    result = [resolve(section) for section in sections]
+    if used_documents != set(documents):
+        raise ValueError("Every presentation must belong to exactly one section")
+    return result
+
+
 def solution_ai_context(page):
     """Only curated descriptions are sent to AI; PDF text is treated as source data."""
     parts = urlsplit(page).path.strip("/").split("/")

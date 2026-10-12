@@ -2,7 +2,7 @@
 {% load static %}
 {% block body_class %}solutions-page solution-vendor-page{% endblock %}
 {% block title %}Отраслевые решения {{ solution_vendor.name }} — ПНП{% endblock %}
-{% block description %}{{ solution_vendor.description }} Отраслевые презентации для банков, ритейла, нефтегаза и промышленности. Смотрите PDF прямо на сайте ПНП.{% endblock %}
+{% block description %}{{ solution_vendor.description }} Презентации {{ solution_vendor.name }}: просмотр и скачивание PDF на сайте ПНП.{% endblock %}
 {% block content %}
 <section class="section solution-vendor-intro">
   <div class="container">
@@ -16,15 +16,31 @@
 </section>
 <section class="section solution-documents" id="presentations">
   <div class="container">
-    <div class="solutions-section-head"><div><h2>Решения для вашей отрасли</h2><p>Презентации {{ solution_vendor.name }}. Выберите задачу и изучите материал прямо на сайте.</p></div><span class="solution-section-count">{{ solution_documents|length }} PDF-презентации</span></div>
-    <div class="solution-document-grid">
-      {% for document in solution_documents %}
-      <a class="solution-document-card" href="{{ document.url }}" data-solution-document="{{ document.slug }}">
-        <div class="solution-document-cover"><img src="{% static document.cover %}" alt="Обложка презентации {{ solution_vendor.name }}: {{ document.title }}" width="960" height="540" loading="lazy"><span class="solution-cover-open" aria-hidden="true">Открыть ↗</span></div>
-        <div class="solution-document-copy"><span class="solution-document-meta">PDF <span aria-hidden="true">·</span> {{ document.pages }} стр.</span><h3>{{ document.title }}</h3><p>{{ document.description }}</p><span class="solution-card-link">Смотреть презентацию <span aria-hidden="true">↗</span></span></div>
-      </a>
+    <div class="solutions-section-head"><div><h2>{{ solution_vendor.section_title|default:"Решения для вашей отрасли" }}</h2><p>Презентации {{ solution_vendor.name }}. Выберите задачу и изучите материал прямо на сайте.</p></div><span class="solution-section-count">{{ solution_documents|length }} PDF</span></div>
+    {% if solution_sections %}
+    <nav class="solution-section-nav" aria-label="Разделы решений {{ solution_vendor.name }}">
+      {% for section in solution_sections %}<a href="#{{ section.anchor }}">{{ section.title }}</a>{% endfor %}
+    </nav>
+    {% for section in solution_sections %}
+    <section class="solution-topic" id="{{ section.anchor }}" aria-labelledby="{{ section.anchor }}-title">
+      <div class="solution-topic-head"><h3 id="{{ section.anchor }}-title">{{ section.title }}</h3><span class="solution-section-count">{{ section.document_count }} PDF</span></div>
+      {% if section.documents %}{% include "main/includes/solution_document_cards.html" with documents=section.documents document_heading="h4" %}{% endif %}
+      {% if section.children %}
+      <nav class="solution-section-nav solution-section-nav--children" aria-label="Подразделы: {{ section.title }}">
+        {% for child in section.children %}<a href="#{{ child.anchor }}">{{ child.title }}</a>{% endfor %}
+      </nav>
+      {% for child in section.children %}
+      <section class="solution-subtopic" id="{{ child.anchor }}" aria-labelledby="{{ child.anchor }}-title">
+        <div class="solution-topic-head"><h4 id="{{ child.anchor }}-title">{{ child.title }}</h4><span class="solution-section-count">{{ child.document_count }} PDF</span></div>
+        {% include "main/includes/solution_document_cards.html" with documents=child.documents document_heading="h5" %}
+      </section>
       {% endfor %}
-    </div>
+      {% endif %}
+    </section>
+    {% endfor %}
+    {% else %}
+      {% include "main/includes/solution_document_cards.html" with documents=solution_documents %}
+    {% endif %}
     <p class="solution-source-note">Материалы предоставлены производителем {{ solution_vendor.name }}. Применимость оборудования и состав решения уточняются под требования вашего проекта.</p>
   </div>
 </section>
