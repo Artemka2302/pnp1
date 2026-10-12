@@ -5,9 +5,21 @@
       "slug": "eltex",
       "name": "Eltex",
       "logo": "assets/img/logos/approved-top/eltex.png",
+      "background": {
+        "image": "assets/solutions/eltex/vendor-background-v1.webp",
+        "source_pdf": "assets/solutions/eltex/industry.pdf",
+        "page": 2,
+        "image_name": "Image342.jp2"
+      },
       "description": "Сетевое оборудование, Wi-Fi и корпоративная связь для бизнеса.",
       "intro": "От офисов и торговых точек до промышленных площадок: проводные и беспроводные сети, корпоративная телефония и управление инфраструктурой. Изучите отраслевые презентации Eltex и обсудите применение решений на вашем объекте.",
       "tags": ["Сетевое оборудование", "Wi-Fi", "IP-телефония"],
+      "sections": [
+        {"slug": "banking", "title": "Банковский сектор", "documents": ["banking"]},
+        {"slug": "retail", "title": "Ритейл", "documents": ["retail"]},
+        {"slug": "oil-gas", "title": "Нефтегаз", "documents": ["oil-gas"]},
+        {"slug": "industry", "title": "Промышленность", "documents": ["industry"]}
+      ],
       "documents": [
         {
           "slug": "banking",
@@ -59,11 +71,25 @@
       "slug": "yadro",
       "name": "YADRO",
       "logo": "assets/img/logos/approved-top/yadro.png",
+      "background": {
+        "image": "assets/solutions/yadro/vendor-background-v1.webp",
+        "source_pdf": "assets/solutions/yadro/borey.pdf",
+        "page": 1,
+        "image_name": "Image9.jpg"
+      },
       "reader_logo_on_light": true,
       "description": "Серверы, хранение данных, сети и инженерная инфраструктура для бизнеса.",
       "intro": "От рабочих мест до центров обработки данных: серверы, системы хранения, корпоративные сети, охлаждение и управление оборудованием. Изучите презентации YADRO и обсудите применение решений в вашем проекте.",
       "section_title": "Решения для вашей инфраструктуры",
       "tags": ["Серверы и СХД", "Корпоративные сети", "Инфраструктура ЦОД"],
+      "sections": [
+        {"slug": "datacenter", "title": "Инженерная инфраструктура ЦОД", "documents": ["borey"]},
+        {"slug": "networks", "title": "Корпоративные сети", "documents": ["kornfeld-se"]},
+        {"slug": "workplaces", "title": "Рабочие места", "documents": ["kvadra"]},
+        {"slug": "management", "title": "Управление инфраструктурой", "documents": ["suprim"]},
+        {"slug": "servers", "title": "Серверы", "documents": ["h225-g4", "vegman-r215-g4"]},
+        {"slug": "storage", "title": "Системы хранения данных", "documents": ["tatlin-afa"]}
+      ],
       "documents": [
         {
           "slug": "borey",
@@ -148,6 +174,12 @@
       "slug": "iss",
       "name": "ISS",
       "logo": "assets/img/logos/approved-top/iss.png",
+      "background": {
+        "image": "assets/solutions/iss/vendor-background-v1.webp",
+        "source_pdf": "assets/solutions/iss/safe-city.pdf",
+        "page": 38,
+        "image_name": "Image277.jpg"
+      },
       "reader_logo_on_light": true,
       "description": "Видеоаналитика, комплексная безопасность и автоматизация для города, транспорта и промышленности.",
       "intro": "От безопасного города до промышленного предприятия: видеонаблюдение, транспортная аналитика, охрана труда и ситуационный контроль на базе SecurOS. Выберите направление и изучите материалы ISS прямо на сайте.",

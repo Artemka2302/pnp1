@@ -199,9 +199,24 @@ class SolutionLibraryTests(SimpleTestCase):
         self.assertContains(response, 'data-solution-document=', count=13)
         self.assertContains(response, 'href="#solution-iss-road-transport-its"')
         self.assertContains(response, 'id="solution-iss-industry"')
-        for slug in ('eltex', 'yadro'):
-            self.assertEqual(solution_sections(find_solution_vendor(slug)), [])
-            self.assertNotContains(self.client.get(f'/solutions/{slug}/'), 'class="solution-topic"')
+
+    def test_all_vendor_pages_use_iss_layout_without_section_counters(self):
+        expected_sections = {'eltex': 4, 'yadro': 6, 'iss': 3}
+        for slug, count in expected_sections.items():
+            with self.subTest(vendor=slug):
+                vendor = find_solution_vendor(slug)
+                sections = solution_sections(vendor)
+                self.assertEqual(len(sections), count)
+                self.assertEqual(sum(section['document_count'] for section in sections), len(vendor['documents']))
+                response = self.client.get(f'/solutions/{slug}/')
+                self.assertContains(response, 'class="solution-section-nav"', count=1)
+                self.assertContains(response, 'class="solution-topic"', count=count)
+                self.assertContains(response, 'data-solution-document=', count=len(vendor['documents']))
+                self.assertNotContains(response, 'class="solution-section-count"')
+                self.assertContains(response, 'class="solution-document-meta"', count=len(vendor['documents']))
+                for section in sections:
+                    self.assertContains(response, f'href="#{section["anchor"]}"')
+                    self.assertContains(response, f'id="{section["anchor"]}-title"')
 
     def test_solution_hierarchy_rejects_missing_unknown_and_repeated_documents(self):
         for groups in ([{'slug': 'section', 'documents': []}],
@@ -211,3 +226,17 @@ class SolutionLibraryTests(SimpleTestCase):
                        [{'slug': 'section', 'children': [{'slug': 'child', 'children': [{'slug': 'grandchild', 'documents': ['doc']}]}]}]):
             with self.subTest(groups=groups), self.assertRaises(ValueError):
                 solution_sections({'slug': 'test', 'documents': [{'slug': 'doc'}], 'sections': groups})
+
+    def test_vendor_background_photos_are_local_and_source_tracked(self):
+        for vendor in solution_vendors():
+            with self.subTest(vendor=vendor['slug']):
+                background = vendor['background']
+                self.assertIn(background['source_pdf'], [doc['pdf'] for doc in vendor['documents']])
+                self.assertGreater(background['page'], 0)
+                image = Path(settings.BASE_DIR) / 'static' / background['image']
+                self.assertTrue(image.is_file())
+                self.assertLess(image.stat().st_size, 350_000)
+                response = self.client.get(vendor['url'])
+                self.assertContains(response, 'solution-vendor-intro--photo')
+                self.assertContains(response, f'src="/static/{background["image"]}" alt="" aria-hidden="true"')
+                self.assertNotContains(self.client.get(solution_documents(vendor)[0]['url']), 'class="solution-vendor-background"')

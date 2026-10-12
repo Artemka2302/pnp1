@@ -4,7 +4,8 @@
 {% block title %}Отраслевые решения {{ solution_vendor.name }} — ПНП{% endblock %}
 {% block description %}{{ solution_vendor.description }} Презентации {{ solution_vendor.name }}: просмотр и скачивание PDF на сайте ПНП.{% endblock %}
 {% block content %}
-<section class="section solution-vendor-intro">
+<section class="section solution-vendor-intro{% if solution_vendor.background %} solution-vendor-intro--photo{% endif %}">
+  {% if solution_vendor.background %}<img class="solution-vendor-background" src="{% static solution_vendor.background.image %}" alt="" aria-hidden="true" fetchpriority="high" decoding="async">{% endif %}
   <div class="container">
     <nav class="solution-breadcrumbs" aria-label="Хлебные крошки"><a href="{% url 'index' %}">Главная</a><span aria-hidden="true">/</span><a href="{% url 'solutions' %}">Решения</a><span aria-hidden="true">/</span><span aria-current="page">{{ solution_vendor.name }}</span></nav>
     <a class="solution-back" href="{% url 'solutions' %}#solutionManufacturers">← Все производители</a>
@@ -16,14 +17,14 @@
 </section>
 <section class="section solution-documents" id="presentations">
   <div class="container">
-    <div class="solutions-section-head"><div><h2>{{ solution_vendor.section_title|default:"Решения для вашей отрасли" }}</h2><p>Презентации {{ solution_vendor.name }}. Выберите задачу и изучите материал прямо на сайте.</p></div><span class="solution-section-count">{{ solution_documents|length }} PDF</span></div>
+    <div class="solutions-section-head"><div><h2>{{ solution_vendor.section_title|default:"Решения для вашей отрасли" }}</h2><p>Презентации {{ solution_vendor.name }}. Выберите задачу и изучите материал прямо на сайте.</p></div></div>
     {% if solution_sections %}
     <nav class="solution-section-nav" aria-label="Разделы решений {{ solution_vendor.name }}">
       {% for section in solution_sections %}<a href="#{{ section.anchor }}">{{ section.title }}</a>{% endfor %}
     </nav>
     {% for section in solution_sections %}
     <section class="solution-topic" id="{{ section.anchor }}" aria-labelledby="{{ section.anchor }}-title">
-      <div class="solution-topic-head"><h3 id="{{ section.anchor }}-title">{{ section.title }}</h3><span class="solution-section-count">{{ section.document_count }} PDF</span></div>
+      <div class="solution-topic-head"><h3 id="{{ section.anchor }}-title">{{ section.title }}</h3></div>
       {% if section.documents %}{% include "main/includes/solution_document_cards.html" with documents=section.documents document_heading="h4" %}{% endif %}
       {% if section.children %}
       <nav class="solution-section-nav solution-section-nav--children" aria-label="Подразделы: {{ section.title }}">
@@ -31,7 +32,7 @@
       </nav>
       {% for child in section.children %}
       <section class="solution-subtopic" id="{{ child.anchor }}" aria-labelledby="{{ child.anchor }}-title">
-        <div class="solution-topic-head"><h4 id="{{ child.anchor }}-title">{{ child.title }}</h4><span class="solution-section-count">{{ child.document_count }} PDF</span></div>
+        <div class="solution-topic-head"><h4 id="{{ child.anchor }}-title">{{ child.title }}</h4></div>
         {% include "main/includes/solution_document_cards.html" with documents=child.documents document_heading="h5" %}
       </section>
       {% endfor %}
