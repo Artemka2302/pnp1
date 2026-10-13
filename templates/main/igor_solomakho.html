@@ -120,21 +120,28 @@
     }
 
     .contact-phones.is-multiple {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      display: flex;
+      gap: 6px;
       align-items: center;
     }
 
     .contact-phones.is-multiple .contact-link {
-      width: 100%;
+      width: auto;
       margin-top: 0;
-      font-size: 14px;
+      font-size: 13px;
       white-space: nowrap;
     }
 
-    .contact-phones.is-multiple .contact-link:last-child {
-      text-align: right;
+    .contact-phone-country {
+      color: #d57a9c;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .contact-phone-separator {
+      color: rgba(244, 243, 238, .42);
+      font-size: 13px;
+      line-height: 1;
     }
 
     .contact-phones + .contact-link { margin-top: 3px; }
@@ -213,6 +220,56 @@
       border-color: var(--white);
       color: #070707;
       font-weight: 600;
+    }
+
+    button.button { cursor: pointer; }
+
+    .call-picker[hidden] { display: none; }
+
+    .call-picker {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding-top: 2px;
+    }
+
+    .call-picker-option {
+      min-width: 0;
+      min-height: 52px;
+      padding: 8px 10px;
+      border: 1px solid rgba(197, 91, 130, .5);
+      background: rgba(157, 27, 73, .12);
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      transition: border-color .16s ease, background .16s ease;
+    }
+
+    .call-picker-option:hover,
+    .call-picker-option:focus-visible {
+      border-color: rgba(213, 122, 156, .9);
+      background: rgba(157, 27, 73, .22);
+    }
+
+    .call-picker-option span {
+      color: #d57a9c;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .call-picker-option strong {
+      overflow: hidden;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 500;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     body.contact-modal-open { overflow: hidden; }
@@ -333,21 +390,30 @@
     }
 
     .contact-dialog-phones.is-multiple {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       margin-top: 3px;
     }
 
     .contact-dialog-phones.is-multiple a {
-      width: 100%;
+      width: auto;
       margin-top: 0;
-      font-size: 13px;
+      font-size: 12px;
       white-space: nowrap;
     }
 
-    .contact-dialog-phones.is-multiple a:last-child {
-      text-align: right;
+    .contact-dialog-phones .contact-phone-country {
+      display: inline;
+      color: #d57a9c;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .contact-dialog-phones .contact-phone-separator {
+      display: inline;
+      color: rgba(244, 243, 238, .42);
+      font-size: 13px;
     }
 
     .contact-dialog-actions {
@@ -460,7 +526,10 @@
       <div class="rule" aria-hidden="true"></div>
 
       <div class="contact-phones{% if business_card.phones|length > 1 %} is-multiple{% endif %}">
-        {% for phone in business_card.phones %}<a class="contact-link" href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+        {% for phone in business_card.phones %}
+          {% if not forloop.first %}<span class="contact-phone-separator" aria-hidden="true">/</span>{% endif %}
+          <a class="contact-link" href="tel:{{ phone.value }}">{% if business_card.phones|length > 1 %}<span class="contact-phone-country">{% if forloop.first %}РФ{% else %}РБ{% endif %}</span> {% endif %}{{ phone.display }}</a>
+        {% endfor %}
       </div>
       <a class="contact-link" href="{{ business_card.site_url }}">{{ business_card.site_label }}</a>
 
@@ -474,8 +543,22 @@
 
       <nav class="actions" aria-label="Действия">
         <a class="button primary" href="{% static business_card.vcard_path %}" data-add-contact>Добавить контакт</a>
-        <a class="button" href="tel:{{ business_card.phones.0.value }}">Позвонить</a>
+        {% if business_card.phones|length > 1 %}
+          <button class="button" type="button" aria-expanded="false" aria-controls="call-picker" data-call-picker-toggle>Позвонить</button>
+        {% else %}
+          <a class="button" href="tel:{{ business_card.phones.0.value }}">Позвонить</a>
+        {% endif %}
         <a class="button" href="{{ business_card.site_url }}">Открыть сайт</a>
+        {% if business_card.phones|length > 1 %}
+          <div class="call-picker" id="call-picker" data-call-picker hidden>
+            {% for phone in business_card.phones %}
+              <a class="call-picker-option" href="tel:{{ phone.value }}">
+                <span>{% if forloop.first %}РФ{% else %}РБ{% endif %}</span>
+                <strong>{{ phone.display }}</strong>
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
       </nav>
     </section>
   </main>
@@ -495,7 +578,10 @@
         <strong>{{ business_card.name }}</strong>
         <span>{{ business_card.title }} · {{ business_card.company }}</span>
         <div class="contact-dialog-phones{% if business_card.phones|length > 1 %} is-multiple{% endif %}">
-          {% for phone in business_card.phones %}<a href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+          {% for phone in business_card.phones %}
+            {% if not forloop.first %}<span class="contact-phone-separator" aria-hidden="true">/</span>{% endif %}
+            <a href="tel:{{ phone.value }}">{% if business_card.phones|length > 1 %}<span class="contact-phone-country">{% if forloop.first %}РФ{% else %}РБ{% endif %}</span> {% endif %}{{ phone.display }}</a>
+          {% endfor %}
         </div>
       </div>
 
@@ -526,6 +612,8 @@
       const copyPhone = document.querySelector("[data-copy-phone]");
       const shareContact = document.querySelector("[data-share-contact]");
       const contactStatus = document.querySelector("[data-contact-status]");
+      const callPickerToggle = document.querySelector("[data-call-picker-toggle]");
+      const callPicker = document.querySelector("[data-call-picker]");
       const contact = JSON.parse(document.getElementById("business-card-data").textContent);
       const contactText = [
         contact.name,
@@ -541,6 +629,13 @@
 
       const setStatus = (message) => {
         if (contactStatus) contactStatus.textContent = message;
+      };
+
+      const setCallPickerOpen = (isOpen, focusOption = false) => {
+        if (!callPicker || !callPickerToggle) return;
+        callPicker.hidden = !isOpen;
+        callPickerToggle.setAttribute("aria-expanded", String(isOpen));
+        if (isOpen && focusOption) callPicker.querySelector("a")?.focus({ preventScroll: true });
       };
 
       const prepareVCardFile = async () => {
@@ -572,6 +667,7 @@
 
       const openModal = () => {
         if (!modal || !dialog) return;
+        setCallPickerOpen(false);
         lastFocusedElement = document.activeElement;
         modal.hidden = false;
         document.body.classList.add("contact-modal-open");
@@ -597,10 +693,20 @@
         openModal();
       });
 
+      callPickerToggle?.addEventListener("click", () => {
+        setCallPickerOpen(callPicker.hidden, true);
+      });
+
       closeButtons.forEach((button) => button.addEventListener("click", closeModal));
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && modal && !modal.hidden) closeModal();
+        if (event.key !== "Escape") return;
+        if (modal && !modal.hidden) {
+          closeModal();
+        } else if (callPicker && !callPicker.hidden) {
+          setCallPickerOpen(false);
+          callPickerToggle?.focus({ preventScroll: true });
+        }
       });
 
       prepareVCardFile().catch(() => {
