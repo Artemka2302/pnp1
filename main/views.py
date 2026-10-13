@@ -202,8 +202,59 @@ def solutions_sitemap(request):
     }, content_type="application/xml")
 
 
+BUSINESS_CARDS = {
+    "igor-solomakho": {
+        "name": "Игорь Леонидович Соломахо",
+        "name_lines": ["Игорь Леонидович", "Соломахо"],
+        "title": "Акционер",
+        "company": "Первый Национальный Поставщик",
+        "phones": [
+            {"display": "+7 (985) 776-02-99", "value": "+79857760299"},
+        ],
+        "site_url": "https://www.pnp1.ru/",
+        "site_label": "pnp1.ru",
+        "card_url": "https://www.pnp1.ru/igor-solomakho",
+        "vcard_path": "assets/business-card/igor-solomakho/contact.vcf",
+        "vcard_filename": "igor-solomakho.vcf",
+        "copy_label": "Скопировать номер",
+        "copy_done_label": "Номер скопирован",
+        "copy_status": "Телефон скопирован в буфер обмена.",
+    },
+    "sovetnik-generalnogo-direktora": {
+        "name": "Сергей Владимирович Максимов",
+        "name_lines": ["Сергей Владимирович", "Максимов"],
+        "title": "Советник генерального директора",
+        "company": "Первый Национальный Поставщик",
+        "phones": [
+            {"display": "+7 (910) 711-52-89", "value": "+79107115289"},
+            {"display": "+375 (29) 168-58-98", "value": "+375291685898"},
+        ],
+        "site_url": "https://www.pnp1.ru/",
+        "site_label": "pnp1.ru",
+        "card_url": "https://pnp1.ru/sovetnik-generalnogo-direktora",
+        "vcard_path": "assets/business-card/sovetnik-generalnogo-direktora/contact.vcf",
+        "vcard_filename": "sergey-maksimov.vcf",
+        "copy_label": "Скопировать номера",
+        "copy_done_label": "Номера скопированы",
+        "copy_status": "Телефоны скопированы в буфер обмена.",
+    },
+}
+
+
+def render_business_card(request, card_slug):
+    return render(
+        request,
+        "main/igor_solomakho.html",
+        {"business_card": BUSINESS_CARDS[card_slug]},
+    )
+
+
 def igor_solomakho(request):
-    return render(request, "main/igor_solomakho.html")
+    return render_business_card(request, "igor-solomakho")
+
+
+def sovetnik_generalnogo_direktora(request):
+    return render_business_card(request, "sovetnik-generalnogo-direktora")
 
 
 def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):

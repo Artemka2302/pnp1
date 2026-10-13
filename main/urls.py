@@ -18,6 +18,15 @@ urlpatterns = [
     path("solutions/<slug:vendor_slug>/<slug:document_slug>/", views.solution_document, name="solution_document"),
     path("igor-solomakho/", views.igor_solomakho, name="igor_solomakho"),
     path("igor-solomakho", views.igor_solomakho),
+    path(
+        "sovetnik-generalnogo-direktora/",
+        views.sovetnik_generalnogo_direktora,
+        name="sovetnik_generalnogo_direktora",
+    ),
+    path(
+        "sovetnik-generalnogo-direktora",
+        views.sovetnik_generalnogo_direktora,
+    ),
     path("catalog/", views.catalog, name="catalog"),
     path("catalog/<slug:block_slug>/", views.catalog_block, name="catalog_block"),
     path(

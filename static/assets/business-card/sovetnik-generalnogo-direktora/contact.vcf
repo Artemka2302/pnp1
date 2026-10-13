@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N;CHARSET=UTF-8:Максимов;Сергей;Владимирович;;
+FN;CHARSET=UTF-8:Сергей Владимирович Максимов
+ORG;CHARSET=UTF-8:Первый Национальный Поставщик
+TITLE;CHARSET=UTF-8:Советник генерального директора
+TEL;TYPE=CELL,VOICE:+79107115289
+TEL;TYPE=CELL,VOICE:+375291685898
+URL:https://www.pnp1.ru/
+NOTE;CHARSET=UTF-8:Визитка: https://pnp1.ru/sovetnik-generalnogo-direktora
+END:VCARD

@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#050505">
-  <title>Игорь Леонидович Соломахо | ПНП</title>
-  <meta name="description" content="Электронная визитка: Игорь Леонидович Соломахо, Первый Национальный Поставщик.">
-  <link rel="canonical" href="https://www.pnp1.ru/igor-solomakho">
+  <title>{{ business_card.name }} | ПНП</title>
+  <meta name="description" content="Электронная визитка: {{ business_card.name }}, {{ business_card.title }}, Первый Национальный Поставщик.">
+  <link rel="canonical" href="{{ business_card.card_url }}">
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="Игорь Леонидович Соломахо | ПНП">
-  <meta property="og:description" content="Электронная визитка: Игорь Леонидович Соломахо, Первый Национальный Поставщик.">
-  <meta property="og:url" content="https://www.pnp1.ru/igor-solomakho">
+  <meta property="og:title" content="{{ business_card.name }} | ПНП">
+  <meta property="og:description" content="Электронная визитка: {{ business_card.name }}, {{ business_card.title }}, Первый Национальный Поставщик.">
+  <meta property="og:url" content="{{ business_card.card_url }}">
   <meta property="og:image" content="https://www.pnp1.ru/assets/img/brand/pnp-logo-header-white-clean.png">
   <meta name="twitter:card" content="summary">
   <style>
@@ -413,11 +413,11 @@
     <section class="card">
       <img class="logo" src="{% static 'assets/img/brand/pnp-logo-header-white-clean.png' %}" alt="ПНП, Первый Национальный Поставщик">
 
-      <h1>Игорь Леонидович<br>Соломахо</h1>
+      <h1>{% for line in business_card.name_lines %}{{ line }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</h1>
       <div class="rule" aria-hidden="true"></div>
 
-      <a class="contact-link" href="tel:+79857760299">+7 (985) 776-02-99</a>
-      <a class="contact-link" href="https://www.pnp1.ru/">pnp1.ru</a>
+      {% for phone in business_card.phones %}<a class="contact-link" href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+      <a class="contact-link" href="{{ business_card.site_url }}">{{ business_card.site_label }}</a>
 
       <section class="scope-groups" aria-label="Направления">
         <article class="scope-group">Строительные материалы</article>
@@ -428,9 +428,9 @@
       </section>
 
       <nav class="actions" aria-label="Действия">
-        <a class="button primary" href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}" data-add-contact>Добавить контакт</a>
-        <a class="button" href="tel:+79857760299">Позвонить</a>
-        <a class="button" href="https://www.pnp1.ru/">Открыть сайт</a>
+        <a class="button primary" href="{% static business_card.vcard_path %}" data-add-contact>Добавить контакт</a>
+        <a class="button" href="tel:{{ business_card.phones.0.value }}">Позвонить</a>
+        <a class="button" href="{{ business_card.site_url }}">Открыть сайт</a>
       </nav>
     </section>
   </main>
@@ -447,15 +447,15 @@
       </header>
 
       <div class="contact-dialog-person">
-        <strong>Игорь Леонидович Соломахо</strong>
-        <span>Акционер · Первый Национальный Поставщик</span>
-        <a href="tel:+79857760299">+7 (985) 776-02-99</a>
+        <strong>{{ business_card.name }}</strong>
+        <span>{{ business_card.title }} · {{ business_card.company }}</span>
+        {% for phone in business_card.phones %}<a href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
       </div>
 
       <div class="contact-dialog-actions">
-        <a class="contact-dialog-action primary" href="{% static 'assets/business-card/igor-solomakho/contact.vcf' %}" data-open-contact>Открыть контакт</a>
+        <a class="contact-dialog-action primary" href="{% static business_card.vcard_path %}" data-open-contact>Открыть контакт</a>
         <button class="contact-dialog-action" type="button" data-share-contact>Поделиться контактом</button>
-        <button class="contact-dialog-action" type="button" data-copy-phone>Скопировать номер</button>
+        <button class="contact-dialog-action" type="button" data-copy-phone>{{ business_card.copy_label }}</button>
       </div>
 
       <p class="contact-dialog-note">Откройте файл контакта и подтвердите его добавление в адресную книгу. Если контакт сохранился в загрузки, откройте файл оттуда.</p>
@@ -468,6 +468,7 @@
       <p class="contact-dialog-status" role="status" aria-live="polite" data-contact-status></p>
     </section>
   </div>
+  {{ business_card|json_script:"business-card-data" }}
   <script>
     (() => {
       const addContact = document.querySelector("[data-add-contact]");
@@ -478,16 +479,14 @@
       const copyPhone = document.querySelector("[data-copy-phone]");
       const shareContact = document.querySelector("[data-share-contact]");
       const contactStatus = document.querySelector("[data-contact-status]");
-      const contact = {
-        "name": "Игорь Леонидович Соломахо",
-        "phone": "+79857760299",
-        "company": "Первый Национальный Поставщик",
-        "title": "Акционер",
-        "url": "https://www.pnp1.ru/",
-        "cardUrl": "https://www.pnp1.ru/igor-solomakho"
-      };
-
-      const contactText = ["Игорь Леонидович Соломахо", "Акционер", "Первый Национальный Поставщик", "+7 (985) 776-02-99", "https://www.pnp1.ru/igor-solomakho"].join("\n");
+      const contact = JSON.parse(document.getElementById("business-card-data").textContent);
+      const contactText = [
+        contact.name,
+        contact.title,
+        contact.company,
+        ...contact.phones.map((phone) => phone.display),
+        contact.card_url
+      ].join("\n");
       const vcardUrl = new URL(addContact.getAttribute("href"), window.location.href).href;
       let cachedVCardFile = null;
       let vcardPreparePromise = null;
@@ -505,7 +504,7 @@
           const response = await fetch(vcardUrl, { cache: "no-store" });
           if (!response.ok) throw new Error("VCF is unavailable");
           const blob = await response.blob();
-          cachedVCardFile = new File([blob], "igor-solomakho.vcf", { type: "text/vcard" });
+          cachedVCardFile = new File([blob], contact.vcard_filename, { type: "text/vcard" });
           return cachedVCardFile;
         })();
 
@@ -570,7 +569,7 @@
             await navigator.share({
               title: contact.name,
               text: contactText,
-              url: contact.cardUrl
+              url: contact.card_url
             });
             return;
           }
@@ -586,14 +585,14 @@
 
       copyPhone?.addEventListener("click", async () => {
         try {
-          await navigator.clipboard.writeText(contact.phone);
-          copyPhone.textContent = "Номер скопирован";
-          setStatus("Телефон скопирован в буфер обмена.");
+          await navigator.clipboard.writeText(contact.phones.map((phone) => phone.value).join("\n"));
+          copyPhone.textContent = contact.copy_done_label;
+          setStatus(contact.copy_status);
           window.setTimeout(() => {
-            copyPhone.textContent = "Скопировать номер";
+            copyPhone.textContent = contact.copy_label;
           }, 1800);
         } catch (_error) {
-          setStatus(`Скопируйте номер вручную: ${contact.phone}`);
+          setStatus(`Скопируйте вручную: ${contact.phones.map((phone) => phone.display).join(", ")}`);
         }
       });
 
