@@ -114,6 +114,31 @@
 
     .contact-link + .contact-link { margin-top: 3px; }
 
+    .contact-phones {
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-phones.is-multiple {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: center;
+    }
+
+    .contact-phones.is-multiple .contact-link {
+      width: 100%;
+      margin-top: 0;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .contact-phones.is-multiple .contact-link:last-child {
+      text-align: right;
+    }
+
+    .contact-phones + .contact-link { margin-top: 3px; }
+
     .scope-groups {
       margin: 28px 0 0;
       padding: 20px 0 0;
@@ -307,6 +332,24 @@
       text-underline-offset: 3px;
     }
 
+    .contact-dialog-phones.is-multiple {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 3px;
+    }
+
+    .contact-dialog-phones.is-multiple a {
+      width: 100%;
+      margin-top: 0;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .contact-dialog-phones.is-multiple a:last-child {
+      text-align: right;
+    }
+
     .contact-dialog-actions {
       display: grid;
       gap: 9px;
@@ -416,7 +459,9 @@
       <h1>{% for line in business_card.name_lines %}{{ line }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</h1>
       <div class="rule" aria-hidden="true"></div>
 
-      {% for phone in business_card.phones %}<a class="contact-link" href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+      <div class="contact-phones{% if business_card.phones|length > 1 %} is-multiple{% endif %}">
+        {% for phone in business_card.phones %}<a class="contact-link" href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+      </div>
       <a class="contact-link" href="{{ business_card.site_url }}">{{ business_card.site_label }}</a>
 
       <section class="scope-groups" aria-label="Направления">
@@ -449,7 +494,9 @@
       <div class="contact-dialog-person">
         <strong>{{ business_card.name }}</strong>
         <span>{{ business_card.title }} · {{ business_card.company }}</span>
-        {% for phone in business_card.phones %}<a href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+        <div class="contact-dialog-phones{% if business_card.phones|length > 1 %} is-multiple{% endif %}">
+          {% for phone in business_card.phones %}<a href="tel:{{ phone.value }}">{{ phone.display }}</a>{% endfor %}
+        </div>
       </div>
 
       <div class="contact-dialog-actions">
