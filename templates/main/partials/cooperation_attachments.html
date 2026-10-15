@@ -1,0 +1,27 @@
+<details class="cooperation-attachments">
+  <summary class="cooperation-attachments-trigger">
+    <span class="cooperation-attachments-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg></span>
+    <span class="cooperation-attachments-copy"><strong>Добавить файлы</strong><small>Карточка компании, презентация или прайс-лист</small></span>
+    <span class="cooperation-attachments-chevron" aria-hidden="true">+</span>
+  </summary>
+  <div class="cooperation-files-grid" aria-label="Файлы для предложения">
+    <div class="field file-field cooperation-file-card quick-file-field">
+      <div class="cooperation-file-copy"><span class="field-label">Карточка компании</span><small>PDF, DOCX</small></div>
+      <label class="upload-box" for="{{ attachment_prefix }}CompanyCard"><span data-file-label>Выбрать файл</span></label>
+      <input class="file-input" id="{{ attachment_prefix }}CompanyCard" name="company_card" type="file" accept=".pdf,.docx" aria-label="Прикрепить карточку компании">
+      <div class="file-list" data-file-list hidden></div>
+    </div>
+    <div class="field file-field cooperation-file-card quick-file-field">
+      <div class="cooperation-file-copy"><span class="field-label">Каталог / презентация</span><small>PDF, PPTX</small></div>
+      <label class="upload-box" for="{{ attachment_prefix }}CatalogPresentation"><span data-file-label>Выбрать файл</span></label>
+      <input class="file-input" id="{{ attachment_prefix }}CatalogPresentation" name="catalog_presentation" type="file" accept=".pdf,.pptx" aria-label="Прикрепить каталог или презентацию">
+      <div class="file-list" data-file-list hidden></div>
+    </div>
+    <div class="field file-field cooperation-file-card quick-file-field">
+      <div class="cooperation-file-copy"><span class="field-label">Прайс-лист</span><small>XLSX, PDF</small></div>
+      <label class="upload-box" for="{{ attachment_prefix }}PriceList"><span data-file-label>Выбрать файл</span></label>
+      <input class="file-input" id="{{ attachment_prefix }}PriceList" name="price_list" type="file" accept=".xlsx,.pdf" aria-label="Прикрепить прайс-лист">
+      <div class="file-list" data-file-list hidden></div>
+    </div>
+  </div>
+</details>

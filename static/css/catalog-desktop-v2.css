@@ -513,7 +513,7 @@
       linear-gradient(90deg, rgba(3, 10, 18, .46), transparent 82%);
   }
 
-  .catalog-page .catalog-v2-direction-card h2 {
+  .catalog-page .catalog-v2-direction-card h3 {
     max-width: 100%;
     margin: 0;
     color: #fff;
@@ -1324,7 +1324,7 @@
       min-height: 124px;
     }
 
-    .catalog-page .catalog-v2-direction-card h2,
+    .catalog-page .catalog-v2-direction-card h3,
     .catalog-page .catalog-v2-system-card h3 {
       max-width: 100%;
       font-size: clamp(11px, 3vw, 13px);
@@ -1379,3 +1379,85 @@
       overflow-wrap: anywhere;
     }
   }
+
+/* Project hierarchy is a view over the existing catalog, not a new URL tree. */
+body.catalog-page.pnp-ux-parity { font-family: var(--sans, Arial, sans-serif); }
+.catalog-page .catalog-v2-direction-grid { display: block; }
+.catalog-page .catalog-v2-project-group + .catalog-v2-project-group { margin-top: 28px; }
+.catalog-page .catalog-v2-project-group-title {
+  margin: 0 0 12px;
+  color: #e7edf6;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 750;
+}
+.catalog-page .catalog-v2-project-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 12px;
+}
+.catalog-page .catalog-v2-project-cards .catalog-v2-direction-card {
+  grid-column: auto;
+  min-height: 164px;
+}
+.catalog-page .catalog-v2-structure-note {
+  margin: 0 0 22px;
+  color: #b8c7da;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.catalog-page .catalog-v2-project-tree-group { margin: 0; padding: 0; list-style: none; }
+.catalog-page .catalog-v2-project-tree-group > ul { margin: 0; padding: 0; list-style: none; }
+.catalog-page .catalog-v2-project-tree-title {
+  display: block;
+  padding: 16px 12px 8px;
+  color: #dca0b6;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 750;
+}
+.catalog-page .catalog-v2-project-badge {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  right: 10px;
+  padding: 5px 9px;
+  border: 1px solid rgba(235,142,175,.5);
+  border-radius: 5px;
+  color: #f6d1df;
+  background: rgba(22,31,49,.92);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+.catalog-page .catalog-v2-content-head { align-items: start; flex-wrap: wrap; }
+.catalog-page .catalog-v2-content-head > div:first-child { flex: 1 1 180px; }
+.catalog-page .catalog-v2-project-info {
+  flex: 0 1 320px;
+  margin-left: auto;
+  padding: 12px 14px;
+  border: 1px solid rgba(211,93,135,.38);
+  border-radius: 8px;
+  background: rgba(31,43,65,.8);
+  color: #e6edf6;
+  font-size: 12px;
+  line-height: 1.5;
+  min-width: 0;
+}
+.catalog-page .catalog-v2-project-info[hidden] { display: none; }
+.catalog-page .catalog-v2-project-definition { display: flex; gap: 10px; align-items: baseline; }
+.catalog-page .catalog-v2-project-definition b { color: #f2a9c3; flex-shrink: 0; font-size: 14px; }
+.catalog-page .catalog-v2-project-info > small { display: block; margin-top: 6px; color: #afbed1; font-size: 10px; }
+.catalog-page .catalog-v2-project-info summary { cursor: pointer; margin-top: 8px; color: #f0bfd1; }
+.catalog-page .catalog-v2-project-info dl { margin: 10px 0 0; }
+.catalog-page .catalog-v2-project-info dl > div { display: grid; grid-template-columns: 44px 1fr; gap: 8px; margin-top: 6px; }
+.catalog-page .catalog-v2-project-info dt { font-weight: 750; }
+.catalog-page .catalog-v2-project-info dd { margin: 0; }
+@media (max-width: 680px) {
+  .catalog-page .catalog-v2-project-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .catalog-page .catalog-v2-project-cards .catalog-v2-direction-card { min-height: 138px; }
+  .catalog-page .catalog-v2-project-group-title { font-size: 17px; }
+  .catalog-page .catalog-v2-content-head > div:first-child { flex: 0 1 auto; width: 100%; }
+  .catalog-page .catalog-v2-project-info { flex: 0 1 auto; width: 100%; box-sizing: border-box; margin-left: 0; }
+  .catalog-page .catalog-v2-project-badge { top: 8px; right: 8px; padding: 4px 7px; font-size: 10px; }
+}

@@ -198,18 +198,18 @@ class PublicRouteSmokeTests(TestCase):
             [
                 "direction:architecture",
                 "direction:constructive",
-                "direction:it-infrastructure",
-                "direction:low-current",
-                "direction:tech-equipment",
                 "direction:eom",
-                "direction:hvac",
+                "direction:ev-charging-infrastructure",
                 "direction:water",
+                "direction:hvac",
+                "direction:low-current",
+                "direction:it-infrastructure",
                 "direction:gas",
+                "direction:tech-equipment",
+                "direction:vertical-transport",
                 "direction:fire",
                 "direction:accessibility",
-                "direction:vertical-transport",
                 "direction:landscaping-and-site-improvement",
-                "direction:ev-charging-infrastructure",
             ],
         )
         self.assertTrue(all(child["kind"] == "direction" for child in root_data["children"]))
@@ -232,6 +232,66 @@ class PublicRouteSmokeTests(TestCase):
         self.assertEqual(block_data["node"]["kind"], "block")
         self.assertTrue(block_data["children"])
         self.assertTrue(all(child["kind"] == "direction" for child in block_data["children"]))
+
+    def test_catalog_project_sections_cover_existing_directions_without_new_urls(self):
+        from .catalog_sections import PROJECT_DIRECTIONS, project_section
+
+        root = self.client.get("/api/catalog-node/", {"id": "root"}).json()
+        self.assertEqual(len(root["children"]), Direction.objects.count())
+        for child in root["children"]:
+            slug = child["id"].split(":", 1)[1]
+            direction = Direction.objects.get(slug=slug)
+            self.assertEqual(child["url"], direction.get_absolute_url())
+            self.assertEqual(child["projectSection"], project_section(slug))
+            self.assertTrue(child["projectSection"]["code"])
+        self.assertEqual(tuple(PROJECT_DIRECTIONS)[:3], ("architecture", "constructive", "eom"))
+        self.assertIsNone(project_section("unknown-direction"))
+
+    def test_catalog_fire_accessibility_landscaping_are_independent_blocks(self):
+        root = self.client.get("/api/catalog-node/", {"id": "root"}).json()
+        sections = [child["projectSection"] for child in root["children"]]
+        self.assertEqual([section["group"] for section in sections[-3:]], [
+            "fire", "accessibility", "landscaping",
+        ])
+        self.assertEqual([section["groupTitle"] for section in sections[-3:]], [
+            "ПБ — Мероприятия по обеспечению пожарной безопасности",
+            "ОДИ — Мероприятия по обеспечению доступа инвалидов",
+            "ГП — Благоустройство и озеленение",
+        ])
+        self.assertNotIn("additional", [section["group"] for section in sections])
+
+    def test_home_solutions_follow_catalog_and_do_not_appear_on_about(self):
+        response = self.client.get('/')
+        self.assertContains(response, 'id="homeSolutions"', count=1)
+        html = response.content.decode()
+        self.assertLess(html.index('id="homeCategories"'), html.index('id="homeSolutions"'))
+        self.assertLess(html.index('id="homeSolutions"'), html.index('id="clients"'))
+        self.assertNotContains(self.client.get('/about/'), 'id="homeSolutions"')
+
+    def test_catalog_section_explanation_survives_deep_links(self):
+        from .catalog_sections import DRAWING_MARKS
+
+        self.assertEqual(DRAWING_MARKS["ОС"], "Охранная сигнализация")
+        system = self.client.get("/api/catalog-node/", {"id": "system:wood-based-panel-materials"}).json()
+        group = self.client.get("/api/catalog-node/", {"id": "group:plywood"}).json()
+        self.assertEqual(system["node"]["projectSection"]["code"], "КР")
+        self.assertEqual(group["node"]["projectSection"], system["node"]["projectSection"])
+        self.assertEqual(group["node"]["url"], "/catalog/building-materials/constructive/wood-based-panel-materials/plywood/")
+        expected_vendors = ProductGroup.objects.get(slug="plywood").vendorproductgroup_set.filter(
+            show_in_catalog=True
+        ).order_by("vendor__name").values_list("vendor__slug", flat=True)[:12]
+        self.assertEqual([vendor["slug"] for vendor in group["node"]["vendors"]], list(expected_vendors))
+        self.assertTrue(group["node"]["types"])
+
+    def test_catalog_water_and_electricity_system_order(self):
+        electricity = self.client.get("/api/catalog-node/", {"id": "direction:eom"}).json()
+        self.assertEqual([row["id"] for row in electricity["children"]][:4], [
+            "system:indoor-lighting", "system:electrical-equipment", "system:outdoor-lighting",
+            "system:transformer-and-distribution-substations",
+        ])
+        water = self.client.get("/api/catalog-node/", {"id": "direction:water"}).json()
+        systems = [row["id"] for row in water["children"]]
+        self.assertLess(systems.index("system:water-supply"), systems.index("system:wastewater-and-drainage"))
 
     def test_product_group_uses_the_same_lightweight_catalog_shell(self):
         response = self.client.get(
@@ -283,6 +343,10 @@ class CatalogCrawlThrottleTests(SimpleTestCase):
 class MiniRequestApiTests(TestCase):
     def setUp(self):
         cache.clear()
+        # Legacy form scenarios must not depend on a developer's live API key.
+        company_lookup = patch("main.views.lookup_configured", return_value=False)
+        company_lookup.start()
+        self.addCleanup(company_lookup.stop)
         self.client = Client(HTTP_HOST="testserver")
         self.media_root = tempfile.mkdtemp()
         self.media_override = override_settings(MEDIA_ROOT=self.media_root)
@@ -445,6 +509,24 @@ class MiniRequestApiTests(TestCase):
         self.assertEqual(lead.raw_payload["proposer_type"], "manufacturer")
         self.assertEqual(ConsentLog.objects.get().form_type, Lead.SOURCE_COOPERATION)
 
+    def test_cooperation_api_accepts_logistics(self):
+        response = self.client.post(
+            "/api/cooperation-request/",
+            data={
+                "proposer_type": Lead.COOPERATION_TYPE_LOGISTICS,
+                "company": "ООО Логистика",
+                "phone": "+7 900 000-00-00",
+                "email": "logistics@example.com",
+                "message": "Предлагаем доставку по объектам.",
+                "consent": "1",
+            },
+        )
+
+        self.assertEqual(response.status_code, 201)
+        lead = Lead.objects.get()
+        self.assertEqual(lead.raw_payload["proposer_type"], Lead.COOPERATION_TYPE_LOGISTICS)
+        self.assertIn("Кто обращается: Логистика", build_bitrix_comment(lead))
+
     def test_cooperation_api_preserves_file_field_names(self):
         company_card = SimpleUploadedFile(
             "company-card.pdf",
@@ -593,7 +675,7 @@ class BitrixPayloadTests(TestCase):
         self.assertIn("ООО Производитель", payload["fields"]["title"])
         self.assertEqual(payload["fields"][COOPERATION_PHONE_FIELD], "+79000000000")
         self.assertEqual(payload["fields"][COOPERATION_EMAIL_FIELD], "partner@example.com")
-        self.assertEqual(payload["fields"][COOPERATION_COMMENT_FIELD], "Предлагаем сотрудничество.")
+        self.assertEqual(payload["fields"][COOPERATION_COMMENT_FIELD], comment)
         self.assertEqual(payload["fields"][COOPERATION_PROPOSER_TYPE_FIELD], 1333)
         self.assertIn("Кто обращается: Производитель", comment)
         self.assertIn("Предлагаем сотрудничество.", comment)
@@ -674,6 +756,7 @@ class BitrixPayloadTests(TestCase):
         expected_ids = {
             Lead.COOPERATION_TYPE_SUPPLIER: 1330,
             Lead.COOPERATION_TYPE_CONTRACTOR: 1331,
+            Lead.COOPERATION_TYPE_LOGISTICS: 1332,
             Lead.COOPERATION_TYPE_MANUFACTURER: 1333,
             Lead.COOPERATION_TYPE_OTHER: 1332,
         }

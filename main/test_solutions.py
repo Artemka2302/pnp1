@@ -1,16 +1,53 @@
 import hashlib
 import json
 from pathlib import Path
+from unittest.mock import patch
 from xml.etree import ElementTree
 
 from django.conf import settings
 from django.test import SimpleTestCase
+from django.template.loader import render_to_string
 
 from .ai import build_ai_messages
-from .solutions import find_solution_vendor, solution_documents, solution_sections, solution_vendors
+from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 
 
 class SolutionLibraryTests(SimpleTestCase):
+    def test_home_showcase_includes_all_current_materials_and_interleaves_brands(self):
+        showcase = homepage_solution_showcase()
+        vendors = solution_vendors()
+        self.assertEqual(len(showcase['documents']), sum(len(v['documents']) for v in vendors))
+        self.assertEqual([doc['vendor_slug'] for doc in showcase['documents'][:len(vendors)]],
+                         [v['slug'] for v in vendors])
+        html = render_to_string('main/partials/home_solutions.html', {'home_solutions': showcase})
+        for document in showcase['documents']:
+            self.assertIn(f'href="{document["url"]}"', html)
+        for vendor in vendors:
+            self.assertIn(f'data-solutions-filter="{vendor["slug"]}"', html)
+
+    def test_home_showcase_automatically_includes_new_vendor_and_skips_unpublished(self):
+        doc = {'slug': 'new-presentation', 'title': 'Новое решение', 'pdf': 'new.pdf'}
+        vendor = {'slug': 'new-brand', 'name': 'Новый бренд', 'url': '/solutions/new-brand/', 'documents': [doc]}
+        with patch('main.solutions.solution_vendors', return_value=[
+            {**vendor, 'published': False},
+            {**vendor, 'documents': [{**doc, 'published': False}, {**doc, 'pdf': ''}]},
+            vendor,
+        ]):
+            showcase = homepage_solution_showcase()
+        self.assertEqual(len(showcase['vendors']), 1)
+        self.assertEqual(len(showcase['documents']), 1)
+        self.assertEqual(showcase['documents'][0]['url'], '/solutions/new-brand/new-presentation/')
+        html = render_to_string('main/partials/home_solutions.html', {'home_solutions': showcase})
+        self.assertIn('data-solutions-filter="new-brand"', html)
+        self.assertIn('Новое решение', html)
+
+    def test_home_showcase_omits_empty_section(self):
+        with patch('main.solutions.solution_vendors', return_value=[]):
+            showcase = homepage_solution_showcase()
+        self.assertEqual(showcase, {'vendors': [], 'documents': []})
+        self.assertNotIn('id="homeSolutions"', render_to_string(
+            'main/partials/home_solutions.html', {'home_solutions': showcase}))
+
     def test_landing_uses_approved_hero_icons_and_cards(self):
         response = self.client.get('/solutions/')
         self.assertContains(response, 'solutions-hero pnp-mobile-standard-hero')

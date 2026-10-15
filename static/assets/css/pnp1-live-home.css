@@ -11040,13 +11040,27 @@ a[href*="wa.me"]{
   }
 }
 
-/* Desktop alignment: shared content registers for partner and responsibility cards. */
+/* Preserve the homepage typeface against the late mobile parity layer. */
+body.pnp-ux-parity.home-page{font-family:var(--sans)}
+
+/* The responsibility overview stays on About; the homepage opens with the catalog. */
+body.home-page:not(.about-page) #why-pnp.home-why-tech{display:none!important}
+body.home-page.about-page #why-pnp.home-why-tech{display:block!important}
+@media(max-width:680px){
+  body.home-page.about-page #why-pnp .eyebrow{color:#6d2039!important}
+  body.home-page.about-page #why-pnp .why-tech-head h2,
+  body.home-page.about-page #why-pnp .why-tech-grid .why-tech-card h3{color:#202c47!important}
+  body.home-page.about-page #why-pnp .why-tech-head p{color:rgba(32,44,71,.74)!important}
+  body.home-page.about-page #why-pnp .why-tech-grid .why-tech-card.is-active h3{color:#fefefe!important}
+}
+
+/* Desktop alignment for the four customer cards. */
 @media (min-width:1081px){
   body.home-page #clients .role-entry-head p{
     max-width:790px;
   }
   body.home-page #clients .role-entry-grid{
-    grid-template-columns:repeat(6,minmax(0,1fr));
+    grid-template-columns:repeat(4,minmax(0,1fr));
     gap:16px;
   }
   body.home-page #clients .role-entry-card{
@@ -11055,11 +11069,9 @@ a[href*="wa.me"]{
     padding:24px;
     cursor:default;
   }
-  body.home-page #clients #client-private{
-    grid-column:2 / span 2;
-  }
+  body.home-page #clients #client-private,
   body.home-page #clients #client-diy{
-    grid-column:4 / span 2;
+    grid-column:span 2;
   }
   body.home-page #clients .role-entry-card-top{
     margin-bottom:28px;
@@ -13239,9 +13251,9 @@ body.home-page .home-supply-gallery-head p{
   display:grid;
   grid-template-columns:repeat(10,minmax(0,1fr));
   grid-template-areas:
-    "architecture architecture constructive constructive it it lowcurrent lowcurrent tech tech"
-    "eom eom hvac hvac water water gas gas fire fire"
-    ". access access vertical vertical landscape landscape charging charging .";
+    "architecture architecture constructive constructive eom eom charging charging water water"
+    "hvac hvac lowcurrent lowcurrent it it gas gas tech tech"
+    ". vertical vertical fire fire access access landscape landscape .";
   gap:12px;
   width:100%;
 }
@@ -13263,6 +13275,20 @@ body.home-page .home-supply-gallery-head p{
   border-color:rgba(238,112,160,.82);
   box-shadow:0 18px 36px rgba(0,0,0,.27),0 0 0 1px rgba(214,57,112,.16);
   transform:translateY(-2px);
+}
+.home-supply-project-badge{
+  position:absolute;
+  z-index:3;
+  top:10px;
+  right:10px;
+  padding:5px 8px;
+  border:1px solid rgba(235,142,175,.5);
+  border-radius:5px;
+  background:rgba(22,31,49,.92);
+  color:#f6d1df;
+  font-size:11px;
+  font-weight:750;
+  line-height:1.2;
 }
 .home-supply-gallery-card:focus-visible{
   outline:3px solid rgba(255,118,173,.88);

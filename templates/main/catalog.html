@@ -6,7 +6,7 @@
 
 {% block extra_head %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20260925-mobile-catalog-parity-v1">
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20261014-project-sections-v1">
 {% endblock %}
 
 {% block content %}
@@ -58,6 +58,7 @@
       <div class="catalog-v2-status" data-catalog-v2-status role="status" hidden></div>
 
       <section class="catalog-v2-directions" aria-label="Разделы проекта" data-catalog-v2-direction-section>
+        <p class="catalog-v2-structure-note">Выберите раздел проекта. Внутри — системы, материалы и оборудование для комплектации.</p>
         <div class="catalog-v2-direction-grid" data-catalog-v2-directions></div>
       </section>
 
@@ -68,6 +69,7 @@
             <span class="catalog-v2-kicker" data-catalog-v2-kicker hidden></span>
             <h2 data-catalog-v2-title></h2>
           </div>
+          <aside class="catalog-v2-project-info" data-catalog-v2-project-info aria-label="Обозначение раздела" hidden></aside>
           <button class="catalog-v2-back" type="button" data-catalog-v2-back hidden>
             Назад
           </button>
@@ -80,5 +82,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20260925-mobile-catalog-parity-v1"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261014-project-sections-v1"></script>
 {% endblock %}

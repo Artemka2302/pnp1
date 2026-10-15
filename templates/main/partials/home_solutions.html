@@ -1,0 +1,46 @@
+{% load static %}
+{% if home_solutions.documents %}
+<section class="section home-solutions" id="homeSolutions" aria-labelledby="homeSolutionsTitle" data-home-solutions>
+  <div class="container">
+    <div class="home-solutions-head">
+      <div>
+        <div class="section-eyebrow">Технологии для вашего проекта</div>
+        <h2 id="homeSolutionsTitle">Решения для вашего объекта</h2>
+        <p>Выберите задачу и изучите презентации производителей прямо на сайте.</p>
+      </div>
+      <a class="btn ghost" href="{% url 'solutions' %}">Все решения</a>
+    </div>
+    <div class="home-solutions-toolbar" data-solutions-controls hidden>
+      <div class="home-solutions-filters" role="group" aria-label="Производитель решений">
+        <button type="button" data-solutions-filter="all" aria-pressed="true" aria-controls="homeSolutionsRail">Все производители</button>
+        {% for vendor in home_solutions.vendors %}
+        <button type="button" data-solutions-filter="{{ vendor.slug }}" aria-pressed="false" aria-controls="homeSolutionsRail">{{ vendor.name }} <span>{{ vendor.document_count }}</span></button>
+        {% endfor %}
+      </div>
+      <div class="home-solutions-navigation">
+        <button type="button" data-solutions-prev aria-label="Предыдущие решения" aria-controls="homeSolutionsRail"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+        <button type="button" data-solutions-next aria-label="Следующие решения" aria-controls="homeSolutionsRail"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="home-solutions-rail" id="homeSolutionsRail" tabindex="0" role="region" aria-label="Презентации производителей, листайте влево или вправо">
+      {% for document in home_solutions.documents %}
+      <article class="home-solution-card" data-solutions-vendor="{{ document.vendor_slug }}">
+        <a class="home-solution-preview" href="{{ document.url }}" tabindex="-1" aria-hidden="true">
+          {% if document.cover %}<img src="{% static document.cover %}" alt="" loading="lazy" decoding="async" width="640" height="360">{% else %}<span>PDF</span>{% endif %}
+        </a>
+        <div class="home-solution-body">
+          <div class="home-solution-meta">
+            <a class="home-solution-brand" href="{{ document.vendor_url }}" aria-label="Все решения {{ document.vendor_name }}">{% if document.vendor_logo %}<img src="{% static document.vendor_logo %}" alt="{{ document.vendor_name }}" loading="lazy" width="88" height="30">{% else %}{{ document.vendor_name }}{% endif %}</a>
+            <span>PDF{% if document.pages %} · {{ document.pages }} стр.{% endif %}</span>
+          </div>
+          <h3><a href="{{ document.url }}">{{ document.title }}</a></h3>
+          <p>{{ document.description }}</p>
+          <a class="home-solution-open" href="{{ document.url }}" aria-label="Смотреть презентацию: {{ document.title }} — {{ document.vendor_name }}">Смотреть презентацию</a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <p class="home-solutions-status" data-solutions-status role="status" aria-live="polite">Материалов: {{ home_solutions.documents|length }}</p>
+  </div>
+</section>
+{% endif %}

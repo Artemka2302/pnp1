@@ -1,10 +1,12 @@
 from django.urls import path
 
 from . import views
+from .company_lookup import company_suggestions_api
 
 
 
 urlpatterns = [
+    path("api/company-suggestions/", company_suggestions_api, name="api_company_suggestions"),
     path("health/", views.healthcheck, name="healthcheck"),
     path("robots.txt", views.robots_txt, name="robots_txt"),
     path("", views.index, name="index"),

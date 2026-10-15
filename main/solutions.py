@@ -1,6 +1,7 @@
 """Portable, file-backed library of manufacturer presentations (no DB changes)."""
 
 import json
+from itertools import zip_longest
 from functools import lru_cache
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -35,6 +36,25 @@ def solution_documents(vendor):
         }
         for document in vendor["documents"]
     ]
+
+
+def homepage_solution_showcase():
+    """One source of content; interleave brands without a hand-maintained shortlist."""
+    vendors = []
+    batches = []
+    for vendor in solution_vendors():
+        if vendor.get("published", True) is False:
+            continue
+        documents = [doc for doc in solution_documents(vendor)
+                     if doc.get("published", True) is not False and doc.get("pdf")]
+        if not documents:
+            continue
+        vendors.append({**vendor, "document_count": len(documents)})
+        batches.append([{**doc, "vendor_slug": vendor["slug"],
+                         "vendor_name": vendor["name"], "vendor_url": vendor["url"],
+                         "vendor_logo": vendor.get("logo", "")} for doc in documents])
+    documents = [doc for row in zip_longest(*batches) for doc in row if doc is not None]
+    return {"vendors": vendors, "documents": documents}
 
 
 def solution_sections(vendor):

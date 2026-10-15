@@ -1,0 +1,11 @@
+<div class="field company-lookup" data-company-lookup data-endpoint="{% url 'api_company_suggestions' %}">
+  <label for="{{ identity_prefix }}Company">Компания</label>
+  <input id="{{ identity_prefix }}Company" name="company" placeholder="Введите ИНН или название компании" autocomplete="off" maxlength="220" required role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="{{ identity_prefix }}Suggestions" aria-describedby="{{ identity_prefix }}CompanyStatus">
+  <input type="hidden" name="company_token" value="">
+  <div class="company-suggestions" id="{{ identity_prefix }}Suggestions" role="listbox" aria-label="Найденные организации" hidden></div>
+  <small class="company-lookup-status" id="{{ identity_prefix }}CompanyStatus" role="status" aria-live="polite" hidden></small>
+</div>
+<div class="field">
+  <label for="{{ identity_prefix }}ContactName">Контактное лицо</label>
+  <input id="{{ identity_prefix }}ContactName" name="contact_name" placeholder="Имя и фамилия" autocomplete="name" maxlength="220">
+</div>

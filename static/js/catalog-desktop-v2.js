@@ -29,6 +29,7 @@
   const content = rootElement.querySelector("[data-catalog-v2-content]");
   const contentTitle = rootElement.querySelector("[data-catalog-v2-title]");
   const contentKicker = rootElement.querySelector("[data-catalog-v2-kicker]");
+  const projectInfo = rootElement.querySelector("[data-catalog-v2-project-info]");
   const breadcrumbs = rootElement.querySelector("[data-catalog-v2-breadcrumbs]");
   const backButton = rootElement.querySelector("[data-catalog-v2-back]");
   const status = rootElement.querySelector("[data-catalog-v2-status]");
@@ -170,26 +171,48 @@
 
   const renderIndex = () => {
     if (!indexList) return;
-    indexList.innerHTML = directionTargets().map(treeNodeHtml).join("");
+    indexList.innerHTML = projectGroups().map(group => `
+      <li class="catalog-v2-project-tree-group" role="none">
+        <span class="catalog-v2-project-tree-title">${escapeHtml(group.title)}</span>
+        <ul role="group" aria-label="${escapeHtml(group.title)}">${group.targets.map(treeNodeHtml).join("")}</ul>
+      </li>`).join("");
   };
+
+  const projectGroups = () => {
+    const groups = new Map();
+    directionTargets().forEach(target => {
+      const section = nodeById(target).projectSection;
+      const key = section?.group || "additional";
+      if (!groups.has(key)) groups.set(key, {title: section?.groupTitle || "Другие направления", targets: []});
+      groups.get(key).targets.push(target);
+    });
+    return [...groups.values()];
+  };
+
+  const badgeHtml = node => node.projectSection ? `<span class="catalog-v2-project-badge" title="${escapeHtml(node.projectSection.title)}">${escapeHtml(node.projectSection.code)}</span>` : "";
 
   const renderDirectionCards = () => {
     if (!directionGrid) return;
-    directionGrid.innerHTML = directionTargets().map((target, index) => {
+    directionGrid.innerHTML = projectGroups().map(group => `
+      <section class="catalog-v2-project-group" aria-label="${escapeHtml(group.title)}">
+        <h2 class="catalog-v2-project-group-title">${escapeHtml(group.title)}</h2>
+        <div class="catalog-v2-project-cards">${group.targets.map((target, index) => {
       const direction = nodeById(target);
       return `
         <a class="catalog-v2-direction-card" href="${escapeHtml(urlFor(direction))}" data-catalog-v2-target="${escapeHtml(target)}">
           <img src="${escapeHtml(imageFor(direction))}" alt="" loading="${index === 0 ? "eager" : "lazy"}">
+          ${badgeHtml(direction)}
           <span class="catalog-v2-direction-overlay">
-            <h2>${escapeHtml(direction.title)}</h2>
+            <h3>${escapeHtml(direction.title)}</h3>
           </span>
         </a>`;
-    }).join("");
+    }).join("")}</div></section>`).join("");
   };
 
   const cardHtml = node => `
     <a class="catalog-v2-system-card" href="${escapeHtml(urlFor(node))}" data-catalog-v2-target="${escapeHtml(node.id)}">
       <img src="${escapeHtml(imageFor(node))}" alt="" loading="lazy">
+      ${badgeHtml(node)}
       <span class="catalog-v2-system-overlay">
         <h3>${escapeHtml(node.title)}</h3>
       </span>
@@ -377,6 +400,14 @@
       if (contentKicker) {
         contentKicker.textContent = node.title;
         contentKicker.hidden = false;
+      }
+      if (projectInfo) {
+        const section = node.projectSection;
+        projectInfo.hidden = !section;
+        projectInfo.innerHTML = section ? `
+          <div class="catalog-v2-project-definition"><b>${escapeHtml(section.code)}</b><span>${escapeHtml(section.title)}</span></div>
+          <small>${escapeHtml(section.context)}</small>
+          ${section.marks?.length ? `<details><summary>Обозначения в проекте</summary><dl>${section.marks.map(mark => `<div><dt>${escapeHtml(mark.code)}</dt><dd>${escapeHtml(mark.title)}</dd></div>`).join("")}</dl></details>` : ""}` : "";
       }
       if (backButton) {
         backButton.dataset.catalogV2Back = node.parent || rootTarget;

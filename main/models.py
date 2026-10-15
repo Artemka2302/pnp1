@@ -50,6 +50,11 @@ class Direction(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    @property
+    def project_section(self):
+        from .catalog_sections import project_section
+        return project_section(self.slug)
+
     def get_absolute_url(self):
         return reverse(
             "catalog_direction",
@@ -214,11 +219,13 @@ class Lead(TimeStampedModel):
     COOPERATION_TYPE_MANUFACTURER = "manufacturer"
     COOPERATION_TYPE_SUPPLIER = "supplier"
     COOPERATION_TYPE_CONTRACTOR = "contractor"
+    COOPERATION_TYPE_LOGISTICS = "logistics"
     COOPERATION_TYPE_OTHER = "other"
     COOPERATION_TYPE_CHOICES = [
         (COOPERATION_TYPE_MANUFACTURER, "Производитель"),
         (COOPERATION_TYPE_SUPPLIER, "Поставщик"),
         (COOPERATION_TYPE_CONTRACTOR, "Подрядчик"),
+        (COOPERATION_TYPE_LOGISTICS, "Логистика"),
         (COOPERATION_TYPE_OTHER, "Другое"),
     ]
 

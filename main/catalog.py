@@ -5,27 +5,13 @@ from django.templatetags.static import static
 from django.urls import reverse
 
 from .models import CatalogBlock, CatalogSystem, Direction, ProductGroup, VendorProductGroup
+from .catalog_sections import PROJECT_DIRECTIONS, SYSTEM_ORDER, project_section
 
 
 CATALOG_CACHE_TTL = 15 * 60
-CATALOG_CACHE_VERSION_KEY = "pnp:catalog:public-v2:version"
+CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v4:version"
 
-PUBLIC_DIRECTION_SLUGS = (
-    "architecture",
-    "constructive",
-    "it-infrastructure",
-    "low-current",
-    "tech-equipment",
-    "eom",
-    "hvac",
-    "water",
-    "gas",
-    "fire",
-    "accessibility",
-    "vertical-transport",
-    "landscaping-and-site-improvement",
-    "ev-charging-infrastructure",
-)
+PUBLIC_DIRECTION_SLUGS = tuple(PROJECT_DIRECTIONS)
 
 
 def public_direction_order_expression(field_name="slug"):
@@ -48,7 +34,7 @@ def catalog_cache_version():
 
 
 def catalog_cache_key(namespace, value=""):
-    return f"pnp:catalog:v{catalog_cache_version()}:{namespace}:{value}"
+    return f"pnp:catalog:sections-v4:v{catalog_cache_version()}:{namespace}:{value}"
 
 
 def invalidate_catalog_cache():
@@ -119,6 +105,7 @@ def direction_payload(direction):
     return {
         "id": target,
         "kind": "direction",
+        "projectSection": project_section(direction.slug),
         "level": "Раздел проекта",
         "title": direction.title,
         "summary": direction.purpose,
@@ -147,6 +134,7 @@ def system_payload(system):
     return {
         "id": target,
         "kind": "system",
+        "projectSection": project_section(direction.slug),
         "level": "Система",
         "title": system.title,
         "summary": f"Выберите товарную группу внутри системы «{system.title}».",
@@ -179,6 +167,7 @@ def group_payload(group):
     return {
         "id": target,
         "kind": "group",
+        "projectSection": project_section(direction.slug),
         "slug": group.slug,
         "level": "Товарная группа",
         "title": group.title,
@@ -223,6 +212,7 @@ def group_card_payload(group):
     return {
         "id": target,
         "kind": "group",
+        "projectSection": project_section(direction.slug),
         "slug": group.slug,
         "level": "Товарная группа",
         "title": group.title,
@@ -364,16 +354,20 @@ def build_catalog_node(target):
             raise Http404("Catalog block not found")
         children = [
             direction_payload(direction)
-            for direction in direction_queryset().filter(block=block).order_by("sort_order", "title")
+            for direction in direction_queryset().filter(block=block)
+            .annotate(public_order=public_direction_order_expression()).order_by("public_order", "sort_order", "title")
         ]
         node = _with_children(block_payload(block), children)
     elif kind == "direction":
         direction = direction_queryset().filter(slug=slug).first()
         if not direction:
             raise Http404("Catalog direction not found")
+        system_order = SYSTEM_ORDER.get(direction.slug, ())
+        systems = list(system_queryset().filter(direction=direction).order_by("sort_order", "title"))
+        systems.sort(key=lambda system: system_order.index(system.slug) if system.slug in system_order else len(system_order))
         children = [
             system_payload(system)
-            for system in system_queryset().filter(direction=direction).order_by("sort_order", "title")
+            for system in systems
         ]
         node = _with_children(direction_payload(direction), children)
     elif kind == "system":

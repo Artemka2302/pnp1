@@ -4,10 +4,11 @@
 {% block body_class %}home-page pnp-live-home{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20261001-header-logo-axis-v2">
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260817-cooperation-files-v3">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20261014-project-order-v6">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261015-form-spacing-v2">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260812-1">
   <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20260825-mobile-header-phone-v1">
+  <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261015-1">
 {% endblock %}
 
 {% block content %}
@@ -58,23 +59,48 @@
 </section>
 {% endif %}
 
+<section class="section home-supply-section home-directions-section home-desktop-only" aria-labelledby="homeSupplyTitle">
+  <div class="container">
+    <div class="section-head home-supply-section-head home-supply-gallery-head">
+      <div>
+        <div class="section-eyebrow">Комплектация по проекту</div>
+        <h2 id="homeSupplyTitle">Проектные решения</h2>
+        <p>Подбираем и поставляем материалы, оборудование и комплексные решения по всем ключевым направлениям.</p>
+      </div>
+    </div>
+    <div id="homeCategories">
+      <div class="home-supply-gallery" aria-label="Разделы комплектации объекта">
+        {% for direction in directions %}
+          <a class="home-supply-gallery-card home-supply-gallery-card--{{ direction.slug }}"
+            href="{{ direction.get_absolute_url }}"
+            aria-label="Открыть раздел: {{ direction.title }}">
+            <span class="home-supply-gallery-media" aria-hidden="true">
+              {% if direction.image %}<img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">{% endif %}
+            </span>
+            <span class="home-supply-gallery-shade" aria-hidden="true"></span>
+            {% with section=direction.project_section %}{% if section %}<span class="home-supply-project-badge" title="{{ section.title }}">{{ section.code }}</span>{% endif %}{% endwith %}
+            <span class="home-supply-gallery-content">
+              <strong>{{ direction.title }}</strong>
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include "main/partials/home_solutions.html" %}
+
 <section class="section compact role-entry-section home-desktop-only" id="clients">
   <div class="container">
     <div class="section-head role-entry-head">
       <div>
-        <div class="eyebrow">С кем работаем</div>
-        <h2><span class="role-entry-title-desktop">Наши партнёры</span><span class="role-entry-title-mobile">С кем работаем</span></h2>
-        <p>Помогаем участникам проектирования и строительства, частным заказчикам и DIY-проектам подобрать материалы, оборудование и решения под конкретную задачу.</p>
+        <div class="eyebrow">Сферы сотрудничества</div>
+        <h2><span class="role-entry-title-desktop">Наши заказчики</span><span class="role-entry-title-mobile">Наши заказчики</span></h2>
+        <p>Подбираем проектные решения, материалы и оборудование для проектных организаций, строительных компаний, торговых сетей и частных заказчиков. Организуем комплектацию и поставки.</p>
       </div>
     </div>
     <div class="role-entry-grid">
-      <article class="role-entry-card" id="client-designers" data-role-card="designer">
-        <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><path d="M4.5 4.5h18v18h-18zM11 4.5V12h11.5M4.5 16.5H11v6M15.5 12v5h7"/><path class="icon-detail" d="m16.5 26 8.9-8.9 2.8 2.8-8.9 8.9-3.8 1 1-3.8Zm7.5-7.5 2.8 2.8"/></svg></span>
-        <div class="role-entry-card-top"><span class="role-entry-tag">Проектирование</span></div>
-        <h3>Проектировщики</h3>
-        <span class="role-entry-mobile-summary">Решения и документы по техническому заданию</span>
-        <p>Помогаем подобрать решения по техническому заданию, проверить применимость материалов и получить документы для согласования.</p>
-      </article>
       <article class="role-entry-card" id="client-construction" data-role-card="general_contractor">
         <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 21V4h2v17M3 7h16M7 4h8l4 3M3 21h9"/><path class="icon-detail" d="M16 7v7M13.5 14h5v3h-5z"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Комплектация</span></div>
@@ -85,23 +111,23 @@
       <article class="role-entry-card" id="client-institutes" data-role-card="procurement">
         <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m3 8.5 9-5 9 5H3ZM4.5 17.5h15M3 20.5h18"/><path class="icon-detail" d="M6.5 9v8.5M10.2 9v8.5M13.8 9v8.5M17.5 9v8.5"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Проектные решения</span></div>
-        <h3>Проектные институты</h3>
-        <span class="role-entry-mobile-summary">Аналоги и документация для согласования</span>
-        <p>Сопоставляем решения с требованиями проекта, подбираем аналоги и помогаем собрать документацию по позициям.</p>
+        <h3>Проектные институты и архитектурные бюро</h3>
+        <span class="role-entry-mobile-summary">Проектные решения и техническая документация</span>
+        <p>Подбираем проектные решения, материалы и оборудование по техническому заданию. Предоставляем документацию для включения в проект.</p>
       </article>
       <article class="role-entry-card" id="client-private" data-role-card="private">
         <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m3 11.5 9-7.5 9 7.5M5 10v10h14V10"/><path class="icon-detail" d="M12 11a2.35 2.35 0 1 1 0 4.7A2.35 2.35 0 0 1 12 11Zm-4 9c.35-2.25 1.75-3.45 4-3.45s3.65 1.2 4 3.45"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Частный объект</span></div>
-        <h3>Физические лица</h3>
+        <h3>B2C</h3>
         <span class="role-entry-mobile-summary">Материалы и оборудование для частного объекта</span>
         <p>Помогаем подобрать материалы и оборудование для частного строительства, ремонта и благоустройства.</p>
       </article>
       <article class="role-entry-card" id="client-diy" data-role-card="diy">
         <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><path d="M4 9h14l5 4-5 4H4V9Zm5 8-1 10h5l2-10"/><path class="icon-detail" d="M18 11h2.5v4H18M4 12.2h7M9.8 21.5h3.7M23 12h5v2h-5"/></svg></span>
-        <div class="role-entry-card-top"><span class="role-entry-tag">Самостоятельные проекты</span></div>
-        <h3>DIY</h3>
-        <span class="role-entry-mobile-summary">Понятный подбор для самостоятельных работ</span>
-        <p>Подбираем понятные материалы, комплектующие и оборудование для самостоятельной реализации конкретной задачи.</p>
+        <div class="role-entry-card-top"><span class="role-entry-tag">Торговый ассортимент</span></div>
+        <h3>DIY-сети и строительные магазины</h3>
+        <span class="role-entry-mobile-summary">Подбор ассортимента и организация поставок</span>
+        <p>Подбираем продукцию и производителей для торгового ассортимента. Организуем комплектацию и поставки.</p>
       </article>
     </div>
   </div>
@@ -139,35 +165,6 @@
       <article><b>Сопровождаем поставку</b><span>Ведём путь от первичного запроса до коммерческого предложения и отгрузки.</span></article>
       <article><b>Готовим данные для КАЦ</b><span>Организуем согласованные КП производителей, сводим ценовые данные и помогаем с защитой материалов.</span></article>
       <article><b>Формируем коммерческое предложение</b><span>Запрашиваем исходные КП и сводим позиции, аналоги, сроки и условия поставки по объекту.</span></article>
-    </div>
-  </div>
-</section>
-
-<section class="section home-supply-section home-directions-section home-desktop-only" aria-labelledby="homeSupplyTitle">
-  <div class="container">
-    <div class="section-head home-supply-section-head home-supply-gallery-head">
-      <div>
-        <div class="section-eyebrow">Комплектация по проекту</div>
-        <h2 id="homeSupplyTitle">Комплектуем объект по всем разделам проекта</h2>
-        <p>Подбираем и поставляем материалы, оборудование и комплексные решения по всем ключевым направлениям.</p>
-      </div>
-    </div>
-    <div id="homeCategories">
-      <div class="home-supply-gallery" aria-label="Разделы комплектации объекта">
-        {% for direction in directions %}
-          <a class="home-supply-gallery-card home-supply-gallery-card--{{ direction.slug }}"
-            href="{{ direction.get_absolute_url }}"
-            aria-label="Открыть раздел: {{ direction.title }}">
-            <span class="home-supply-gallery-media" aria-hidden="true">
-              {% if direction.image %}<img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">{% endif %}
-            </span>
-            <span class="home-supply-gallery-shade" aria-hidden="true"></span>
-            <span class="home-supply-gallery-content">
-              <strong>{{ direction.title }}</strong>
-            </span>
-          </a>
-        {% endfor %}
-      </div>
     </div>
   </div>
 </section>
@@ -230,8 +227,8 @@
         <div class="home-request-stage-tabs" role="tablist" aria-label="Этапы комплектации объекта">
           <span class="home-request-stage-rail" aria-hidden="true"><span class="home-request-stage-rail-fill" data-home-request-track-fill></span><span class="home-request-stage-runner" data-home-request-runner></span></span>
           <button class="home-request-stage is-active" id="homeRequestStageProject" type="button" role="tab" aria-selected="true" aria-controls="homeRequestPanel" tabindex="0" data-home-request-step="project"><span class="home-request-stage-node" aria-hidden="true">01</span><span class="home-request-stage-copy"><strong>Проект</strong><small>Разбираем разделы проекта</small></span></button>
-          <button class="home-request-stage" id="homeRequestStageAnalogs" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="analogs"><span class="home-request-stage-node" aria-hidden="true">02</span><span class="home-request-stage-copy"><strong>Аналоги</strong><small>Подбираем замены</small></span></button>
-          <button class="home-request-stage" id="homeRequestStageControl" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="control"><span class="home-request-stage-node" aria-hidden="true">03</span><span class="home-request-stage-copy"><strong>Контроль</strong><small>Сверяем позиции и сроки</small></span></button>
+          <button class="home-request-stage" id="homeRequestStageAnalogs" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="analogs"><span class="home-request-stage-node" aria-hidden="true">02</span><span class="home-request-stage-copy"><strong>Подбор</strong><small>Подбираем решения</small></span></button>
+          <button class="home-request-stage" id="homeRequestStageControl" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="control"><span class="home-request-stage-node" aria-hidden="true">03</span><span class="home-request-stage-copy"><strong>Согласование</strong><small>Цена, сроки, качество</small></span></button>
           <button class="home-request-stage" id="homeRequestStageDelivery" type="button" role="tab" aria-selected="false" aria-controls="homeRequestPanel" tabindex="-1" data-home-request-step="delivery"><span class="home-request-stage-node" aria-hidden="true">04</span><span class="home-request-stage-copy"><strong>Поставка</strong><small>Готовим документы и логистику</small></span></button>
         </div>
         <div class="home-request-workflow-details" aria-live="off" data-home-request-details>
@@ -249,8 +246,8 @@
     <div class="eyebrow home-desktop-eyebrow home-desktop-eyebrow-form">Быстрая заявка</div>
     <article class="glass request-panel home-request-card home-request-card--switcher" id="home-request-form" data-contact-request-switcher>
       <div class="contact-request-tabs" role="tablist" aria-label="Тип обращения">
-        <button class="contact-request-tab is-active" id="homeSupplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="homeSupplyRequestPanel" tabindex="0" data-contact-request-tab="supply">Заявка на поставку</button>
-        <button class="contact-request-tab" id="homeCooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="homeCooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">Сотрудничество</button>
+        <button class="contact-request-tab is-active" id="homeSupplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="homeSupplyRequestPanel" tabindex="0" data-contact-request-tab="supply">Для покупателей</button>
+        <button class="contact-request-tab" id="homeCooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="homeCooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">Для поставщиков</button>
       </div>
 
       <section class="contact-request-panel" id="homeSupplyRequestPanel" role="tabpanel" aria-labelledby="homeSupplyRequestTab" data-contact-request-panel="supply">
@@ -258,7 +255,7 @@
         <form class="form sym-request-home-form quick-request-form home-direct-request" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-request-mode="supply" data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="hidden" name="source" value="contact">
-          <div class="field"><label for="homeLiveName">Имя</label><input id="homeLiveName" name="name" autocomplete="name" placeholder="Как к вам обращаться" required></div>
+          <div class="field"><label for="homeLiveName">Контактное лицо</label><input id="homeLiveName" name="name" autocomplete="name" placeholder="Имя и фамилия" required></div>
           <div class="field"><label for="homeLivePhone">Телефон</label><input id="homeLivePhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input placeholder="+7 ___ ___-__-__" required></div>
           <div class="field sym-request-message-field"><label for="homeLiveMessage">Комментарий</label><textarea id="homeLiveMessage" name="message" placeholder="Что нужно подобрать? Укажите объект, город или сроки."></textarea></div>
           <div class="field file-field sym-request-upload-field quick-file-field"><span class="field-label">Спецификация или файл <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeLiveSpecification"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeLiveSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div></div>
@@ -272,15 +269,11 @@
         <form class="form sym-request-home-form quick-request-form cooperation-request-form" method="post" action="{% url 'api_cooperation_request' %}" data-lead-form data-request-mode="cooperation" data-lead-url="{% url 'api_cooperation_request' %}" data-submit-pending="Отправляем предложение..." data-submit-success="Предложение отправлено. Мы свяжемся с вами после рассмотрения." enctype="multipart/form-data">
           {% csrf_token %}
           <input type="hidden" name="source" value="cooperation">
-          <fieldset class="cooperation-role-field"><legend>Кто вы? <span aria-hidden="true">*</span></legend><div class="cooperation-role-options"><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="manufacturer" required><span>Производитель</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="supplier" required><span>Поставщик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="contractor" required><span>Подрядчик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="other" required><span>Другое</span></label></div></fieldset>
-          <div class="field"><label for="homeCooperationCompany">Компания / контактное лицо *</label><input id="homeCooperationCompany" name="company" placeholder="Введите компанию или ФИО" autocomplete="organization" maxlength="220" required></div>
-          <div class="cooperation-contact-row"><div class="field"><label for="homeCooperationPhone">Телефон *</label><input id="homeCooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div><div class="field"><label for="homeCooperationEmail">Email *</label><input id="homeCooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div></div>
-          <div class="field"><label for="homeCooperationMessage">Комментарий *</label><textarea id="homeCooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
-          <div class="cooperation-files-grid" aria-label="Файлы для предложения">
-            <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Карточка компании <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeCooperationCompanyCard"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeCooperationCompanyCard" name="company_card" type="file" accept=".pdf,.docx"><small>PDF, DOCX</small><div class="file-list" data-file-list hidden></div></div>
-            <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Каталог / презентация <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeCooperationCatalogPresentation"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeCooperationCatalogPresentation" name="catalog_presentation" type="file" accept=".pdf,.pptx"><small>PDF, PPTX</small><div class="file-list" data-file-list hidden></div></div>
-            <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Прайс-лист <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeCooperationPriceList"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeCooperationPriceList" name="price_list" type="file" accept=".xlsx,.pdf"><small>XLSX, PDF</small><div class="file-list" data-file-list hidden></div></div>
-          </div>
+          <fieldset class="cooperation-role-field" aria-label="Тип организации"><div class="cooperation-role-options"><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="manufacturer" required><span>Производитель</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="supplier" required><span>Поставщик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="logistics" required><span>Логистика</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="other" required><span>Другое</span></label></div></fieldset>
+          {% include "main/partials/cooperation_identity.html" with identity_prefix="homeCooperation" %}
+          <div class="cooperation-contact-row"><div class="field"><label for="homeCooperationPhone">Телефон</label><input id="homeCooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div><div class="field"><label for="homeCooperationEmail">Email</label><input id="homeCooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div></div>
+          <div class="field"><label for="homeCooperationMessage">Комментарий</label><textarea id="homeCooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
+          {% include "main/partials/cooperation_attachments.html" with attachment_prefix="homeCooperation" %}
           <label class="form-consent-check quick-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span></label>
           <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить предложение →</button><small class="home-request-reassurance">Предложение поступит сотруднику, отвечающему за партнёрские обращения.</small></div>
         </form>
@@ -298,14 +291,14 @@
     <article class="glass home-about-sales"><h2>О компании</h2><p>ПНП объединяет подбор оборудования, работу с производителями и сопровождение заявок для строительных объектов.</p><p class="sales-trigger">Вместо разрозненных прайсов клиент получает рабочий комплект под объект: позиции, аналоги, сроки поставки и понятные точки риска.</p><div class="about-sales-points"><span><b>Проверяем</b><small>спецификацию</small></span><span><b>Подбираем</b><small>аналоги</small></span><span><b>Готовим КП</b><small>под задачу</small></span></div></article>
     <article class="glass request-panel home-mobile-request-card" id="home-mobile-request-form" data-contact-request-switcher>
       <div class="contact-request-tabs" role="tablist" aria-label="Тип обращения">
-        <button class="contact-request-tab is-active" id="homeMobileSupplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="homeMobileSupplyRequestPanel" tabindex="0" data-contact-request-tab="supply">Заявка на поставку</button>
-        <button class="contact-request-tab" id="homeMobileCooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="homeMobileCooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">Сотрудничество</button>
+        <button class="contact-request-tab is-active" id="homeMobileSupplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="homeMobileSupplyRequestPanel" tabindex="0" data-contact-request-tab="supply">Для покупателей</button>
+        <button class="contact-request-tab" id="homeMobileCooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="homeMobileCooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">Для поставщиков</button>
       </div>
       <section class="contact-request-panel" id="homeMobileSupplyRequestPanel" role="tabpanel" aria-labelledby="homeMobileSupplyRequestTab" data-contact-request-panel="supply">
         <header class="home-request-head"><span class="home-request-kicker">Быстрая заявка</span><h2>Заявка</h2></header>
         <form class="home-request-form quick-request-form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-request-mode="supply" data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
           {% csrf_token %}<input type="hidden" name="source" value="contact">
-          <div class="form-row"><div class="field"><label for="homeMobileName">Имя / компания</label><input id="homeMobileName" name="name" placeholder="ООО СтройПроект" autocomplete="organization" required></div><div class="field"><label for="homeMobileContact">Телефон</label><input id="homeMobileContact" name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input placeholder="+7 ___ ___-__-__" autocomplete="tel" required></div></div>
+          <div class="form-row"><div class="field"><label for="homeMobileName">Контактное лицо</label><input id="homeMobileName" name="name" placeholder="Имя и фамилия" autocomplete="name" required></div><div class="field"><label for="homeMobileContact">Телефон</label><input id="homeMobileContact" name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input placeholder="+7 ___ ___-__-__" autocomplete="tel" required></div></div>
           <div class="field"><label for="homeMobileMessage">Комментарий</label><textarea id="homeMobileMessage" name="message" placeholder="Опишите задачу или добавьте список позиций"></textarea></div>
           <div class="field file-field quick-file-field"><span class="field-label">Спецификация или файл <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeMobileSpecification"><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeMobileSpecification" name="specification" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.jpg,.jpeg,.png,.zip" multiple><div class="file-list" data-file-list hidden></div></div>
           <label class="form-consent form-consent-check quick-consent home-request-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener noreferrer">Политикой конфиденциальности</a>.</span></label>
@@ -316,15 +309,11 @@
         <header class="home-request-head cooperation-request-head"><span class="home-request-kicker">Партнёрам и поставщикам</span><h2>Предложить сотрудничество</h2></header>
         <form class="home-request-form quick-request-form cooperation-request-form" method="post" action="{% url 'api_cooperation_request' %}" data-lead-form data-request-mode="cooperation" data-lead-url="{% url 'api_cooperation_request' %}" data-submit-pending="Отправляем предложение..." data-submit-success="Предложение отправлено. Мы свяжемся с вами после рассмотрения." enctype="multipart/form-data">
           {% csrf_token %}<input type="hidden" name="source" value="cooperation">
-          <fieldset class="cooperation-role-field"><legend>Кто вы? <span aria-hidden="true">*</span></legend><div class="cooperation-role-options"><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="manufacturer" required><span>Производитель</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="supplier" required><span>Поставщик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="contractor" required><span>Подрядчик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="other" required><span>Другое</span></label></div></fieldset>
-          <div class="field"><label for="homeMobileCooperationCompany">Компания / контактное лицо *</label><input id="homeMobileCooperationCompany" name="company" placeholder="Введите компанию или ФИО" autocomplete="organization" maxlength="220" required></div>
-          <div class="cooperation-contact-row"><div class="field"><label for="homeMobileCooperationPhone">Телефон *</label><input id="homeMobileCooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div><div class="field"><label for="homeMobileCooperationEmail">Email *</label><input id="homeMobileCooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div></div>
-          <div class="field"><label for="homeMobileCooperationMessage">Комментарий *</label><textarea id="homeMobileCooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
-          <div class="cooperation-files-grid" aria-label="Файлы для предложения">
-            <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Карточка компании <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeMobileCooperationCompanyCard"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeMobileCooperationCompanyCard" name="company_card" type="file" accept=".pdf,.docx"><small>PDF, DOCX</small><div class="file-list" data-file-list hidden></div></div>
-            <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Каталог / презентация <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeMobileCooperationCatalogPresentation"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeMobileCooperationCatalogPresentation" name="catalog_presentation" type="file" accept=".pdf,.pptx"><small>PDF, PPTX</small><div class="file-list" data-file-list hidden></div></div>
-            <div class="field file-field cooperation-file-card quick-file-field"><span class="field-label">Прайс-лист <span class="field-optional">(при наличии)</span></span><label class="upload-box" for="homeMobileCooperationPriceList"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label><input class="file-input" id="homeMobileCooperationPriceList" name="price_list" type="file" accept=".xlsx,.pdf"><small>XLSX, PDF</small><div class="file-list" data-file-list hidden></div></div>
-          </div>
+          <fieldset class="cooperation-role-field" aria-label="Тип организации"><div class="cooperation-role-options"><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="manufacturer" required><span>Производитель</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="supplier" required><span>Поставщик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="logistics" required><span>Логистика</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="other" required><span>Другое</span></label></div></fieldset>
+          {% include "main/partials/cooperation_identity.html" with identity_prefix="homeMobileCooperation" %}
+          <div class="cooperation-contact-row"><div class="field"><label for="homeMobileCooperationPhone">Телефон</label><input id="homeMobileCooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div><div class="field"><label for="homeMobileCooperationEmail">Email</label><input id="homeMobileCooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div></div>
+          <div class="field"><label for="homeMobileCooperationMessage">Комментарий</label><textarea id="homeMobileCooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
+          {% include "main/partials/cooperation_attachments.html" with attachment_prefix="homeMobileCooperation" %}
           <label class="form-consent-check quick-consent"><input type="checkbox" name="consent" value="1" required><span>Я даю согласие на обработку персональных данных в соответствии с <a href="{% url 'privacy' %}" target="_blank" rel="noopener">Политикой конфиденциальности</a>.</span></label>
           <div class="home-request-actions"><p class="form-status" data-form-status role="status" aria-live="polite"></p><button class="btn quick-request-submit" type="submit">Отправить предложение →</button></div>
         </form>
@@ -336,5 +325,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/home-pnp1-live.js' %}?v=20260824-mobile-interactions-v1"></script>
+  <script src="{% static 'js/home-solutions.js' %}?v=20261015-1" defer></script>
+  <script src="{% static 'js/home-pnp1-live.js' %}?v=20261014-home-process-v1"></script>
 {% endblock %}

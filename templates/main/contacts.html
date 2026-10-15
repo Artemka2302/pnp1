@@ -5,7 +5,7 @@
 {% block body_class %}contacts-page{% endblock %}
 
 {% block extra_head %}
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20260817-cooperation-files-v3">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261015-form-spacing-v2">
   <style>
     .contacts-page .home-request-card {
       background:
@@ -48,10 +48,10 @@
       <article class="glass request-panel home-request-card contact-request-card" id="request-form" data-contact-request-switcher>
         <div class="contact-request-tabs" role="tablist" aria-label="Тип обращения">
           <button class="contact-request-tab is-active" id="supplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="supplyRequestPanel" tabindex="0" data-contact-request-tab="supply">
-            Заявка на поставку
+            Для покупателей
           </button>
           <button class="contact-request-tab" id="cooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="cooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">
-            Сотрудничество
+            Для поставщиков
           </button>
         </div>
 
@@ -62,7 +62,7 @@
             <input type="hidden" name="source" value="contact">
             <input type="hidden" name="items" data-request-items>
 
-            <div class="field"><label for="name">Имя</label><input id="name" name="name" placeholder="Как к вам обращаться" autocomplete="name" required></div>
+            <div class="field"><label for="name">Контактное лицо</label><input id="name" name="name" placeholder="Имя и фамилия" autocomplete="name" required></div>
             <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div>
 
             <div class="field contact-selected-items" data-contact-request-items hidden>
@@ -109,8 +109,7 @@
             {% csrf_token %}
             <input type="hidden" name="source" value="cooperation">
 
-            <fieldset class="cooperation-role-field">
-              <legend>Кто вы? <span aria-hidden="true">*</span></legend>
+            <fieldset class="cooperation-role-field" aria-label="Тип организации">
               <div class="cooperation-role-options">
                 <label class="cooperation-role-option">
                   <input type="radio" name="proposer_type" value="manufacturer" required>
@@ -121,8 +120,8 @@
                   <span>Поставщик</span>
                 </label>
                 <label class="cooperation-role-option">
-                  <input type="radio" name="proposer_type" value="contractor" required>
-                  <span>Подрядчик</span>
+                  <input type="radio" name="proposer_type" value="logistics" required>
+                  <span>Логистика</span>
                 </label>
                 <label class="cooperation-role-option">
                   <input type="radio" name="proposer_type" value="other" required>
@@ -131,35 +130,16 @@
               </div>
             </fieldset>
 
-            <div class="field"><label for="cooperationCompany">Компания / контактное лицо *</label><input id="cooperationCompany" name="company" placeholder="Введите компанию или ФИО" autocomplete="organization" maxlength="220" required></div>
+            {% include "main/partials/cooperation_identity.html" with identity_prefix="cooperation" %}
 
             <div class="cooperation-contact-row">
-              <div class="field"><label for="cooperationPhone">Телефон *</label><input id="cooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div>
-              <div class="field"><label for="cooperationEmail">Email *</label><input id="cooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div>
+              <div class="field"><label for="cooperationPhone">Телефон</label><input id="cooperationPhone" name="phone" type="tel" placeholder="+7 ___ ___-__-__" autocomplete="tel" inputmode="tel" maxlength="18" data-phone-input required></div>
+              <div class="field"><label for="cooperationEmail">Email</label><input id="cooperationEmail" name="email" type="email" placeholder="name@company.ru" autocomplete="email" maxlength="254" required></div>
             </div>
 
-            <div class="field"><label for="cooperationMessage">Комментарий *</label><textarea id="cooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
+            <div class="field"><label for="cooperationMessage">Комментарий</label><textarea id="cooperationMessage" name="message" placeholder="Расскажите о вашем предложении и возможностях сотрудничества" maxlength="5000" required></textarea></div>
 
-            <div class="cooperation-files-grid" aria-label="Файлы для предложения">
-              <div class="field file-field cooperation-file-card quick-file-field">
-                <span class="field-label">Карточка компании <span class="field-optional">(при наличии)</span></span>
-                <label class="upload-box" for="cooperationCompanyCard"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label>
-                <input class="file-input" id="cooperationCompanyCard" name="company_card" type="file" accept=".pdf,.docx">
-                <small>PDF, DOCX</small><div class="file-list" data-file-list hidden></div>
-              </div>
-              <div class="field file-field cooperation-file-card quick-file-field">
-                <span class="field-label">Каталог / презентация <span class="field-optional">(при наличии)</span></span>
-                <label class="upload-box" for="cooperationCatalogPresentation"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label>
-                <input class="file-input" id="cooperationCatalogPresentation" name="catalog_presentation" type="file" accept=".pdf,.pptx">
-                <small>PDF, PPTX</small><div class="file-list" data-file-list hidden></div>
-              </div>
-              <div class="field file-field cooperation-file-card quick-file-field">
-                <span class="field-label">Прайс-лист <span class="field-optional">(при наличии)</span></span>
-                <label class="upload-box" for="cooperationPriceList"><svg class="upload-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 12.5 14.8 6.2a3 3 0 0 1 4.2 4.2l-8.5 8.5a5 5 0 0 1-7.1-7.1l8.1-8.1"></path></svg><span data-file-label>Прикрепить файл</span></label>
-                <input class="file-input" id="cooperationPriceList" name="price_list" type="file" accept=".xlsx,.pdf">
-                <small>XLSX, PDF</small><div class="file-list" data-file-list hidden></div>
-              </div>
-            </div>
+            {% include "main/partials/cooperation_attachments.html" with attachment_prefix="cooperation" %}
 
             <label class="form-consent-check quick-consent">
               <input type="checkbox" name="consent" value="1" required>

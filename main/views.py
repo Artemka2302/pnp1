@@ -35,7 +35,8 @@ from .models import (
     Vendor,
 )
 from .bitrix import send_lead_to_bitrix
-from .solutions import find_solution_vendor, solution_documents, solution_sections, solution_vendors
+from .company_lookup import lookup_configured, selected_company
+from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 from .ai import (
     AiConfigurationError,
     AiProviderError,
@@ -130,7 +131,9 @@ def homepage_context():
 
 
 def index(request):
-    return render(request, "main/home.html", homepage_context())
+    return render(request, "main/home.html", {
+        **homepage_context(), "home_solutions": homepage_solution_showcase(),
+    })
 
 
 def about(request):
@@ -1311,6 +1314,7 @@ def lead_request_api(request, forced_source=None):
         source = Lead.SOURCE_CATALOG_REQUEST
 
     cooperation_types = {choice[0] for choice in Lead.COOPERATION_TYPE_CHOICES}
+    company_record = None
 
     if not consent_value:
         return JsonResponse({"ok": False, "error": "Подтвердите согласие на обработку данных."}, status=400)
@@ -1318,7 +1322,14 @@ def lead_request_api(request, forced_source=None):
         if proposer_type not in cooperation_types:
             return JsonResponse({"ok": False, "error": "Укажите, кого вы представляете."}, status=400)
         if not company:
-            return JsonResponse({"ok": False, "error": "Укажите компанию или контактное лицо."}, status=400)
+            return JsonResponse({"ok": False, "error": "Укажите компанию."}, status=400)
+        company_token = payload_value(payload, "company_token", max_length=8192)
+        if company_token:
+            company_record = selected_company(company_token)
+            if not company_record or company_record["name"] != company:
+                return JsonResponse({"ok": False, "error": "Выберите компанию из списка ещё раз — данные выбора изменились или устарели."}, status=400)
+        elif lookup_configured() or re.fullmatch(r"[\d\s]+", company):
+            return JsonResponse({"ok": False, "error": "Выберите организацию из списка по ИНН или названию."}, status=400)
         if not phone:
             return JsonResponse({"ok": False, "error": "Укажите телефон."}, status=400)
         if not email:
@@ -1347,6 +1358,12 @@ def lead_request_api(request, forced_source=None):
 
     product_group = resolve_product_group(product_group_slug, product_group_title)
     raw_payload = payload_to_dict(payload)
+    if source == Lead.SOURCE_COOPERATION:
+        raw_payload.pop("company_token", None)
+        raw_payload.pop("company_record", None)
+        raw_payload["company_verified"] = bool(company_record)
+        if company_record:
+            raw_payload["company_record"] = company_record
 
     with transaction.atomic():
         lead = Lead.objects.create(

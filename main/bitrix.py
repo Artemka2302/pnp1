@@ -18,6 +18,8 @@ COOPERATION_PROPOSER_TYPE_FIELD = "UF_CRM_14_1786358572238"
 COOPERATION_PROPOSER_TYPE_IDS = {
     Lead.COOPERATION_TYPE_SUPPLIER: 1330,
     Lead.COOPERATION_TYPE_CONTRACTOR: 1331,
+    # Until Bitrix has its own Logistics option, route it to Other; the comment retains the exact type.
+    Lead.COOPERATION_TYPE_LOGISTICS: 1332,
     Lead.COOPERATION_TYPE_OTHER: 1332,
     Lead.COOPERATION_TYPE_MANUFACTURER: 1333,
 }
@@ -95,6 +97,18 @@ def build_bitrix_comment(lead):
         lines = [f"Предложение о сотрудничестве #{lead.pk} с сайта ПНП"]
         if proposer_type in proposer_labels:
             lines.extend(["", f"Кто обращается: {proposer_labels[proposer_type]}"])
+        if lead.company:
+            lines.append(f"Компания: {lead.company}")
+        if lead.contact_name:
+            lines.append(f"Контактное лицо: {lead.contact_name}")
+        company_record = lead.raw_payload.get("company_record")
+        if lead.raw_payload.get("company_verified") and isinstance(company_record, dict):
+            for key, label in (("inn", "ИНН"), ("kpp", "КПП"), ("ogrn", "ОГРН"), ("address", "Адрес"), ("status", "Статус в реестре")):
+                if company_record.get(key):
+                    lines.append(f"{label}: {company_record[key]}")
+            lines.append("Реквизиты: выбраны из справочника DaData (ЕГРЮЛ/ЕГРИП).")
+        elif "company_verified" in lead.raw_payload:
+            lines.append("Реквизиты: требуется проверка менеджером.")
         if lead.message:
             lines.extend(["", "Предложение:", lead.message])
         return "\n".join(lines)
@@ -232,7 +246,7 @@ def build_bitrix_cooperation_payload(lead):
         "title": title[:255],
         COOPERATION_PHONE_FIELD: lead.phone,
         COOPERATION_EMAIL_FIELD: lead.email,
-        COOPERATION_COMMENT_FIELD: lead.message,
+        COOPERATION_COMMENT_FIELD: build_bitrix_comment(lead),
         COOPERATION_PROPOSER_TYPE_FIELD: proposer_type_id,
     }
     return {
