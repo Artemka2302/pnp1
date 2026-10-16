@@ -1,0 +1,88 @@
+{
+  "version": "2026-10-15",
+  "old_system": "wood-based-panel-materials",
+  "new_system": "wooden-structures",
+  "moves": [
+    {
+      "slug": "dvp-fiberboard",
+      "system": "interior-wall-panels"
+    },
+    {
+      "slug": "mdf",
+      "system": "interior-wall-panels"
+    },
+    {
+      "slug": "hdf",
+      "system": "interior-wall-panels"
+    },
+    {
+      "slug": "chipboard-dsp",
+      "system": "interior-wall-panels"
+    },
+    {
+      "slug": "laminated-chipboard-ldsp",
+      "system": "interior-wall-panels"
+    },
+    {
+      "slug": "gsp",
+      "system": "interior-wall-panels"
+    },
+    {
+      "slug": "cement-bonded-particle-board",
+      "system": "facades"
+    },
+    {
+      "slug": "acpl",
+      "system": "facades"
+    },
+    {
+      "slug": "mdvp-soft-fiberboard",
+      "system": "floors"
+    },
+    {
+      "slug": "fibrolite-boards",
+      "system": "finishing-materials"
+    },
+    {
+      "slug": "plywood",
+      "system": "wooden-structures"
+    },
+    {
+      "slug": "osb",
+      "system": "wooden-structures"
+    },
+    {
+      "slug": "lvl",
+      "system": "wooden-structures"
+    },
+    {
+      "slug": "vdsp-sh",
+      "system": "floor-and-partition-structures"
+    }
+  ],
+  "clones": [
+    {
+      "source": "cement-bonded-particle-board",
+      "slug": "cement-bonded-particle-board-structural",
+      "system": "floor-and-partition-structures"
+    },
+    {
+      "source": "gsp",
+      "slug": "gsp-structural",
+      "system": "floor-and-partition-structures"
+    }
+  ],
+  "new_systems": [
+    {
+      "slug": "wooden-structures",
+      "title": "Деревянные конструкции",
+      "direction": "constructive"
+    },
+    {
+      "slug": "floor-and-partition-structures",
+      "title": "Конструкции полов и перегородок",
+      "direction": "constructive"
+    }
+  ],
+  "formwork_type": "ламинированная фанера для опалубки"
+}

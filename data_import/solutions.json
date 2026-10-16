@@ -412,6 +412,71 @@
           "source_filename": "iss-mccdispathermcc-pa-2024.pdf"
         }
       ]
+    },
+    {
+      "slug": "astro-lift",
+      "name": "Астро-Лифт",
+      "reader_logo_on_light": true,
+      "provider_label": "Решения поставщика",
+      "logo": "assets/img/logos/solutions/astro-lift.svg",
+      "official_site": "https://astro-lift.ru/",
+      "background": {"image": "assets/solutions/astro-lift/vendor-background.webp", "source_pdf": "assets/solutions/astro-lift/premium-business.pdf", "page": 1, "image_name": "Im7.jpg (original source)"},
+      "description": "Лифты, эскалаторы и траволаторы: подбор оборудования, дизайн кабин и реализованные проекты.",
+      "intro": "Группа компаний «Астро-Лифт» — поставщик лифтового оборудования и официальный дистрибьютор BLT в России. В материалах представлены комплектация объектов, варианты отделки кабин и проекты бизнес- и премиум-класса.",
+      "tags": ["Лифты", "Эскалаторы", "Вертикальный транспорт"],
+      "sections": [
+        {"slug": "projects", "title": "Объекты премиум- и бизнес-класса", "documents": ["premium-business"]},
+        {"slug": "catalog", "title": "Каталог оборудования", "documents": ["catalog-2025"]}
+      ],
+      "documents": [
+        {
+          "slug": "premium-business", "title": "Объекты премиум- и бизнес-класса",
+          "description": "Примеры применения лифтов BLT в жилых комплексах, бизнес-центрах и гостиницах.",
+          "summary": "Презентация Астро-Лифт 2024 года: реализованные объекты премиум- и бизнес-класса, оборудование BLT, количество лифтов, грузоподъёмность, скорости и остановки для отдельных проектов. Параметры приведены для показанных объектов, а не как универсальные характеристики оборудования.",
+          "tags": ["Жилые комплексы", "Бизнес-центры", "Гостиницы"],
+          "pdf": "assets/solutions/astro-lift/premium-business.pdf", "cover": "assets/solutions/astro-lift/premium-business-cover.webp", "pages": 22,
+          "source_filename": "Презентация_Астро_Лифт_Объекты_Премиум_и_Бизнес.pdf"
+        },
+        {
+          "slug": "catalog-2025", "title": "Каталог оборудования 2025",
+          "description": "Лифты, дизайн и отделка кабин, эскалаторы, траволаторы, поставка и обслуживание.",
+          "summary": "Юбилейный каталог Астро-Лифт 2025 года: лифтовое оборудование BLT, дизайн кабин и панорамных лифтов, отделочные материалы, потолки, полы, двери, приказные посты, распределение пассажиропотока, эскалаторы и траволаторы. Представлены направления проектирования, поставки и обслуживания. В PDF 27 страниц, часть оформлена разворотами.",
+          "tags": ["Лифты", "Отделка кабин", "Эскалаторы", "Траволаторы"],
+          "pdf": "assets/solutions/astro-lift/catalog-2025.pdf", "cover": "assets/solutions/astro-lift/catalog-2025-cover.webp", "pages": 27,
+          "source_filename": "Каталог 2025.pdf"
+        }
+      ]
+    },
+    {
+      "slug": "blt", "name": "BLT",
+      "reader_logo_on_light": true,
+      "logo": "assets/img/logos/solutions/blt.png", "official_site": "https://www.bltelevator.com/",
+      "background": {"image": "assets/solutions/blt/vendor-background.webp", "source_pdf": "assets/solutions/blt/cabin-design-2026.pdf", "page": 14, "image_name": "Image571.jpg (original source)"},
+      "description": "Лифты и эскалаторы BLT: дизайн кабин и проекты транспортной, жилой и общественной инфраструктуры.",
+      "intro": "Решения BLT для вертикального транспорта: варианты дизайна лифтовых кабин и примеры применения оборудования на объектах в разных странах. Изучите материалы для выбора оборудования и отделки под задачи вашего проекта.",
+      "tags": ["Лифты", "Дизайн кабин", "Эскалаторы"],
+      "sections": [
+        {"slug": "design", "title": "Дизайн кабин", "documents": ["cabin-design-2026"]},
+        {"slug": "projects", "title": "Международные объекты", "documents": ["world-projects"]}
+      ],
+      "documents": [
+        {
+          "slug": "cabin-design-2026", "title": "Дизайн кабин 2026",
+          "description": "Варианты интерьеров лифта: стеновые панели, материалы, освещение и интерфейсы управления.",
+          "summary": "Презентация BLT по дизайну новых лифтовых кабин: тенденции оформления, материалы стеновых панелей, интеллектуальное освещение, пользовательские интерфейсы и визуализации вариантов отделки. Концепции и планы из презентации требуют уточнения доступности для конкретного проекта.",
+          "tags": ["Интерьеры", "Отделка", "Освещение"],
+          "pdf": "assets/solutions/blt/cabin-design-2026.pdf", "cover": "assets/solutions/blt/cabin-design-2026-cover.webp", "pages": 34,
+          "source_filename": "Дизайн кабины 2026.pdf"
+        },
+        {
+          "slug": "world-projects", "title": "Объекты мирового значения",
+          "description": "Лифты и эскалаторы BLT на объектах транспортной инфраструктуры, в жилых и общественных зданиях.",
+          "summary": "Корпоративная презентация BLT / Shenyang Yuanda Intellectual Industry Group: производство, технологии лифтов и эскалаторов, примеры проектов в Китае и других странах. Представлены аэропорты, метро, высотные здания, гостиницы и жилые комплексы. В PDF 18 страниц-разворотов.",
+          "tags": ["Международные проекты", "Метро", "Аэропорты", "Высотные здания"],
+          "pdf": "assets/solutions/blt/world-projects.pdf", "cover": "assets/solutions/blt/world-projects-cover.webp", "pages": 18,
+          "source_filename": "Объекты BLT Мирового значения.pdf"
+        }
+      ]
     }
   ]
 }

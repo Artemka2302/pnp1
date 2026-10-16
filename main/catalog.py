@@ -9,7 +9,7 @@ from .catalog_sections import PROJECT_DIRECTIONS, SYSTEM_ORDER, project_section
 
 
 CATALOG_CACHE_TTL = 15 * 60
-CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v4:version"
+CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v6:version"
 
 PUBLIC_DIRECTION_SLUGS = tuple(PROJECT_DIRECTIONS)
 
@@ -34,7 +34,7 @@ def catalog_cache_version():
 
 
 def catalog_cache_key(namespace, value=""):
-    return f"pnp:catalog:sections-v4:v{catalog_cache_version()}:{namespace}:{value}"
+    return f"pnp:catalog:sections-v6:v{catalog_cache_version()}:{namespace}:{value}"
 
 
 def invalidate_catalog_cache():
@@ -340,6 +340,8 @@ def _ancestor_chain(node):
 
 
 def build_catalog_node(target):
+    if target == "system:wood-based-panel-materials":
+        target = "system:wooden-structures"
     if target == "root":
         children = [direction_payload(direction) for direction in public_direction_queryset()]
         return {"node": _with_children(root_node(), children), "children": children, "ancestors": []}

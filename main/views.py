@@ -554,6 +554,9 @@ def catalog_direction(request, block_slug, direction_slug):
 
 
 def catalog_system(request, block_slug, direction_slug, system_slug):
+    if (block_slug, direction_slug, system_slug) == ("building-materials", "constructive", "wood-based-panel-materials"):
+        system = get_object_or_404(CatalogSystem, slug="wooden-structures")
+        return redirect(system.get_absolute_url(), permanent=True)
     system = get_object_or_404(
         CatalogSystem.objects.select_related("direction__block").only(
             "slug",
@@ -573,6 +576,11 @@ def catalog_system(request, block_slug, direction_slug, system_slug):
 
 
 def product_group(request, block_slug, direction_slug, system_slug, group_slug):
+    if (block_slug, direction_slug, system_slug) == ("building-materials", "constructive", "wood-based-panel-materials"):
+        from .catalog_materials import MATERIAL_SLUGS
+        if group_slug in MATERIAL_SLUGS:
+            group = get_object_or_404(ProductGroup.objects.select_related("system__direction__block"), slug=group_slug)
+            return redirect(group.get_absolute_url(), permanent=True)
     group = get_object_or_404(
         ProductGroup.objects.select_related("system__direction__block").only(
             "slug",
@@ -1527,6 +1535,13 @@ def legacy_page(request, page):
 
     if page.startswith("solution-"):
         suffix = page.removeprefix("solution-")
+        if suffix == "constructive-wood-based-panel-materials":
+            system = get_object_or_404(CatalogSystem, slug="wooden-structures")
+            return redirect(system.get_absolute_url())
+        from .catalog_materials import MATERIAL_SLUGS
+        if suffix.removeprefix("constructive-") in MATERIAL_SLUGS and suffix.startswith("constructive-"):
+            group = get_object_or_404(ProductGroup.objects.select_related("system__direction__block"), slug=suffix.removeprefix("constructive-"))
+            return redirect(group.get_absolute_url())
         directions = Direction.objects.select_related("block").order_by("-slug")
         for direction in directions:
             if suffix == direction.slug:

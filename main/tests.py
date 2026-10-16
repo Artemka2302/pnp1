@@ -69,8 +69,8 @@ class PublicRouteSmokeTests(TestCase):
             "/catalog/": 200,
             "/catalog/building-materials/": 200,
             "/catalog/building-materials/constructive/": 200,
-            "/catalog/building-materials/constructive/wood-based-panel-materials/": 200,
-            "/catalog/building-materials/constructive/wood-based-panel-materials/plywood/": 200,
+            "/catalog/building-materials/constructive/wood-based-panel-materials/": 301,
+            "/catalog/building-materials/constructive/wood-based-panel-materials/plywood/": 301,
             "/vendors/?q=kaspersky": 200,
             "/partners/": 200,
             "/solution-constructive-wood-based-panel-materials": 302,
@@ -276,7 +276,7 @@ class PublicRouteSmokeTests(TestCase):
         group = self.client.get("/api/catalog-node/", {"id": "group:plywood"}).json()
         self.assertEqual(system["node"]["projectSection"]["code"], "КР")
         self.assertEqual(group["node"]["projectSection"], system["node"]["projectSection"])
-        self.assertEqual(group["node"]["url"], "/catalog/building-materials/constructive/wood-based-panel-materials/plywood/")
+        self.assertEqual(group["node"]["url"], "/catalog/building-materials/constructive/wooden-structures/plywood/")
         expected_vendors = ProductGroup.objects.get(slug="plywood").vendorproductgroup_set.filter(
             show_in_catalog=True
         ).order_by("vendor__name").values_list("vendor__slug", flat=True)[:12]
@@ -295,7 +295,7 @@ class PublicRouteSmokeTests(TestCase):
 
     def test_product_group_uses_the_same_lightweight_catalog_shell(self):
         response = self.client.get(
-            "/catalog/building-materials/constructive/wood-based-panel-materials/plywood/"
+            "/catalog/building-materials/constructive/wooden-structures/plywood/"
         )
 
         self.assertEqual(response.status_code, 200)

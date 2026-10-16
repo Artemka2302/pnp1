@@ -1,5 +1,33 @@
 [
   {
+    "id": "astro-lift",
+    "name": "Астро-Лифт",
+    "slug": "astro-lift",
+    "status": "logo_ready",
+    "priority": 100,
+    "show_on_home": false,
+    "show_on_partners": true,
+    "logo": "assets/img/logos/solutions/astro-lift.svg",
+    "logo_source_url": "https://astro-lift.ru/upload/CAllcorp3/de4/1pjnxx521v8r1t133dnz41yctebkz66v.svg",
+    "official_site": "https://astro-lift.ru/",
+    "category": "Вертикальный транспорт",
+    "note": "Поставка лифтов, эскалаторов и траволаторов, комплектация объектов и обслуживание оборудования."
+  },
+  {
+    "id": "blt",
+    "name": "BLT",
+    "slug": "blt",
+    "status": "logo_ready",
+    "priority": 101,
+    "show_on_home": false,
+    "show_on_partners": true,
+    "logo": "assets/img/logos/solutions/blt.png",
+    "logo_source_url": "",
+    "official_site": "https://www.bltelevator.com/",
+    "category": "Вертикальный транспорт",
+    "note": "Лифты и эскалаторы для жилых, общественных и транспортных объектов. Варианты дизайна и отделки кабин."
+  },
+  {
     "id": "dkc",
     "name": "DKC",
     "slug": "dkc",

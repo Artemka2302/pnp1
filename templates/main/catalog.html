@@ -6,7 +6,7 @@
 
 {% block extra_head %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20261014-project-sections-v1">
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20261015-compact-sections-v3">
 {% endblock %}
 
 {% block content %}
@@ -69,7 +69,6 @@
             <span class="catalog-v2-kicker" data-catalog-v2-kicker hidden></span>
             <h2 data-catalog-v2-title></h2>
           </div>
-          <aside class="catalog-v2-project-info" data-catalog-v2-project-info aria-label="Обозначение раздела" hidden></aside>
           <button class="catalog-v2-back" type="button" data-catalog-v2-back hidden>
             Назад
           </button>
@@ -82,5 +81,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261014-project-sections-v1"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261015-compact-sections-v3"></script>
 {% endblock %}

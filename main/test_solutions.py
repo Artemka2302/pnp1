@@ -238,7 +238,7 @@ class SolutionLibraryTests(SimpleTestCase):
         self.assertContains(response, 'id="solution-iss-industry"')
 
     def test_all_vendor_pages_use_iss_layout_without_section_counters(self):
-        expected_sections = {'eltex': 4, 'yadro': 6, 'iss': 3}
+        expected_sections = {'eltex': 4, 'yadro': 6, 'iss': 3, 'astro-lift': 2, 'blt': 2}
         for slug, count in expected_sections.items():
             with self.subTest(vendor=slug):
                 vendor = find_solution_vendor(slug)
@@ -277,3 +277,26 @@ class SolutionLibraryTests(SimpleTestCase):
                 self.assertContains(response, 'solution-vendor-intro--photo')
                 self.assertContains(response, f'src="/static/{background["image"]}" alt="" aria-hidden="true"')
                 self.assertNotContains(self.client.get(solution_documents(vendor)[0]['url']), 'class="solution-vendor-background"')
+
+    def test_lift_brands_documents_search_and_web_size(self):
+        expected = {'astro-lift': {'premium-business': 22, 'catalog-2025': 27},
+                    'blt': {'cabin-design-2026': 34, 'world-projects': 18}}
+        total_bytes = 0
+        for slug, documents in expected.items():
+            vendor = find_solution_vendor(slug)
+            self.assertEqual({d['slug']: d['pages'] for d in vendor['documents']}, documents)
+            self.assertTrue((Path(settings.BASE_DIR) / 'static' / vendor['logo']).is_file())
+            self.assertContains(self.client.get('/solutions/', {'q': vendor['name']}), f'/solutions/{slug}/')
+            for document in solution_documents(vendor):
+                response = self.client.get(document['url'])
+                self.assertContains(response, 'data-pdf-reader')
+                self.assertContains(response, 'solution-reader-logo-light')
+                size = (Path(settings.BASE_DIR) / 'static' / document['pdf']).stat().st_size
+                self.assertLess(size, 8_000_000)
+                total_bytes += size
+        self.assertLess(total_bytes, 20_000_000)
+        self.assertContains(self.client.get('/solutions/astro-lift/'), 'Решения поставщика')
+        context = build_ai_messages('Дизайн лифта', page='/solutions/blt/cabin-design-2026/')[0]['content']
+        self.assertIn('BLT', context)
+        self.assertIn('освещение', context)
+        self.assertNotIn('Объекты мирового значения', context)

@@ -1,4 +1,4 @@
-"""Portable, file-backed library of manufacturer presentations (no DB changes)."""
+"""Portable, file-backed library of manufacturer and supplier presentations."""
 
 import json
 from itertools import zip_longest

@@ -4,19 +4,20 @@ See docs/catalog-project-structure.txt for sources and mapping boundaries.
 """
 
 PROJECT_GROUPS = {
-    "building": "Архитектура и конструкции",
+    "architecture": "АР — Архитектурные решения",
+    "constructive": "КР — Конструктивные решения",
     "engineering": "ИОС — Инженерные системы",
     "technology": "ТХ — Технологические решения",
-    "fire": "ПБ — Мероприятия по обеспечению пожарной безопасности",
-    "accessibility": "ОДИ — Мероприятия по обеспечению доступа инвалидов",
+    "fire": "ПБ — Пожарная безопасность",
+    "accessibility": "ОДИ — Доступная среда",
     "landscaping": "ГП — Благоустройство и озеленение",
 }
 
 # Order within engineering follows PP 87, paragraph 15. Related commercial
 # directions sit beside their parent discipline; they are not statutory sections.
 PROJECT_DIRECTIONS = {
-    "architecture": ("building", "АР", "Архитектурные решения", "Раздел 3 · Объёмно-планировочные и архитектурные решения", ("АР", "АС", "АИ")),
-    "constructive": ("building", "КР", "Конструктивные решения", "Раздел 4 · Конструктивные решения", ("КЖ", "КМ", "КД")),
+    "architecture": ("architecture", "АР", "Архитектурные решения", "Раздел 3 · Объёмно-планировочные и архитектурные решения", ("АР", "АС", "АИ")),
+    "constructive": ("constructive", "КР", "Конструктивные решения", "Раздел 4 · Конструктивные решения", ("КЖ", "КМ", "КД")),
     "eom": ("engineering", "ЭОМ", "Силовое электрооборудование и электрическое освещение", "ИОС · Система электроснабжения", ("ЭО", "ЭМ", "ЭН", "ЭС")),
     "ev-charging-infrastructure": ("engineering", "ЭОМ", "Силовое электрооборудование и электрическое освещение", "Направление комплектации · Зарядная инфраструктура", ("ЭМ", "ЭС")),
     "water": ("engineering", "ВК", "Водоснабжение и водоотведение", "ИОС · Системы водоснабжения и водоотведения", ("ВК", "НВ", "НК", "НВК", "АВК")),
@@ -80,7 +81,7 @@ def project_section(direction_slug):
 
 # Order known systems within a discipline without renaming or moving records.
 SYSTEM_ORDER = {
-    "constructive": ("concrete-structures", "metall", "wood-based-panel-materials"),
+    "constructive": ("concrete-structures", "metall", "floor-and-partition-structures", "wooden-structures"),
     "eom": ("indoor-lighting", "electrical-equipment", "outdoor-lighting", "transformer-and-distribution-substations"),
     "water": ("water-supply", "water-treatment", "sanitary-equipment", "wastewater-and-drainage", "stormwater-treatment-facilities", "external-water-and-sewer-networks"),
     "hvac": ("heating-radiators", "air-ventilation", "air-conditioning", "teplovye-seti", "individual-heat-substation", "teplovye-zavesy"),
