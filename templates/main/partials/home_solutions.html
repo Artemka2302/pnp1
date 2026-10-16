@@ -4,7 +4,6 @@
   <div class="container">
     <div class="home-solutions-head">
       <div>
-        <div class="section-eyebrow">Технологии для вашего проекта</div>
         <h2 id="homeSolutionsTitle">Решения для вашего объекта</h2>
         <p>Выберите задачу и изучите презентации производителей прямо на сайте.</p>
       </div>
@@ -41,6 +40,9 @@
         </div>
       </article>
       {% endfor %}
+    </div>
+    <div class="home-solutions-footer">
+      <a class="mobile-section-cta" href="{% url 'solutions' %}">Посмотреть все решения <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 </section>

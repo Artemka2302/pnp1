@@ -562,3 +562,29 @@ body.vendors-page #vendorRows .vendor-row-actions .link-more {
     line-height: 1.12;
   }
 }
+
+/* An explicit divider separates PB, ODI and GP from TX on phones. */
+body.vendors-page .vendor-project-divider { display: none; }
+@media (max-width: 760px) {
+  body.vendors-page .vendor-project-divider {
+    grid-column: 1 / -1;
+    display: block;
+    margin-top: 2px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(175, 194, 219, .3);
+    color: #e7edf6;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  body.vendors-page .vendor-project-group--fire,
+  body.vendors-page .vendor-project-group--accessibility { grid-column: span 3; }
+  body.vendors-page .vendor-project-group--landscaping { grid-column: 1 / -1; }
+  body.vendors-page .vendor-project-group--fire > h3,
+  body.vendors-page .vendor-project-group--accessibility > h3,
+  body.vendors-page .vendor-project-group--landscaping > h3 { display: none; }
+  body.vendors-page .vendor-project-group--fire .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--accessibility .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}

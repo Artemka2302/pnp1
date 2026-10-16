@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block final_styles %}
-  <link rel="stylesheet" href="{% static 'css/vendors-v2.css' %}?v=20261016-vendor-list-v10">
+  <link rel="stylesheet" href="{% static 'css/vendors-v2.css' %}?v=20261016-mobile-groups-v12">
 {% endblock %}
 
 {% block content %}
@@ -49,6 +49,7 @@
     </div>
     <div class="vendor-project-map">
       {% for project_group in vendor_project_groups %}
+        {% if project_group.key == 'fire' %}<div class="vendor-project-divider">Другие разделы проекта</div>{% endif %}
         <section class="vendor-project-group vendor-project-group--{{ project_group.key }}" aria-labelledby="vendorProjectGroup{{ forloop.counter }}">
           <h3 id="vendorProjectGroup{{ forloop.counter }}">{{ project_group.label }}</h3>
           <div class="vendor-direction-grid">

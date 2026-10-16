@@ -1,6 +1,6 @@
 slug,review_status,reason
 grand-line,resolved_official,restored transparent official logo from manufacturer site
-ingermax,user_confirmed,favicon instead of readable logo
+ingermax,resolved_official,Full original logo sourced from the manufacturer website or official company presentation.
 almax,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
 axima,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
 slaven,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
@@ -10,7 +10,7 @@ armstrong,automatic_review,white-dominant raster
 onetop,resolved_official,replaced favicon with full official wordmark from manufacturer site
 crown-de-cor,resolved_official,replaced favicon with full transparent official logo
 lemark,automatic_review,icon source
-atlas-concorde,user_confirmed,icon-only favicon removed; text fallback until official full logo is available
+atlas-concorde,resolved_official,Full original logo sourced from the manufacturer website or official company presentation.
 estima,verified_official,official manufacturer artwork has opaque white background; retained on white logo tile
 benarmo,automatic_review,icon source
 ridan,automatic_review,70x70 raster

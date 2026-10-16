@@ -1,4 +1,4 @@
-﻿vendor_name,vendor_slug,product_group_id,product_group_title,catalog_url,logo
+vendor_name,vendor_slug,product_group_id,product_group_title,catalog_url,logo
 Armstrong,armstrong,ceiling-systems,Потолочные системы,https://pnp1.ru/catalog/building-materials/architecture/ceilings/ceiling-systems/,assets/img/logos/vendor-list-20261015/armstrong.png
 Cesal,cesal,ceiling-systems,Потолочные системы,https://pnp1.ru/catalog/building-materials/architecture/ceilings/ceiling-systems/,assets/img/logos/vendors/import-20260630/cesal.svg
 Ecophon,ecophon,ceiling-systems,Потолочные системы,https://pnp1.ru/catalog/building-materials/architecture/ceilings/ceiling-systems/,assets/img/logos/partners/ecophon.svg
@@ -58,16 +58,12 @@ Unitile,unitile,facade-porcelain-slabs,Керамогранитные плиты
 Уральский керамогранит,uralskii-keramogranit,facade-porcelain-slabs,Керамогранитные плиты,https://pnp1.ru/catalog/building-materials/architecture/facades/facade-porcelain-slabs/,assets/img/logos/vendor-list-20261015/uralskii-keramogranit.svg
 ArcoBleno,arcobleno,facade-hpl-panels,HPL панели,https://pnp1.ru/catalog/building-materials/architecture/facades/facade-hpl-panels/,assets/img/logos/vendor-list-20261015/arcobleno.svg
 Crown Décor,crown-de-cor,facade-hpl-panels,HPL панели,https://pnp1.ru/catalog/building-materials/architecture/facades/facade-hpl-panels/,assets/img/logos/vendor-list-20261015/crown-de-cor.png
-Grand Line,grand-line,ventilated-facade-systems,Навесные фасадные системы,https://pnp1.ru/catalog/building-materials/architecture/facades/ventilated-facade-systems/,assets/img/logos/partners/grand-line.png
 Saint-Gobain,saint-gobain,uteplitel,Утеплитель,https://pnp1.ru/catalog/building-materials/architecture/facades/uteplitel/,assets/img/logos/approved-top/saint-gobain.png
 ТЕХНОНИКОЛЬ,tehnonikol,uteplitel,Утеплитель,https://pnp1.ru/catalog/building-materials/architecture/facades/uteplitel/,assets/img/logos/approved-top/tehnonikol.png
-Saint-Gobain,saint-gobain,suhie-smesi,Сухие смеси,https://pnp1.ru/catalog/building-materials/architecture/finishing-materials/suhie-smesi/,assets/img/logos/approved-top/saint-gobain.png
 Grand Line,grand-line,krovelnye-sistemy,Кровельные системы,https://pnp1.ru/catalog/building-materials/architecture/roofing-systems/krovelnye-sistemy/,assets/img/logos/partners/grand-line.png
 ТЕХНОНИКОЛЬ,tehnonikol,krovelnye-sistemy,Кровельные системы,https://pnp1.ru/catalog/building-materials/architecture/roofing-systems/krovelnye-sistemy/,assets/img/logos/approved-top/tehnonikol.png
 ТЕХНОНИКОЛЬ,tehnonikol,waterproofing,Гидроизоляция,https://pnp1.ru/catalog/building-materials/constructive/concrete-structures/waterproofing/,assets/img/logos/approved-top/tehnonikol.png
 Grand Line,grand-line,profnastil,Профнастил,https://pnp1.ru/catalog/building-materials/constructive/metall/profnastil/,assets/img/logos/partners/grand-line.png
-Saint-Gobain,saint-gobain,drywall,Гипсокартон,https://pnp1.ru/catalog/building-materials/constructive/partitions/drywall/,assets/img/logos/approved-top/saint-gobain.png
-HTL,htl,commercial-interior-linear-recessed-lighting,"Для бизнеса, интерьерные, линейные, встраиваемые",https://pnp1.ru/catalog/energy/eom/indoor-lighting/commercial-interior-linear-recessed-lighting/,assets/img/logos/approved-top/htl.png
 Aquastrong,aquastrong,water-pumps,Насосное оборудование,https://pnp1.ru/catalog/engineering-equipment/water/water-supply/water-pumps/,assets/img/logos/vendor-list-20261015/aquastrong.svg
 Wilo,wilo,water-pumps,Насосное оборудование,https://pnp1.ru/catalog/engineering-equipment/water/water-supply/water-pumps/,assets/img/logos/partners/wilo.png
 Водокомфорт,vodokomfort,water-pumps,Насосное оборудование,https://pnp1.ru/catalog/engineering-equipment/water/water-supply/water-pumps/,assets/img/logos/vendor-list-20261015/vodokomfort.svg
@@ -172,7 +168,6 @@ RVi,rvi,video-surveillance-equipment,Оборудование видеонабл
 Рубеж,rubezh,video-surveillance-equipment,Оборудование видеонаблюдения,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/video-surveillance-equipment/,assets/img/logos/vendors/rubezh.svg
 Eltex,eltex,active-lan-equipment,Активное оборудование ЛВС,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/active-lan-equipment/,assets/img/logos/approved-top/eltex.png
 Satel,satel,active-lan-equipment,Активное оборудование ЛВС,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/active-lan-equipment/,assets/img/logos/vendor-list-20261015/satel.svg
-Вектор,vektor,active-lan-equipment,Активное оборудование ЛВС,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/active-lan-equipment/,assets/img/logos/vendor-list-20261015/vektor.svg
 Dahua,dahua,video-surveillance-systems,Системы видеонаблюдения,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/video-surveillance-systems/,assets/img/logos/vendor-list-20261015/dahua.png
 Hikvision,hikvision,video-surveillance-systems,Системы видеонаблюдения,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/video-surveillance-systems/,assets/img/logos/vendor-list-20261015/hikvision.png
 HiWatch,hiwatch,video-surveillance-systems,Системы видеонаблюдения,https://pnp1.ru/catalog/engineering-equipment/low-current/video-surveillance-and-network-equipment/video-surveillance-systems/,assets/img/logos/vendor-list-20261015/hiwatch.png
@@ -201,7 +196,6 @@ Elsys,elsys,sistemy-ohrannoy-signalizatsii,Системы охранной си�
 ТвинПро / Бастион-3,twinpro,sistemy-ohrannoy-signalizatsii,Системы охранной сигнализации,https://pnp1.ru/catalog/engineering-equipment/low-current/intrusion-alarm-systems/sistemy-ohrannoy-signalizatsii/,assets/img/logos/approved-top/twinpro.png
 ISS / SecurOS,iss,ssoi-software-hardware-complexes,"ССОИ, Программно-аппаратные комплексы",https://pnp1.ru/catalog/engineering-equipment/low-current/information-collection-processing-systems/ssoi-software-hardware-complexes/,assets/img/logos/approved-top/iss.png
 VisitorControl,visitorcontrol,ssoi-software-hardware-complexes,"ССОИ, Программно-аппаратные комплексы",https://pnp1.ru/catalog/engineering-equipment/low-current/information-collection-processing-systems/ssoi-software-hardware-complexes/,assets/img/logos/approved-top/visitorcontrol.png
-ПАК Бастион,pak-bastion,ssoi-software-hardware-complexes,"ССОИ, Программно-аппаратные комплексы",https://pnp1.ru/catalog/engineering-equipment/low-current/information-collection-processing-systems/ssoi-software-hardware-complexes/,assets/img/logos/vendor-list-20261015/pak-bastion.png
 ТвинПро / Бастион-3,twinpro,ssoi-software-hardware-complexes,"ССОИ, Программно-аппаратные комплексы",https://pnp1.ru/catalog/engineering-equipment/low-current/information-collection-processing-systems/ssoi-software-hardware-complexes/,assets/img/logos/approved-top/twinpro.png
 VisitorControl,visitorcontrol,pass-terminals-and-queue-systems,"Программно-аппаратные комплексы, терминалы выдачи пропусков, системы электронных очередей",https://pnp1.ru/catalog/engineering-equipment/low-current/pass-management-automation/pass-terminals-and-queue-systems/,assets/img/logos/approved-top/visitorcontrol.png
 Альфаматика,alfamatika,pass-terminals-and-queue-systems,"Программно-аппаратные комплексы, терминалы выдачи пропусков, системы электронных очередей",https://pnp1.ru/catalog/engineering-equipment/low-current/pass-management-automation/pass-terminals-and-queue-systems/,assets/img/logos/partners/alphamatica.svg
@@ -301,3 +295,17 @@ BIOSMART,biosmart,emergency-notification-and-control-equipment,"Оборудов
 Гефест,gefest,avtomaticheskoe-sprinklernoe-pozharotushenie,Автоматическое спринклерное пожаротушение,https://pnp1.ru/catalog/engineering-equipment/fire/automatic-fire-alarm/avtomaticheskoe-sprinklernoe-pozharotushenie/,assets/img/logos/vendor-list-20261015/gefest.png
 ПО Спецавтоматика,spetsavtomatika-biysk,avtomaticheskoe-sprinklernoe-pozharotushenie,Автоматическое спринклерное пожаротушение,https://pnp1.ru/catalog/engineering-equipment/fire/automatic-fire-alarm/avtomaticheskoe-sprinklernoe-pozharotushenie/,assets/img/logos/vendors/spetsavtomatika-biysk.png
 Grand Line,grand-line,zabory,Заборы,https://pnp1.ru/catalog/building-materials/landscaping-and-site-improvement/ograzhdeniya-i-zonirovanie/zabory/,assets/img/logos/partners/grand-line.png
+ArmPanel,armpanel,acpl,АЦПЛ,https://pnp1.ru/catalog/building-materials/architecture/facades/acpl/,assets/img/logos/vendor-list-20261016/armpanel.svg
+Белтермо,beltermo,mdvp-soft-fiberboard,МДВП,https://pnp1.ru/catalog/building-materials/architecture/floors/mdvp-soft-fiberboard/,assets/img/logos/vendor-list-20261016/beltermo.svg
+Quick Deck,quick-deck,vdsp-sh,ВДСПШ,https://pnp1.ru/catalog/building-materials/constructive/floor-and-partition-structures/vdsp-sh/,assets/img/logos/vendor-list-20261016/quick-deck.png
+ULTRALAM,ultralam,lvl,ЛВЛ,https://pnp1.ru/catalog/building-materials/constructive/wooden-structures/lvl/,assets/img/logos/vendor-list-20261016/ultralam.svg
+Krafter,krafter,santehnicheskie-peregorodki,Сантехнические перегородки,https://pnp1.ru/catalog/building-materials/architecture/interior-wall-panels/santehnicheskie-peregorodki/,assets/img/logos/vendor-list-20261015/krafter.svg
+Волма,volma,drywall,Гипсокартон,https://pnp1.ru/catalog/building-materials/constructive/partitions/drywall/,assets/img/logos/partners/volma.svg
+Волма,volma,gypsum-partition-blocks,ПГП,https://pnp1.ru/catalog/building-materials/constructive/partitions/gypsum-partition-blocks/,assets/img/logos/partners/volma.svg
+Кнауф,knauf,drywall,Гипсокартон,https://pnp1.ru/catalog/building-materials/constructive/partitions/drywall/,assets/img/logos/partners/knauf.svg
+Кнауф,knauf,gypsum-partition-blocks,ПГП,https://pnp1.ru/catalog/building-materials/constructive/partitions/gypsum-partition-blocks/,assets/img/logos/partners/knauf.svg
+Магма,magma,drywall,Гипсокартон,https://pnp1.ru/catalog/building-materials/constructive/partitions/drywall/,assets/img/logos/partners/magma-clean.png
+Магма,magma,gypsum-partition-blocks,ПГП,https://pnp1.ru/catalog/building-materials/constructive/partitions/gypsum-partition-blocks/,assets/img/logos/partners/magma-clean.png
+Gyproc,gyproc,drywall,Гипсокартон,https://pnp1.ru/catalog/building-materials/constructive/partitions/drywall/,assets/img/logos/partners/gyproc.png
+ООО «Пешеланский гипсовый завод»,peshelan,gsp,ГСП,https://pnp1.ru/catalog/building-materials/architecture/interior-wall-panels/gsp/,assets/img/logos/vendors/import-20260630/peshelan.svg
+Lemark,lemark,santehnicheskie-peregorodki,Сантехнические перегородки,https://pnp1.ru/catalog/building-materials/architecture/interior-wall-panels/santehnicheskie-peregorodki/,assets/img/logos/vendor-list-20261015/lemark.png
