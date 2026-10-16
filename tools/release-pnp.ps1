@@ -40,7 +40,7 @@ if ($critical.Count) { throw "Critical changes require the full manual deploymen
 $key = 'C:/Users/AD/.ssh/silaopt_ed25519'
 $target = 'silaopt@194.156.124.214'
 $sshOptions = @('-o', 'BatchMode=yes', '-o', 'ConnectTimeout=15', '-i', $key)
-& ssh @sshOptions $target 'cd /home/silaopt/pnp1-django && test -z "$(git status --porcelain)" && git status --short --branch && docker inspect pnp1-web-1 --format "{{.Config.Image}} {{.State.Health.Status}}"'
+& ssh @sshOptions $target 'cd /home/silaopt/pnp1-django && test -z "$(git status --porcelain)" && git status --short --branch && docker inspect pnp1-web-1 --format {{.Config.Image}} && docker inspect pnp1-web-1 --format {{.State.Health.Status}}'
 if ($LASTEXITCODE -ne 0) { throw 'Production preflight failed; nothing pushed.' }
 $originalBranch = Git-Checked @('branch', '--show-current')
 foreach ($branch in @('main', 'develop')) {
