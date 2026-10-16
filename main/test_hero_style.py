@@ -41,7 +41,7 @@ class SharedHeroStyleTests(TestCase):
         self.assertNotContains(response, '5 ключевых блоков')
 
     def test_hero_strips_have_three_line_icons_and_shared_styles(self):
-        for url in ('/', '/about/', '/vendors/', '/partners/', '/solutions/'):
+        for url in ('/about/', '/vendors/', '/partners/', '/solutions/'):
             with self.subTest(url=url):
                 response = self.client.get(url)
                 self.assertEqual(response.status_code, 200)

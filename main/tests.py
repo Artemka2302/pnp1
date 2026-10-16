@@ -171,7 +171,7 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("Armstrong", rows_html)
         self.assertIn("<img", rows_html)
 
-    def test_vendor_rows_use_text_fallback_for_logo_under_review(self):
+    def test_vendor_rows_render_new_approved_ingermax_logo(self):
         response = self.client.get(
             "/vendors/",
             {"q": "Ingermax"},
@@ -180,10 +180,10 @@ class PublicRouteSmokeTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         rows_html = response.json()["rows_html"]
-        self.assertIn("vendor-chip-text", rows_html)
+        self.assertIn("vendor-chip-logo", rows_html)
         self.assertIn("Ingermax", rows_html)
-        self.assertNotIn("vendor-chip-logo", rows_html)
-        self.assertNotIn("<img", rows_html)
+        self.assertIn("ingermax-official.png", rows_html)
+        self.assertIn("<img", rows_html)
 
     def test_vendor_rows_include_unassigned_groups_as_broad_vendor_pool(self):
         group = (
