@@ -270,8 +270,8 @@ class PublicRouteSmokeTests(TestCase):
             "fire", "accessibility", "landscaping",
         ])
         self.assertEqual([section["groupTitle"] for section in sections[-3:]], [
-            "ПБ — Мероприятия по обеспечению пожарной безопасности",
-            "ОДИ — Мероприятия по обеспечению доступа инвалидов",
+            "ПБ — Пожарная безопасность",
+            "ОДИ — Доступная среда",
             "ГП — Благоустройство и озеленение",
         ])
         self.assertNotIn("additional", [section["group"] for section in sections])
