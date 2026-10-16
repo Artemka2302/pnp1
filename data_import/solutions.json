@@ -29,6 +29,7 @@
           "tags": ["Банки", "Офисы", "ЦОД"],
           "pdf": "assets/solutions/eltex/banking.pdf",
           "cover": "assets/solutions/eltex/banking-cover.webp",
+          "home_cover": "assets/img/catalog/generated/system-it-infrastructure-servers-and-datacenter.webp",
           "pages": 27,
           "source_filename": "Eltex_Решения Банковский сектор.pdf"
         },

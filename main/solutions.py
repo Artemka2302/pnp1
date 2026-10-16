@@ -39,7 +39,7 @@ def solution_documents(vendor):
 
 
 def homepage_solution_showcase():
-    """One source of content; interleave brands without a hand-maintained shortlist."""
+    """Interleave brands; optional home_cover affects only the homepage preview."""
     vendors = []
     batches = []
     for vendor in solution_vendors():

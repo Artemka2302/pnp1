@@ -24,6 +24,7 @@ class SolutionLibraryTests(SimpleTestCase):
             self.assertIn(f'href="{document["url"]}"', html)
         for vendor in vendors:
             self.assertIn(f'data-solutions-filter="{vendor["slug"]}"', html)
+        self.assertIn('system-it-infrastructure-servers-and-datacenter.webp', html)
 
     def test_home_showcase_automatically_includes_new_vendor_and_skips_unpublished(self):
         doc = {'slug': 'new-presentation', 'title': 'Новое решение', 'pdf': 'new.pdf'}

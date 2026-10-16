@@ -27,7 +27,7 @@
       {% for document in home_solutions.documents %}
       <article class="home-solution-card" data-solutions-vendor="{{ document.vendor_slug }}">
         <a class="home-solution-preview" href="{{ document.url }}" tabindex="-1" aria-hidden="true">
-          {% if document.cover %}<img src="{% static document.cover %}" alt="" loading="lazy" decoding="async" width="640" height="360">{% else %}<span>PDF</span>{% endif %}
+          {% if document.home_cover %}<img src="{% static document.home_cover %}" alt="" loading="lazy" decoding="async" width="640" height="360">{% elif document.cover %}<img src="{% static document.cover %}" alt="" loading="lazy" decoding="async" width="640" height="360">{% else %}<span>PDF</span>{% endif %}
         </a>
         <div class="home-solution-body">
           <div class="home-solution-meta">
