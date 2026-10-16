@@ -36,6 +36,8 @@ from .models import (
 )
 from .bitrix import send_lead_to_bitrix
 from .company_lookup import lookup_configured, selected_company
+from .catalog_sections import PROJECT_DIRECTIONS, PROJECT_GROUPS
+from .home_brands import homepage_brand_cards
 from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 from .ai import (
     AiConfigurationError,
@@ -133,6 +135,7 @@ def homepage_context():
 def index(request):
     return render(request, "main/home.html", {
         **homepage_context(), "home_solutions": homepage_solution_showcase(),
+        "home_brand_cards": homepage_brand_cards(),
     })
 
 
@@ -668,7 +671,9 @@ def vendor_page_context(request):
     cloud_filters = {**filters, "vendors": []}
     cloud_vendors_qs = apply_vendor_filters(vendor_base_qs, cloud_filters).order_by("name")
 
-    group_rows_qs = ProductGroup.objects.filter(vendorproductgroup__show_in_vendors=True)
+    # The public register mirrors the complete project hierarchy. Product groups
+    # without an approved brand stay visible with a neutral pool placeholder.
+    group_rows_qs = ProductGroup.objects.all()
     query = filters["query"]
     if query:
         group_rows_qs = group_rows_qs.filter(
@@ -702,7 +707,7 @@ def vendor_page_context(request):
 
     group_rows_qs = (
         group_rows_qs.select_related("system__direction__block")
-        .prefetch_related(Prefetch("vendors", queryset=vendors_qs))
+        .prefetch_related("types", Prefetch("vendors", queryset=vendors_qs))
         .distinct()
         .order_by(
             "system__direction__block__sort_order",
@@ -718,44 +723,51 @@ def vendor_page_context(request):
     group_rows_query_params = request.GET.copy()
     group_rows_query_params.pop("rows_page", None)
 
-    blocks = CatalogBlock.objects.annotate(
-        direction_count=Count("directions", distinct=True),
-        system_count=Count("directions__systems", distinct=True),
-        group_count=Count("directions__systems__product_groups", distinct=True),
-        vendor_count=Count("directions__systems__product_groups__vendors", distinct=True),
-    )
-    directions = Direction.objects.select_related("block").order_by("block__sort_order", "sort_order", "title")
-    direction_cards = list(directions.annotate(
-        system_count=Count("systems", distinct=True),
-        group_count=Count("systems__product_groups", distinct=True),
-        vendor_count=Count("systems__product_groups__vendors", distinct=True),
-    ))
-    preview_vendor_rows = (
-        Vendor.objects.filter(
-            product_groups__system__direction__in=direction_cards,
-            vendorproductgroup__show_in_vendors=True,
+    direction_cards = list(
+        Direction.objects.select_related("block")
+        .annotate(
+            group_count=Count("systems__product_groups", distinct=True),
+            vendor_count=Count(
+                "systems__product_groups__vendors",
+                filter=Q(systems__product_groups__vendorproductgroup__show_in_vendors=True),
+                distinct=True,
+            ),
         )
-        .exclude(logo="")
-        .values(
-            "product_groups__system__direction_id",
-            "name",
-            "logo",
-        )
-        .distinct()
-        .order_by("product_groups__system__direction_id", "name")
+        .order_by("block__sort_order", "sort_order", "title")
     )
-    preview_vendors_by_direction = {}
-    for vendor in preview_vendor_rows:
-        direction_id = vendor["product_groups__system__direction_id"]
-        preview_vendors_by_direction.setdefault(direction_id, [])
-        if len(preview_vendors_by_direction[direction_id]) < 3:
-            preview_vendors_by_direction[direction_id].append(vendor)
+    project_direction_order = {slug: index for index, slug in enumerate(PROJECT_DIRECTIONS)}
+    direction_cards.sort(key=lambda direction: project_direction_order.get(direction.slug, len(project_direction_order)))
     for direction in direction_cards:
-        direction.preview_vendors = preview_vendors_by_direction.get(direction.id, [])
-        direction.vendor_icon = first_existing_static_path(
-            f"assets/img/vendors/directions/{direction.slug}.svg",
-            f"assets/img/vendors/mini-cards/{direction.slug}.svg",
-        )
+        section = direction.project_section or {}
+        direction.vendor_project_code = section.get("code", "")
+        direction.vendor_project_group = section.get("group", "")
+
+    project_group_order = (
+        "architecture",
+        "constructive",
+        "engineering",
+        "technology",
+        "fire",
+        "accessibility",
+        "landscaping",
+    )
+    project_group_map = {
+        key: {
+            "key": key,
+            "label": PROJECT_GROUPS[key],
+            "directions": [],
+        }
+        for key in project_group_order
+    }
+    for direction in direction_cards:
+        project_group = project_group_map.get(direction.vendor_project_group)
+        if project_group is not None:
+            project_group["directions"].append(direction)
+    vendor_project_groups = [
+        project_group_map[key]
+        for key in project_group_order
+        if project_group_map[key]["directions"]
+    ]
     selected_vendors = Vendor.objects.none()
     if filters["vendors"]:
         selected_vendors = Vendor.objects.filter(Q(slug__in=filters["vendors"]) | Q(name__in=filters["vendors"])).order_by("name")
@@ -771,16 +783,13 @@ def vendor_page_context(request):
         "query": filters["query"],
         "selected_vendors": selected_vendors,
         "vendor_options": vendor_options,
-        "blocks": blocks,
-        "directions": directions,
+        "directions": direction_cards,
         "direction_cards": direction_cards,
-        "systems": CatalogSystem.objects.select_related("direction__block").order_by(
-            "direction__block__sort_order",
-            "direction__sort_order",
-            "sort_order",
-            "title",
-        ),
-        "product_groups": ProductGroup.objects.select_related("system__direction__block").order_by(
+        "vendor_project_groups": vendor_project_groups,
+        "product_groups": ProductGroup.objects.all()
+        .select_related("system__direction__block")
+        .distinct()
+        .order_by(
             "system__direction__block__sort_order",
             "system__direction__sort_order",
             "system__sort_order",
@@ -794,7 +803,7 @@ def vendor_page_context(request):
         "filtered_vendor_count": vendors_qs.count(),
         "filtered_group_count": group_rows_qs.count(),
         "vendor_count": Vendor.objects.filter(vendorproductgroup__show_in_vendors=True).distinct().count(),
-        "group_count": ProductGroup.objects.filter(vendorproductgroup__show_in_vendors=True).distinct().count(),
+        "group_count": ProductGroup.objects.count(),
     }
 
 

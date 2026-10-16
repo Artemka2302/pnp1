@@ -337,7 +337,17 @@
           </section>
           <section class="catalog-v2-passport-panel">
             <h3>Бренды / производители</h3>
-            <div class="catalog-v2-vendor-grid">${vendors || '<p class="catalog-v2-vendor-empty">Производители уточняются коммерческим отделом.</p>'}</div>
+            <div class="catalog-v2-vendor-grid">${vendors || `
+              <div class="catalog-v2-vendor-pool" role="note">
+                <span class="catalog-v2-vendor-pool-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="m16 5 12 6-12 6L4 11 16 5Z"/><path d="m4 16 12 6 12-6M4 21l12 6 12-6"/></svg>
+                </span>
+                <div class="catalog-v2-vendor-pool-copy">
+                  <strong>Обширный пул производителей</strong>
+                  <p>Подберём бренды под требования проекта. На сайте представлена часть производителей, с которыми мы работаем.</p>
+                  <a href="/contacts/?request_type=specification_review#request-form">Запросить подбор<span aria-hidden="true"> ↗</span></a>
+                </div>
+              </div>`}</div>
           </section>
         </div>
       </article>

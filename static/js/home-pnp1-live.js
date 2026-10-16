@@ -72,31 +72,12 @@
       const activeLabel = section?.querySelector("[data-home-brand-active-label]");
       if (!filterButtons.length || !sourceCards.length) return;
 
-      const brandGroupsBySlug = {
-        "eltex": ["it", "engineering"],
-        "yadro": ["it"],
-        "orionsoft-zvirt": ["it"],
-        "gk-astra": ["it"],
-        "kiberprotekt": ["it"],
-        "kaspersky": ["it"],
-        "keyguard": ["security"],
-        "twinpro": ["security"],
-        "iss": ["security"],
-        "biosmart": ["security"],
-        "itbp": ["security"],
-        "visitorcontrol": ["security"],
-        "infomatika": ["security"],
-        "korf": ["engineering"],
-        "ned": ["engineering"],
-        "htl": ["engineering"],
-        "komset": ["engineering"],
-      };
       const groupDefinitions = filterButtons.map(button => ({
         key: button.dataset.brandFilter,
         label: button.textContent.trim(),
         button,
         cards: sourceCards.filter(card => (
-          brandGroupsBySlug[card.dataset.brandSlug]?.includes(button.dataset.brandFilter)
+          (card.dataset.brandGroups || "").split(" ").includes(button.dataset.brandFilter)
         )),
       })).filter(group => group.cards.length);
 

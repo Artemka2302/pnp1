@@ -1,0 +1,21 @@
+/* Original white wordmarks: contrast belongs to the surface, not the artwork.
+   Match asset filenames so catalog, vendor list and partners stay consistent. */
+html body :has(> img[src*="/orion-official.svg"]),
+html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/orion-official.svg"]) {
+  background-color: #0d0e19 !important; /* orionsoft.ru basic-dark_blue */
+}
+
+html body :has(> img[src*="/almax-official.webp"]),
+html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/almax-official.webp"]) {
+  background-color: #24211e !important; /* almaks.pro header */
+}
+
+html body :has(> img[src*="/slaven-official.png"]),
+html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/slaven-official.png"]) {
+  background-color: #706f6f !important; /* slaven.su header */
+}
+
+html body :has(> img[src*="/axima-official.png"]),
+html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/axima-official.png"]) {
+  background: #2c2c2c url("../assets/img/logos/vendor-list-20261015/axima-official-background.png") center / cover !important;
+}

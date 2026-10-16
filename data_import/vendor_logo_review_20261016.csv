@@ -1,0 +1,33 @@
+slug,review_status,reason
+grand-line,resolved_official,restored transparent official logo from manufacturer site
+ingermax,user_confirmed,favicon instead of readable logo
+almax,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
+axima,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
+slaven,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
+orion,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
+grani-taganaya,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
+armstrong,automatic_review,white-dominant raster
+onetop,resolved_official,replaced favicon with full official wordmark from manufacturer site
+crown-de-cor,resolved_official,replaced favicon with full transparent official logo
+lemark,automatic_review,icon source
+atlas-concorde,user_confirmed,icon-only favicon removed; text fallback until official full logo is available
+estima,verified_official,official manufacturer artwork has opaque white background; retained on white logo tile
+benarmo,automatic_review,icon source
+ridan,automatic_review,70x70 raster
+rosma,resolved_official,replaced app icon with official transparent SVG
+tulskii-zavod-polietilenovyh-trub,automatic_review,white-dominant raster
+adl,automatic_review,81x80 raster
+ideal,automatic_review,icon source
+jika,automatic_review,119x53 and white-dominant raster
+ako,automatic_review,icon source
+santehprom,automatic_review,50x52 raster
+daikin,automatic_review,32x32 icon
+hikvision,automatic_review,48x48 icon
+rvi,automatic_review,icon source
+nits-360,automatic_review,white-dominant raster
+elsys,automatic_review,48x48 icon
+prosoft-sistemy,automatic_review,icon source
+kod-bezopasnosti,automatic_review,icon source
+blt,automatic_review,16x16 icon
+gefest,automatic_review,icon source
+argus-spektr,automatic_review,32x32 icon

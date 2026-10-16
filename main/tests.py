@@ -129,7 +129,35 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("data-vendor-chip", data["cloud_html"])
         self.assertIn("vendor-row", data["rows_html"])
 
-    def test_vendor_rows_render_approved_vendor_logo(self):
+    def test_vendor_page_uses_project_section_hierarchy(self):
+        response = self.client.get("/vendors/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Вендор-лист ПНП")
+        self.assertContains(response, 'aria-label="Вендор-лист проектных решений"')
+        self.assertContains(response, 'data-nav="vendors" class="active">Вендор-лист</a>')
+        self.assertContains(response, "Разделы проекта")
+        self.assertContains(response, "Раздел проекта")
+        self.assertContains(response, "Тип продукции")
+        for heading in (
+            "АР — Архитектурные решения",
+            "КР — Конструктивные решения",
+            "ИОС — Инженерные системы",
+            "ТХ — Технологические решения",
+            "ПБ — Пожарная безопасность",
+            "ОДИ — Доступная среда",
+            "ГП — Благоустройство и озеленение",
+        ):
+            with self.subTest(heading=heading):
+                self.assertContains(response, heading)
+        self.assertNotContains(response, 'id="vendorBlock"')
+        self.assertNotContains(response, 'id="vendorSystem"')
+        self.assertNotContains(response, 'class="vendor-direction-count"')
+        self.assertNotContains(response, 'class="vendor-direction-arrow"')
+        self.assertNotContains(response, "Основные разделы поставки")
+        self.assertNotContains(response, "Производители по товарным группам")
+
+    def test_vendor_rows_render_approved_logo(self):
         response = self.client.get(
             "/vendors/",
             {"q": "Armstrong"},
@@ -139,11 +167,43 @@ class PublicRouteSmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         rows_html = response.json()["rows_html"]
         self.assertIn("vendor-chip-logo", rows_html)
-        self.assertIn(
-            '/static/assets/img/logos/vendor-list-20261015/armstrong.png?v=20261016-vendor-list',
-            rows_html,
+        self.assertIn("Armstrong", rows_html)
+        self.assertIn("<img", rows_html)
+
+    def test_vendor_rows_use_text_fallback_for_logo_under_review(self):
+        response = self.client.get(
+            "/vendors/",
+            {"q": "Ingermax"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
-        self.assertIn('alt="Armstrong"', rows_html)
+
+        self.assertEqual(response.status_code, 200)
+        rows_html = response.json()["rows_html"]
+        self.assertIn("vendor-chip-text", rows_html)
+        self.assertIn("Ingermax", rows_html)
+        self.assertNotIn("vendor-chip-logo", rows_html)
+        self.assertNotIn("<img", rows_html)
+
+    def test_vendor_rows_include_unassigned_groups_as_broad_vendor_pool(self):
+        group = (
+            ProductGroup.objects.exclude(vendorproductgroup__show_in_vendors=True)
+            .distinct()
+            .first()
+        )
+
+        response = self.client.get(
+            "/vendors/",
+            {"group": group.slug},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        rows_html = payload["rows_html"]
+        self.assertIn(group.title, rows_html)
+        self.assertIn("Обширный пул производителей", rows_html)
+        self.assertIn("Обширный пул производителей", payload["cloud_html"])
+        self.assertNotIn("По запросу ничего не найдено", payload["cloud_html"])
 
     def test_vendor_ajax_filter_accepts_selected_vendors(self):
         vendors = list(Vendor.objects.filter(name__in=["Eltex", "YADRO"]).order_by("name"))

@@ -2,9 +2,11 @@
 {% for group in group_rows %}
   <article class="vendor-row">
     <div class="vendor-meta">
-      <span>{{ group.system.direction.block.title }}</span>
+      <span>{{ group.system.direction.project_section.code }} · {{ group.system.direction.title }}</span>
       <b>{{ group.title }}</b>
-      <small>{{ group.system.direction.title }} · {{ group.system.title }}</small>
+      <small>
+        {% for product_type in group.types.all|slice:":6" %}{% if not forloop.first %} · {% endif %}{{ product_type.title }}{% empty %}Подбор по требованиям проекта{% endfor %}
+      </small>
     </div>
     <div>
       <div class="vendor-brands">
@@ -18,13 +20,13 @@
             {% endif %}
           </button>
         {% empty %}
-          <span class="vendor-chip">Производители не привязаны</span>
+          <span class="vendor-chip vendor-chip-placeholder">Обширный пул производителей</span>
         {% endfor %}
       </div>
       <div class="vendor-row-actions">
         <a class="link-more" href="{% url 'product_group' group.system.direction.block.slug group.system.direction.slug group.system.slug group.slug %}">
-          <span class="vendor-row-action-desktop">Открыть товарную группу</span>
-          <span class="vendor-row-action-mobile">Открыть группу</span>
+          <span class="vendor-row-action-desktop">Открыть в каталоге</span>
+          <span class="vendor-row-action-mobile">В каталог</span>
         </a>
       </div>
     </div>
@@ -40,7 +42,7 @@
 {% endfor %}
 
 {% if group_rows_page_obj.has_other_pages %}
-  <nav class="vendor-rows-pagination" aria-label="Страницы товарных групп">
+  <nav class="vendor-rows-pagination" aria-label="Страницы типов продукции">
     {% if group_rows_page_obj.has_previous %}
       <a class="vendor-rows-page-link" href="?{% if group_rows_querystring %}{{ group_rows_querystring }}&{% endif %}rows_page={{ group_rows_page_obj.previous_page_number }}" data-vendor-page-link>
         Назад

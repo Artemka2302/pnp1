@@ -7,7 +7,6 @@
   const filters = [...root.querySelectorAll("[data-solutions-filter]")];
   const prev = root.querySelector("[data-solutions-prev]");
   const next = root.querySelector("[data-solutions-next]");
-  const status = root.querySelector("[data-solutions-status]");
   const behavior = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
   const update = () => {
     prev.disabled = rail.scrollLeft <= 2;
@@ -17,7 +16,6 @@
     filters.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
     cards.forEach(card => { card.hidden = button.dataset.solutionsFilter !== "all" && card.dataset.solutionsVendor !== button.dataset.solutionsFilter; });
     rail.scrollTo({left: 0, behavior: "instant"});
-    status.textContent = `Материалов: ${cards.filter(card => !card.hidden).length}`;
     update();
   }));
   const move = direction => {

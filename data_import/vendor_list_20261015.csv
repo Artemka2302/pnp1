@@ -1,4 +1,4 @@
-﻿vendor_name,slug,official_site,logo,logo_source_url,match_type,fetch_status
+vendor_name,slug,official_site,logo,logo_source_url,match_type,fetch_status
 Armstrong,armstrong,https://www.armstrongceilings.com/commercial/en-us/,assets/img/logos/vendor-list-20261015/armstrong.png,https://seeklogo.com/vector-logo/491122/armstrong-ceilings,new,downloaded
 Cesal,cesal,https://cesal.ru,assets/img/logos/vendors/import-20260630/cesal.svg,https://www.cesal.ru/bitrix/templates/cesal/images/logo.svg,existing,existing
 Ecophon,ecophon,https://www.ecophon.com/,assets/img/logos/partners/ecophon.svg,https://www.ecophon.com/globalassets/new-site/media/logo/ecophon-logo-2023r3_black-01.svg,existing,existing
@@ -13,19 +13,19 @@ Lemark,lemark,https://lemarkllc.ru/,assets/img/logos/vendor-list-20261015/lemark
 Вышневолоцкий МДОК,vyshnevolotskii-mdok,http://www.mdok.ru/,assets/img/logos/vendor-list-20261015/vyshnevolotskii-mdok.png,https://web.archive.org/web/20161107193742id_/http://www.mdok.ru/attachments/Logo/tree_130.png,new,downloaded
 Interpan,interpan,https://interpan.ru/,assets/img/logos/vendor-list-20261015/interpan.svg,https://interpan.ru/bitrix/templates/interpan-new/assets/images/logo.svg,new,downloaded
 Krafter,krafter,https://hpl-krafter.ru/,assets/img/logos/vendor-list-20261015/krafter.svg,https://hpl-krafter.ru/wp-content/uploads/2025/03/krafter-logo-2.svg,new,downloaded
-Almax,almax,https://almaks.pro/,assets/img/logos/vendor-list-20261015/almax.png,https://almaks.pro/upload/dev2fun.imagecompress/webp/CPriority/18b/49xcatkf4kiayk1oakezvu9422uzl0g8.webp,new,downloaded
+Almax,almax,https://almaks.pro/,assets/img/logos/vendor-list-20261015/almax-official.webp,https://almaks.pro/upload/dev2fun.imagecompress/webp/CPriority/18b/49xcatkf4kiayk1oakezvu9422uzl0g8.webp,new,downloaded
 Ingermax,ingermax,https://www.ingermax.ru/,assets/img/logos/vendor-list-20261015/ingermax.png,"https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.ingermax.ru&size=256",new,downloaded
 Випрок,viprok,https://a-xiom.ru/,assets/img/logos/vendor-list-20261015/viprok.png,https://a-xiom.ru/wp-content/uploads/2024/02/viprok_logo_new-2.png,new,downloaded
 Криплат,kriplat,https://cryplat.ru/,assets/img/logos/vendor-list-20261015/kriplat.svg,https://cryplat.ru/wp-content/themes/kriplat/assets/images/logo.svg,new,downloaded
 AlmaCeramica,almaceramica,https://almaceramica.ru/,assets/img/logos/vendor-list-20261015/almaceramica.png,https://almaceramica.ru/themes/almatheme/img/logo.png,new,downloaded
 Atlas Concorde,atlas-concorde,https://www.atlasconcorde.com/ru,assets/img/logos/vendor-list-20261015/atlas-concorde.png,"https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.atlasconcorde.com&size=256",new,downloaded
-AXIMA,axima,https://vkz.ru/,assets/img/logos/vendor-list-20261015/axima.png,"https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://vkz.ru&size=256",new,downloaded
+AXIMA,axima,https://vkz.ru/,assets/img/logos/vendor-list-20261015/axima-official.png,https://vkz.ru/bitrix/templates/vkz/img/brands/brand-2-text.png,new,downloaded
 Estima,estima,https://estima.ru/,assets/img/logos/vendor-list-20261015/estima.png,https://estima.ru/upload/uf/b86/xzpdk4y4h87hg2rlx7e0d2n6u7cli5s0.png,new,downloaded
 Kerama Marazzi,kerama-marazzi,https://kerama-marazzi.com/,assets/img/logos/partners/kerama-marazzi.png,,alias: KERAMA MARAZZI,existing
 Laparet,laparet,https://laparet.ru/,assets/img/logos/vendor-list-20261015/laparet.svg,https://laparet.ru/local/templates/templ_main/ui/upline/logo_laparet_black2026.svg,new,downloaded
 Maimoon,maimoon,https://maimoonceramica.ru/,assets/img/logos/vendor-list-20261015/maimoon.svg,https://maimoonceramica.ru/wp-content/uploads/2024/10/maimoon-ceramica-main-logo-alt-01.svg,new,downloaded
 Unitile,unitile,https://unitile.ru/partners/style_guidelines/,assets/img/logos/partners/unitile.png,https://unitile.ru/custom/assets/guideline/unitile-logo.zip,existing,existing
-Грани Таганая,grani-taganaya,https://granitaganay.ru/,assets/img/logos/vendor-list-20261015/grani-taganaya.svg,https://granitaganay.ru/image/catalog/logo.svg,new,downloaded
+Грани Таганая,grani-taganaya,https://zgranit.ru/,assets/img/logos/vendor-list-20261015/grani-taganaya-official.svg,https://zgranit.ru/,new,downloaded
 Гроссаро,grossaro,https://grasaro.ru/,assets/img/logos/vendor-list-20261015/grossaro.png,https://grasaro.ru/bitrix/templates/grasaro/images/Grasaro-80-Black.png,new,downloaded
 Керамин,keramin,https://keramin.ru/,assets/img/logos/vendor-list-20261015/keramin.svg,https://keramin.ru/local/images/logo.svg,new,downloaded
 Пиастрелла,piastrella,https://piastrella.pro/,assets/img/logos/vendor-list-20261015/piastrella.png,https://piastrella.pro/images/23.png,new,downloaded
@@ -71,7 +71,7 @@ Ideal,ideal,https://www.idealstandard.ru/,assets/img/logos/vendor-list-20261015/
 Roca,roca,https://www.roca.com/,assets/img/logos/partners/roca.svg,https://www.roca.com/documents/20126/346080475/roca-logo.svg/4dc29d13-1df3-b628-786b-7c63db57cdcd?t=1753429104544,existing,existing
 АНИ Пласт,ani-plast,https://www.aniplast.ru/,assets/img/logos/vendor-list-20261015/ani-plast.png,https://www.aniplast.ru/local/templates/main/img/logo.png,new,downloaded
 Профсан,profsan,https://profsan-psm.ru/,assets/img/logos/vendor-list-20261015/profsan.png,https://profsan-psm.ru/wp-content/uploads/2018/10/logo-2.png,new,downloaded
-Славен,slaven,https://www.slaven.su/,assets/img/logos/vendor-list-20261015/slaven.png,https://www.slaven.su/assets/templates/main/img/logo3.png,new,downloaded
+Славен,slaven,https://www.slaven.su/,assets/img/logos/vendor-list-20261015/slaven-official.png,https://www.slaven.su/assets/templates/main/img/logo3.png,new,downloaded
 Центр Сантехники,tsentr-santehniki,https://cs-trade.ru/,assets/img/logos/vendor-list-20261015/tsentr-santehniki.png,https://www.cs-trade.ru/upload/CMax/557/5exuozx17yjefwugmex8kuuhi73665yw.png,new,downloaded
 Idea,idea,https://idea-home.ru/,assets/img/logos/vendor-list-20261015/idea.svg,https://idea-home.ru/local/templates/mp_adap/img/logo-idea.svg,new,downloaded
 Sanita,sanita,https://sanita.ru/,assets/img/logos/partners/sanita.png,https://static.tildacdn.com/tild6661-3431-4361-b466-346430643430/_.png,existing,existing
@@ -121,7 +121,6 @@ Keyguard,keyguard,https://keyguard.ru/,assets/img/logos/approved-top/keyguard.pn
 VisitorControl,visitorcontrol,https://www.visitorcontrol.ru/,assets/img/logos/approved-top/visitorcontrol.png,https://www.visitorcontrol.ru/,existing,existing
 ПАК Бастион,pak-bastion,https://www.trevog.net/,assets/img/logos/vendor-list-20261015/pak-bastion.png,https://www.trevog.net/images/logo.png,new,downloaded
 Альфаматика,alfamatika,https://alphamatica.ru/aboutPage,assets/img/logos/partners/alphamatica.svg,https://alphamatica.ru/_next/static/media/LogoCompany.6ab5ef73.svg,existing,existing
-Инсайрес,insai-res,https://www.insyres.ru/,assets/img/logos/vendor-list-20261015/insai-res.png,https://www.insyres.ru/wp-content/themes/insyres/assets/img/bottom-logo1.png,new,downloaded
 Пунктир-А,punktir-a,https://www.punktir-a.ru/,assets/img/logos/vendor-list-20261015/punktir-a.png,https://www.punktir-a.ru/upload/CAllcorp2/231/mawudyjzvtqulap1lzbkhf1l2ac1suev.png,new,downloaded
 СОП Точка,tochka-impeks,https://impeks-group.ru/catalog/ohrana-perimetra/tochka/,assets/img/logos/vendors/tochka-impeks.png,https://impeks-group.ru/wp-content/uploads/2024/07/tochka_logo_7.png,existing,existing
 Новые программные технологии (НПТ),novye-programmnye-tehnologii-npt,https://npt.spb.ru/,assets/img/logos/vendor-list-20261015/novye-programmnye-tehnologii-npt.png,https://npt.spb.ru/thumb/2/9Jvt2zDGDAW1FxYwiJ1ttQ/c/d/logo.png,new,downloaded
@@ -139,7 +138,7 @@ YADRO,yadro,https://yadro.com/,assets/img/logos/approved-top/yadro.png,https://y
 Норси-Транс,norsi-trans,https://servers.nt.ru/,assets/img/logos/vendor-list-20261015/norsi-trans.png,https://norsi-trans.ru/local/templates/norsi_trans/img/NT_logo_color.png,new,downloaded
 YADRO / KVADRA,kvadra,https://квадра.рф/,assets/img/logos/partners/kvadra-on-white.svg,https://xn--80aaej1a3b.xn--p1ai/wp-content/themes/kvadra/assets/public/static/images/logo.svg?v2,alias: KVADRA,existing
 МойОфис,moi-ofis,https://myoffice.ru/,assets/img/logos/vendor-list-20261015/moi-ofis.svg,https://myoffice.ru/local/templates/myoffice/img/logo.svg,new,downloaded
-Орион,orion,https://orionsoft.ru/,assets/img/logos/vendor-list-20261015/orion.png,https://www.orionsoft.ru/img/favicons/apple-touch-icon-57x57.png,new,downloaded
+Орион,orion,https://orionsoft.ru/,assets/img/logos/vendor-list-20261015/orion-official.svg,https://orionsoft.ru/,new,downloaded
 Группа Астра / РусБИТех-Астра,gk-astra,https://astra.ru/,assets/img/logos/vendors/gk-astra.svg,https://astra.ru/upload/logotipy/logoGroupAstra.zip,alias: Группа Астра,existing
 Киберпротект,kiberprotekt,https://cyberprotect.ru/,assets/img/logos/vendors/kiberprotekt.svg,https://cyberprotect.ru/static/img/main_new/logo_10.svg,existing,existing
 Код Безопасности,kod-bezopasnosti,https://www.securitycode.ru/,assets/img/logos/vendor-list-20261015/kod-bezopasnosti.png,"https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.securitycode.ru&size=256",new,downloaded

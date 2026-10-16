@@ -1,0 +1,564 @@
+/* Vendor list 2026: project-section hierarchy and compact two-level filtering. */
+body.vendors-page .vendors-hero h1 {
+  max-width: 900px;
+}
+
+body.vendors-page .vendor-hero-features {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+body.vendors-page #vendorDirections {
+  scroll-margin-top: 92px;
+}
+
+body.vendors-page .vendor-section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 24px;
+}
+
+body.vendors-page .vendor-section-head > div {
+  display: grid;
+  gap: 8px;
+}
+
+body.vendors-page .vendor-section-head h2,
+body.vendors-page .vendor-section-head p {
+  margin: 0;
+}
+
+body.vendors-page .vendor-section-head p {
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+body.vendors-page .vendor-section-kicker {
+  color: #e2a8bd;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+body.vendors-page .vendor-section-jump {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid rgba(214, 168, 185, .32);
+  border-radius: 10px;
+  color: #f4d7e1;
+  background: rgba(109, 32, 57, .16);
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+body.vendors-page .vendor-section-jump:hover {
+  border-color: rgba(239, 107, 156, .58);
+  background: rgba(109, 32, 57, .28);
+}
+
+body.vendors-page .vendor-project-map {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 22px 16px;
+}
+
+body.vendors-page .vendor-project-group {
+  grid-column: span 3;
+  min-width: 0;
+}
+
+body.vendors-page .vendor-project-group--engineering,
+body.vendors-page .vendor-project-group--technology {
+  grid-column: 1 / -1;
+}
+
+body.vendors-page .vendor-project-group--fire,
+body.vendors-page .vendor-project-group--accessibility,
+body.vendors-page .vendor-project-group--landscaping {
+  grid-column: span 2;
+}
+
+body.vendors-page .vendor-project-group > h3 {
+  margin: 0 0 10px;
+  color: #f2f6fc;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+}
+
+body.vendors-page .vendor-project-group .vendor-direction-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 10px !important;
+}
+
+body.vendors-page .vendor-project-group--engineering .vendor-direction-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+body.vendors-page .vendor-project-group--technology .vendor-direction-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+body.vendors-page .vendor-direction-card {
+  position: relative !important;
+  isolation: isolate;
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  align-items: start;
+  gap: 10px 12px !important;
+  min-height: 132px !important;
+  padding: 14px !important;
+  overflow: hidden;
+  border: 1px solid rgba(170, 197, 230, .28) !important;
+  border-radius: 10px !important;
+  background:
+    linear-gradient(90deg, rgba(4, 13, 24, .95) 0%, rgba(5, 15, 27, .76) 62%, rgba(5, 15, 27, .26) 100%),
+    linear-gradient(180deg, rgba(5, 15, 27, .08), rgba(5, 15, 27, .66)),
+    var(--direction-photo) center / cover no-repeat !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .16) !important;
+  color: #fff;
+  text-decoration: none;
+  transform: none !important;
+  order: initial !important;
+}
+
+body.vendors-page .vendor-direction-card::before {
+  content: "" !important;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block !important;
+  background: linear-gradient(135deg, rgba(143, 33, 71, .16), transparent 46%);
+  pointer-events: none;
+}
+
+body.vendors-page .vendor-direction-card::after {
+  content: none !important;
+}
+
+body.vendors-page .vendor-direction-card:hover {
+  border-color: rgba(239, 107, 156, .58) !important;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .24) !important;
+}
+
+body.vendors-page .vendor-direction-code {
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 24px;
+  padding: 3px 7px;
+  border: 1px solid rgba(239, 107, 156, .58);
+  border-radius: 6px;
+  background: rgba(72, 20, 43, .72);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: .04em;
+}
+
+body.vendors-page .vendor-direction-card strong {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: end;
+  color: #fff !important;
+  font-size: 15px;
+  line-height: 1.18;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .7);
+}
+
+body.vendors-page .vendor-direction-meta {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  color: rgba(233, 241, 251, .78);
+  font-size: 10.5px;
+  font-weight: 750;
+}
+
+body.vendors-page .vendor-master-card {
+  grid-template-columns: minmax(330px, .72fr) minmax(0, 1.28fr) !important;
+}
+
+body.vendors-page .vendor-master-copy h2 {
+  max-width: 420px !important;
+  white-space: normal !important;
+}
+
+body.vendors-page .vendor-toolbar.vendor-toolbar-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 14px !important;
+}
+
+body.vendors-page .vendor-toolbar-main .vendor-search-field,
+body.vendors-page .vendor-toolbar-main .vendor-count {
+  grid-column: 1 / -1 !important;
+  min-width: 0;
+}
+
+body.vendors-page .vendor-advanced-filters {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+body.vendors-page .vendor-advanced-filters .vendor-actions-field {
+  display: grid !important;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+body.vendors-page .all-manufacturer-cloud {
+  max-height: 250px !important;
+}
+
+body.vendors-page #vendorRowsSection .section-head {
+  margin-bottom: 20px;
+}
+
+/* Compact vendor register: restrained rows and outlined brand pills. */
+body.vendors-page #vendorRows {
+  gap: 9px !important;
+}
+
+body.vendors-page #vendorRows .vendor-row {
+  min-height: 82px;
+  grid-template-columns: minmax(270px, .8fr) minmax(0, 1.2fr) !important;
+  align-items: center !important;
+  gap: 18px !important;
+  padding: 13px 16px !important;
+  border: 1px solid rgba(118, 143, 176, .24) !important;
+  border-radius: 11px !important;
+  background: linear-gradient(145deg, rgba(28, 44, 70, .96), rgba(13, 27, 47, .96)) !important;
+  box-shadow: inset 3px 0 0 rgba(155, 40, 80, .88), 0 8px 18px rgba(0, 0, 0, .13) !important;
+}
+
+body.vendors-page #vendorRows .vendor-meta span {
+  margin-bottom: 6px !important;
+  padding: 4px 8px !important;
+  border-color: rgba(214, 168, 185, .25) !important;
+  background: rgba(109, 32, 57, .2) !important;
+  color: #e9b8ca !important;
+  font-size: 9px !important;
+}
+
+body.vendors-page #vendorRows .vendor-meta b {
+  color: #fff !important;
+  font-size: 15px !important;
+  line-height: 1.16 !important;
+}
+
+body.vendors-page #vendorRows .vendor-meta small {
+  margin-top: 4px !important;
+  color: rgba(225, 234, 246, .68) !important;
+  font-size: 10.5px !important;
+  line-height: 1.3 !important;
+}
+
+body.vendors-page #vendorRows .vendor-row > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+body.vendors-page #vendorRows .vendor-brands {
+  display: flex !important;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+body.vendors-page #vendorRows .vendor-chip.vendor-chip-text,
+body.vendors-page #vendorRows .vendor-chip.vendor-chip-placeholder {
+  width: auto !important;
+  min-height: 30px !important;
+  height: auto !important;
+  padding: 6px 12px !important;
+  border: 1px solid rgba(225, 235, 248, .64) !important;
+  border-radius: 999px !important;
+  background: #202c47 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(225, 235, 248, .08), inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+  font-family: var(--sans) !important;
+  font-size: 10px !important;
+  font-weight: 850 !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+}
+
+body.vendors-page #vendorRows .vendor-chip.vendor-chip-placeholder {
+  max-width: none !important;
+  border-color: rgba(214, 168, 185, .45) !important;
+  background: rgba(109, 32, 57, .32) !important;
+  font-style: normal;
+}
+
+body.vendors-page #vendorRows .vendor-chip.vendor-chip-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 5px 8px !important;
+  border: 1px solid rgba(255, 255, 255, .88) !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(225, 235, 248, .08) !important;
+  overflow: hidden !important;
+}
+
+body.vendors-page #vendorRows .vendor-chip.vendor-chip-logo img {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 70px !important;
+  max-height: 18px !important;
+  object-fit: contain !important;
+}
+
+body.vendors-page #vendorRows .vendor-chip.vendor-chip-logo b {
+  display: none !important;
+}
+
+body.vendors-page #vendorRows .vendor-row-actions {
+  flex: 0 0 auto;
+}
+
+body.vendors-page #vendorRows .vendor-row-actions .link-more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  color: #e9b8ca !important;
+  font-size: 10px !important;
+  white-space: nowrap;
+}
+
+@media (max-width: 1120px) {
+  body.vendors-page .vendor-project-group--engineering .vendor-direction-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  body.vendors-page .vendor-project-group--fire,
+  body.vendors-page .vendor-project-group--accessibility,
+  body.vendors-page .vendor-project-group--landscaping {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 1080px) {
+  body.vendors-page .vendor-master-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity .all-manufacturer-cloud {
+    display: none !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity .vendor-toolbar-main .vendor-advanced-filters {
+    margin-top: 14px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.vendors-page .vendor-section-head {
+    align-items: start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  body.vendors-page .vendor-section-jump {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  body.vendors-page .vendor-project-map {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px 8px;
+  }
+
+  body.vendors-page .vendor-project-group--architecture,
+  body.vendors-page .vendor-project-group--constructive {
+    grid-column: span 3;
+  }
+
+  body.vendors-page .vendor-project-group--engineering,
+  body.vendors-page .vendor-project-group--technology {
+    grid-column: 1 / -1;
+  }
+
+  body.vendors-page .vendor-project-group--fire,
+  body.vendors-page .vendor-project-group--accessibility,
+  body.vendors-page .vendor-project-group--landscaping {
+    grid-column: span 2;
+  }
+
+  body.vendors-page .vendor-project-group--architecture > h3,
+  body.vendors-page .vendor-project-group--constructive > h3,
+  body.vendors-page .vendor-project-group--fire > h3,
+  body.vendors-page .vendor-project-group--accessibility > h3,
+  body.vendors-page .vendor-project-group--landscaping > h3 {
+    display: none;
+  }
+
+  body.vendors-page .vendor-project-group--engineering .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--technology .vendor-direction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  body.vendors-page .vendor-hero-features {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.vendors-page .vendor-project-group > h3,
+  body.vendors-page .vendor-direction-code,
+  body.vendors-page .vendor-direction-card strong {
+    font-family: var(--sans) !important;
+    text-transform: none !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-row {
+    height: 88px !important;
+    min-height: 88px !important;
+    max-height: 88px !important;
+    gap: 5px !important;
+    padding: 9px !important;
+    border-color: rgba(214, 168, 185, .3) !important;
+    border-radius: 9px !important;
+    background: linear-gradient(145deg, #172641 0%, #0c192c 100%) !important;
+    box-shadow: inset 2px 0 0 #9b2850, 0 7px 16px rgba(0, 0, 0, .15) !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-meta b {
+    min-height: 2.2em !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    line-height: 1.1 !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-brands {
+    height: 25px !important;
+    gap: 6px !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip,
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-text {
+    width: auto !important;
+    max-width: 102px !important;
+    min-height: 25px !important;
+    height: 25px !important;
+    padding: 4px 8px !important;
+    border-radius: 999px !important;
+    font-size: 8px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo {
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+    min-height: 25px !important;
+    height: 25px !important;
+    padding: 4px 7px !important;
+    border-radius: 6px !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo img {
+    max-width: 62px !important;
+    max-height: 15px !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-text,
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-placeholder {
+    border-color: rgba(225, 235, 248, .68) !important;
+    background: #202c47 !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-placeholder {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: 116px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-color: rgba(214, 168, 185, .5) !important;
+    background: rgba(109, 32, 57, .35) !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-family: var(--sans) !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity #vendorRows .vendor-row span.vendor-chip.vendor-chip-placeholder {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  body.vendors-page.pnp-ux-parity #vendorRows .vendor-row-actions {
+    display: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  html body.vendors-page.pnp-ux-parity .vendor-toolbar-main .vendor-advanced-filters,
+  body.vendors-page .vendor-advanced-filters .vendor-actions-field {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.vendors-page .vendor-direction-card {
+    min-height: 108px !important;
+  }
+
+  body.vendors-page .vendor-project-group--fire .vendor-direction-card,
+  body.vendors-page .vendor-project-group--accessibility .vendor-direction-card,
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-card {
+    display: flex !important;
+    min-height: 96px !important;
+    padding: 9px !important;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px !important;
+  }
+
+  body.vendors-page .vendor-project-group--fire .vendor-direction-meta,
+  body.vendors-page .vendor-project-group--accessibility .vendor-direction-meta,
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-meta {
+    display: none;
+  }
+
+  body.vendors-page .vendor-project-group--fire .vendor-direction-card strong,
+  body.vendors-page .vendor-project-group--accessibility .vendor-direction-card strong,
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-card strong {
+    margin-top: auto;
+    font-size: 11px;
+    line-height: 1.12;
+  }
+}

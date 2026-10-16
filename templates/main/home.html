@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261015-form-spacing-v2">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260812-1">
   <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20260825-mobile-header-phone-v1">
-  <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261015-1">
+  <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261016-mobile-swipe">
 {% endblock %}
 
 {% block content %}
@@ -125,7 +125,7 @@
       <article class="role-entry-card" id="client-diy" data-role-card="diy">
         <span class="role-entry-mobile-icon" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><path d="M4 9h14l5 4-5 4H4V9Zm5 8-1 10h5l2-10"/><path class="icon-detail" d="M18 11h2.5v4H18M4 12.2h7M9.8 21.5h3.7M23 12h5v2h-5"/></svg></span>
         <div class="role-entry-card-top"><span class="role-entry-tag">Торговый ассортимент</span></div>
-        <h3>DIY-сети и строительные магазины</h3>
+        <h3>DIY</h3>
         <span class="role-entry-mobile-summary">Подбор ассортимента и организация поставок</span>
         <p>Подбираем продукцию и производителей для торгового ассортимента. Организуем комплектацию и поставки.</p>
       </article>
@@ -200,12 +200,10 @@
       <div class="partner-logo-carousel home-partner-logo-carousel is-at-start" data-partner-logo-carousel aria-label="Популярные бренды и партнёры">
         <button class="partner-logo-nav partner-logo-nav-prev" type="button" aria-label="Листать логотипы назад" data-partner-logo-prev>‹</button>
         <div class="partner-logo-showcase home-partner-logo-showcase" id="homeBrandLogoTrack" tabindex="0" aria-label="Логотипы производителей">
-          {% for partner in featured_partners %}
-            {% if partner.show_on_home and partner.logo %}
-              <a class="mega-logo-card mega-partner-logo-card partner-showcase-logo" href="{% url 'vendors' %}?vendors={{ partner.slug }}" aria-label="{{ partner.name }}" data-home-brand-card data-brand-slug="{{ partner.slug }}" data-brand-category="{{ partner.category }}">
+          {% for partner in home_brand_cards %}
+              <a class="mega-logo-card mega-partner-logo-card partner-showcase-logo" href="{% url 'vendors' %}?vendors={{ partner.slug }}#vendorRowsSection" aria-label="{{ partner.name }}" data-home-brand-card data-brand-slug="{{ partner.slug }}" data-brand-groups="{{ partner.groups }}">
                 <img src="{% static partner.logo %}" alt="{{ partner.name }}" loading="lazy" decoding="async">
               </a>
-            {% endif %}
           {% empty %}<p class="partner-empty-state">Бренды не найдены</p>{% endfor %}
         </div>
         <button class="partner-logo-nav partner-logo-nav-next" type="button" aria-label="Листать логотипы вперёд" data-partner-logo-next>›</button>
@@ -325,6 +323,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/home-solutions.js' %}?v=20261015-1" defer></script>
-  <script src="{% static 'js/home-pnp1-live.js' %}?v=20261014-home-process-v1"></script>
+  <script src="{% static 'js/home-solutions.js' %}?v=20261016-no-count" defer></script>
+  <script src="{% static 'js/home-pnp1-live.js' %}?v=20261016-home-brands-v2"></script>
 {% endblock %}

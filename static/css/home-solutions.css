@@ -7,6 +7,7 @@
 .home-solutions-head p { margin: 0; color: #b8c6d8; line-height: 1.5; }
 .home-solutions-head > a { flex-shrink: 0; }
 .home-solutions-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.home-solutions-filter-frame { display: contents; }
 .home-solutions-filters { display: flex; gap: 8px; overflow-x: auto; min-width: 0; padding: 3px; scrollbar-width: thin; scrollbar-color: #76516c #152239; }
 .home-solutions-filters button, .home-solutions-navigation button { border: 1px solid #43516a; border-radius: 8px; background: #1c2a40; color: #e9edf4; font: inherit; cursor: pointer; min-height: 44px; }
 .home-solutions-filters button { padding: 9px 15px; white-space: nowrap; }
@@ -47,6 +48,28 @@
 }
 /* The legacy mobile homepage applies a light palette to generic sections. */
 @media(max-width: 680px) {
+  .home-solutions-navigation { display: none; }
+  .home-solutions-toolbar { flex-wrap: wrap; min-width: 0; }
+  .home-solutions-filter-frame {
+    display: block;
+    flex: 0 1 100%;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px;
+    border: 1px solid #43516a;
+    border-radius: 12px;
+    background: #132239;
+    overflow: hidden;
+  }
+  .home-solutions-filter-frame .home-solutions-filters {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3px 3px 7px;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+  .home-solutions-filters button { flex: 0 0 auto; scroll-snap-align: start; }
   body.home-page #homeSolutions { background: #101d31 !important; color: #fff !important; }
   body.home-page #homeSolutions > .container { width: 100%; padding-inline: var(--home-mobile-gutter, 22px); box-sizing: border-box; }
   body.home-page #homeSolutions h2, body.home-page #homeSolutions h3 { color: #fff !important; }

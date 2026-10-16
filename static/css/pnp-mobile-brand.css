@@ -496,6 +496,7 @@
     max-width: 100% !important;
     margin: 0 !important;
     font-size: clamp(42px, 10.5vw, 64px) !important;
+    font-weight: 700 !important;
     line-height: .92 !important;
   }
 
