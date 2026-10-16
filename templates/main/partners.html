@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Партнёры и бренды — ПНП{% endblock %}
+{% block title %}Участники и партнёры — Ассоциация ПНП{% endblock %}
 {% block body_class %}partners-page{% endblock %}
 
 {% block extra_head %}
@@ -13,15 +13,15 @@
 <section class="hero hero-small partners-hero pnp-mobile-standard-hero">
   <div class="vertical-accent"></div>
   <div class="container">
-    <div class="eyebrow">Партнёры и бренды</div>
-    <h1 aria-label="Партнёры и бренды">
-      <span class="pnp-mobile-hero-line">Партнёры</span>
-      <span class="pnp-mobile-hero-line accent-word">и бренды</span>
+    <div class="eyebrow">Ассоциация ПНП</div>
+    <h1 aria-label="Участники и партнёры">
+      <span class="pnp-mobile-hero-line">Участники</span>
+      <span class="pnp-mobile-hero-line accent-word">и партнёры</span>
     </h1>
-    <p class="hero-subtitle">Мы сотрудничаем с ведущими производителями и поставщиками оборудования, чтобы предлагать клиентам надёжные решения, проверенные временем и опытом совместных проектов.</p>
+    <p class="hero-subtitle">Участники объединяют профильные компетенции для формирования проектных решений. Партнёры и производители помогают комплектовать их материалами и оборудованием.</p>
     <div class="hero-actions pnp-mobile-only-actions">
       <a class="btn pnp-btn-primary" href="{% url 'contacts' %}?form=cooperation#request-form">Стать партнёром</a>
-      <a class="btn ghost pnp-btn-secondary" href="{% url 'vendors' %}">Смотреть производителей</a>
+      <a class="btn ghost pnp-btn-secondary" href="#associationMembers">Смотреть участников</a>
     </div>
     <div class="hero-features partner-hero-features pnp-hero-features">
       <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 12.5 5 9l3-3 3.5 3.5M15.5 11.5 19 15l-3 3-3.5-3.5M9.5 14.5l5-5M7 17l-2 2M17 7l2-2"/></svg></i><span>официальные партнёрства<br>и прямые поставки</span></div>
@@ -31,10 +31,41 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section association-members-section" id="associationMembers" aria-labelledby="associationMembersTitle">
+  <div class="container">
+    <div class="section-head association-members-head">
+      <div>
+        <h2 id="associationMembersTitle">Участники ассоциации ПНП</h2>
+        <p>Каждый участник отвечает за профильные направления и подключается к проекту в рамках своей экспертизы.</p>
+      </div>
+    </div>
+    <div class="association-member-grid">
+      <article class="association-member-card association-member-card--leans">
+        <div class="association-member-logo"><img src="{% static 'assets/img/association/leans-color.png' %}" alt="ЛЕАНС"></div>
+        <div class="association-member-content">
+          <h3>ООО «ЛЕАНС»</h3>
+          <p>Компетенции в области IT-инфраструктуры, инженерных систем и комплексного оснащения объектов.</p>
+          <ul class="association-member-tags" aria-label="Направления ЛЕАНС"><li>IT-инфраструктура</li><li>Инженерное оборудование</li></ul>
+          <a class="association-member-action" href="https://proleans.ru/" target="_blank" rel="noopener noreferrer">Перейти на сайт <span aria-hidden="true">↗</span></a>
+        </div>
+      </article>
+      <article class="association-member-card association-member-card--raido">
+        <div class="association-member-logo association-member-logo--dark"><img src="{% static 'assets/img/association/pkf-raido.png' %}" alt="ПКФ РАЙДО"></div>
+        <div class="association-member-content">
+          <h3>ООО «ПКФ РАЙДО»</h3>
+          <p>Компетенции в области строительных материалов, архитектурных и конструктивных разделов проекта.</p>
+          <ul class="association-member-tags" aria-label="Направления ПКФ РАЙДО"><li>АР</li><li>КР</li></ul>
+          <span class="association-member-action association-member-action--disabled">Сайт готовится</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section association-partners-section">
   <div class="container">
     <div class="section-head">
-      <div><h2>Наши партнёры</h2></div>
+      <div><h2>Партнёры и производители</h2><p>Проверенные бренды и поставщики, которых мы подключаем к комплектации проектных решений.</p></div>
     </div>
     <div class="partners-results-grid" data-partner-results>
       {% include "main/partials/partner_results.html" %}

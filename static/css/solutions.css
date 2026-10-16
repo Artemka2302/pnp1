@@ -226,3 +226,54 @@ body.solutions-page .brand-spine { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .solutions-page .solution-vendor-card, .solutions-page .solution-document-card, .solution-cover-open { transition: none; }
 }
+
+/* Keep the manufacturer directory scannable in two columns on phones. */
+@media (max-width: 680px) {
+  html body.solutions-index-page.pnp-ux-parity .solution-library,
+  html body.solutions-index-page.pnp-ux-parity .solution-library :is(h2, h3, p, span, input) {
+    font-family: var(--sans) !important;
+  }
+  .solutions-index-page .solution-library .solutions-section-head { gap: 14px; }
+  .solutions-index-page .solution-library .solutions-section-head h2 {
+    text-align: center;
+    font-size: clamp(23px, 6.6vw, 29px);
+  }
+  .solutions-index-page .solution-library .solutions-section-head p { text-align: center; }
+  .solutions-index-page .solution-vendor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .solutions-index-page .solution-vendor-card.partner-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 9px;
+    border-radius: 12px;
+  }
+  .solutions-index-page .solution-vendor-card .partner-logo-tile {
+    height: 76px;
+    min-height: 76px;
+    margin-bottom: 9px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .solutions-index-page .solution-vendor-card .partner-logo-tile img {
+    max-width: 100%;
+    max-height: 52px;
+  }
+  .solutions-index-page .solution-vendor-card .solution-card-heading { gap: 3px; }
+  .solutions-index-page .solution-vendor-card .solution-card-heading h3 { font-size: 15px; }
+  .solutions-index-page .solution-vendor-card .solution-card-heading > span { font-size: 10px; }
+  .solutions-index-page .solution-vendor-card p:not(.partner-meta) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 7px 0 8px;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+  .solutions-index-page .solution-vendor-card .partner-meta { display: none; }
+  .solutions-index-page .solution-vendor-card .solution-card-link { font-size: 11px; }
+}

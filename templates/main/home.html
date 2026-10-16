@@ -5,10 +5,10 @@
 
 {% block extra_head %}
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20261014-project-order-v6">
-  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261015-form-spacing-v2">
+  <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261016-form-gap-v3">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260812-1">
-  <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20260825-mobile-header-phone-v1">
-  <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261016-mobile-swipe">
+  <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20261016-mobile-sections-v3">
+  <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261016-mobile-compact-v2">
 {% endblock %}
 
 {% block content %}
@@ -20,19 +20,14 @@
   <div class="container">
     <div class="hero-grid">
       <div>
-        <div class="eyebrow">Первый национальный поставщик</div>
+        <div class="eyebrow">Ассоциация ПНП</div>
         <h1>Единый центр <span class="accent-word">комплектации</span> строительных объектов</h1>
-        <p class="hero-subtitle">Берём на себя комплектацию объекта по разделам проекта: подбираем материалы, оборудование, производителей и аналоги под спецификацию, сроки и бюджет.</p>
+        <p class="hero-subtitle">Подбираем проектные решения, материалы и оборудование для проектных организаций, строительных компаний, торговых сетей и частных заказчиков. Организуем комплектацию и поставки.</p>
         <div class="hero-actions">
           <a class="btn hero-primary-cta" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
           <a class="btn ghost hero-commercial-cta" href="{% url 'catalog' %}">Перейти в каталог</a>
         </div>
       </div>
-    </div>
-    <div class="hero-features home-hero-features pnp-hero-features">
-      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4 8l8 5 8-5-8-5Zm-6 8 6 4 6-4M6 15l6 4 6-4M12 8v5"></path></svg></i><span>Надёжные бренды<br>и решения</span></div>
-      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16c3 0 3-8 6-8s3 8 6 8 3-8 4-8M5 19h14M5 5h14M8 5v3m8-3v3M8 16v3m8-3v3"></path></svg></i><span>Комплексные поставки<br>точно в срок</span></div>
-      <div class="feature-mini"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 0 0-8 8v5a3 3 0 0 0 3 3h2v-7H5m14 0h-4v7h2a3 3 0 0 0 3-3v-5a8 8 0 0 0-8-8Zm-2 16h4M12 8v2m-3 1 2 2 4-4"></path></svg></i><span>Экспертная поддержка<br>на всех этапах</span></div>
     </div>
   </div>
 </section>
@@ -40,6 +35,7 @@
 <section class="hero hero-light hero-v13 home-mobile-only" id="top-mobile">
   <div class="container">
     <div class="home-mobile-hero-content">
+      <div class="association-home-kicker">Ассоциация ПНП</div>
       <h1 aria-label="Единый центр комплектации строительных объектов">
         <span class="home-mobile-hero-line home-mobile-hero-line--kicker">Единый центр</span>
         <span class="home-mobile-hero-line home-mobile-hero-line--core accent-word">комплектации</span>
@@ -47,8 +43,8 @@
         <span class="home-mobile-hero-line home-mobile-hero-line--object">объектов</span>
       </h1>
       <p class="hero-subtitle">
-        <span>Подбираем решения по проекту,</span>
-        <span>срокам и бюджету.</span>
+        <span>Подбираем проектные решения, материалы и оборудование.</span>
+        <span>Организуем комплектацию и поставки.</span>
       </p>
       <div class="hero-actions">
         <a class="btn" href="{% url 'contacts' %}#request-form">Отправить заявку</a>
@@ -59,11 +55,44 @@
 </section>
 {% endif %}
 
+{% if request.resolver_match.url_name != 'about' %}
+<section class="section association-intro-section" aria-labelledby="associationMissionTitle">
+  <div class="container">
+    <div class="association-strip-head">
+      <h2 id="associationMissionTitle">Чем занимается <span>ассоциация</span></h2>
+      <a class="association-text-link" href="{% url 'partners' %}">Участники и партнёры</a>
+    </div>
+    <div class="association-mission-grid">
+      <article class="association-mission-card" tabindex="0">
+        <div class="association-mission-media"><img src="{% static 'assets/img/association/mission/unite-market-participants.webp' %}" alt="Профессионалы строительного рынка объединяют компетенции"></div>
+        <div class="association-mission-content">
+          <h3>Объединяем участников рынка</h3>
+          <p>Создаём единый контур для проектных, инженерных и производственных компаний.</p>
+        </div>
+      </article>
+      <article class="association-mission-card association-mission-card--project" tabindex="0">
+        <div class="association-mission-media"><img src="{% static 'assets/img/association/mission/project-solution-selection-v2.webp' %}" alt="Специалисты подбирают материалы и решения по чертежам проекта"></div>
+        <div class="association-mission-content">
+          <h3>Подбираем решения под проект</h3>
+          <p>Соединяем профильных партнёров и подбираем решения с учётом бюджета, сроков и требований к качеству.</p>
+        </div>
+      </article>
+      <article class="association-mission-card" tabindex="0">
+        <div class="association-mission-media"><img src="{% static 'assets/img/association/mission/project-supply.webp' %}" alt="Организованная комплектация строительного объекта"></div>
+        <div class="association-mission-content">
+          <h3>Комплектуем строительные объекты</h3>
+          <p>Сопровождаем материалы, оборудование и проектные решения до реализации.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <section class="section home-supply-section home-directions-section home-desktop-only" aria-labelledby="homeSupplyTitle">
   <div class="container">
     <div class="section-head home-supply-section-head home-supply-gallery-head">
       <div>
-        <div class="section-eyebrow">Комплектация по проекту</div>
         <h2 id="homeSupplyTitle">Проектные решения</h2>
         <p>Подбираем и поставляем материалы, оборудование и комплексные решения по всем ключевым направлениям.</p>
       </div>
@@ -95,9 +124,7 @@
   <div class="container">
     <div class="section-head role-entry-head">
       <div>
-        <div class="eyebrow">Сферы сотрудничества</div>
         <h2><span class="role-entry-title-desktop">Наши заказчики</span><span class="role-entry-title-mobile">Наши заказчики</span></h2>
-        <p>Подбираем проектные решения, материалы и оборудование для проектных организаций, строительных компаний, торговых сетей и частных заказчиков. Организуем комплектацию и поставки.</p>
       </div>
     </div>
     <div class="role-entry-grid">
@@ -135,7 +162,7 @@
 
 <section class="section compact why-v13 home-why-v13 home-why-tech home-desktop-only" id="why-pnp" data-why-variant="console">
   <div class="container">
-    <div class="section-head why-tech-head"><div><div class="eyebrow">Преимущества ПНП</div><h2>Что ПНП берёт на себя</h2><p>От разбора спецификации и подбора решений до технических документов и сопровождения поставки — всё в контексте одной задачи по объекту.</p></div></div>
+    <div class="section-head why-tech-head"><div><h2>Что ПНП берёт на себя</h2><p>От разбора спецификации и подбора решений до технических документов и сопровождения поставки — всё в контексте одной задачи по объекту.</p></div></div>
     <div class="why-grid-v13 why-tech-grid" data-pnp-live-why>
       <article class="why-tech-card" tabindex="0" data-label="Комплектация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Комплектация</span></div><h3>Комплектуем объект по разделам</h3><div class="why-tech-card__detail"><p>Собираем потребность по архитектурным, конструктивным и инженерным разделам в одну рабочую ведомость. Связываем материалы, оборудование, количества, требования и сроки, чтобы заказчику не приходилось координировать десятки отдельных запросов.</p></div></article>
       <article class="why-tech-card" tabindex="0" data-label="Спецификация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Спецификация</span></div><h3>Разбираем спецификации и ТЗ</h3><div class="why-tech-card__detail"><p>Разбираем спецификации, ТЗ, ведомости и проектные файлы построчно. Уточняем назначение, характеристики, количество, объект и сроки; спорные или неполные позиции отмечаем до расчёта, чтобы подбор и коммерческое предложение опирались на согласованный объём.</p></div></article>
@@ -186,7 +213,7 @@
 <section class="section compact home-brands-section home-desktop-only">
   <div class="container">
     <div class="section-head home-brand-section-head">
-      <div><div class="eyebrow home-desktop-eyebrow">Проверенные производители</div><h2>Популярные бренды</h2></div>
+      <div><h2>Популярные бренды</h2></div>
       <span class="home-brand-active-label" data-home-brand-active-label hidden aria-hidden="true">IT-инфраструктура и ПО</span>
     </div>
     <div class="home-brand-filter" data-home-brand-filter>
@@ -218,9 +245,8 @@
 
 <section class="section compact home-request-section home-desktop-only" id="homeRequest">
   <div class="container">
-    <div class="eyebrow home-desktop-eyebrow home-desktop-eyebrow-router">Ход работы</div>
     <section class="home-request-router" aria-labelledby="homeRequestRouterTitle" data-pnp-live-workflow data-default-step="project">
-      <header class="home-request-router-head"><span class="home-request-router-kicker">Ход работы</span><h2 id="homeRequestRouterTitle">Как проходит комплектация объекта</h2></header>
+      <header class="home-request-router-head"><h2 id="homeRequestRouterTitle">Как проходит комплектация объекта</h2></header>
       <div class="home-request-workflow" data-home-request-process>
         <div class="home-request-stage-tabs" role="tablist" aria-label="Этапы комплектации объекта">
           <span class="home-request-stage-rail" aria-hidden="true"><span class="home-request-stage-rail-fill" data-home-request-track-fill></span><span class="home-request-stage-runner" data-home-request-runner></span></span>
@@ -241,7 +267,6 @@
         <a class="home-request-route home-request-route-vendors" href="{% url 'partners' %}" data-home-pre-request-route="partners"><span class="home-request-route-node home-request-route-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3.5 20.5V9.8l5-2.6v3.4l5-2.6v3.5l3-1.6V4.5h3v16M3.5 20.5h17M7 15h2m3 0h2m3 0h2M7 18h2m3 0h2m3 0h2"></path></svg></span><span class="home-request-route-copy"><small>Партнёры</small><strong>Бренды и поставщики</strong></span></a>
       </nav>
     </section>
-    <div class="eyebrow home-desktop-eyebrow home-desktop-eyebrow-form">Быстрая заявка</div>
     <article class="glass request-panel home-request-card home-request-card--switcher" id="home-request-form" data-contact-request-switcher>
       <div class="contact-request-tabs" role="tablist" aria-label="Тип обращения">
         <button class="contact-request-tab is-active" id="homeSupplyRequestTab" type="button" role="tab" aria-selected="true" aria-controls="homeSupplyRequestPanel" tabindex="0" data-contact-request-tab="supply">Для покупателей</button>
@@ -249,7 +274,7 @@
       </div>
 
       <section class="contact-request-panel" id="homeSupplyRequestPanel" role="tabpanel" aria-labelledby="homeSupplyRequestTab" data-contact-request-panel="supply">
-        <header class="home-request-head"><span class="home-request-kicker">Быстрая заявка</span><h2>Заявка</h2></header>
+        <header class="home-request-head"><h2>Заявка</h2></header>
         <form class="form sym-request-home-form quick-request-form home-direct-request" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-request-mode="supply" data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="hidden" name="source" value="contact">
@@ -263,7 +288,7 @@
       </section>
 
       <section class="contact-request-panel" id="homeCooperationRequestPanel" role="tabpanel" aria-labelledby="homeCooperationRequestTab" data-contact-request-panel="cooperation" hidden>
-        <header class="home-request-head cooperation-request-head"><span class="home-request-kicker">Партнёрам и поставщикам</span><h2>Предложить сотрудничество</h2></header>
+        <header class="home-request-head cooperation-request-head"><h2>Предложить сотрудничество</h2></header>
         <form class="form sym-request-home-form quick-request-form cooperation-request-form" method="post" action="{% url 'api_cooperation_request' %}" data-lead-form data-request-mode="cooperation" data-lead-url="{% url 'api_cooperation_request' %}" data-submit-pending="Отправляем предложение..." data-submit-success="Предложение отправлено. Мы свяжемся с вами после рассмотрения." enctype="multipart/form-data">
           {% csrf_token %}
           <input type="hidden" name="source" value="cooperation">
@@ -293,7 +318,7 @@
         <button class="contact-request-tab" id="homeMobileCooperationRequestTab" type="button" role="tab" aria-selected="false" aria-controls="homeMobileCooperationRequestPanel" tabindex="-1" data-contact-request-tab="cooperation">Для поставщиков</button>
       </div>
       <section class="contact-request-panel" id="homeMobileSupplyRequestPanel" role="tabpanel" aria-labelledby="homeMobileSupplyRequestTab" data-contact-request-panel="supply">
-        <header class="home-request-head"><span class="home-request-kicker">Быстрая заявка</span><h2>Заявка</h2></header>
+        <header class="home-request-head"><h2>Заявка</h2></header>
         <form class="home-request-form quick-request-form" method="post" action="{% url 'api_catalog_request' %}" data-lead-form data-request-mode="supply" data-lead-url="{% url 'api_catalog_request' %}" enctype="multipart/form-data">
           {% csrf_token %}<input type="hidden" name="source" value="contact">
           <div class="form-row"><div class="field"><label for="homeMobileName">Контактное лицо</label><input id="homeMobileName" name="name" placeholder="Имя и фамилия" autocomplete="name" required></div><div class="field"><label for="homeMobileContact">Телефон</label><input id="homeMobileContact" name="phone" type="tel" inputmode="tel" maxlength="18" data-phone-input placeholder="+7 ___ ___-__-__" autocomplete="tel" required></div></div>
@@ -304,7 +329,7 @@
         </form>
       </section>
       <section class="contact-request-panel" id="homeMobileCooperationRequestPanel" role="tabpanel" aria-labelledby="homeMobileCooperationRequestTab" data-contact-request-panel="cooperation" hidden>
-        <header class="home-request-head cooperation-request-head"><span class="home-request-kicker">Партнёрам и поставщикам</span><h2>Предложить сотрудничество</h2></header>
+        <header class="home-request-head cooperation-request-head"><h2>Предложить сотрудничество</h2></header>
         <form class="home-request-form quick-request-form cooperation-request-form" method="post" action="{% url 'api_cooperation_request' %}" data-lead-form data-request-mode="cooperation" data-lead-url="{% url 'api_cooperation_request' %}" data-submit-pending="Отправляем предложение..." data-submit-success="Предложение отправлено. Мы свяжемся с вами после рассмотрения." enctype="multipart/form-data">
           {% csrf_token %}<input type="hidden" name="source" value="cooperation">
           <fieldset class="cooperation-role-field" aria-label="Тип организации"><div class="cooperation-role-options"><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="manufacturer" required><span>Производитель</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="supplier" required><span>Поставщик</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="logistics" required><span>Логистика</span></label><label class="cooperation-role-option"><input type="radio" name="proposer_type" value="other" required><span>Другое</span></label></div></fieldset>

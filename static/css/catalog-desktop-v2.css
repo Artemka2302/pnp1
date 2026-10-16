@@ -1503,3 +1503,34 @@ body.catalog-page.pnp-ux-parity { font-family: var(--sans, Arial, sans-serif); }
   .catalog-page .catalog-v2-content-head > div:first-child { flex: 0 1 auto; width: 100%; }
   .catalog-page .catalog-v2-project-badge { top: 8px; right: 8px; padding: 4px 7px; font-size: 10px; }
 }
+
+/* Compact mobile hierarchy, with AR and KR aligned on the same baseline. */
+@media (max-width: 680px) {
+  .catalog-page .catalog-v2-structure-note { display: none; }
+  .catalog-page .catalog-v2-direction-grid { gap: 14px 8px; }
+  .catalog-page .catalog-v2-project-group[data-project-group="architecture"],
+  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] { grid-column: span 1; }
+  .catalog-page .catalog-v2-project-group[data-project-group="architecture"] > .catalog-v2-project-group-title,
+  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] > .catalog-v2-project-group-title {
+    display: flex;
+    align-items: center;
+    min-height: 35px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    line-height: 1.16;
+  }
+  .catalog-page .catalog-v2-project-cards { gap: 7px; }
+  .catalog-page .catalog-v2-project-group[data-project-group="architecture"] .catalog-v2-project-cards,
+  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] .catalog-v2-project-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html body.pnp-ux-parity.catalog-page .catalog-v2-project-cards .catalog-v2-direction-card,
+  html body.pnp-ux-parity.catalog-page .catalog-v2-project-cards > :only-child {
+    grid-column: auto !important;
+    height: 96px !important;
+    min-height: 96px !important;
+  }
+  .catalog-page .catalog-v2-project-group-title { margin-bottom: 7px; }
+  .catalog-page .catalog-v2-direction-overlay { padding: 8px; }
+  .catalog-page .catalog-v2-project-cards .catalog-v2-direction-card h3 { font-size: 11px; }
+}

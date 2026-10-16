@@ -1628,3 +1628,63 @@ body.home-page .role-entry-mobile-summary {
     transition: none !important;
   }
 }
+
+@media (max-width: 680px) {
+  html body.home-page.pnp-ux-parity .home-supply-gallery-head {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-supply-gallery-head > div,
+  html body.home-page.pnp-ux-parity .home-supply-gallery-head h2 {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  body.home-page .home-supply-gallery-head h2 {
+    max-width: none !important;
+    font-size: clamp(23px, 6.6vw, 29px) !important;
+  }
+
+  body.home-page .home-supply-gallery-head p {
+    margin-inline: auto !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-brands-section .home-brand-section-head {
+    text-align: center !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-brands-section .partner-logo-carousel.home-partner-logo-carousel {
+    padding: 0 !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-brands-section .partner-logo-nav {
+    display: none !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-brands-section .partner-logo-showcase.home-partner-logo-showcase {
+    height: 78px !important;
+    min-height: 78px !important;
+    padding: 6px 9px !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-brands-section .home-brand-marquee-motion,
+  html body.home-page.pnp-ux-parity .home-brands-section .home-brand-marquee-cycle,
+  html body.home-page.pnp-ux-parity .home-brands-section .home-brand-marquee-group {
+    height: 64px !important;
+  }
+
+  html body.home-page.pnp-ux-parity .home-brands-section .partner-logo-showcase .partner-showcase-logo {
+    flex: 0 0 130px !important;
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+  }
+}
