@@ -129,6 +129,22 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("data-vendor-chip", data["cloud_html"])
         self.assertIn("vendor-row", data["rows_html"])
 
+    def test_vendor_rows_render_approved_vendor_logo(self):
+        response = self.client.get(
+            "/vendors/",
+            {"q": "Armstrong"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        rows_html = response.json()["rows_html"]
+        self.assertIn("vendor-chip-logo", rows_html)
+        self.assertIn(
+            '/static/assets/img/logos/vendor-list-20261015/armstrong.png?v=20261016-vendor-list',
+            rows_html,
+        )
+        self.assertIn('alt="Armstrong"', rows_html)
+
     def test_vendor_ajax_filter_accepts_selected_vendors(self):
         vendors = list(Vendor.objects.filter(name__in=["Eltex", "YADRO"]).order_by("name"))
         self.assertEqual(len(vendors), 2)

@@ -52,7 +52,7 @@
             {% for vendor in direction.preview_vendors|slice:":2" %}
               <span class="vendor-chip vendor-chip-logo" title="{{ vendor.name }}">
                 {% if vendor.logo %}
-                  <img src="{% static vendor.logo %}" alt="{{ vendor.name }}">
+                  <img src="{% static vendor.logo %}?v=20261016-vendor-list" alt="{{ vendor.name }}">
                 {% else %}
                   <b>{{ vendor.name }}</b>
                 {% endif %}
