@@ -43,6 +43,7 @@ from .models import (
     LeadItem,
     ProductGroup,
     ProductType,
+    Partner,
     UploadedFile,
     Vendor,
 )
@@ -144,6 +145,19 @@ class PublicRouteSmokeTests(TestCase):
             rows_html,
         )
         self.assertIn('alt="Armstrong"', rows_html)
+
+    def test_partners_page_renders_approved_vendor_logo(self):
+        partner = Partner.objects.get(slug="armstrong")
+        self.assertTrue(partner.show_on_partners)
+
+        response = self.client.get("/partners/", {"q": "Armstrong"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Armstrong")
+        self.assertContains(
+            response,
+            '/static/assets/img/logos/vendor-list-20261015/armstrong.png',
+        )
 
     def test_vendor_ajax_filter_accepts_selected_vendors(self):
         vendors = list(Vendor.objects.filter(name__in=["Eltex", "YADRO"]).order_by("name"))
