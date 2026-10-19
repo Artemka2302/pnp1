@@ -1510,18 +1510,26 @@ body.catalog-page.pnp-ux-parity { font-family: var(--sans, Arial, sans-serif); }
   .catalog-page .catalog-v2-direction-grid { gap: 14px 8px; }
   .catalog-page .catalog-v2-project-group[data-project-group="architecture"],
   .catalog-page .catalog-v2-project-group[data-project-group="constructive"] { grid-column: span 1; }
+  .catalog-page .catalog-v2-project-group[data-project-group="landscaping"] {
+    grid-column: 1 / -1;
+  }
   .catalog-page .catalog-v2-project-group[data-project-group="architecture"] > .catalog-v2-project-group-title,
-  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] > .catalog-v2-project-group-title {
+  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] > .catalog-v2-project-group-title,
+  .catalog-page .catalog-v2-project-group[data-project-group="fire"] > .catalog-v2-project-group-title,
+  .catalog-page .catalog-v2-project-group[data-project-group="accessibility"] > .catalog-v2-project-group-title {
     display: flex;
     align-items: center;
     min-height: 35px;
     margin-bottom: 6px;
-    font-size: 11px;
-    line-height: 1.16;
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 750;
   }
   .catalog-page .catalog-v2-project-cards { gap: 7px; }
   .catalog-page .catalog-v2-project-group[data-project-group="architecture"] .catalog-v2-project-cards,
-  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] .catalog-v2-project-cards {
+  .catalog-page .catalog-v2-project-group[data-project-group="constructive"] .catalog-v2-project-cards,
+  .catalog-page .catalog-v2-project-group[data-project-group="fire"] .catalog-v2-project-cards,
+  .catalog-page .catalog-v2-project-group[data-project-group="accessibility"] .catalog-v2-project-cards {
     grid-template-columns: minmax(0, 1fr);
   }
   html body.pnp-ux-parity.catalog-page .catalog-v2-project-cards .catalog-v2-direction-card,
@@ -1529,6 +1537,12 @@ body.catalog-page.pnp-ux-parity { font-family: var(--sans, Arial, sans-serif); }
     grid-column: auto !important;
     height: 96px !important;
     min-height: 96px !important;
+  }
+  html body.pnp-ux-parity.catalog-page .catalog-v2-project-group:is(
+    [data-project-group="landscaping"]
+  ) .catalog-v2-direction-card {
+    grid-column: 1 / -1 !important;
+    aspect-ratio: 3.35 / 1 !important;
   }
   .catalog-page .catalog-v2-project-group-title { margin-bottom: 7px; }
   .catalog-page .catalog-v2-direction-overlay { padding: 8px; }

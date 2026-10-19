@@ -80,6 +80,35 @@ AI_RATE_LIMIT_WINDOW_SECONDS = 10 * 60
 AI_RATE_LIMIT_MAX = 20
 AI_MAX_BODY_BYTES = 32 * 1024
 
+PROJECT_GROUP_ORDER = (
+    "architecture",
+    "constructive",
+    "engineering",
+    "technology",
+    "fire",
+    "accessibility",
+    "landscaping",
+)
+
+
+def grouped_project_directions(directions):
+    """Build the shared project-section navigation used across public pages."""
+    project_group_map = {
+        key: {"key": key, "label": PROJECT_GROUPS[key], "directions": []}
+        for key in PROJECT_GROUP_ORDER
+    }
+    for direction in directions:
+        section = direction.project_section or {}
+        direction.vendor_project_code = section.get("code", "")
+        project_group = project_group_map.get(section.get("group", ""))
+        if project_group is not None:
+            project_group["directions"].append(direction)
+    return [
+        project_group_map[key]
+        for key in PROJECT_GROUP_ORDER
+        if project_group_map[key]["directions"]
+    ]
+
 
 @require_GET
 def healthcheck(request):
@@ -109,6 +138,11 @@ Disallow: /*?
     return response
 
 
+@require_GET
+def favicon(request):
+    return redirect(static("assets/img/brand/favicon.ico"), permanent=True)
+
+
 def first_existing_static_path(*paths):
     for path in paths:
         if finders.find(path):
@@ -118,10 +152,13 @@ def first_existing_static_path(*paths):
 
 def homepage_context():
     partners_qs = Partner.objects.order_by("-show_on_home", "name")
+    directions = list(public_direction_queryset())
 
     return {
-        "directions": public_direction_queryset(),
+        "directions": directions,
+        "home_project_groups": grouped_project_directions(directions),
         "featured_partners": partners_qs,
+        "home_brand_cards": homepage_brand_cards(),
         "featured_vendors": Vendor.objects.filter(vendorproductgroup__show_on_home=True).distinct()[:24],
         "stats": {
             "directions": Direction.objects.count(),
@@ -135,7 +172,6 @@ def homepage_context():
 def index(request):
     return render(request, "main/home.html", {
         **homepage_context(), "home_solutions": homepage_solution_showcase(),
-        "home_brand_cards": homepage_brand_cards(),
     })
 
 
@@ -737,37 +773,7 @@ def vendor_page_context(request):
     )
     project_direction_order = {slug: index for index, slug in enumerate(PROJECT_DIRECTIONS)}
     direction_cards.sort(key=lambda direction: project_direction_order.get(direction.slug, len(project_direction_order)))
-    for direction in direction_cards:
-        section = direction.project_section or {}
-        direction.vendor_project_code = section.get("code", "")
-        direction.vendor_project_group = section.get("group", "")
-
-    project_group_order = (
-        "architecture",
-        "constructive",
-        "engineering",
-        "technology",
-        "fire",
-        "accessibility",
-        "landscaping",
-    )
-    project_group_map = {
-        key: {
-            "key": key,
-            "label": PROJECT_GROUPS[key],
-            "directions": [],
-        }
-        for key in project_group_order
-    }
-    for direction in direction_cards:
-        project_group = project_group_map.get(direction.vendor_project_group)
-        if project_group is not None:
-            project_group["directions"].append(direction)
-    vendor_project_groups = [
-        project_group_map[key]
-        for key in project_group_order
-        if project_group_map[key]["directions"]
-    ]
+    vendor_project_groups = grouped_project_directions(direction_cards)
     selected_vendors = Vendor.objects.none()
     if filters["vendors"]:
         selected_vendors = Vendor.objects.filter(Q(slug__in=filters["vendors"]) | Q(name__in=filters["vendors"])).order_by("name")

@@ -527,6 +527,160 @@ body.vendors-page #vendorRows .vendor-row-actions .link-more {
   }
 }
 
+/* Keep the mobile project map identical to the approved catalog hierarchy. */
+@media (max-width: 680px) {
+  body.vendors-page .vendor-project-map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 8px;
+    width: calc(100vw - 20px);
+    margin-left: calc(50% - 50vw + 10px);
+  }
+
+  body.vendors-page .vendor-project-divider {
+    display: none;
+  }
+
+  body.vendors-page .vendor-project-group,
+  body.vendors-page .vendor-project-group--engineering,
+  body.vendors-page .vendor-project-group--technology,
+  body.vendors-page .vendor-project-group--landscaping {
+    grid-column: 1 / -1;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  body.vendors-page .vendor-project-group:is(
+    .vendor-project-group--architecture,
+    .vendor-project-group--constructive,
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility
+  ) {
+    grid-column: span 1;
+  }
+
+  body.vendors-page .vendor-project-group > h3,
+  body.vendors-page .vendor-project-group:is(
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility,
+    .vendor-project-group--landscaping
+  ) > h3 {
+    display: block;
+    margin: 0 0 7px;
+    color: #e7edf6;
+    font-family: var(--sans, Arial, sans-serif) !important;
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.3;
+    letter-spacing: 0;
+    text-transform: none !important;
+  }
+
+  body.vendors-page .vendor-project-group:is(
+    .vendor-project-group--architecture,
+    .vendor-project-group--constructive,
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility
+  ) > h3 {
+    display: flex;
+    min-height: 35px;
+    margin-bottom: 6px;
+    align-items: center;
+  }
+
+  body.vendors-page .vendor-project-group .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--engineering .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--technology .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+  }
+
+  body.vendors-page .vendor-project-group:is(
+    .vendor-project-group--architecture,
+    .vendor-project-group--constructive,
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility
+  ) .vendor-direction-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity .vendor-direction-card,
+  html body.vendors-page.pnp-ux-parity .vendor-project-group:is(
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility,
+    .vendor-project-group--landscaping
+  ) .vendor-direction-card {
+    position: relative !important;
+    display: block !important;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    height: 96px !important;
+    min-height: 96px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    border: 1px solid rgba(178, 198, 224, .33) !important;
+    border-radius: 12px !important;
+    background:
+      linear-gradient(180deg, rgba(3, 10, 18, .04) 10%, rgba(3, 10, 18, .25) 46%, rgba(3, 10, 18, .96) 100%),
+      var(--direction-photo) center / cover no-repeat !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .2) !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity .vendor-direction-card::before {
+    content: none !important;
+  }
+
+  body.vendors-page .vendor-direction-code {
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    right: 8px;
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    padding: 4px 7px;
+    border: 1px solid rgba(235, 142, 175, .5);
+    border-radius: 5px;
+    color: #f6d1df;
+    background: rgba(22, 31, 49, .92);
+    font-size: 10px;
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  body.vendors-page .vendor-direction-card strong,
+  body.vendors-page .vendor-project-group:is(
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility,
+    .vendor-project-group--landscaping
+  ) .vendor-direction-card strong {
+    position: absolute;
+    z-index: 1;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    display: block;
+    margin: 0;
+    color: #fff !important;
+    font-size: 11px;
+    font-weight: 850;
+    line-height: 1.16;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .76);
+  }
+
+  body.vendors-page .vendor-direction-meta {
+    display: none;
+  }
+
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-card {
+    grid-column: 1 / -1;
+    aspect-ratio: 3.35 / 1;
+  }
+}
+
 @media (max-width: 560px) {
   html body.vendors-page.pnp-ux-parity .vendor-toolbar-main .vendor-advanced-filters,
   body.vendors-page .vendor-advanced-filters .vendor-actions-field {
@@ -577,7 +731,7 @@ body.vendors-page .vendor-project-divider { display: none; }
     font-weight: 800;
   }
   body.vendors-page .vendor-project-group--fire,
-  body.vendors-page .vendor-project-group--accessibility { grid-column: span 3; }
+  body.vendors-page .vendor-project-group--accessibility,
   body.vendors-page .vendor-project-group--landscaping { grid-column: 1 / -1; }
   body.vendors-page .vendor-project-group--fire > h3,
   body.vendors-page .vendor-project-group--accessibility > h3,
@@ -586,5 +740,65 @@ body.vendors-page .vendor-project-divider { display: none; }
   body.vendors-page .vendor-project-group--accessibility .vendor-direction-grid,
   body.vendors-page .vendor-project-group--landscaping .vendor-direction-grid {
     grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* Final mobile parity overrides must follow the legacy compact rules above. */
+@media (max-width: 680px) {
+  body.vendors-page .vendor-project-divider {
+    display: none !important;
+  }
+
+  body.vendors-page .vendor-project-group--fire,
+  body.vendors-page .vendor-project-group--accessibility {
+    grid-column: span 1 !important;
+  }
+
+  body.vendors-page .vendor-project-group--landscaping {
+    grid-column: 1 / -1 !important;
+  }
+
+  body.vendors-page .vendor-project-group--fire > h3,
+  body.vendors-page .vendor-project-group--accessibility > h3 {
+    display: flex !important;
+  }
+
+  body.vendors-page .vendor-project-group--landscaping > h3 {
+    display: block !important;
+  }
+
+  body.vendors-page .vendor-project-group--fire .vendor-direction-grid,
+  body.vendors-page .vendor-project-group--accessibility .vendor-direction-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  body.vendors-page .vendor-project-group--landscaping .vendor-direction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  html body.vendors-page.pnp-ux-parity .vendor-direction-card,
+  html body.vendors-page.pnp-ux-parity .vendor-project-group:is(
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility,
+    .vendor-project-group--landscaping
+  ) .vendor-direction-card {
+    display: block !important;
+    height: 96px !important;
+    min-height: 96px !important;
+    padding: 0 !important;
+  }
+
+  body.vendors-page .vendor-project-group:is(
+    .vendor-project-group--fire,
+    .vendor-project-group--accessibility,
+    .vendor-project-group--landscaping
+  ) .vendor-direction-card strong {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.16;
   }
 }

@@ -67,6 +67,7 @@ class PublicRouteSmokeTests(TestCase):
     def test_public_routes_match_handoff_smoke(self):
         expected_statuses = {
             "/": 200,
+            "/favicon.ico": 301,
             "/catalog/": 200,
             "/catalog/building-materials/": 200,
             "/catalog/building-materials/constructive/": 200,
@@ -183,6 +184,20 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("vendor-chip-logo", rows_html)
         self.assertIn("Ingermax", rows_html)
         self.assertIn("ingermax-official.png", rows_html)
+        self.assertIn("<img", rows_html)
+
+    def test_vendor_rows_render_official_ideal_standard_wordmark(self):
+        response = self.client.get(
+            "/vendors/",
+            {"q": "Ideal"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        rows_html = response.json()["rows_html"]
+        self.assertIn("vendor-chip-logo", rows_html)
+        self.assertIn("Ideal", rows_html)
+        self.assertIn("ideal-standard-official.png", rows_html)
         self.assertIn("<img", rows_html)
 
     def test_vendor_rows_include_unassigned_groups_as_broad_vendor_pool(self):

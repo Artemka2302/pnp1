@@ -10,6 +10,58 @@ html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*
   background-color: #24211e !important; /* almaks.pro header */
 }
 
+html body :has(> img[src*="/atlas-concorde-official.png"]),
+html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/atlas-concorde-official.png"]) {
+  background-color: #151515 !important; /* official white wordmark */
+}
+
+html body :has(> img[src*="/adl.png"]) > img,
+html body :has(> img[src*="/spl.svg"]) > img {
+  width: auto !important;
+  max-width: 84% !important;
+  height: 84% !important;
+  max-height: 84% !important;
+  object-fit: contain !important;
+}
+
+html body :has(> img[src*="/ingermax-official.png"]) > img,
+html body :has(> img[src*="/ideal-standard-official.png"]) > img,
+html body :has(> img[src*="/toshiba.svg"]) > img {
+  width: 90% !important;
+  max-width: 90% !important;
+  height: auto !important;
+  max-height: 84% !important;
+  object-fit: contain !important;
+}
+
+html body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:is(
+  :has(> img[src*="/adl.png"]),
+  :has(> img[src*="/spl.svg"])
+) {
+  padding-block: 2px !important;
+}
+
+html body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:is(
+  :has(> img[src*="/adl.png"]),
+  :has(> img[src*="/spl.svg"])
+) > img {
+  width: auto !important;
+  height: 21px !important;
+  max-width: 21px !important;
+  max-height: 21px !important;
+}
+
+html body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/ideal-standard-official.png"]) {
+  padding-block: 2px !important;
+}
+
+html body.vendors-page.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/ideal-standard-official.png"]) > img {
+  width: auto !important;
+  height: 19px !important;
+  max-width: 64px !important;
+  max-height: 19px !important;
+}
+
 html body :has(> img[src*="/slaven-official.png"]),
 html body.pnp-ux-parity #vendorRows .vendor-chip.vendor-chip-logo:has(> img[src*="/slaven-official.png"]) {
   background-color: #706f6f !important; /* slaven.su header */

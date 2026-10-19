@@ -197,8 +197,9 @@
         <h2 class="catalog-v2-project-group-title">${escapeHtml(group.title)}</h2>
         <div class="catalog-v2-project-cards">${group.targets.map((target, index) => {
       const direction = nodeById(target);
+      const directionSlug = String(direction?.id || "").replace(/^direction:/, "");
       return `
-        <a class="catalog-v2-direction-card" href="${escapeHtml(urlFor(direction))}" data-catalog-v2-target="${escapeHtml(target)}">
+        <a class="catalog-v2-direction-card" href="${escapeHtml(urlFor(direction))}" data-catalog-v2-target="${escapeHtml(target)}" data-direction-slug="${escapeHtml(directionSlug)}">
           <img src="${escapeHtml(imageFor(direction))}" alt="" loading="${index === 0 ? "eager" : "lazy"}">
           ${badgeHtml(direction)}
           <span class="catalog-v2-direction-overlay">

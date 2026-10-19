@@ -38,3 +38,12 @@ class HomepageBrandTests(TestCase):
         cards = homepage_brand_cards()
         self.assertEqual([card["slug"] for card in cards], ["zzz"])
         self.assertEqual(cards[0]["groups"], "engineering")
+
+    def test_about_reuses_homepage_brand_cards(self):
+        brand = Vendor.objects.create(slug="about-brand", name="About brand", logo="about-brand.png")
+        self.link(brand, "it-infrastructure")
+
+        response = self.client.get("/about/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-brand-slug="about-brand"')

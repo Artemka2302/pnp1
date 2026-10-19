@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20261014-project-order-v6">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261016-form-gap-v3">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260812-1">
-  <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20261016-mobile-logos-v4">
+  <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20261019-catalog-project-parity-v7">
   <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261016-mobile-swipe-v4">
 {% endblock %}
 
@@ -100,7 +100,7 @@
       </div>
     </div>
     <div id="homeCategories">
-      <div class="home-supply-gallery" aria-label="Разделы комплектации объекта">
+      <div class="home-supply-gallery home-supply-gallery--desktop" aria-label="Разделы комплектации объекта">
         {% for direction in directions %}
           <a class="home-supply-gallery-card home-supply-gallery-card--{{ direction.slug }}"
             href="{{ direction.get_absolute_url }}"
@@ -114,6 +114,24 @@
               <strong>{{ direction.title }}</strong>
             </span>
           </a>
+        {% endfor %}
+      </div>
+      <div class="home-project-map-mobile" aria-label="Разделы проекта">
+        {% for project_group in home_project_groups %}
+          <section class="home-project-group home-project-group--{{ project_group.key }}" aria-labelledby="homeProjectGroup{{ forloop.counter }}">
+            <h3 id="homeProjectGroup{{ forloop.counter }}">{{ project_group.label }}</h3>
+            <div class="home-project-direction-grid">
+              {% for direction in project_group.directions %}
+                <a class="home-project-direction-card"
+                  href="{{ direction.get_absolute_url }}"
+                  aria-label="Открыть раздел: {{ direction.title }}">
+                  {% if direction.image %}<img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">{% endif %}
+                  <span class="home-project-direction-code">{{ direction.vendor_project_code }}</span>
+                  <span class="home-project-direction-overlay"><strong>{{ direction.title }}</strong></span>
+                </a>
+              {% endfor %}
+            </div>
+          </section>
         {% endfor %}
       </div>
     </div>
@@ -164,7 +182,7 @@
 
 <section class="section compact why-v13 home-why-v13 home-why-tech home-desktop-only" id="why-pnp" data-why-variant="console">
   <div class="container">
-    <div class="section-head why-tech-head"><div><h2>Что ПНП берёт на себя</h2><p>От разбора спецификации и подбора решений до технических документов и сопровождения поставки — всё в контексте одной задачи по объекту.</p></div></div>
+    <div class="section-head why-tech-head"><div><h2>Что ПНП берёт на себя</h2></div></div>
     <div class="why-grid-v13 why-tech-grid" data-pnp-live-why>
       <article class="why-tech-card" tabindex="0" data-label="Комплектация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Комплектация</span></div><h3>Комплектуем объект по разделам</h3><div class="why-tech-card__detail"><p>Собираем потребность по архитектурным, конструктивным и инженерным разделам в одну рабочую ведомость. Связываем материалы, оборудование, количества, требования и сроки, чтобы заказчику не приходилось координировать десятки отдельных запросов.</p></div></article>
       <article class="why-tech-card" tabindex="0" data-label="Спецификация"><div class="why-tech-card__top"><span class="why-tech-card__pill">Спецификация</span></div><h3>Разбираем спецификации и ТЗ</h3><div class="why-tech-card__detail"><p>Разбираем спецификации, ТЗ, ведомости и проектные файлы построчно. Уточняем назначение, характеристики, количество, объект и сроки; спорные или неполные позиции отмечаем до расчёта, чтобы подбор и коммерческое предложение опирались на согласованный объём.</p></div></article>
