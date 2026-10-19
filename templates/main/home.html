@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20261014-project-order-v6">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261016-form-gap-v3">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260812-1">
-  <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20261019-catalog-project-parity-v7">
+  <link rel="stylesheet" href="{% static 'css/home-mobile-redesign.css' %}?v=20261020-project-headings-v9">
   <link rel="stylesheet" href="{% static 'css/home-solutions.css' %}?v=20261016-mobile-swipe-v4">
 {% endblock %}
 
@@ -116,7 +116,7 @@
           </a>
         {% endfor %}
       </div>
-      <div class="home-project-map-mobile" aria-label="Разделы проекта">
+      <div class="home-project-map home-project-map-mobile" aria-label="Разделы проекта">
         {% for project_group in home_project_groups %}
           <section class="home-project-group home-project-group--{{ project_group.key }}" aria-labelledby="homeProjectGroup{{ forloop.counter }}">
             <h3 id="homeProjectGroup{{ forloop.counter }}">{{ project_group.label }}</h3>
