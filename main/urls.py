@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from . import views
 from .company_lookup import company_suggestions_api
@@ -6,6 +7,11 @@ from .company_lookup import company_suggestions_api
 
 
 urlpatterns = [
+    path(
+        "googlec1ddf76696582111.html",
+        TemplateView.as_view(template_name="googlec1ddf76696582111.html"),
+        name="google_site_verification",
+    ),
     path("api/company-suggestions/", company_suggestions_api, name="api_company_suggestions"),
     path("health/", views.healthcheck, name="healthcheck"),
     path("robots.txt", views.robots_txt, name="robots_txt"),
