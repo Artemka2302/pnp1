@@ -1,0 +1,59 @@
+<article class="catalog-v2-product-hero">
+  <img src="{{ catalog_node.image }}" alt="" loading="lazy">
+  <div class="catalog-v2-product-hero-copy">
+    <span>Товарная группа</span>
+    <h2>{{ catalog_node.title }}</h2>
+    <p>{{ catalog_node.summary }}</p>
+  </div>
+</article>
+<article class="catalog-v2-passport">
+  <div class="catalog-v2-passport-grid">
+    <section class="catalog-v2-passport-panel">
+      <h3>Типы продукции</h3>
+      <div class="catalog-v2-request-guide" role="note">
+        <span class="catalog-v2-request-guide-icon" aria-hidden="true">+</span>
+        <span><strong>Соберите заявку прямо в каталоге</strong><small>Нажмите на нужный тип продукции — выбранная позиция появится в заявке.</small></span>
+      </div>
+      <div class="catalog-v2-type-list">
+        {% for type in catalog_node.types %}
+        <button class="catalog-v2-type-row" type="button" data-request-item="{{ catalog_node.systemTitle }}|{{ catalog_node.title }}|{{ type.title }}" aria-pressed="false">
+          <span><b>{{ type.title }}</b><small>Добавить в заявку</small></span>
+          <i aria-hidden="true">+</i>
+        </button>
+        {% endfor %}
+      </div>
+      <noscript><p>Чтобы отправить список без JavaScript, <a href="{% url 'contacts' %}">свяжитесь с отделом продаж</a>.</p></noscript>
+    </section>
+    <section class="catalog-v2-passport-panel">
+      <h3>Бренды / производители</h3>
+      <div class="catalog-v2-vendor-grid">
+        {% for vendor in catalog_node.vendors %}
+        <a class="logo-tile" href="{{ vendor.url }}" title="{{ vendor.name }}">
+          {% if vendor.logo %}<img src="{{ vendor.logo }}" alt="{{ vendor.name }}" loading="lazy">{% else %}<span>{{ vendor.name }}</span>{% endif %}
+        </a>
+        {% empty %}
+        <div class="catalog-v2-vendor-pool" role="note">
+          <span class="catalog-v2-vendor-pool-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="m16 5 12 6-12 6L4 11 16 5Z"/><path d="m4 16 12 6 12-6M4 21l12 6 12-6"/></svg>
+          </span>
+          <div class="catalog-v2-vendor-pool-copy">
+            <strong>Обширный пул производителей</strong>
+            <p>Подберём бренды под требования проекта. На сайте представлена часть производителей, с которыми мы работаем.</p>
+            <a href="/contacts/?request_type=specification_review#request-form">Запросить подбор<span aria-hidden="true"> ↗</span></a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</article>
+<section class="glass catalog-mini-request catalog-mini-request-compact" data-catalog-request-panel>
+  <input type="hidden" name="items" data-request-items>
+  <textarea class="mini-request-raw" name="request_text" data-request-output aria-label="Комментарий к заявке"></textarea>
+  <div class="mini-request-head">
+    <div><span class="soft-label">Заявка <b data-request-count>0</b></span><h3>Выбранные позиции</h3></div>
+    <button class="btn ghost small" type="button" data-request-clear>Очистить</button>
+  </div>
+  <div class="mini-request-selected-list" data-request-list>Выбранные позиции появятся здесь.</div>
+  <div class="mini-request-actions"><a class="btn light" href="/contacts/#request-form">Перейти к заявке</a></div>
+</section>

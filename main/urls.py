@@ -15,6 +15,7 @@ urlpatterns = [
     path("api/company-suggestions/", company_suggestions_api, name="api_company_suggestions"),
     path("health/", views.healthcheck, name="healthcheck"),
     path("robots.txt", views.robots_txt, name="robots_txt"),
+    path("sitemap.xml", views.site_sitemap, name="site_sitemap"),
     path("favicon.ico", views.favicon, name="favicon"),
     path("", views.index, name="index"),
     path("about/", views.about, name="about"),

@@ -2170,20 +2170,6 @@
     "note": ""
   },
   {
-    "id": "sanline-sml",
-    "name": "Sanline SML",
-    "slug": "sanline-sml",
-    "status": "logo_ready",
-    "priority": 200,
-    "show_on_home": false,
-    "show_on_partners": true,
-    "logo": "assets/img/logos/vendor-list-20261015/sanline-sml.png",
-    "logo_source_url": "https://www.sanline.ru/wp-content/themes/sanline/assets/img/logo.png?ver=2",
-    "official_site": "https://www.sanline.ru/products/chugunnye-truby-i-fitingi-sanline-sml/",
-    "category": "Инженерное оборудование / Водоснабжение и водоотведение",
-    "note": ""
-  },
-  {
     "id": "zavod-universal",
     "name": "Завод Универсал",
     "slug": "zavod-universal",

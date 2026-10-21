@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block title %}Контакты — ПНП{% endblock %}
+{% block description %}Обсудите комплектацию объекта с ПНП: направьте проект, спецификацию или список материалов и оборудования. Работаем с проектными и строительными организациями по России и Беларуси.{% endblock %}
 {% block body_class %}contacts-page{% endblock %}
 
 {% block extra_head %}
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261015-form-spacing-v2">
   <style>
     .contacts-page .home-request-card {

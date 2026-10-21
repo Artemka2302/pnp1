@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from main.catalog import invalidate_catalog_cache
+from main.catalog_duplicates import canonical_group_slug, catalog_without_duplicate_groups
 from main.models import (
     CatalogBlock,
     CatalogSystem,
@@ -67,7 +68,7 @@ class Command(BaseCommand):
             stats = {}
             catalog = read_json(source_dir / "catalog_master.json")
             product_images = read_json(source_dir / "catalog_product_group_images.json")
-            stats.update(self.import_catalog(catalog, product_images))
+            stats.update(self.import_catalog(catalog_without_duplicate_groups(catalog), product_images))
             stats.update(self.import_vendors(source_dir / "vendors_master.csv"))
             stats.update(self.import_vendor_map(source_dir / "catalog_vendor_map.csv"))
             stats.update(self.import_partners(source_dir / "partners.json"))
@@ -193,7 +194,7 @@ class Command(BaseCommand):
         with path.open(encoding="utf-8-sig", newline="") as file:
             for row in csv.DictReader(file):
                 vendor_slug = (row.get("vendor_slug") or "").strip()
-                group_slug = (row.get("product_group_id") or "").strip()
+                group_slug = canonical_group_slug((row.get("product_group_id") or "").strip())
                 if not vendor_slug or not group_slug:
                     skipped += 1
                     continue

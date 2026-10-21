@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from .models import CatalogBlock, CatalogSystem, Direction, ProductGroup, VendorProductGroup
 from .catalog_sections import PROJECT_DIRECTIONS, SYSTEM_ORDER, project_section
+from .catalog_duplicates import canonical_group_slug
 
 
 CATALOG_CACHE_TTL = 15 * 60
@@ -349,6 +350,8 @@ def build_catalog_node(target):
     kind, separator, slug = target.partition(":")
     if not separator or not slug:
         raise Http404("Unknown catalog node")
+    if kind == "group":
+        slug = canonical_group_slug(slug)
 
     if kind == "block":
         block = block_queryset().filter(slug=slug).first()
@@ -394,11 +397,14 @@ def build_catalog_node(target):
 
 
 def get_catalog_node(target):
+    from .seo import catalog_metadata
+
     cache_key = catalog_cache_key("node", target)
     payload = cache.get(cache_key)
     if payload is None:
         payload = build_catalog_node(target)
         cache.set(cache_key, payload, timeout=CATALOG_CACHE_TTL)
+    payload["node"]["seo"] = catalog_metadata(payload["node"])
     return payload
 
 

@@ -28,7 +28,8 @@
   const contentSection = rootElement.querySelector("[data-catalog-v2-content-section]");
   const content = rootElement.querySelector("[data-catalog-v2-content]");
   const contentTitle = rootElement.querySelector("[data-catalog-v2-title]");
-  const contentKicker = rootElement.querySelector("[data-catalog-v2-kicker]");
+  let contentKicker = rootElement.querySelector("[data-catalog-v2-kicker]");
+  let rootHeading = rootElement.querySelector("[data-catalog-v2-root-heading]");
   const breadcrumbs = rootElement.querySelector("[data-catalog-v2-breadcrumbs]");
   const backButton = rootElement.querySelector("[data-catalog-v2-back]");
   const status = rootElement.querySelector("[data-catalog-v2-status]");
@@ -106,7 +107,7 @@
       const payload = await response.json();
       mergePayload(payload);
       setStatus();
-      return nodeById(target);
+      return nodeById(payload.node.id);
     })().finally(() => pendingTargets.delete(target));
 
     pendingTargets.set(target, pending);
@@ -388,11 +389,44 @@
     history[method]({ catalogTarget: node.id }, "", node.url);
   };
 
+  const headingTag = (element, tag) => {
+    if (!element || element.localName === tag) return element;
+    const replacement = document.createElement(tag);
+    for (const attribute of element.attributes) replacement.setAttribute(attribute.name, attribute.value);
+    replacement.textContent = element.textContent;
+    element.replaceWith(replacement);
+    return replacement;
+  };
+
+  const updatePageMetadata = node => {
+    rootHeading = headingTag(rootHeading, node.kind === "root" ? "h1" : "div");
+    contentKicker = headingTag(contentKicker, node.kind === "root" ? "span" : "h1");
+    if (node.seo) {
+      document.title = node.seo.title;
+      document.querySelector('meta[name="description"]')?.setAttribute("content", node.seo.description);
+    }
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", new URL(node.url, location.origin).href);
+    const schema = document.getElementById("catalogBreadcrumbData");
+    if (schema) {
+      const rows = node.breadcrumbs || [];
+      schema.textContent = JSON.stringify(rows.length ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: rows.map((row, index) => ({
+          "@type": "ListItem", position: index + 1, name: row.title,
+          item: new URL(row.url, location.origin).href,
+        })),
+      } : null);
+    }
+  };
+
   const renderTarget = async (target, { historyMode = "push" } = {}) => {
     try {
       const node = await ensureNode(target);
       if (!node) return;
+      target = node.id;
       state.currentTarget = target;
+      updatePageMetadata(node);
       expandPath(target);
       renderIndex();
       renderDirectionCards();

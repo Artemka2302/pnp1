@@ -37,7 +37,9 @@ from .models import (
 from .bitrix import send_lead_to_bitrix
 from .company_lookup import lookup_configured, selected_company
 from .catalog_sections import PROJECT_DIRECTIONS, PROJECT_GROUPS
+from .catalog_duplicates import GROUP_ALIASES, canonical_group_slug
 from .home_brands import homepage_brand_cards
+from .seo import catalog_template_context, sitemap_paths
 from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 from .ai import (
     AiConfigurationError,
@@ -132,7 +134,7 @@ Allow: /
 Disallow: /api/
 Disallow: /*?
 """
-    content += f"\nSitemap: {request.build_absolute_uri(reverse('solutions_sitemap'))}\n"
+    content += f"\nSitemap: {request.build_absolute_uri(reverse('site_sitemap'))}\n"
     response = HttpResponse(content, content_type="text/plain; charset=utf-8")
     response["Cache-Control"] = "public, max-age=86400"
     return response
@@ -234,6 +236,13 @@ def solution_document(request, vendor_slug, document_slug):
 
 
 @require_GET
+def site_sitemap(request):
+    return render(request, "main/solutions_sitemap.xml", {
+        "locations": [request.build_absolute_uri(path) for path in sitemap_paths()],
+    }, content_type="application/xml")
+
+
+@require_GET
 def solutions_sitemap(request):
     locations = [reverse("solutions")]
     for vendor in solution_vendors():
@@ -300,11 +309,13 @@ def sovetnik_generalnogo_direktora(request):
 
 
 def render_catalog_page(request, *, initial_target="root", page_title="Каталог поставки"):
+    initial = catalog_initial_data(initial_target)
     return render(
         request,
         "main/catalog.html",
         {
-            "catalog_initial_data": catalog_initial_data(initial_target),
+            "catalog_initial_data": initial,
+            **catalog_template_context(request, initial),
             "catalog_page_title": page_title,
             "canonical_url": request.build_absolute_uri(request.path),
         },
@@ -615,6 +626,15 @@ def catalog_system(request, block_slug, direction_slug, system_slug):
 
 
 def product_group(request, block_slug, direction_slug, system_slug, group_slug):
+    if group_slug in GROUP_ALIASES:
+        group = get_object_or_404(
+            ProductGroup.objects.select_related("system__direction__block"),
+            slug=canonical_group_slug(group_slug),
+            system__slug=system_slug,
+            system__direction__slug=direction_slug,
+            system__direction__block__slug=block_slug,
+        )
+        return redirect(group.get_absolute_url(), permanent=True)
     if (block_slug, direction_slug, system_slug) == ("building-materials", "constructive", "wood-based-panel-materials"):
         from .catalog_materials import MATERIAL_SLUGS
         if group_slug in MATERIAL_SLUGS:
@@ -1565,6 +1585,12 @@ def legacy_page(request, page):
             if not suffix.startswith(prefix):
                 continue
             child_slug = suffix.removeprefix(prefix)
+            if child_slug in GROUP_ALIASES:
+                group = get_object_or_404(
+                    ProductGroup.objects.select_related("system__direction__block"),
+                    slug=canonical_group_slug(child_slug), system__direction=direction,
+                )
+                return redirect(group.get_absolute_url(), permanent=True)
             system = CatalogSystem.objects.filter(direction=direction, slug=child_slug).first()
             if system:
                 return redirect(

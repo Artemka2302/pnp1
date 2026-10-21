@@ -1,0 +1,14 @@
+{% for group in catalog_project_groups %}
+<section class="catalog-v2-project-group" data-project-group="{{ group.key }}" aria-label="{{ group.title }}">
+  <h2 class="catalog-v2-project-group-title">{{ group.title }}</h2>
+  <div class="catalog-v2-project-cards">
+    {% for direction in group.directions %}
+    <a class="catalog-v2-direction-card" href="{{ direction.url }}" data-catalog-v2-target="{{ direction.id }}" data-direction-slug="{{ direction.id|cut:'direction:' }}">
+      <img src="{{ direction.image }}" alt="" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+      {% include "main/partials/catalog_badge.html" with node=direction %}
+      <span class="catalog-v2-direction-overlay"><h3>{{ direction.title }}</h3></span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}

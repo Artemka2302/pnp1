@@ -6,6 +6,7 @@
 {% block description %}Подбираем проектные решения, материалы и оборудование для проектных организаций, строительных компаний, торговых сетей и частных заказчиков. Организуем комплектацию и поставки.{% endblock %}
 
 {% block extra_head %}
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-home.css' %}?v=20261014-project-order-v6">
   <link rel="stylesheet" href="{% static 'assets/css/pnp1-live-request.css' %}?v=20261016-form-gap-v3">
   <link rel="stylesheet" href="{% static 'css/home-pnp1-parity.css' %}?v=20260812-1">

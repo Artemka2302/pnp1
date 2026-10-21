@@ -261,7 +261,7 @@
     margin-bottom: 18px;
   }
 
-  .catalog-page .catalog-v2-toolbar h1 {
+  .catalog-page .catalog-v2-toolbar .catalog-v2-toolbar-label {
     max-width: none;
     margin: 0;
     color: #f7f9fd;
@@ -574,7 +574,7 @@
 
   .catalog-page .catalog-v2-kicker {
     display: block;
-    margin-bottom: 5px;
+    margin: 0 0 5px;
     color: #ef79a1;
     font-size: 11px;
     font-weight: 900;
@@ -980,7 +980,7 @@
       gap: 12px;
     }
 
-    .catalog-page .catalog-v2-toolbar h1 {
+    .catalog-page .catalog-v2-toolbar .catalog-v2-toolbar-label {
       font-size: 30px;
     }
 
@@ -1080,7 +1080,7 @@
       margin-bottom: 18px;
     }
 
-    .catalog-page .catalog-v2-toolbar h1 {
+    .catalog-page .catalog-v2-toolbar .catalog-v2-toolbar-label {
       font-size: 30px;
       white-space: normal;
     }
@@ -1266,7 +1266,7 @@
       order: 3;
     }
 
-    .catalog-page .catalog-v2-toolbar h1 {
+    .catalog-page .catalog-v2-toolbar .catalog-v2-toolbar-label {
       order: 1;
     }
   }
@@ -1325,7 +1325,7 @@
       margin-bottom: 14px;
     }
 
-    .catalog-page .catalog-v2-toolbar h1 {
+    .catalog-page .catalog-v2-toolbar .catalog-v2-toolbar-label {
       font-size: 28px;
     }
 

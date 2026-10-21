@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ catalog_page_title }} — ПНП{% endblock %}
+{% block title %}{{ catalog_seo.title }}{% endblock %}
+{% block description %}{{ catalog_seo.description }}{% endblock %}
 {% block body_class %}catalog-page{% endblock %}
 
 {% block extra_head %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20261019-mobile-project-grid-v7">
+  <script type="application/ld+json" id="catalogBreadcrumbData">{{ catalog_breadcrumb_json|safe }}</script>
+  <link rel="stylesheet" href="{% static 'css/catalog-desktop-v2.css' %}?v=20261020-seo-ssr-v1">
 {% endblock %}
 
 {% block content %}
@@ -27,12 +29,28 @@
           </span>
         </button>
       </div>
-      <ul class="catalog-v2-index-list" id="catalogV2IndexList" data-catalog-v2-index role="tree"></ul>
+      <ul class="catalog-v2-index-list" id="catalogV2IndexList" data-catalog-v2-index role="tree">
+        {% for group in catalog_project_groups %}
+        <li class="catalog-v2-project-tree-group" role="none">
+          <span class="catalog-v2-project-tree-title">{{ group.title }}</span>
+          <ul role="group" aria-label="{{ group.title }}">
+            {% for direction in group.directions %}
+            <li class="catalog-v2-tree-item" role="treeitem">
+              <div class="catalog-v2-tree-row">
+                <span class="catalog-v2-tree-marker" aria-hidden="true"></span>
+                <a class="catalog-v2-tree-link" href="{{ direction.url }}" data-catalog-v2-target="{{ direction.id }}"><span class="catalog-v2-tree-label">{{ direction.title }}</span></a>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
     </aside>
 
     <div class="catalog-v2-workspace">
       <header class="catalog-v2-toolbar">
-        <h1>Каталог</h1>
+        {% if catalog_node.kind == 'root' %}<h1 class="catalog-v2-toolbar-label" data-catalog-v2-root-heading>Каталог</h1>{% else %}<div class="catalog-v2-toolbar-label" data-catalog-v2-root-heading>Каталог</div>{% endif %}
         <div class="catalog-v2-toolbar-request" role="note" aria-label="Сбор заявки в каталоге">
           <span class="catalog-v2-toolbar-request-icon" aria-hidden="true">+</span>
           <span>
@@ -57,23 +75,37 @@
 
       <div class="catalog-v2-status" data-catalog-v2-status role="status" hidden></div>
 
-      <section class="catalog-v2-directions" aria-label="Разделы проекта" data-catalog-v2-direction-section>
+      <section class="catalog-v2-directions" aria-label="Разделы проекта" data-catalog-v2-direction-section{% if catalog_node.kind != 'root' %} hidden{% endif %}>
         <p class="catalog-v2-structure-note">Выберите раздел проекта. Внутри — системы, материалы и оборудование для комплектации.</p>
-        <div class="catalog-v2-direction-grid" data-catalog-v2-directions></div>
+        <div class="catalog-v2-direction-grid" data-catalog-v2-directions>{% include "main/partials/catalog_direction_cards.html" %}</div>
       </section>
 
-      <section class="catalog-v2-content" data-catalog-v2-content-section aria-live="polite" hidden>
-        <nav class="catalog-v2-breadcrumbs" aria-label="Путь в каталоге" data-catalog-v2-breadcrumbs hidden></nav>
+      <section class="catalog-v2-content" data-catalog-v2-content-section aria-live="polite"{% if catalog_node.kind == 'root' %} hidden{% endif %}>
+        <nav class="catalog-v2-breadcrumbs" aria-label="Путь в каталоге" data-catalog-v2-breadcrumbs{% if not catalog_breadcrumbs %} hidden{% endif %}>
+          {% for row in catalog_breadcrumbs %}<a class="catalog-v2-breadcrumb" href="{{ row.url }}" data-catalog-v2-target="{{ row.target }}">{{ row.title }}</a>{% endfor %}
+        </nav>
         <div class="catalog-v2-content-head">
           <div>
-            <span class="catalog-v2-kicker" data-catalog-v2-kicker hidden></span>
-            <h2 data-catalog-v2-title></h2>
+            {% if catalog_node.kind == 'root' %}<span class="catalog-v2-kicker" data-catalog-v2-kicker hidden></span>{% else %}<h1 class="catalog-v2-kicker" data-catalog-v2-kicker>{{ catalog_node.title }}</h1>{% endif %}
+            <h2 data-catalog-v2-title>{{ catalog_content_heading }}</h2>
           </div>
           <button class="catalog-v2-back" type="button" data-catalog-v2-back hidden>
             Назад
           </button>
         </div>
-        <div class="catalog-v2-system-grid" data-catalog-v2-content></div>
+        <div class="{% if catalog_node.kind == 'group' %}catalog-v2-product{% else %}catalog-v2-system-grid{% endif %}" data-catalog-v2-content{% if catalog_node.kind != 'group' %} data-catalog-v2-count="{{ catalog_children|length }}" data-catalog-v2-kind="{{ catalog_children.0.kind|default:'empty' }}"{% endif %}>
+          {% if catalog_node.kind == 'group' %}
+            {% include "main/partials/catalog_product.html" %}
+          {% elif catalog_node.kind != 'root' %}
+            {% for node in catalog_children %}
+            <a class="catalog-v2-system-card" href="{{ node.url }}" data-catalog-v2-target="{{ node.id }}">
+              <img src="{{ node.image }}" alt="" loading="lazy">
+              {% include "main/partials/catalog_badge.html" %}
+              <span class="catalog-v2-system-overlay"><h3>{{ node.title }}</h3></span>
+            </a>
+            {% empty %}<div class="catalog-v2-empty">В этом разделе пока нет опубликованных позиций.</div>{% endfor %}
+          {% endif %}
+        </div>
       </section>
     </div>
   </div>
@@ -81,5 +113,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261019-direction-slugs-v2"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261020-seo-ssr-v1"></script>
 {% endblock %}
