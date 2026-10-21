@@ -12,6 +12,11 @@ urlpatterns = [
         TemplateView.as_view(template_name="googlec1ddf76696582111.html"),
         name="google_site_verification",
     ),
+    path(
+        "yandex_fa4ca51ac1521f23.html",
+        TemplateView.as_view(template_name="yandex_fa4ca51ac1521f23.html"),
+        name="yandex_site_verification",
+    ),
     path("api/company-suggestions/", company_suggestions_api, name="api_company_suggestions"),
     path("health/", views.healthcheck, name="healthcheck"),
     path("robots.txt", views.robots_txt, name="robots_txt"),

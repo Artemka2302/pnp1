@@ -19,3 +19,19 @@ class GoogleSiteVerificationTests(SimpleTestCase):
         response = self.client.head(reverse("google_site_verification"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, b"")
+
+
+@override_settings(ALLOWED_HOSTS=["testserver"])
+class YandexSiteVerificationTests(SimpleTestCase):
+    def test_verification_file_is_public_and_has_yandex_token(self):
+        url = reverse("yandex_site_verification")
+        self.assertEqual(url, "/yandex_fa4ca51ac1521f23.html")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Verification: fa4ca51ac1521f23")
+        self.assertTrue(response["Content-Type"].startswith("text/html"))
+
+    def test_verification_file_supports_head(self):
+        response = self.client.head(reverse("yandex_site_verification"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b"")
