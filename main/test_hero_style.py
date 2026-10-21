@@ -58,3 +58,18 @@ class SharedHeroStyleTests(TestCase):
         self.assertIn('.support-chat-launcher .support-chat-channels[hidden]', styles)
         self.assertIn('data-support-toggle', script)
         self.assertIn('data-support-mode-option="manager"', script)
+
+    def test_home_responsive_guardrails_cover_phone_landscape_and_touch_tablet(self):
+        root = Path(settings.BASE_DIR)
+        styles = (root / 'static/css/pnp-association.css').read_text(encoding='utf-8')
+        response = self.client.get('/')
+
+        self.assertContains(response, '20261021-responsive-guardrails-v1')
+        self.assertIn(
+            '@media (orientation: landscape) and (max-width: 1080px) and (max-height: 680px)',
+            styles,
+        )
+        self.assertIn('#top.home-desktop-only', styles)
+        self.assertIn('#top-mobile.home-mobile-only', styles)
+        self.assertIn('body.pnp-ux-parity .support-chat-widget', styles)
+        self.assertIn('(hover: none) and (pointer: coarse)', styles)
