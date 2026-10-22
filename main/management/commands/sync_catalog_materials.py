@@ -39,14 +39,21 @@ class Command(BaseCommand):
             return
         with transaction.atomic():
             if old:
-                old.slug=REVISION['new_system'];old.title='Деревянные конструкции'
+                old.slug=REVISION['new_system'];old.title=next(
+                    item['title'] for item in REVISION['new_systems']
+                    if item['slug'] == REVISION['new_system']
+                )
                 old.save(update_fields=['slug','title','updated_at'])
             for item in REVISION['new_systems']:
                 direction=Direction.objects.get(slug=item['direction'])
-                CatalogSystem.objects.get_or_create(slug=item['slug'],defaults={
+                system,created=CatalogSystem.objects.get_or_create(slug=item['slug'],defaults={
                     'direction':direction,'title':item['title'],
                     'image':old.image if old else 'assets/img/catalog/generated/direction-constructive.webp',
                 })
+                if not created and (system.direction_id != direction.id or system.title != item['title']):
+                    system.direction=direction
+                    system.title=item['title']
+                    system.save(update_fields=['direction','title','updated_at'])
             for item in REVISION['moves']:
                 group=ProductGroup.objects.get(slug=item['slug'])
                 group.system=CatalogSystem.objects.get(slug=item['system'])

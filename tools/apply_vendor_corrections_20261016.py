@@ -25,7 +25,7 @@ NEW = {
                    "Конструкции полов и перегородок", "vdsp-sh", "ВДСПШ"),
     "ultralam": ("ULTRALAM", "https://ultralam.com/lvl", LOGOS + "ultralam.svg",
                   "https://static.tildacdn.com/tild3464-6334-4732-a334-353135626165/Frame_1321314553.svg",
-                  "constructive", "Конструктивные решения", "wooden-structures", "Деревянные конструкции", "lvl", "ЛВЛ"),
+                  "constructive", "Конструктивные решения", "wooden-structures", "Древесно-плитные материалы", "lvl", "ЛВЛ"),
 }
 GROUP_URLS = {
     "acpl": "https://pnp1.ru/catalog/building-materials/architecture/facades/acpl/",
