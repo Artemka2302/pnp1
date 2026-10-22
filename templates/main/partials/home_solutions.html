@@ -31,7 +31,7 @@
         </a>
         <div class="home-solution-body">
           <div class="home-solution-meta">
-            <a class="home-solution-brand" href="{{ document.vendor_url }}" aria-label="Все решения {{ document.vendor_name }}">{% if document.vendor_logo %}<img src="{% static document.vendor_logo %}" alt="{{ document.vendor_name }}" loading="lazy" width="88" height="30">{% else %}{{ document.vendor_name }}{% endif %}</a>
+            <a class="home-solution-brand{% if document.vendor_logo_on_dark %} solution-logo-dark{% endif %}" href="{{ document.vendor_url }}" aria-label="Все решения {{ document.vendor_name }}">{% if document.vendor_logo %}<img src="{% static document.vendor_logo %}" alt="{{ document.vendor_name }}" loading="lazy" width="88" height="30">{% else %}{{ document.vendor_name }}{% endif %}</a>
             <span>PDF{% if document.pages %} · {{ document.pages }} стр.{% endif %}</span>
           </div>
           <h3><a href="{{ document.url }}">{{ document.title }}</a></h3>

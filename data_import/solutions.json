@@ -478,6 +478,70 @@
           "source_filename": "Объекты BLT Мирового значения.pdf"
         }
       ]
+    },
+    {
+      "slug": "saint-gobain",
+      "name": "Saint-Gobain",
+      "reader_logo_on_light": true,
+      "logo": "assets/img/logos/approved-top/saint-gobain.png",
+      "official_site": "https://www.saint-gobain.ru/",
+      "background": {
+        "image": "assets/solutions/saint-gobain/vendor-background.webp",
+        "source_pdf": "assets/solutions/saint-gobain/vetonit-comprehensive-solutions.pdf",
+        "page": 3,
+        "image_name": "Image2.jpg"
+      },
+      "description": "Комплексные строительные решения VETONIT для фасадов, кровель, стен, перегородок и полов.",
+      "intro": "Материалы Saint-Gobain объединяют теплоизоляцию, каркасные системы и строительные смеси VETONIT для ремонта и нового строительства. В информационном материале представлены области применения, комплексные решения, сервисы и основная номенклатура.",
+      "tags": ["VETONIT", "Теплоизоляция", "Каркасные системы", "Строительные смеси"],
+      "sections": [
+        {"slug": "construction-solutions", "title": "Строительные решения VETONIT", "documents": ["vetonit-comprehensive-solutions"]}
+      ],
+      "documents": [
+        {
+          "slug": "vetonit-comprehensive-solutions",
+          "title": "Комплексные решения VETONIT",
+          "description": "Теплоизоляция, каркасные системы и строительные смеси для ремонта и нового строительства.",
+          "summary": "Информационный материал Saint-Gobain о комплексных решениях VETONIT: теплоизоляция, гипсовые строительные плиты и профили, строительные смеси, фасады, кровли, стены, перегородки и полы. Также представлены проектные сервисы, BIM, обучение и основная номенклатура материалов; применимость конкретных решений уточняется для проекта.",
+          "tags": ["VETONIT", "Фасады", "Перегородки", "Кровли", "Полы"],
+          "pdf": "assets/solutions/saint-gobain/vetonit-comprehensive-solutions.pdf",
+          "cover": "assets/solutions/saint-gobain/vetonit-comprehensive-solutions-cover.webp",
+          "pages": 6,
+          "source_filename": "Информационное_письмо_VETONIT_Saint_Gobain (1).pdf"
+        }
+      ]
+    },
+    {
+      "slug": "istkult",
+      "name": "ISTKULT",
+      "logo_on_dark": true,
+      "logo": "assets/img/logos/vendors/import-20260630/instkult.png",
+      "official_site": "https://istkult.ru/",
+      "background": {
+        "image": "assets/solutions/istkult/vendor-background.webp",
+        "source_pdf": "assets/solutions/istkult/presentation-2026.pdf",
+        "page": 1,
+        "image_name": "Image29.jpg"
+      },
+      "description": "Газобетонные блоки, крупноформатные решения, перемычки, кладочные смеси и техническая поддержка.",
+      "intro": "ISTKULT выпускает газобетонные решения для многоэтажного и малоэтажного строительства. В презентации собраны сведения о производстве и ассортименте, блоках стандартных и крупных форматов, сопутствующих материалах, фасадных решениях, логистике и сервисах для проектировщиков и строителей.",
+      "tags": ["Газобетон", "Стеновые блоки", "Перегородки", "Техническая поддержка"],
+      "sections": [
+        {"slug": "aerated-concrete", "title": "Газобетонные решения ISTKULT", "documents": ["presentation-2026"]}
+      ],
+      "documents": [
+        {
+          "slug": "presentation-2026",
+          "title": "Газобетонные решения ISTKULT 2026",
+          "description": "Газобетонные блоки, JUMBO, перемычки, кладочные растворы, фасадные системы и сервисы.",
+          "summary": "Презентация ISTKULT 2026 года: производство и ассортимент газобетона, стеновые блоки D400-D700, крупноформатные плиты JUMBO, U- и O-образные блоки, перемычки, кладочные смеси, декоративные и фасадные решения. Отдельно описаны логистика, обучение, технические консультации и поддержка проектировщиков; характеристики и доступность продукции уточняются для конкретного объекта.",
+          "tags": ["Газобетон", "JUMBO", "Перемычки", "Кладочные смеси", "Сервисы"],
+          "pdf": "assets/solutions/istkult/presentation-2026.pdf",
+          "cover": "assets/solutions/istkult/presentation-2026-cover.webp",
+          "pages": 42,
+          "source_filename": "Презентация для ПГС ISTKULT 2026 2.pdf"
+        }
+      ]
     }
   ]
 }

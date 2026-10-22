@@ -24,6 +24,7 @@
 .home-solution-body { display: flex; flex-direction: column; flex: 1; padding: 18px; }
 .home-solution-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #b8c6d8; font-size: 12px; margin-bottom: 16px; }
 .home-solution-brand { display: grid; place-items: center; width: 100px; height: 40px; border-radius: 6px; padding: 5px 8px; background: #f5f7fb; color: #14223a; }
+.home-solution-brand.solution-logo-dark { background: #050505; }
 .home-solution-brand img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .home-solution-card h3 { margin: 0 0 10px; font-size: 21px; line-height: 1.2; overflow-wrap: break-word; }
 .home-solution-card h3 a { color: #fff; text-decoration: none; }

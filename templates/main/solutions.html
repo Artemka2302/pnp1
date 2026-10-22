@@ -35,7 +35,7 @@
     <div class="partners-grid solution-vendor-grid">
       {% for vendor in solution_vendors %}
       <a class="partner-card partner-card-link solution-vendor-card" href="{{ vendor.url }}">
-        <div class="logo-tile partner-logo-tile"><img src="{% static vendor.logo %}" alt="{{ vendor.name }}" width="250" height="100" loading="lazy"></div>
+        <div class="logo-tile partner-logo-tile{% if vendor.logo_on_dark %} solution-logo-dark{% endif %}"><img src="{% static vendor.logo %}" alt="{{ vendor.name }}" width="250" height="100" loading="lazy"></div>
         <div class="solution-vendor-card-body">
           <div class="solution-card-heading"><h3>{{ vendor.name }}</h3><span>{{ vendor.documents|length }} PDF</span></div>
           <p>{{ vendor.description }}</p>

@@ -22,6 +22,7 @@ body.solutions-page .brand-spine { display: none; }
 /* Manufacturer entries reuse the approved partner-card and logo-tile surfaces. */
 .solutions-page .solution-vendor-card { text-decoration: none; }
 .solutions-page .solution-logo { display: grid; place-items: center; min-height: 150px; padding: 28px; border-radius: 10px; background: linear-gradient(140deg, #fff, #e8edf4); }
+.solutions-page .solution-logo.solution-logo-dark { background: #050505; }
 .solutions-page .solution-logo img { display: block; width: 80%; max-width: 250px; height: auto; max-height: 94px; object-fit: contain; }
 .solution-vendor-card-body { display: flex; flex-direction: column; flex: 1; }
 .solution-card-heading { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
@@ -155,6 +156,7 @@ body.solutions-page .brand-spine { display: none; }
   html body.solutions-page.pnp-ux-parity:not(.solutions-index-page) main .btn.ghost { background: #1b293e !important; color: #f1d6e0 !important; border-color: #617089 !important; }
   html body.solutions-index-page.pnp-ux-parity .solution-vendor-card.partner-card { border: 1px solid rgba(118, 143, 176, .26) !important; background: linear-gradient(145deg, #202c47, #121f35) !important; color: #fefefe !important; }
   html body.solutions-index-page.pnp-ux-parity .solution-vendor-card.partner-card .partner-logo-tile { background: linear-gradient(145deg, #fff, #edf2f8) !important; }
+  html body.solutions-index-page.pnp-ux-parity .solution-vendor-card.partner-card .partner-logo-tile.solution-logo-dark { background: #050505 !important; }
   html body.solutions-index-page.pnp-ux-parity .solution-vendor-card.partner-card :is(h3, p, span) { color: #fefefe !important; }
   html body.solutions-index-page.pnp-ux-parity .solution-vendor-card.partner-card p { font-size: 12px; line-height: 1.45; }
   html body.solutions-index-page.pnp-ux-parity .solution-vendor-card.partner-card .partner-meta { color: rgba(254, 254, 254, .76) !important; }

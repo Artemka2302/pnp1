@@ -52,7 +52,9 @@ def homepage_solution_showcase():
         vendors.append({**vendor, "document_count": len(documents)})
         batches.append([{**doc, "vendor_slug": vendor["slug"],
                          "vendor_name": vendor["name"], "vendor_url": vendor["url"],
-                         "vendor_logo": vendor.get("logo", "")} for doc in documents])
+                         "vendor_logo": vendor.get("logo", ""),
+                         "vendor_logo_on_dark": vendor.get("logo_on_dark", False)}
+                        for doc in documents])
     documents = [doc for row in zip_longest(*batches) for doc in row if doc is not None]
     return {"vendors": vendors, "documents": documents}
 
