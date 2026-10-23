@@ -1680,6 +1680,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const advancedFilters = form.querySelector("[data-vendor-advanced-filters]");
     const vendorOptionsData = document.querySelector("#vendorOptionsData");
     const vendorOptions = vendorOptionsData ? JSON.parse(vendorOptionsData.textContent || "[]") : [];
+    const directionOptions = directionSelect
+      ? Array.from(directionSelect.options).filter(option => option.value).map(option => ({
+        value: option.value,
+        name: option.dataset.searchLabel || option.textContent.trim(),
+        search: option.textContent.trim(),
+      }))
+      : [];
+    const groupOptions = groupSelect
+      ? Array.from(groupSelect.options).filter(option => option.value).map(option => ({
+        value: option.value,
+        name: option.dataset.searchLabel || option.textContent.trim(),
+        search: option.textContent.trim(),
+        direction: option.dataset.direction || "",
+        meta: option.dataset.suggestionMeta || "",
+      }))
+      : [];
     const selectedVendors = new Map();
     let controller = null;
 
@@ -1737,6 +1753,29 @@ document.addEventListener("DOMContentLoaded", () => {
       customSelects.forEach(({ select }) => syncCustomSelect(select));
     };
 
+    const filterProductGroupOptions = () => {
+      if (!groupSelect) return;
+      const selectedDirection = directionSelect?.value || "";
+      let currentValueIsAvailable = !groupSelect.value;
+
+      Array.from(groupSelect.options).forEach(option => {
+        const optionDirection = option.dataset.direction || "";
+        const visible = !option.value || !selectedDirection || optionDirection === selectedDirection;
+        option.hidden = !visible;
+        option.disabled = !visible;
+        if (visible && option.value === groupSelect.value) currentValueIsAvailable = true;
+      });
+
+      const control = customSelects.find(item => item.select === groupSelect);
+      control?.menu.querySelectorAll("[data-vendor-select-option]").forEach(option => {
+        const optionDirection = option.dataset.direction || "";
+        option.hidden = Boolean(option.dataset.value && selectedDirection && optionDirection !== selectedDirection);
+      });
+
+      if (!currentValueIsAvailable) groupSelect.value = "";
+      syncCustomSelect(groupSelect);
+    };
+
     [blockSelect, directionSelect, systemSelect, groupSelect].forEach(select => {
       if (!select) return;
       select.classList.add("vendor-filter-native");
@@ -1762,6 +1801,7 @@ document.addEventListener("DOMContentLoaded", () => {
         item.type = "button";
         item.dataset.vendorSelectOption = "";
         item.dataset.value = option.value;
+        item.dataset.direction = option.dataset.direction || "";
         item.textContent = option.textContent.trim();
         menu.append(item);
       });
@@ -1791,10 +1831,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!option) return;
         select.value = option.dataset.value || "";
         syncCustomSelect(select);
+        if (select === directionSelect) filterProductGroupOptions();
         closeCustomSelects();
       });
     });
 
+    filterProductGroupOptions();
     syncCustomSelects();
 
     const buildUrl = () => {
@@ -1910,6 +1952,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       selectedVendors.clear();
       hideSuggestions();
+      filterProductGroupOptions();
       syncCustomSelects();
       renderSelectedVendors();
       updateVendors();
@@ -1923,9 +1966,38 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const matches = vendorOptions
-        .filter(vendor => !selectedVendors.has(vendor.slug) && normalizeVendor(vendor.name).startsWith(query))
-        .slice(0, 10);
+      const selectedDirection = directionSelect?.value || "";
+      const searchOptions = [
+        ...vendorOptions
+          .filter(vendor => !selectedVendors.has(vendor.slug))
+          .map(vendor => ({
+            kind: "vendor",
+            value: vendor.slug,
+            name: vendor.name,
+            search: vendor.name,
+            meta: "Производитель",
+          })),
+        ...directionOptions.map(direction => ({
+          kind: "direction",
+          ...direction,
+          meta: "Раздел проекта",
+        })),
+        ...groupOptions
+          .filter(group => !selectedDirection || group.direction === selectedDirection)
+          .map(group => ({
+            kind: "group",
+            ...group,
+            meta: group.meta ? `Тип продукции · ${group.meta}` : "Тип продукции",
+          })),
+      ];
+      const matches = searchOptions
+        .filter(option => normalizeVendor(`${option.name} ${option.search}`).includes(query))
+        .sort((left, right) => {
+          const leftStarts = normalizeVendor(left.name).startsWith(query) ? 0 : 1;
+          const rightStarts = normalizeVendor(right.name).startsWith(query) ? 0 : 1;
+          return leftStarts - rightStarts || left.name.localeCompare(right.name, "ru");
+        })
+        .slice(0, 12);
 
       suggestions.innerHTML = "";
       if (!matches.length) {
@@ -1933,11 +2005,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      for (const vendor of matches) {
+      for (const option of matches) {
         const button = document.createElement("button");
         button.type = "button";
-        button.dataset.vendorSuggestion = vendor.slug;
-        button.textContent = vendor.name;
+        button.dataset.vendorSuggestion = option.value;
+        button.dataset.vendorSuggestionKind = option.kind;
+
+        const name = document.createElement("span");
+        name.textContent = option.name;
+        const meta = document.createElement("small");
+        meta.textContent = option.meta;
+        button.append(name, meta);
         suggestions.append(button);
       }
       suggestions.hidden = false;
@@ -1984,8 +2062,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const suggestion = event.target.closest("[data-vendor-suggestion]");
       if (suggestion) {
         event.preventDefault();
-        const vendor = vendorOptions.find(item => item.slug === suggestion.dataset.vendorSuggestion);
-        if (vendor) addVendor(vendor.slug, vendor.name);
+        const value = suggestion.dataset.vendorSuggestion || "";
+        const kind = suggestion.dataset.vendorSuggestionKind || "vendor";
+        if (kind === "vendor") {
+          const vendor = vendorOptions.find(item => item.slug === value);
+          if (vendor) addVendor(vendor.slug, vendor.name);
+        } else if (kind === "direction" && directionSelect) {
+          directionSelect.value = value;
+          if (groupSelect) groupSelect.value = "";
+          filterProductGroupOptions();
+          syncCustomSelects();
+          if (search) search.value = "";
+          hideSuggestions();
+        } else if (kind === "group" && groupSelect) {
+          const group = groupOptions.find(item => item.value === value);
+          if (group?.direction && directionSelect) directionSelect.value = group.direction;
+          filterProductGroupOptions();
+          groupSelect.value = value;
+          syncCustomSelects();
+          if (search) search.value = "";
+          hideSuggestions();
+        }
         return;
       }
 
@@ -2031,6 +2128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedVendors.clear();
         hideSuggestions();
         renderSelectedVendors();
+        filterProductGroupOptions();
         syncCustomSelects();
         updateVendors({ scroll: true, rowsHash: "#vendorRowsSection" });
       });

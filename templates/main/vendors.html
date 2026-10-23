@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block final_styles %}
-  <link rel="stylesheet" href="{% static 'css/vendors-v2.css' %}?v=20261019-catalog-project-parity-v14">
+  <link rel="stylesheet" href="{% static 'css/vendors-v2.css' %}?v=20261023-filter-usability-v15">
 {% endblock %}
 
 {% block content %}
@@ -99,7 +99,7 @@
             <select id="vendorDirection" name="direction" data-vendor-filter>
               <option value="">Все разделы проекта</option>
               {% for direction in directions %}
-                <option value="{{ direction.slug }}" {% if filters.direction == direction.slug or filters.direction == direction.title %}selected{% endif %}>{{ direction.vendor_project_code }} — {{ direction.title }}</option>
+                <option value="{{ direction.slug }}" data-search-label="{{ direction.title }}" {% if filters.direction == direction.slug or filters.direction == direction.title %}selected{% endif %}>{{ direction.vendor_project_code }} — {{ direction.title }}</option>
               {% endfor %}
             </select>
           </div>
@@ -108,7 +108,7 @@
             <select id="vendorGroup" name="group" data-vendor-filter>
               <option value="">Все типы продукции</option>
               {% for group in product_groups %}
-                <option value="{{ group.slug }}" {% if filters.group == group.slug or filters.group == group.title %}selected{% endif %}>{{ group.system.direction.project_section.code }} — {{ group.title }}</option>
+                <option value="{{ group.slug }}" data-direction="{{ group.system.direction.slug }}" data-search-label="{{ group.title }}" data-suggestion-meta="{{ group.system.direction.vendor_project_code }} — {{ group.system.direction.title }}" {% if filters.group == group.slug or filters.group == group.title %}selected{% endif %}>{{ group.system.direction.project_section.code }} — {{ group.title }}</option>
               {% endfor %}
             </select>
           </div>
