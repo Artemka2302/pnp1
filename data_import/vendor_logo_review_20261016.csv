@@ -1,7 +1,7 @@
 slug,review_status,reason
 grand-line,resolved_official,restored transparent official logo from manufacturer site
 ingermax,resolved_official,Full original logo sourced from the manufacturer website or official company presentation.
-almax,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
+almax,resolved_official,Dark manufacturer artwork extracted from the official ALMAX presentation for use on white logo tiles.
 axima,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
 slaven,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
 orion,resolved_official,Original manufacturer artwork; official contrast surface for white wordmarks. Source recorded in master registry.
@@ -15,11 +15,11 @@ estima,verified_official,official manufacturer artwork has opaque white backgrou
 benarmo,automatic_review,icon source
 ridan,automatic_review,70x70 raster
 rosma,resolved_official,replaced app icon with official transparent SVG
-tulskii-zavod-polietilenovyh-trub,automatic_review,white-dominant raster
+tulskii-zavod-polietilenovyh-trub,resolved_official,Official current manufacturer mark with only the opaque white background removed; no redraw or recolor.
 adl,automatic_review,81x80 raster
-ideal,automatic_review,icon source
+ideal,resolved_official,Full official Ideal Standard wordmark is already used by the vendor registry.
 jika,automatic_review,119x53 and white-dominant raster
-ako,automatic_review,icon source
+ako,resolved_official,Replaced unrelated aco.ru favicon with the official ACO Russia SVG from acorussia.ru.
 santehprom,automatic_review,50x52 raster
 daikin,automatic_review,32x32 icon
 hikvision,automatic_review,48x48 icon
@@ -28,6 +28,6 @@ nits-360,automatic_review,white-dominant raster
 elsys,automatic_review,48x48 icon
 prosoft-sistemy,automatic_review,icon source
 kod-bezopasnosti,automatic_review,icon source
-blt,automatic_review,16x16 icon
+blt,resolved_official,Vendor registry already reuses the supplied original BLT solution logo.
 gefest,automatic_review,icon source
 argus-spektr,automatic_review,32x32 icon

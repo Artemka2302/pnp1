@@ -172,19 +172,27 @@ class PublicRouteSmokeTests(TestCase):
         self.assertIn("Armstrong", rows_html)
         self.assertIn("<img", rows_html)
 
-    def test_vendor_rows_render_new_approved_ingermax_logo(self):
-        response = self.client.get(
-            "/vendors/",
-            {"q": "Ingermax"},
-            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
-        )
+    def test_vendor_rows_render_corrected_official_logos(self):
+        expected_logos = {
+            "Almax": "vendor-list-20261023/almax-dark-official.png",
+            "Ingermax": "vendor-list-20261015/ingermax-official.png",
+            "Atlas Concorde": "vendor-list-20261015/atlas-concorde-official.png",
+            "Тульский завод полиэтиленовых труб": "vendor-list-20261023/tzpt-official-transparent.png",
+            "АКО": "vendor-list-20261023/aco-russia-official.svg",
+        }
 
-        self.assertEqual(response.status_code, 200)
-        rows_html = response.json()["rows_html"]
-        self.assertIn("vendor-chip-logo", rows_html)
-        self.assertIn("Ingermax", rows_html)
-        self.assertIn("ingermax-official.png", rows_html)
-        self.assertIn("<img", rows_html)
+        for query, logo_path in expected_logos.items():
+            with self.subTest(query=query):
+                response = self.client.get(
+                    "/vendors/",
+                    {"q": query},
+                    HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+                )
+                self.assertEqual(response.status_code, 200)
+                rows_html = response.json()["rows_html"]
+                self.assertIn("vendor-chip-logo", rows_html)
+                self.assertIn(logo_path, rows_html)
+                self.assertIn("<img", rows_html)
 
     def test_vendor_rows_render_official_ideal_standard_wordmark(self):
         response = self.client.get(
