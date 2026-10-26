@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static catalog_photos %}
 
 {% block body_class %}home-page pnp-live-home{% endblock %}
 
@@ -66,21 +66,24 @@
     </div>
     <div class="association-mission-grid">
       <article class="association-mission-card" tabindex="0">
-        <div class="association-mission-media"><img src="{% static 'assets/img/association/mission/unite-market-participants.webp' %}" alt="Профессионалы строительного рынка объединяют компетенции"></div>
+        {% catalog_photo 'assets/img/association/mission/unite-market-participants.webp' as mission_photo %}
+        <div class="association-mission-media"><img src="{{ mission_photo.image }}" srcset="{{ mission_photo.image_srcset }}" sizes="(max-width: 720px) calc(100vw - 40px), 400px" width="{{ mission_photo.image_width }}" height="{{ mission_photo.image_height }}" alt="Профессионалы строительного рынка объединяют компетенции" loading="eager" decoding="async"></div>
         <div class="association-mission-content">
           <h3>Объединяем участников рынка</h3>
           <p>Создаём единый контур для проектных, инженерных и производственных компаний.</p>
         </div>
       </article>
       <article class="association-mission-card association-mission-card--project" tabindex="0">
-        <div class="association-mission-media"><img src="{% static 'assets/img/association/mission/project-solution-selection-v2.webp' %}" alt="Специалисты подбирают материалы и решения по чертежам проекта"></div>
+        {% catalog_photo 'assets/img/association/mission/project-solution-selection-v2.webp' as mission_photo %}
+        <div class="association-mission-media"><img src="{{ mission_photo.image }}" srcset="{{ mission_photo.image_srcset }}" sizes="(max-width: 720px) calc(100vw - 40px), 400px" width="{{ mission_photo.image_width }}" height="{{ mission_photo.image_height }}" alt="Специалисты подбирают материалы и решения по чертежам проекта" loading="lazy" decoding="async"></div>
         <div class="association-mission-content">
           <h3>Подбираем решения под проект</h3>
           <p>Соединяем профильных партнёров и подбираем решения с учётом бюджета, сроков и требований к качеству.</p>
         </div>
       </article>
       <article class="association-mission-card" tabindex="0">
-        <div class="association-mission-media"><img src="{% static 'assets/img/association/mission/project-supply.webp' %}" alt="Организованная комплектация строительного объекта"></div>
+        {% catalog_photo 'assets/img/association/mission/project-supply.webp' as mission_photo %}
+        <div class="association-mission-media"><img src="{{ mission_photo.image }}" srcset="{{ mission_photo.image_srcset }}" sizes="(max-width: 720px) calc(100vw - 40px), 400px" width="{{ mission_photo.image_width }}" height="{{ mission_photo.image_height }}" alt="Организованная комплектация строительного объекта" loading="lazy" decoding="async"></div>
         <div class="association-mission-content">
           <h3>Комплектуем строительные объекты</h3>
           <p>Сопровождаем материалы, оборудование и проектные решения до реализации.</p>
@@ -109,7 +112,7 @@
             href="{{ direction.get_absolute_url }}"
             aria-label="Открыть раздел: {{ direction.title }}">
             <span class="home-supply-gallery-media" aria-hidden="true">
-              {% if direction.image %}<img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">{% endif %}
+              {% if direction.image %}{% catalog_photo direction.image as direction_photo %}<img src="{{ direction_photo.image }}"{% if direction_photo.image_srcset %} srcset="{{ direction_photo.image_srcset }}" sizes="(max-width: 720px) calc(100vw - 40px), 420px" width="{{ direction_photo.image_width }}" height="{{ direction_photo.image_height }}"{% endif %} alt="" loading="lazy" decoding="async">{% endif %}
             </span>
             <span class="home-supply-gallery-shade" aria-hidden="true"></span>
             {% with section=direction.project_section %}{% if section %}<span class="home-supply-project-badge" title="{{ section.title }}">{{ section.code }}</span>{% endif %}{% endwith %}
@@ -128,7 +131,7 @@
                 <a class="home-project-direction-card"
                   href="{{ direction.get_absolute_url }}"
                   aria-label="Открыть раздел: {{ direction.title }}">
-                  {% if direction.image %}<img src="{% static direction.image %}" alt="" loading="lazy" decoding="async">{% endif %}
+                  {% if direction.image %}{% catalog_photo direction.image as direction_photo %}<img src="{{ direction_photo.image }}"{% if direction_photo.image_srcset %} srcset="{{ direction_photo.image_srcset }}" sizes="calc(100vw - 40px)" width="{{ direction_photo.image_width }}" height="{{ direction_photo.image_height }}"{% endif %} alt="" loading="lazy" decoding="async">{% endif %}
                   <span class="home-project-direction-code">{{ direction.vendor_project_code }}</span>
                   <span class="home-project-direction-overlay"><strong>{{ direction.title }}</strong></span>
                 </a>
@@ -225,7 +228,7 @@
     <div class="home-main-block-grid">
       {% for direction in directions %}
         <article class="home-main-block-card">
-          <a class="home-main-block-media" href="{{ direction.get_absolute_url }}">{% if direction.image %}<img src="{% static direction.image %}" alt="{{ direction.title }}">{% endif %}</a>
+          <a class="home-main-block-media" href="{{ direction.get_absolute_url }}">{% if direction.image %}{% catalog_photo direction.image as direction_photo %}<img src="{{ direction_photo.image }}"{% if direction_photo.image_srcset %} srcset="{{ direction_photo.image_srcset }}" sizes="calc(100vw - 40px)" width="{{ direction_photo.image_width }}" height="{{ direction_photo.image_height }}"{% endif %} alt="{{ direction.title }}" loading="lazy" decoding="async">{% endif %}</a>
           <div class="home-main-block-body"><em>{{ direction.system_count }} систем · {{ direction.group_count }} групп</em><h3>{{ direction.title }}</h3><p>{{ direction.purpose }}</p><div class="home-main-block-chips">{% for system in direction.catalog_systems|slice:":3" %}<span>{{ system.title }}</span>{% endfor %}</div><div class="category-actions"><a class="btn small" href="{{ direction.get_absolute_url }}">Открыть раздел</a><a class="btn ghost small" href="{% url 'contacts' %}#request-form">Запросить КП</a></div></div>
         </article>
       {% endfor %}
@@ -266,9 +269,13 @@
   <div class="container"><div class="section-head"><div><h2>Популярные бренды</h2></div><div class="home-brand-links"><a class="link-more" href="{% url 'partners' %}">Ключевые партнёры</a><a class="link-more" href="{% url 'vendors' %}">Справочник производителей</a></div></div><div data-home-brand-content>{% include "main/partials/home_popular_brands.html" %}</div></div>
 </section>
 
+{% catalog_photo 'assets/img/complectation/project.webp' as workflow_project_photo %}
+{% catalog_photo 'assets/img/complectation/analogs.webp' as workflow_analogs_photo %}
+{% catalog_photo 'assets/img/complectation/control.webp' as workflow_control_photo %}
+{% catalog_photo 'assets/img/complectation/delivery.webp' as workflow_delivery_photo %}
 <section class="section compact home-request-section home-desktop-only" id="homeRequest">
   <div class="container">
-    <section class="home-request-router" aria-labelledby="homeRequestRouterTitle" data-pnp-live-workflow data-default-step="project">
+    <section class="home-request-router" aria-labelledby="homeRequestRouterTitle" data-pnp-live-workflow data-default-step="project" data-workflow-project-srcset="{{ workflow_project_photo.image_srcset }}" data-workflow-analogs-srcset="{{ workflow_analogs_photo.image_srcset }}" data-workflow-control-srcset="{{ workflow_control_photo.image_srcset }}" data-workflow-delivery-srcset="{{ workflow_delivery_photo.image_srcset }}">
       <header class="home-request-router-head"><h2 id="homeRequestRouterTitle">Как проходит комплектация объекта</h2></header>
       <div class="home-request-workflow" data-home-request-process>
         <div class="home-request-stage-tabs" role="tablist" aria-label="Этапы комплектации объекта">
@@ -372,5 +379,5 @@
 
 {% block extra_scripts %}
   <script src="{% static 'js/home-solutions.js' %}?v=20261016-carousel-v3" defer></script>
-  <script src="{% static 'js/home-pnp1-live.js' %}?v=20261016-home-brands-v2"></script>
+  <script src="{% static 'js/home-pnp1-live.js' %}?v=20261026-responsive-images-v3"></script>
 {% endblock %}

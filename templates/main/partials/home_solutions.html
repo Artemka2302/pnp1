@@ -1,4 +1,4 @@
-{% load static %}
+{% load static catalog_photos %}
 {% if home_solutions.documents %}
 <section class="section home-solutions" id="homeSolutions" aria-labelledby="homeSolutionsTitle" data-home-solutions>
   <div class="container">
@@ -27,7 +27,7 @@
       {% for document in home_solutions.documents %}
       <article class="home-solution-card" data-solutions-vendor="{{ document.vendor_slug }}">
         <a class="home-solution-preview" href="{{ document.url }}" tabindex="-1" aria-hidden="true">
-          {% if document.home_cover %}<img src="{% static document.home_cover %}" alt="" loading="lazy" decoding="async" width="640" height="360">{% elif document.cover %}<img src="{% static document.cover %}" alt="" loading="lazy" decoding="async" width="640" height="360">{% else %}<span>PDF</span>{% endif %}
+          {% if document.home_cover %}{% catalog_photo document.home_cover as solution_photo %}<img src="{{ solution_photo.image }}"{% if solution_photo.image_srcset %} srcset="{{ solution_photo.image_srcset }}" sizes="(max-width: 720px) 82vw, 420px" width="{{ solution_photo.image_width }}" height="{{ solution_photo.image_height }}"{% endif %} alt="" loading="lazy" decoding="async">{% elif document.cover %}{% catalog_photo document.cover as solution_photo %}<img src="{{ solution_photo.image }}"{% if solution_photo.image_srcset %} srcset="{{ solution_photo.image_srcset }}" sizes="(max-width: 720px) 82vw, 420px" width="{{ solution_photo.image_width }}" height="{{ solution_photo.image_height }}"{% endif %} alt="" loading="lazy" decoding="async">{% else %}<span>PDF</span>{% endif %}
         </a>
         <div class="home-solution-body">
           <div class="home-solution-meta">

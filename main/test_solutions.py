@@ -9,6 +9,7 @@ from django.test import SimpleTestCase
 from django.template.loader import render_to_string
 
 from .ai import build_ai_messages
+from .catalog_images import catalog_image_payload
 from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 
 
@@ -24,7 +25,10 @@ class SolutionLibraryTests(SimpleTestCase):
             self.assertIn(f'href="{document["url"]}"', html)
         for vendor in vendors:
             self.assertIn(f'data-solutions-filter="{vendor["slug"]}"', html)
-        self.assertIn('system-it-infrastructure-servers-and-datacenter.webp', html)
+        first_cover = showcase['documents'][0]['home_cover']
+        first_photo = catalog_image_payload(first_cover)
+        self.assertIn(f'src="{first_photo["image"]}"', html)
+        self.assertIn(first_photo['image_srcset'], html)
 
     def test_home_showcase_automatically_includes_new_vendor_and_skips_unpublished(self):
         doc = {'slug': 'new-presentation', 'title': 'Новое решение', 'pdf': 'new.pdf'}

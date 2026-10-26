@@ -69,6 +69,13 @@
   const directionTargets = () => (rootNode?.children || []).filter(target => nodeById(target)?.kind === "direction");
   const childTargets = target => (nodeById(target)?.children || []).filter(child => nodes.has(child));
   const imageFor = node => node?.image || "/static/assets/img/catalog/empty-photo-placeholder.svg";
+  const photoAttributes = (node, sizes, loading = "lazy") => {
+    const srcset = node?.image_srcset ? ` srcset="${escapeHtml(node.image_srcset)}" sizes="${escapeHtml(sizes)}"` : "";
+    const dimensions = node?.image_width && node?.image_height
+      ? ` width="${escapeHtml(node.image_width)}" height="${escapeHtml(node.image_height)}"`
+      : "";
+    return `src="${escapeHtml(imageFor(node))}"${srcset}${dimensions} loading="${loading}" decoding="async"`;
+  };
   const urlFor = node => node?.url || "/catalog/";
 
   const state = {
@@ -196,12 +203,12 @@
     directionGrid.innerHTML = projectGroups().map(group => `
       <section class="catalog-v2-project-group" data-project-group="${escapeHtml(group.key)}" aria-label="${escapeHtml(group.title)}">
         <h2 class="catalog-v2-project-group-title">${escapeHtml(group.title)}</h2>
-        <div class="catalog-v2-project-cards">${group.targets.map((target, index) => {
+        <div class="catalog-v2-project-cards">${group.targets.map(target => {
       const direction = nodeById(target);
       const directionSlug = String(direction?.id || "").replace(/^direction:/, "");
       return `
         <a class="catalog-v2-direction-card" href="${escapeHtml(urlFor(direction))}" data-catalog-v2-target="${escapeHtml(target)}" data-direction-slug="${escapeHtml(directionSlug)}">
-          <img src="${escapeHtml(imageFor(direction))}" alt="" loading="${index === 0 ? "eager" : "lazy"}">
+          <img ${photoAttributes(direction, "(max-width: 720px) calc(100vw - 48px), 420px", target === directionTargets()[0] ? "eager" : "lazy")} alt="">
           ${badgeHtml(direction)}
           <span class="catalog-v2-direction-overlay">
             <h3>${escapeHtml(direction.title)}</h3>
@@ -212,7 +219,7 @@
 
   const cardHtml = node => `
     <a class="catalog-v2-system-card" href="${escapeHtml(urlFor(node))}" data-catalog-v2-target="${escapeHtml(node.id)}">
-      <img src="${escapeHtml(imageFor(node))}" alt="" loading="lazy">
+      <img ${photoAttributes(node, "(max-width: 720px) calc(100vw - 48px), 420px")} alt="">
       ${badgeHtml(node)}
       <span class="catalog-v2-system-overlay">
         <h3>${escapeHtml(node.title)}</h3>
@@ -323,7 +330,8 @@
         <button class="catalog-v2-vendor-more" type="button" data-vendor-show-more aria-expanded="false" data-collapsed-label="Показать ещё ${remaining} моделей">
           <span>Показать ещё ${remaining} моделей</span><i aria-hidden="true"></i>
         </button>` : "";
-      const image = family.products?.[0]?.image || "";
+      const familyPhoto = family.products?.[0] || null;
+      const image = familyPhoto?.image || "";
       return `
         <details class="catalog-v2-vendor-family" data-vendor-family="${escapeHtml(family.slug)}"${familyIndex < 3 ? " open" : ""}>
           <summary>
@@ -333,7 +341,7 @@
             <span class="catalog-v2-vendor-family-chevron" aria-hidden="true"></span>
           </summary>
           <div class="catalog-v2-vendor-family-body">
-            <div class="catalog-v2-vendor-family-image">${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(family.products[0].model)}" loading="lazy">` : ""}</div>
+            <div class="catalog-v2-vendor-family-image">${image ? `<img ${photoAttributes(familyPhoto, "(max-width: 720px) 38vw, 240px")} alt="${escapeHtml(familyPhoto.model)}">` : ""}</div>
             <div class="catalog-v2-vendor-models">${rows}${showMore}</div>
           </div>
         </details>`;
@@ -402,7 +410,7 @@
     content.className = "catalog-v2-product";
     content.innerHTML = `
       <article class="catalog-v2-product-hero">
-        <img src="${escapeHtml(imageFor(group))}" alt="" loading="lazy">
+        <img ${photoAttributes(group, "(max-width: 720px) calc(100vw - 48px), 960px", "eager")} alt="">
         <div class="catalog-v2-product-hero-copy">
           <span>Товарная группа</span>
           <h2>${escapeHtml(group.title)}</h2>

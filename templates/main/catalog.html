@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static catalog_photos %}
 
 {% block title %}{{ catalog_seo.title }}{% endblock %}
 {% block description %}{{ catalog_seo.description }}{% endblock %}
@@ -100,7 +100,7 @@
           {% elif catalog_node.kind != 'root' %}
             {% for node in catalog_children %}
             <a class="catalog-v2-system-card" href="{{ node.url }}" data-catalog-v2-target="{{ node.id }}">
-              <img src="{{ node.image }}" alt="" loading="lazy">
+              <img src="{{ node.image }}"{% if node.image_srcset %} srcset="{{ node.image_srcset }}" sizes="(max-width: 720px) calc(100vw - 48px), 420px" width="{{ node.image_width }}" height="{{ node.image_height }}"{% endif %} alt="" loading="lazy" decoding="async">
               {% include "main/partials/catalog_badge.html" %}
               <span class="catalog-v2-system-overlay"><h3>{{ node.title }}</h3></span>
             </a>
@@ -114,5 +114,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261026-eltex-v2"></script>
+  <script src="{% static 'js/catalog-desktop-v2.js' %}?v=20261026-responsive-images-v3"></script>
 {% endblock %}

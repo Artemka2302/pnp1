@@ -1,5 +1,5 @@
 <article class="catalog-v2-product-hero">
-  <img src="{{ catalog_node.image }}" alt="" loading="lazy">
+  <img src="{{ catalog_node.image }}"{% if catalog_node.image_srcset %} srcset="{{ catalog_node.image_srcset }}" sizes="(max-width: 720px) calc(100vw - 48px), 960px" width="{{ catalog_node.image_width }}" height="{{ catalog_node.image_height }}"{% endif %} alt="" loading="eager" decoding="async">
   <div class="catalog-v2-product-hero-copy">
     <span>Товарная группа</span>
     <h2>{{ catalog_node.title }}</h2>

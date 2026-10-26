@@ -11,6 +11,15 @@ www.{$SITE_DOMAIN} {
 		Referrer-Policy strict-origin-when-cross-origin
 	}
 
+	@responsive_catalog_photos path /static/assets/img/catalog/optimized/*
+	handle @responsive_catalog_photos {
+		uri strip_prefix /static
+		root * /srv/static
+		header Cache-Control "public, max-age=31536000, immutable"
+		header Content-Type "image/webp"
+		file_server
+	}
+
 	handle_path /static/* {
 		root * /srv/static
 		header Cache-Control "public, max-age=604800"

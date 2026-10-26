@@ -10,11 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import mimetypes
 import os
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 from dotenv import load_dotenv
+
+mimetypes.add_type("image/webp", ".webp")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

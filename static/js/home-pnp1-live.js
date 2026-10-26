@@ -321,34 +321,47 @@
       });
     });
   };
+  const workflowRoot = document.querySelector("[data-pnp-live-workflow]");
+  const workflowImage = (key, fallback) => {
+    const attribute = `workflow${key.charAt(0).toUpperCase()}${key.slice(1)}Srcset`;
+    const candidates = String(workflowRoot?.dataset[attribute] || "")
+      .split(",")
+      .map(value => value.trim().match(/^(\S+)\s+(\d+)w$/))
+      .filter(Boolean)
+      .map(match => ({url: match[1], width: Number(match[2])}))
+      .sort((a, b) => a.width - b.width);
+    if (!candidates.length) return fallback;
+    const requested = Math.min(960, Math.max(480, (workflowRoot?.clientWidth || 960) * window.devicePixelRatio));
+    return (candidates.find(candidate => candidate.width >= requested) || candidates.at(-1)).url;
+  };
   const workflowSteps = {
     project: {
       eyebrow: "01 · Проект",
       title: "Разбираем проектную задачу",
       description: "Изучаем спецификацию, раздел проекта и данные об объекте, чтобы зафиксировать требования для подбора.",
       tags: ["Раздел проекта", "Позиции и количество", "Объект и город поставки"],
-      image: "/static/assets/img/complectation/project.webp"
+      image: workflowImage("project", "/static/assets/img/complectation/project.webp")
     },
     analogs: {
       eyebrow: "02 · Подбор",
       title: "Подбираем решения под задачу",
       description: "Сопоставляем подходящие материалы, оборудование и возможные замены по требованиям проекта.",
       tags: ["Параметры проекта", "Материалы и оборудование", "Варианты замены"],
-      image: "/static/assets/img/complectation/analogs.webp"
+      image: workflowImage("analogs", "/static/assets/img/complectation/analogs.webp")
     },
     control: {
       eyebrow: "03 · Согласование",
       title: "Согласовываем условия решения",
       description: "Сверяем цену, сроки и качество выбранных позиций, фиксируем изменения и вопросы до поставки.",
       tags: ["Цена", "Сроки", "Качество"],
-      image: "/static/assets/img/complectation/control.webp"
+      image: workflowImage("control", "/static/assets/img/complectation/control.webp")
     },
     delivery: {
       eyebrow: "04 · Поставка",
       title: "Согласовываем условия поставки",
       description: "После выбора позиций уточняем состав, документы и условия отгрузки по заявке.",
       tags: ["Согласованный состав", "Документы по позициям", "Условия отгрузки"],
-      image: "/static/assets/img/complectation/delivery.webp"
+      image: workflowImage("delivery", "/static/assets/img/complectation/delivery.webp")
     }
   };
 
@@ -395,20 +408,20 @@
     const RESET_REVEAL_MS = 260;
     const MANUAL_HOLD_MS = 8000;
 
-    const preloadedImages = new Map(Object.values(workflowSteps).map(step => {
+    const preloadedImages = new Map();
+    const preloadImage = source => {
+      if (preloadedImages.has(source)) return preloadedImages.get(source);
       const ready = new Promise(resolve => {
         const image = new Image();
         image.decoding = "async";
         image.onload = () => resolve(true);
         image.onerror = () => resolve(false);
-        image.src = step.image;
+        image.src = source;
         if (image.complete) resolve(image.naturalWidth > 0);
       });
-      return [step.image, ready];
-    }));
-    Promise.all(preloadedImages.values()).then(results => {
-      root.dataset.homeRequestImagesReady = String(results.every(Boolean));
-    });
+      preloadedImages.set(source, ready);
+      return ready;
+    };
 
     const progressRatio = index => tabs.length > 1 ? index / (tabs.length - 1) : 0;
     const runnerTransform = index => {
@@ -470,7 +483,7 @@
         }));
       };
       if (immediate) apply(true);
-      else preloadedImages.get(step.image)?.then(apply);
+      else preloadImage(step.image).then(apply);
     };
 
     const activate = (key, { immediate = false, announce = false } = {}) => {
@@ -653,14 +666,26 @@
       });
     });
 
+    let visualsStarted = false;
+    const startVisuals = () => {
+      if (visualsStarted) return;
+      visualsStarted = true;
+      activate(committedKey, { immediate: true });
+      setProgress(activeIndex());
+      root.dataset.homeRequestMotion = "dwelling";
+      scheduleNext();
+    };
+
     document.addEventListener("visibilitychange", () => setPauseReason("hidden", document.hidden));
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver(entries => {
         const entry = entries[0];
+        if (entry?.isIntersecting) startVisuals();
         setPauseReason("offscreen", !(entry?.isIntersecting && entry.intersectionRatio >= 0.45));
       }, { threshold: [0, 0.45, 1] });
       observer.observe(root);
     } else {
+      startVisuals();
       setPauseReason("offscreen", false);
     }
     if ("ResizeObserver" in window) {
@@ -675,12 +700,10 @@
       observer.observe(rail);
     }
 
-    activate(committedKey, { immediate: true });
     setProgress(activeIndex());
     root.dataset.homeRequestMotion = "dwelling";
     root.dataset.homeRequestWorkflowReady = "true";
     root.classList.toggle("is-autoplay-paused", isPaused());
-    scheduleNext();
   };
 
   initAdvantages();

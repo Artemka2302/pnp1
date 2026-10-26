@@ -6,6 +6,8 @@ from pathlib import Path
 from django.conf import settings
 from django.templatetags.static import static
 
+from .catalog_images import catalog_image_payload
+
 
 REGISTRY_DIR = Path(settings.BASE_DIR) / "data_import" / "vendor_products"
 REGISTRY_FILES = (REGISTRY_DIR / "eltex_switches.json",)
@@ -36,7 +38,10 @@ def _catalogs_by_group():
         for family in payload.get("families") or []:
             family["count_label"] = _models_label(family.get("count"))
             for product in family.get("products") or []:
-                product["image"] = static(product["image"]) if product.get("image") else ""
+                if product.get("image"):
+                    product.update(catalog_image_payload(product["image"]))
+                else:
+                    product["image"] = ""
         catalogs[group_slug] = payload
     return catalogs
 

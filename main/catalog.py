@@ -7,11 +7,12 @@ from django.urls import reverse
 from .models import CatalogBlock, CatalogSystem, Direction, ProductGroup, VendorProductGroup
 from .catalog_sections import PROJECT_DIRECTIONS, SYSTEM_ORDER, project_section
 from .catalog_duplicates import canonical_group_slug
+from .catalog_images import catalog_image_payload
 from .vendor_products import vendor_catalog_for_group
 
 
 CATALOG_CACHE_TTL = 15 * 60
-CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v7:version"
+CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v8:version"
 
 PUBLIC_DIRECTION_SLUGS = tuple(PROJECT_DIRECTIONS)
 
@@ -36,7 +37,7 @@ def catalog_cache_version():
 
 
 def catalog_cache_key(namespace, value=""):
-    return f"pnp:catalog:sections-v7:v{catalog_cache_version()}:{namespace}:{value}"
+    return f"pnp:catalog:sections-v8:v{catalog_cache_version()}:{namespace}:{value}"
 
 
 def invalidate_catalog_cache():
@@ -83,7 +84,7 @@ def block_payload(block):
         "level": "Блок",
         "title": block.title,
         "summary": block.summary,
-        "image": catalog_image_url(block.image),
+        **catalog_image_payload(block.image),
         "url": block.get_absolute_url(),
         "parent": "root",
         "breadcrumbs": [
@@ -111,7 +112,7 @@ def direction_payload(direction):
         "level": "Раздел проекта",
         "title": direction.title,
         "summary": direction.purpose,
-        "image": catalog_image_url(direction.image),
+        **catalog_image_payload(direction.image),
         "url": direction.get_absolute_url(),
         "parent": "root",
         "breadcrumbs": [
@@ -140,7 +141,7 @@ def system_payload(system):
         "level": "Система",
         "title": system.title,
         "summary": f"Выберите товарную группу внутри системы «{system.title}».",
-        "image": catalog_image_url(system.image),
+        **catalog_image_payload(system.image),
         "url": system.get_absolute_url(),
         "parent": catalog_node_id("direction", direction.slug),
         "breadcrumbs": [
@@ -174,7 +175,7 @@ def group_payload(group):
         "level": "Товарная группа",
         "title": group.title,
         "summary": group.crm_comment_hint or f"Товарная группа внутри системы «{system.title}».",
-        "image": catalog_image_url(group.image),
+        **catalog_image_payload(group.image),
         "url": group.get_absolute_url(),
         "parent": catalog_node_id("system", system.slug),
         "breadcrumbs": [
@@ -223,7 +224,7 @@ def group_card_payload(group):
         "level": "Товарная группа",
         "title": group.title,
         "summary": group.crm_comment_hint or f"Товарная группа внутри системы «{system.title}».",
-        "image": catalog_image_url(group.image),
+        **catalog_image_payload(group.image),
         "url": group.get_absolute_url(),
         "parent": catalog_node_id("system", system.slug),
         "breadcrumbs": [
