@@ -351,10 +351,6 @@
           ${filters}
         </div>
         <div class="catalog-v2-vendor-families">${families}</div>
-        <footer class="catalog-v2-vendor-catalog-note">
-          <span aria-hidden="true">i</span>
-          <p>Стоимость и наличие уточняются после проверки спецификации. Технические данные — из <a href="${escapeHtml(catalog.source.catalog_url)}" target="_blank" rel="noopener">официального каталога ${escapeHtml(catalog.vendor.name)}</a>.</p>
-        </footer>
       </article>`;
   };
 
