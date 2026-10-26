@@ -41,6 +41,7 @@ from .catalog_duplicates import GROUP_ALIASES, canonical_group_slug
 from .home_brands import homepage_brand_cards
 from .seo import catalog_template_context, sitemap_paths
 from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
+from .vendor_products import search_vendor_products
 from .ai import (
     AiConfigurationError,
     AiProviderError,
@@ -522,6 +523,36 @@ def catalog_search_groups(query):
     )
     type_items = [catalog_type_result(product_type) for product_type in product_types]
 
+    vendor_product_items = []
+    vendor_products = search_vendor_products(query)
+    if vendor_products:
+        group_slugs = {item["product_group_slug"] for item in vendor_products}
+        groups_by_slug = {
+            group.slug: group
+            for group in ProductGroup.objects.select_related("system__direction__block")
+            .filter(slug__in=group_slugs)
+        }
+        for item in vendor_products:
+            group = groups_by_slug.get(item["product_group_slug"])
+            if not group:
+                continue
+            product = item["product"]
+            specs = ", ".join(
+                f'{spec["label"]}: {spec["value"]}'
+                for spec in product.get("specs") or []
+            )
+            vendor_product_items.append(
+                catalog_result_item(
+                    f'Модель {item["vendor"].get("name") or "производителя"}',
+                    product.get("model") or product.get("name") or "",
+                    [*group_path_parts(group), item["family"].get("short_title") or item["family"].get("title")],
+                    group_url(group),
+                    summary=specs or product.get("name") or "",
+                    request_item=f'{group.system.title}|{group.title}|ELTEX {product.get("model") or product.get("name")}',
+                    target=catalog_node_id("group", group.slug),
+                )
+            )
+
     vendors = (
         Vendor.objects.prefetch_related(
             Prefetch(
@@ -545,6 +576,7 @@ def catalog_search_groups(query):
         {"title": "Разделы каталога", "items": section_items},
         {"title": "Товарные группы", "items": group_items},
         {"title": "Типы продукции", "items": type_items},
+        {"title": "Модели ELTEX", "items": vendor_product_items},
         {"title": "Производители", "items": vendor_items},
     ]
     return [group for group in result_groups if group["items"]]

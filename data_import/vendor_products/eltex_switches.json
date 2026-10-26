@@ -1,0 +1,3101 @@
+{
+  "schema_version": 1,
+  "vendor": {
+    "slug": "eltex",
+    "name": "ELTEX",
+    "official_site": "https://eltex.ru/",
+    "logo": "assets/img/logos/approved-top/eltex.png"
+  },
+  "product_group_slug": "network-switches",
+  "title": "Коммутаторы ELTEX",
+  "summary": "Подбор по проектным требованиям · стоимость и наличие по запросу",
+  "source": {
+    "name": "Официальный каталог ELTEX",
+    "catalog_url": "https://eltex.ru/catalog/ethernet-kommutatory-mes/",
+    "api_url": "https://api.eltex.ru/api/catalog/goods",
+    "retrieved_at": "2026-10-26T09:59:26+00:00",
+    "latest_product_update": "2026-10-21T11:32:36+07:00"
+  },
+  "product_count": 108,
+  "families": [
+    {
+      "source_id": 36,
+      "slug": "access",
+      "title": "Коммутаторы доступа",
+      "short_title": "Доступ",
+      "summary": "Подключение рабочих мест, абонентских устройств и офисных сетей.",
+      "count": 31,
+      "source_url": "https://eltex.ru/catalog/ethernet-kommutatory-mes/",
+      "products": [
+        {
+          "id": 19,
+          "model": "MES1428",
+          "name": "Коммутатор доступа MES1428",
+          "code": "kommutator_dostupa_mes1428",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0019-kommutator-dostupa-mes1428.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/19/MES1428_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes1428/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x100М(RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "12,8 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T02:48:03+07:00"
+        },
+        {
+          "id": 533,
+          "model": "MES2300-08",
+          "name": "Коммутатор доступа MES2300-08",
+          "code": "mes2300-08",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0533-mes2300-08.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/533/MES2300-08_front2.png",
+          "official_url": "https://eltex.ru/product/mes2300-08/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "10x1G (RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-07-09T18:05:19+07:00"
+        },
+        {
+          "id": 58,
+          "model": "MES2300-24",
+          "name": "Коммутатор доступа MES2300-24",
+          "code": "kommutator_dostupa_mes2300-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0058-kommutator-dostupa-mes2300-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/58/MES2300_24_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G(RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:22:41+07:00"
+        },
+        {
+          "id": 15,
+          "model": "MES2420B-24D",
+          "name": "Коммутатор доступа MES2420B-24D",
+          "code": "mes2420b-24d",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0015-mes2420b-24d.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/15/MES2420B-24D_front.png",
+          "official_url": "https://eltex.ru/product/mes2420b-24d/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24х2.5G, 4х10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "200 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-09-29T15:58:06+07:00"
+        },
+        {
+          "id": 98,
+          "model": "MES2300B-24F",
+          "name": "Коммутатор доступа MES2300B-24F",
+          "code": "kommutator_agregatsii_mes2300b-24f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0098-kommutator-agregatsii-mes2300b-24f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/98/MES2300B-24F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes2300b-24f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20х1G SFP, 4x1G Combo, 4х10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:21:22+07:00"
+        },
+        {
+          "id": 77,
+          "model": "MES2300B-24",
+          "name": "Коммутатор доступа MES2300B-24",
+          "code": "kommutator_dostupa_mes2300b-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0077-kommutator-dostupa-mes2300b-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/77/MES2300B-24_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300b-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G(RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:22:11+07:00"
+        },
+        {
+          "id": 160,
+          "model": "MES2300B-48",
+          "name": "Коммутатор доступа MES2300B-48",
+          "code": "kommutator_dostupa_mes2300b-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0160-kommutator-dostupa-mes2300b-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/160/mes2300B-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300b-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:19:44+07:00"
+        },
+        {
+          "id": 197,
+          "model": "MES2408",
+          "name": "Коммутатор доступа MES2408",
+          "code": "kommutator_dostupa_mes2408",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0197-kommutator-dostupa-mes2408.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/197/MES2408_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2408/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G(RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T16:08:28+07:00"
+        },
+        {
+          "id": 220,
+          "model": "MES2408B",
+          "name": "Коммутатор доступа MES2408B",
+          "code": "kommutator_dostupa_mes2408b",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0220-kommutator-dostupa-mes2408b.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/220/MES2408B_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2408b/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G(RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-09-29T16:10:16+07:00"
+        },
+        {
+          "id": 246,
+          "model": "MES2408C",
+          "name": "Коммутатор доступа MES2408C",
+          "code": "kommutator_dostupa_mes2408c",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0246-kommutator-dostupa-mes2408c.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/246/MES2408C_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2408c/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G(RJ-45), 2x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-04-30T16:50:18+07:00"
+        },
+        {
+          "id": 268,
+          "model": "MES2411X",
+          "name": "Коммутатор доступа MES2411X",
+          "code": "kommutator_dostupa_mes2411x",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0268-kommutator-dostupa-mes2411x.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/268/MES2411X_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2411x/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G(RJ-45), 11x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "236 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-05-07T09:23:04+07:00"
+        },
+        {
+          "id": 297,
+          "model": "MES2428",
+          "name": "Коммутатор доступа MES2428",
+          "code": "kommutator_dostupa_mes2428",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0297-kommutator-dostupa-mes2428.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/297/mes2428_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2428/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G(RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-04-30T16:41:48+07:00"
+        },
+        {
+          "id": 309,
+          "model": "MES2428B",
+          "name": "Коммутатор доступа MES2428B",
+          "code": "kommutator_dostupa_mes2428b",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0309-kommutator-dostupa-mes2428b.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/309/MES2428B_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2428b/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G(RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-08-20T16:58:45+07:00"
+        },
+        {
+          "id": 325,
+          "model": "MES2424",
+          "name": "Коммутатор доступа MES2424",
+          "code": "kommutator_dostupa_mes2424",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0325-kommutator-dostupa-mes2424.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/325/MES2424_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2424/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G(RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-09T13:05:34+07:00"
+        },
+        {
+          "id": 331,
+          "model": "MES2424B",
+          "name": "Коммутатор доступа MES2424B",
+          "code": "kommutator_dostupa_mes2424b",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0331-kommutator-dostupa-mes2424b.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/331/MES2424B_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2424b/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-09T13:05:19+07:00"
+        },
+        {
+          "id": 337,
+          "model": "MES2448B",
+          "name": "Коммутатор доступа MES2448B",
+          "code": "kommutator_dostupa_mes2448b",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0337-kommutator-dostupa-mes2448b.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/337/MES2448B_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2448b/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G(RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:31:23+07:00"
+        },
+        {
+          "id": 342,
+          "model": "MES2424FB",
+          "name": "Коммутатор доступа MES2424FB",
+          "code": "kommutator_dostupa_mes2424fb",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0342-kommutator-dostupa-mes2424fb.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/342/MES2424FB_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2424fb/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G SFP, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-09T13:01:30+07:00"
+        },
+        {
+          "id": 25,
+          "model": "MES2300-24F",
+          "name": "Коммутатор доступа MES2300-24F",
+          "code": "kommutator_dostupa_mes2300-24f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0025-kommutator-dostupa-mes2300-24f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/25/MES2300-24F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300-24f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20х1G SFP, 4x1G Combo, 4х10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:21:44+07:00"
+        },
+        {
+          "id": 385,
+          "model": "MES2448",
+          "name": "Коммутатор доступа MES2448",
+          "code": "kommutator_dostupa_mes2448",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0385-kommutator-dostupa-mes2448.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/385/MES2448_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2448/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:29:58+07:00"
+        },
+        {
+          "id": 157,
+          "model": "MES1124MB",
+          "name": "Коммутатор доступа MES1124MB",
+          "code": "mes_1124mb",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0157-mes-1124mb.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/157/MES1124MB_front.png",
+          "official_url": "https://eltex.ru/product/mes_1124mb/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x100М(RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "12,8 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-01T22:09:26+07:00"
+        },
+        {
+          "id": 115,
+          "model": "MES1124M",
+          "name": "Коммутатор доступа MES1124M",
+          "code": "mes_1124m",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0115-mes-1124m.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/115/MES1124M_front.png",
+          "official_url": "https://eltex.ru/product/mes_1124m/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x100M, 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "12,8 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-01T22:09:17+07:00"
+        },
+        {
+          "id": 284,
+          "model": "MES2308R",
+          "name": "Коммутатор доступа MES2308R",
+          "code": "mes2308r",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0284-mes2308r.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/284/MES2308R_front.png",
+          "official_url": "https://eltex.ru/product/mes2308r/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G(RJ-45), 2x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-07-21T11:44:54+07:00"
+        },
+        {
+          "id": 346,
+          "model": "MES2324",
+          "name": "Коммутатор доступа MES2324",
+          "code": "mes2324",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0346-mes2324.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/346/mes2324_front.png",
+          "official_url": "https://eltex.ru/product/mes2324/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-08-13T15:50:05+07:00"
+        },
+        {
+          "id": 354,
+          "model": "MES2324B",
+          "name": "Коммутатор доступа MES2324B",
+          "code": "mes2324b",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0354-mes2324b.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/354/mes2324b_front.png",
+          "official_url": "https://eltex.ru/product/mes2324b/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-08-13T15:53:37+07:00"
+        },
+        {
+          "id": 356,
+          "model": "MES2324F",
+          "name": "Коммутатор доступа MES2324F DC",
+          "code": "mes2324f_dc",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0356-mes2324f-dc.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/356/mes2324F_dc_front.png",
+          "official_url": "https://eltex.ru/product/mes2324f_dc/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20х1G SFP, 4x1G Combo, 4х10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T05:27:16+07:00"
+        },
+        {
+          "id": 358,
+          "model": "MES2348B",
+          "name": "Коммутатор доступа MES2348B",
+          "code": "mes2348b",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0358-mes2348b.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/358/MES2348B_front.png",
+          "official_url": "https://eltex.ru/product/mes2348b/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-04-30T16:58:20+07:00"
+        },
+        {
+          "id": 352,
+          "model": "MES2324FB",
+          "name": "Коммутатор доступа MES2324FB",
+          "code": "mes2324fb",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0352-mes2324fb.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/352/MES2324FB_front.png",
+          "official_url": "https://eltex.ru/product/mes2324fb/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20x1G SFP, 4x1G Combo, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2026-10-19T05:20:21+07:00"
+        },
+        {
+          "id": 350,
+          "model": "MES2124MB",
+          "name": "Коммутатор доступа MES2124MB",
+          "code": "mes2124mb",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0350-mes2124mb.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/350/mes2124MB_front.png",
+          "official_url": "https://eltex.ru/product/mes2124mb/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, возможность подключения АКБ"
+            }
+          ],
+          "source_updated_at": "2025-07-07T10:52:41+07:00"
+        },
+        {
+          "id": 362,
+          "model": "MES2308",
+          "name": "Коммутатор доступа MES2308",
+          "code": "mes2308",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0362-mes2308.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/362/mes2308_front.png",
+          "official_url": "https://eltex.ru/product/mes2308/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "10x1G (RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-05-07T09:34:16+07:00"
+        },
+        {
+          "id": 365,
+          "model": "MES2124M",
+          "name": "Коммутатор доступа MES2124M",
+          "code": "mes2124m",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0365-mes2124m.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/365/mes2124M_front.png",
+          "official_url": "https://eltex.ru/product/mes2124m/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-02-18T10:25:24+07:00"
+        },
+        {
+          "id": 368,
+          "model": "MES2124F",
+          "name": "Коммутатор доступа MES2124F",
+          "code": "mes2124f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0368-mes2124f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/368/MES2124F_front.png",
+          "official_url": "https://eltex.ru/product/mes2124f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G SFP, 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-02-18T10:21:53+07:00"
+        }
+      ]
+    },
+    {
+      "source_id": 516,
+      "slug": "poe",
+      "title": "Коммутаторы доступа PoE",
+      "short_title": "PoE",
+      "summary": "Подключение и питание IP-телефонов, точек доступа, камер и IoT-устройств.",
+      "count": 21,
+      "source_url": "https://eltex.ru/catalog/ethernet-kommutatory-mes/",
+      "products": [
+        {
+          "id": 320,
+          "model": "MES2428P",
+          "name": "Коммутатор доступа MES2428P",
+          "code": "kommutator_dostupa_mes2428p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0320-kommutator-dostupa-mes2428p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/320/MES2428P_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2428p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G PoE/PoE+, 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:33:32+07:00"
+        },
+        {
+          "id": 464,
+          "model": "MES2420D-24DP",
+          "name": "Коммутатор доступа MES2420D-24DP",
+          "code": "mes2420d-24dp",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0464-mes2420d-24dp.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/464/MES2420D-24DP_front.png",
+          "official_url": "https://eltex.ru/product/mes2420d-24dp/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x2.5G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "200 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-14T11:29:08+07:00"
+        },
+        {
+          "id": 534,
+          "model": "MES2300-08P",
+          "name": "Коммутатор доступа MES2300-08P",
+          "code": "kommutator-dostupa-mes2300-08p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0534-kommutator-dostupa-mes2300-08p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/534/MES2300-08P_front1.png",
+          "official_url": "https://eltex.ru/product/kommutator-dostupa-mes2300-08p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "2x1G (RJ-45), 8x1G PoE/PoE+, 2х1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-07-09T17:37:56+07:00"
+        },
+        {
+          "id": 386,
+          "model": "MES2300D-24P",
+          "name": "Коммутатор доступа MES2300D-24P",
+          "code": "kommutator_dostupa_mes2300d-24p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0386-kommutator-dostupa-mes2300d-24p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/386/MES2300D-24P_front2.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300d-24p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:29:58+07:00"
+        },
+        {
+          "id": 47,
+          "model": "MES2300-24P",
+          "name": "Коммутатор доступа MES2300-24P",
+          "code": "kommutator_dostupa_mes2300-24p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0047-kommutator-dostupa-mes2300-24p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/47/MES2300-24P_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300-24p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:18:44+07:00"
+        },
+        {
+          "id": 6,
+          "model": "MES2410-08DP",
+          "name": "Коммутатор доступа MES2410-08DP",
+          "code": "mes2410-08dp",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0006-mes2410-08dp.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/6/MES2410-08DP_front.png",
+          "official_url": "https://eltex.ru/product/mes2410-08dp/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x2.5G PoE/PoE+, 2x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "80 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-09-30T10:53:43+07:00"
+        },
+        {
+          "id": 93,
+          "model": "MES2300-48P",
+          "name": "Коммутатор доступа MES2300-48P",
+          "code": "kommutator_dostupa_mes2300-48p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0093-kommutator-dostupa-mes2300-48p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/93/MES2300-48P_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2300-48p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:19:24+07:00"
+        },
+        {
+          "id": 144,
+          "model": "MES2420-48P",
+          "name": "Коммутатор доступа MES2420-48P",
+          "code": "kommutator_dostupa_mes2420-48p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0144-kommutator-dostupa-mes2420-48p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/144/MES2420-48P_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2420-48p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:20:59+07:00"
+        },
+        {
+          "id": 446,
+          "model": "MES2410-08DU",
+          "name": "Коммутатор доступа MES2410-08DU",
+          "code": "mes2410-08du",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0446-mes2410-08du.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/446/MES2410-08DU_front.png",
+          "official_url": "https://eltex.ru/product/mes2410-08du/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x2.5G PoE++, 2x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "80 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T14:31:06+07:00"
+        },
+        {
+          "id": 616,
+          "model": "MES2310-12XU",
+          "name": "Коммутатор доступа MES2310-12XU",
+          "code": "mes2310-12xu",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0616-mes2310-12xu.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/616/MES2310-12XU_front.png",
+          "official_url": "https://eltex.ru/product/mes2310-12xu/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "12x10G PoE/PoE+/PoE++, 4x25G SFP28"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "440 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-14T12:57:37+07:00"
+        },
+        {
+          "id": 617,
+          "model": "MES2310-48DP",
+          "name": "Коммутатор доступа MES2310-48DP",
+          "code": "mes2310-48dp",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0617-mes2310-48dp.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/617/MES2310-48DP_front.png",
+          "official_url": "https://eltex.ru/product/mes2310-48dp/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x2.5G PoE/PoE+, 4x25G SFP28"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "440 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-07-09T12:11:32+07:00"
+        },
+        {
+          "id": 183,
+          "model": "MES2408PL",
+          "name": "Коммутатор доступа MES2408PL",
+          "code": "kommutator_dostupa_mes2408pl",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0183-kommutator-dostupa-mes2408pl.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/183/MES2408PL_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2408pl/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+, 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:32:46+07:00"
+        },
+        {
+          "id": 222,
+          "model": "MES2408P",
+          "name": "Коммутатор доступа MES2408P",
+          "code": "kommutator_dostupa_mes2408p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0222-kommutator-dostupa-mes2408p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/222/MES2408P_front2.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2408p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+, 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:34:06+07:00"
+        },
+        {
+          "id": 247,
+          "model": "MES2408CP",
+          "name": "Коммутатор доступа MES2408CP",
+          "code": "kommutator_dostupa_mes2408cp",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0247-kommutator-dostupa-mes2408cp.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/247/MES2408CP_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2408cp/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+, 2x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:31:57+07:00"
+        },
+        {
+          "id": 429,
+          "model": "MES2424P",
+          "name": "Коммутатор доступа MES2424P",
+          "code": "mes-2424p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0429-mes-2424p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/429/MES2424P_front.png",
+          "official_url": "https://eltex.ru/product/mes-2424p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:25:40+07:00"
+        },
+        {
+          "id": 310,
+          "model": "MES2448P",
+          "name": "Коммутатор доступа MES2448P",
+          "code": "kommutator_dostupa_mes2448p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0310-kommutator-dostupa-mes2448p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/310/MES2448P_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2448p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:24:41+07:00"
+        },
+        {
+          "id": 269,
+          "model": "MES2308P",
+          "name": "Коммутатор доступа MES2308P",
+          "code": "kommutator_dostupa_mes2308p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0269-kommutator-dostupa-mes2308p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/269/mes2308P_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_dostupa_mes2308p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G (RJ-45) PoE/PoE+, 2x1G (RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T16:18:22+07:00"
+        },
+        {
+          "id": 286,
+          "model": "MES2324P",
+          "name": "Коммутатор доступа MES2324P",
+          "code": "mes2324p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0286-mes2324p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/286/mes2324P_front.png",
+          "official_url": "https://eltex.ru/product/mes2324p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/ACW/DC"
+            }
+          ],
+          "source_updated_at": "2026-07-20T02:34:49+07:00"
+        },
+        {
+          "id": 326,
+          "model": "MES2348P",
+          "name": "Коммутатор доступа MES2348P",
+          "code": "mes2348p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0326-mes2348p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/326/MES2348P_front.png",
+          "official_url": "https://eltex.ru/product/mes2348p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G PoE/PoE+, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-09T13:05:34+07:00"
+        },
+        {
+          "id": 332,
+          "model": "MES2124P",
+          "name": "Коммутатор доступа MES2124P",
+          "code": "mes2124p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0332-mes2124p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/332/mes2124P_front.png",
+          "official_url": "https://eltex.ru/product/mes2124p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G PoE/PoE+, 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-10-09T13:05:19+07:00"
+        },
+        {
+          "id": 338,
+          "model": "MES2208P",
+          "name": "Коммутатор доступа MES2208P",
+          "code": "mes2208p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0338-mes2208p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/338/MES2208P_front.png",
+          "official_url": "https://eltex.ru/product/mes2208p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "4x1G PoE/PoE+, 4x1G Combo, 2x1G (RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:31:23+07:00"
+        }
+      ]
+    },
+    {
+      "source_id": 558,
+      "slug": "industrial",
+      "title": "Промышленные коммутаторы",
+      "short_title": "Промышленные",
+      "summary": "Сетевое оборудование для АСУ ТП и эксплуатации в сложных условиях.",
+      "count": 14,
+      "source_url": "https://eltex.ru/catalog/ethernet-kommutatory-mes/",
+      "products": [
+        {
+          "id": 650,
+          "model": "MES3510DS-24F",
+          "name": "Промышленный коммутатор MES3510DS-24F",
+          "code": "mes3510ds-24f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0650-mes3510ds-24f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/650/MES3510DS-24F_front.png",
+          "official_url": "https://eltex.ru/product/mes3510ds-24f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "16x1G SFP, 8x1G Combo, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-21T11:32:36+07:00"
+        },
+        {
+          "id": 573,
+          "model": "MES3510S-08P",
+          "name": "Промышленный коммутатор MES3510S-08P",
+          "code": "mes3510s-08p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0573-mes3510s-08p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/573/MES3510S-08P_front.png",
+          "official_url": "https://eltex.ru/product/mes3510s-08p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 4x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-08-26T17:40:26+07:00"
+        },
+        {
+          "id": 550,
+          "model": "MES3500I-24F",
+          "name": "Промышленный коммутатор MES3500I-24F",
+          "code": "mes-3500i-24f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0550-mes-3500i-24f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/550/MES3500I-24F_front.png",
+          "official_url": "https://eltex.ru/product/mes-3500i-24f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20x1G SFP, 4x1G Combo (RJ-45/SFP), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-14T12:48:14+07:00"
+        },
+        {
+          "id": 546,
+          "model": "MES3500I-8P8F",
+          "name": "Промышленный коммутатор MES3500I-8P8F",
+          "code": "mes3500i-8p8f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0546-mes3500i-8p8f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/546/MES3500I-8P8F_front1.png",
+          "official_url": "https://eltex.ru/product/mes3500i-8p8f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 8x1G SFP, 2x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "72 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-07-09T14:09:32+07:00"
+        },
+        {
+          "id": 445,
+          "model": "MES3500I-10P",
+          "name": "Промышленный коммутатор MES3500I-10P",
+          "code": "promyshlennyy_kommutator_mes3500i-10p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0445-promyshlennyy-kommutator-mes3500i-10p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/445/MES3500I-10P_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes3500i-10p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 4x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-08-26T17:43:31+07:00"
+        },
+        {
+          "id": 481,
+          "model": "MES3500I-08P",
+          "name": "Промышленный коммутатор MES3500I-08P",
+          "code": "promyshlennyy_kommutator_mes3500i-08p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0481-promyshlennyy-kommutator-mes3500i-08p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/481/MES3500I-08P_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes3500i-08p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 2x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-10-14T12:37:25+07:00"
+        },
+        {
+          "id": 32,
+          "model": "MES3400I-24",
+          "name": "Промышленный коммутатор MES3400I-24",
+          "code": "promyshlennyy_kommutator_mes3400i-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0032-promyshlennyy-kommutator-mes3400i-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/32/MES3400I-24_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes3400i-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-29T14:06:51+07:00"
+        },
+        {
+          "id": 444,
+          "model": "MES2300DI-28",
+          "name": "Промышленный коммутатор MES2300DI-28",
+          "code": "promyshlennyy_kommutator_mes2300di-28",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0444-promyshlennyy-kommutator-mes2300di-28.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/444/MES2300DI-28_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes2300di-28/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-04-30T17:06:16+07:00"
+        },
+        {
+          "id": 62,
+          "model": "MES3710P",
+          "name": "Промышленный коммутатор MES3710P",
+          "code": "promyshlennyy_kommutator_mes3710p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0062-promyshlennyy-kommutator-mes3710p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/62/MES3710P_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes3710p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 4x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T14:36:30+07:00"
+        },
+        {
+          "id": 168,
+          "model": "MES3510P",
+          "name": "Промышленный коммутатор MES3510P",
+          "code": "promyshlennyy_kommutator_mes3510p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0168-promyshlennyy-kommutator-mes3510p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/168/MES3510P%20DC_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes3510p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 4x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "24 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T14:38:33+07:00"
+        },
+        {
+          "id": 142,
+          "model": "MES3508P",
+          "name": "Промышленный коммутатор MES3508P",
+          "code": "mes3508p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0142-mes3508p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/142/MES3508P_front.png",
+          "official_url": "https://eltex.ru/product/mes3508p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 2x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T14:40:28+07:00"
+        },
+        {
+          "id": 74,
+          "model": "MES3508",
+          "name": "Промышленный коммутатор MES3508",
+          "code": "mes3508",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0074-mes3508.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/74/mes3508_front.png",
+          "official_url": "https://eltex.ru/product/mes3508/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G (RJ-45), 2x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "DC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T14:44:03+07:00"
+        },
+        {
+          "id": 38,
+          "model": "MES2328I",
+          "name": "Промышленный коммутатор MES2328I",
+          "code": "promyshlennyy_kommutator_mes2328i",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0038-promyshlennyy-kommutator-mes2328i.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/38/MES2328I_front.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes2328i/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x1G Combo"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T02:49:16+07:00"
+        },
+        {
+          "id": 226,
+          "model": "MES3708P",
+          "name": "Промышленный коммутатор MES3708P",
+          "code": "promyshlennyy_kommutator_mes3708p",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0226-promyshlennyy-kommutator-mes3708p.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/226/MES3708P_back.png",
+          "official_url": "https://eltex.ru/product/promyshlennyy_kommutator_mes3708p/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "8x1G PoE/PoE+ (RJ-45), 2x1G SFP"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "20 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2"
+            },
+            {
+              "label": "Питание",
+              "value": "AC"
+            }
+          ],
+          "source_updated_at": "2026-09-29T15:07:10+07:00"
+        }
+      ]
+    },
+    {
+      "source_id": 792,
+      "slug": "aggregation",
+      "title": "Коммутаторы агрегации",
+      "short_title": "Агрегация",
+      "summary": "Объединение уровней доступа и построение отказоустойчивой магистрали.",
+      "count": 31,
+      "source_url": "https://eltex.ru/catalog/ethernet-kommutatory-mes/",
+      "products": [
+        {
+          "id": 264,
+          "model": "MES5324",
+          "name": "Коммутатор агрегации 10G/40G MES5324",
+          "code": "mes5324",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0264-mes5324.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/264/MES5324_front.png",
+          "official_url": "https://eltex.ru/product/mes5324/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x10G SFP+, 4x40G QSFP+, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "800 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:04:15+07:00"
+        },
+        {
+          "id": 66,
+          "model": "MES3400-48F",
+          "name": "Коммутатор агрегации MES3400-48F",
+          "code": "kommutator_agregatsii_mes3400-48f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0066-kommutator-agregatsii-mes3400-48f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/66/MES3400-48F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3400-48f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G SFP, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T01:12:48+07:00"
+        },
+        {
+          "id": 139,
+          "model": "MES3300-08F",
+          "name": "Коммутатор агрегации MES3300-08F",
+          "code": "kommutator_agregatsii_mes3300-08f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0139-kommutator-agregatsii-mes3300-08f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/139/MES-3300-08F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3300-08f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "4x1G SFP, 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "96 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-09T15:40:35+07:00"
+        },
+        {
+          "id": 177,
+          "model": "MES3300-16F",
+          "name": "Коммутатор агрегации MES3300-16F",
+          "code": "kommutator_agregatsii_mes3300-16f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0177-kommutator-agregatsii-mes3300-16f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/177/MES3300-16F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3300-16f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "12x1G SFP, 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "112 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-09T15:42:12+07:00"
+        },
+        {
+          "id": 199,
+          "model": "MES3300-24",
+          "name": "Коммутатор агрегации MES3300-24",
+          "code": "kommutator_agregatsii_mes3300-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0199-kommutator-agregatsii-mes3300-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/199/MES3300-24_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3300-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/c"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T02:50:02+07:00"
+        },
+        {
+          "id": 236,
+          "model": "MES3300-24F",
+          "name": "Коммутатор агрегации MES3300-24F",
+          "code": "kommutator_agregatsii_mes3300-24f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0236-kommutator-agregatsii-mes3300-24f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/236/MES3300-24F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3300-24f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20x1G SFP, 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-06-19T17:17:29+07:00"
+        },
+        {
+          "id": 263,
+          "model": "MES3300-48",
+          "name": "Коммутатор агрегации MES3300-48",
+          "code": "kommutator_agregatsii_mes3300-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0263-kommutator-agregatsii-mes3300-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/263/MES3300-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3300-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G (RJ-45), 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-07-17T11:59:00+07:00"
+        },
+        {
+          "id": 278,
+          "model": "MES3300-48F",
+          "name": "Коммутатор агрегации MES3300-48F",
+          "code": "kommutator_agregatsii_mes3300-48f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0278-kommutator-agregatsii-mes3300-48f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/278/MES3300-48F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3300-48f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G SFP, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-04-30T16:49:01+07:00"
+        },
+        {
+          "id": 293,
+          "model": "MES3400-24",
+          "name": "Коммутатор агрегации MES3400-24",
+          "code": "kommutator_agregatsii_mes3400-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0293-kommutator-agregatsii-mes3400-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/293/MES3400-24_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3400-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:23:07+07:00"
+        },
+        {
+          "id": 306,
+          "model": "MES3400-24F",
+          "name": "Коммутатор агрегации MES3400-24F",
+          "code": "kommutator_agregatsii_mes3400-24f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0306-kommutator-agregatsii-mes3400-24f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/306/MES3400-24F_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3400-24f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G SFP, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:23:28+07:00"
+        },
+        {
+          "id": 316,
+          "model": "MES3400-48",
+          "name": "Коммутатор агрегации MES3400-48",
+          "code": "kommutator_agregatsii_mes3400-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0316-kommutator-agregatsii-mes3400-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/316/MES3400-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes3400-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-07-20T01:47:57+07:00"
+        },
+        {
+          "id": 237,
+          "model": "MES5332A rev.C",
+          "name": "Коммутатор агрегации 10G MES5332A rev.C",
+          "code": "kommutator_agregatsii_10g_mes5332a_rev-c",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0237-kommutator-agregatsii-10g-mes5332a-rev-c.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/237/MES5332A_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_10g_mes5332a_rev-c/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "32x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "640 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:01:19+07:00"
+        },
+        {
+          "id": 279,
+          "model": "MES5448",
+          "name": "Коммутатор агрегации 10G/40G MES5448",
+          "code": "mes5448",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0279-mes5448.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/279/MES5448_front.png",
+          "official_url": "https://eltex.ru/product/mes5448/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x10G SFP+, 4x40G QSFP+, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "1,28 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:08:32+07:00"
+        },
+        {
+          "id": 294,
+          "model": "MES7048",
+          "name": "Коммутатор агрегации 10G/100G MES7048",
+          "code": "kommutator_agregatsii_mes",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0294-kommutator-agregatsii-mes.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/294/mes7048_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_mes/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x10G SFP+, 6x100G QSFP28, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "2,15 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:23:07+07:00"
+        },
+        {
+          "id": 340,
+          "model": "MES3324F",
+          "name": "Коммутатор агрегации MES3324F",
+          "code": "mes3324f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0340-mes3324f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/340/MES3324F_front.png",
+          "official_url": "https://eltex.ru/product/mes3324f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20x1G SFP, 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-07T09:28:12+07:00"
+        },
+        {
+          "id": 344,
+          "model": "MES3348",
+          "name": "Коммутатор агрегации MES3348",
+          "code": "mes3348",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0344-mes3348.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/344/MES3348_front.png",
+          "official_url": "https://eltex.ru/product/mes3348/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T04:24:33+07:00"
+        },
+        {
+          "id": 329,
+          "model": "MES3316F",
+          "name": "Коммутатор агрегации MES3316F",
+          "code": "mes3316f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0329-mes3316f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/329/MES3316F_front.png",
+          "official_url": "https://eltex.ru/product/mes3316f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "12x1G SFP, 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "112 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T04:12:02+07:00"
+        },
+        {
+          "id": 323,
+          "model": "MES3308F",
+          "name": "Коммутатор агрегации MES3308F",
+          "code": "mes3308f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0323-mes3308f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/323/MES3308F_front.png",
+          "official_url": "https://eltex.ru/product/mes3308f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "4x1G SFP, 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "96 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-07-29T10:25:55+07:00"
+        },
+        {
+          "id": 335,
+          "model": "MES3324",
+          "name": "Коммутатор агрегации MES3324",
+          "code": "mes3324",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0335-mes3324.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/335/MES3324_front.png",
+          "official_url": "https://eltex.ru/product/mes3324/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20x1G (RJ-45), 4x1G Combo, 4x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-07-29T10:28:56+07:00"
+        },
+        {
+          "id": 348,
+          "model": "MES3348F",
+          "name": "Коммутатор агрегации MES3348F",
+          "code": "mes3348f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0348-mes3348f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/348/MES3348F_front1.png",
+          "official_url": "https://eltex.ru/product/mes3348f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x1G SFP, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "176 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T04:33:28+07:00"
+        },
+        {
+          "id": 360,
+          "model": "MES3108F",
+          "name": "Коммутатор агрегации MES3108F",
+          "code": "mes3108f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0360-mes3108f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/360/MES3108F_front.png",
+          "official_url": "https://eltex.ru/product/mes3108f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "4x1G SFP, 4x1G Combo, 2x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "56 Гбит/c"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T05:35:07+07:00"
+        },
+        {
+          "id": 363,
+          "model": "MES3116F",
+          "name": "Коммутатор агрегации MES3116F",
+          "code": "mes3116f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0363-mes3116f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/363/MES3116F_front.png",
+          "official_url": "https://eltex.ru/product/mes3116f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "12x1G SFP, 4x1G Combo, 2x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "72 Гбит/c"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-30T09:30:56+07:00"
+        },
+        {
+          "id": 366,
+          "model": "MES3124",
+          "name": "Коммутатор агрегации MES3124",
+          "code": "mes3124",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0366-mes3124.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/366/MES3124_front.png",
+          "official_url": "https://eltex.ru/product/mes3124/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x1G (RJ-45), 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/c"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-30T09:51:32+07:00"
+        },
+        {
+          "id": 369,
+          "model": "MES3124F",
+          "name": "Коммутатор агрегации MES3124F",
+          "code": "mes3124f",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0369-mes3124f.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/369/MES3124F_front.png",
+          "official_url": "https://eltex.ru/product/mes3124f/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "20x1G SFP, 4x1G Combo, 4x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "128 Гбит/c"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-30T10:01:47+07:00"
+        },
+        {
+          "id": 9,
+          "model": "MES5316A",
+          "name": "Коммутатор агрегации 10G MES5316A",
+          "code": "kommutatory_agregatsii_mes5316a",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0009-kommutatory-agregatsii-mes5316a.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/9/MES5316A_front.png",
+          "official_url": "https://eltex.ru/product/kommutatory_agregatsii_mes5316a/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "16x10G SFP+, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "320 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:42:04+07:00"
+        },
+        {
+          "id": 94,
+          "model": "MES5316A rev.C/C1",
+          "name": "Коммутатор агрегации 10G MES5316A rev.C/C1",
+          "code": "kommutator_agregatsii_10g_mes5316a_rev-c-c1",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0094-kommutator-agregatsii-10g-mes5316a-rev-c-c1.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/94/MES5316A_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_10g_mes5316a_rev-c-c1/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "16x10G SFP+, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "320 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:42:58+07:00"
+        },
+        {
+          "id": 140,
+          "model": "MES5324A",
+          "name": "Коммутатор агрегации 10G MES5324A",
+          "code": "kommutatory_agregatsii_mes5324a",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0140-kommutatory-agregatsii-mes5324a.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/140/MES5324A_front.png",
+          "official_url": "https://eltex.ru/product/kommutatory_agregatsii_mes5324a/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x10G SFP+, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "480 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:43:58+07:00"
+        },
+        {
+          "id": 180,
+          "model": "MES5324A rev.C/C1",
+          "name": "Коммутатор агрегации 10G MES5324A rev.C/C1",
+          "code": "kommutator_agregatsii_10g_mes5324a_rev-c-c1",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0180-kommutator-agregatsii-10g-mes5324a-rev-c-c1.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/180/MES5324A_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_10g_mes5324a_rev-c-c1/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x10G SFP+, 1xООВ"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "480 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:44:48+07:00"
+        },
+        {
+          "id": 307,
+          "model": "MES5312",
+          "name": "Коммутатор агрегации 10G MES5312",
+          "code": "mes5312",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0307-mes5312.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/307/MES5312_front.png",
+          "official_url": "https://eltex.ru/product/mes5312/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "12x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "240 Гбит/c"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:23:28+07:00"
+        },
+        {
+          "id": 317,
+          "model": "MES5248",
+          "name": "Коммутатор агрегации 10G MES5248",
+          "code": "mes5248",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0317-mes5248.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/317/MES5248_front.png",
+          "official_url": "https://eltex.ru/product/mes5248/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48x10G SFP+"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "960 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L2+"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:14:48+07:00"
+        },
+        {
+          "id": 213,
+          "model": "MES5332A",
+          "name": "Коммутатор агрегации 10G MES5332A",
+          "code": "kommutatory_agregatsii_mes5332a",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0213-kommutatory-agregatsii-mes5332a.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/213/MES5332A_front.png",
+          "official_url": "https://eltex.ru/product/kommutatory_agregatsii_mes5332a/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "32x10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "640 Гбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:32:15+07:00"
+        }
+      ]
+    },
+    {
+      "source_id": 758,
+      "slug": "datacenter",
+      "title": "Коммутаторы ЦОД",
+      "short_title": "ЦОД",
+      "summary": "Высокопроизводительные решения для серверных и IP-фабрик центров обработки данных.",
+      "count": 11,
+      "source_url": "https://eltex.ru/catalog/ethernet-kommutatory-mes/",
+      "products": [
+        {
+          "id": 575,
+          "model": "MES5320-24",
+          "name": "Коммутатор ЦОД MES5320-24",
+          "code": "mes5320-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0575-mes5320-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/575/MES5320-24_front.png",
+          "official_url": "https://eltex.ru/product/mes5320-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24х25G SFP28, 2х100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "1,6 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-14T12:47:42+07:00"
+        },
+        {
+          "id": 532,
+          "model": "MES5300-24",
+          "name": "Коммутатор ЦОД MES5300-24",
+          "code": "kommutator-mes5300-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0532-kommutator-mes5300-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/532/MES5300-24_front2.png",
+          "official_url": "https://eltex.ru/product/kommutator-mes5300-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x10G SFP+, 6x100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "1,68 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:12:54+07:00"
+        },
+        {
+          "id": 57,
+          "model": "MES5310-48",
+          "name": "Коммутатор ЦОД MES5310-48",
+          "code": "kommutator_tsod_mes5310-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0057-kommutator-tsod-mes5310-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/57/MES5310-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_tsod_mes5310-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48х10G SFP+, 6х100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "2,16 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:52:16+07:00"
+        },
+        {
+          "id": 511,
+          "model": "MES5300-48",
+          "name": "Коммутатор ЦОД MES5300-48",
+          "code": "kommutator_tcod_mes5300-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0511-kommutator-tcod-mes5300-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/511/MES5300-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_tcod_mes5300-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48х10G SFP+, 6х100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "2,16 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:14:13+07:00"
+        },
+        {
+          "id": 512,
+          "model": "MES5305-48",
+          "name": "Коммутатор ЦОД MES5305-48",
+          "code": "kommutator_tcod_mes5305-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0512-kommutator-tcod-mes5305-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/512/MES5305-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_tcod_mes5305-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48х10G SFP+, 6х100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "2,16 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:13:46+07:00"
+        },
+        {
+          "id": 576,
+          "model": "MES5700-32",
+          "name": "Коммутатор ЦОД MES5700-32",
+          "code": "mes5700-32",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0576-mes5700-32.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/576/MES5700-32_front.png",
+          "official_url": "https://eltex.ru/product/mes5700-32/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "32x400G QSFP56-DD, 2х10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "25,6 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-08-11T18:20:43+07:00"
+        },
+        {
+          "id": 621,
+          "model": "MES5600-24",
+          "name": "Коммутатор ЦОД MES5600-24",
+          "code": "mes5600-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0621-mes5600-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/621/MES5600-24_front.png",
+          "official_url": "https://eltex.ru/product/mes5600-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24x100G QSFP28, 8x400G QSFP56-DD, 2х10G SFP+, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "11,24 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-08-27T14:17:22+07:00"
+        },
+        {
+          "id": 194,
+          "model": "MES5410-48",
+          "name": "Коммутатор ЦОД MES5410-48",
+          "code": "kommutator_tsod_mes5410-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0194-kommutator-tsod-mes5410-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/194/MES5410-48_frony.png",
+          "official_url": "https://eltex.ru/product/kommutator_tsod_mes5410-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48х25G SFP28, 6х100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "3,6 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-30T12:03:14+07:00"
+        },
+        {
+          "id": 212,
+          "model": "MES5500-32",
+          "name": "Коммутатор ЦОД MES5500-32",
+          "code": "kommutator_tsod_mes5500-32",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0212-kommutator-tsod-mes5500-32.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/212/MES5500-32_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_tsod_mes5500-32/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "2х10G SFP+, 32х100G QSFP28, 1xOOB"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "6,4 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-10-19T03:30:36+07:00"
+        },
+        {
+          "id": 73,
+          "model": "MES5400-24",
+          "name": "Коммутатор ЦОД 10G MES5400-24",
+          "code": "kommutator_agregatsii_10g_mes5400-24",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0073-kommutator-agregatsii-10g-mes5400-24.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/73/MES5400-24_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_10g_mes5400-24/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "24х10G SFP+, 6х100G QSFP28"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "1,68 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:53:54+07:00"
+        },
+        {
+          "id": 148,
+          "model": "MES5400-48",
+          "name": "Коммутатор ЦОД 10G MES5400-48",
+          "code": "kommutator_agregatsii_10g_mes5400-48",
+          "image": "assets/img/catalog/vendor-products/eltex-switches/0148-kommutator-agregatsii-10g-mes5400-48.webp",
+          "image_source": "https://eltex.ru/storage/catalog/goods/148/MES5400-48_front.png",
+          "official_url": "https://eltex.ru/product/kommutator_agregatsii_10g_mes5400-48/",
+          "specs": [
+            {
+              "label": "Интерфейсы",
+              "value": "48х10G SFP+, 6х100G QSFP28"
+            },
+            {
+              "label": "Пропускная способность",
+              "value": "2,16 Тбит/с"
+            },
+            {
+              "label": "Уровень",
+              "value": "L3"
+            },
+            {
+              "label": "Питание",
+              "value": "AC/DC, 2 сменных БП"
+            }
+          ],
+          "source_updated_at": "2026-09-21T03:55:25+07:00"
+        }
+      ]
+    }
+  ]
+}

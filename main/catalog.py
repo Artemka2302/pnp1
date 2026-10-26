@@ -7,10 +7,11 @@ from django.urls import reverse
 from .models import CatalogBlock, CatalogSystem, Direction, ProductGroup, VendorProductGroup
 from .catalog_sections import PROJECT_DIRECTIONS, SYSTEM_ORDER, project_section
 from .catalog_duplicates import canonical_group_slug
+from .vendor_products import vendor_catalog_for_group
 
 
 CATALOG_CACHE_TTL = 15 * 60
-CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v6:version"
+CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v7:version"
 
 PUBLIC_DIRECTION_SLUGS = tuple(PROJECT_DIRECTIONS)
 
@@ -35,7 +36,7 @@ def catalog_cache_version():
 
 
 def catalog_cache_key(namespace, value=""):
-    return f"pnp:catalog:sections-v6:v{catalog_cache_version()}:{namespace}:{value}"
+    return f"pnp:catalog:sections-v7:v{catalog_cache_version()}:{namespace}:{value}"
 
 
 def invalidate_catalog_cache():
@@ -165,7 +166,7 @@ def group_payload(group):
     vendor_links = list(getattr(group, "catalog_vendor_links", []))
     vendors = [link.vendor for link in vendor_links]
     target = catalog_node_id("group", group.slug)
-    return {
+    payload = {
         "id": target,
         "kind": "group",
         "projectSection": project_section(direction.slug),
@@ -204,6 +205,10 @@ def group_payload(group):
             {"label": "брендов", "value": len(vendors)},
         ],
     }
+    vendor_catalog = vendor_catalog_for_group(group.slug)
+    if vendor_catalog:
+        payload["vendorCatalog"] = vendor_catalog
+    return payload
 
 
 def group_card_payload(group):

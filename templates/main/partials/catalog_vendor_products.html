@@ -1,0 +1,57 @@
+{% with catalog=catalog_node.vendorCatalog %}
+<article class="catalog-v2-vendor-catalog" data-vendor-product-catalog>
+  <header class="catalog-v2-vendor-catalog-head">
+    <div>
+      <h3>{{ catalog.title }}</h3>
+      <p>{{ catalog.summary }}</p>
+    </div>
+    <a class="catalog-v2-vendor-brand" href="{{ catalog.vendor.official_site }}" target="_blank" rel="noopener" aria-label="Официальный сайт {{ catalog.vendor.name }}">
+      <img src="{{ catalog.vendor.logo }}" alt="{{ catalog.vendor.name }}">
+    </a>
+  </header>
+
+  <div class="catalog-v2-vendor-filters" role="group" aria-label="Семейства коммутаторов {{ catalog.vendor.name }}">
+    <button class="is-active" type="button" data-vendor-family-filter="all" aria-pressed="true">Все <span>{{ catalog.product_count }}</span></button>
+    {% for family in catalog.families %}
+    <button type="button" data-vendor-family-filter="{{ family.slug }}" aria-pressed="false">{{ family.short_title }} <span>{{ family.count }}</span></button>
+    {% endfor %}
+  </div>
+
+  <div class="catalog-v2-vendor-families">
+    {% for family in catalog.families %}
+    <details class="catalog-v2-vendor-family" data-vendor-family="{{ family.slug }}"{% if forloop.counter <= 3 %} open{% endif %}>
+      <summary>
+        <span class="catalog-v2-vendor-family-toggle" aria-hidden="true"></span>
+        <span class="catalog-v2-vendor-family-copy"><strong>{{ family.title }}</strong><small>{{ family.summary }}</small></span>
+        <span class="catalog-v2-vendor-family-count">{{ family.count_label }}</span>
+        <span class="catalog-v2-vendor-family-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="catalog-v2-vendor-family-body">
+        <div class="catalog-v2-vendor-family-image">
+          {% if family.products.0.image %}<img src="{{ family.products.0.image }}" alt="{{ family.products.0.model }}" loading="lazy">{% endif %}
+        </div>
+        <div class="catalog-v2-vendor-models">
+          {% for product in family.products %}
+          <div class="catalog-v2-vendor-model{% if forloop.counter > 4 %} is-extra{% endif %}" data-vendor-product{% if forloop.counter > 4 %} hidden{% endif %}>
+            <a class="catalog-v2-vendor-model-name" href="{{ product.official_url }}" target="_blank" rel="noopener">{{ product.model }}</a>
+            <div class="catalog-v2-vendor-model-specs">
+              {% for spec in product.specs %}<span><small>{{ spec.label }}</small><b>{{ spec.value }}</b></span>{% endfor %}
+            </div>
+            <button class="catalog-v2-vendor-model-request" type="button" data-request-item="{{ catalog_node.systemTitle }}|{{ catalog_node.title }}|ELTEX {{ product.model }}" aria-pressed="false"><span>В заявку</span><i aria-hidden="true">+</i></button>
+          </div>
+          {% endfor %}
+          {% if family.count > 4 %}
+          <button class="catalog-v2-vendor-more" type="button" data-vendor-show-more aria-expanded="false"><span>Показать ещё {{ family.count|add:"-4" }} моделей</span><i aria-hidden="true"></i></button>
+          {% endif %}
+        </div>
+      </div>
+    </details>
+    {% endfor %}
+  </div>
+
+  <footer class="catalog-v2-vendor-catalog-note">
+    <span aria-hidden="true">i</span>
+    <p>Стоимость и наличие уточняются после проверки спецификации. Технические данные — из <a href="{{ catalog.source.catalog_url }}" target="_blank" rel="noopener">официального каталога {{ catalog.vendor.name }}</a>.</p>
+  </footer>
+</article>
+{% endwith %}

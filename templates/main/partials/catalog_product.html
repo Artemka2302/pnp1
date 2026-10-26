@@ -6,6 +6,9 @@
     <p>{{ catalog_node.summary }}</p>
   </div>
 </article>
+{% if catalog_node.vendorCatalog %}
+  {% include "main/partials/catalog_vendor_products.html" %}
+{% else %}
 <article class="catalog-v2-passport">
   <div class="catalog-v2-passport-grid">
     <section class="catalog-v2-passport-panel">
@@ -47,6 +50,7 @@
     </section>
   </div>
 </article>
+{% endif %}
 <section class="glass catalog-mini-request catalog-mini-request-compact" data-catalog-request-panel>
   <input type="hidden" name="items" data-request-items>
   <textarea class="mini-request-raw" name="request_text" data-request-output aria-label="Комментарий к заявке"></textarea>

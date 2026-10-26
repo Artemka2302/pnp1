@@ -299,6 +299,65 @@
     });
   };
 
+  const vendorCatalogHtml = group => {
+    const catalog = group.vendorCatalog;
+    if (!catalog?.families?.length) return "";
+    const filters = catalog.families.map(family => `
+      <button type="button" data-vendor-family-filter="${escapeHtml(family.slug)}" aria-pressed="false">
+        ${escapeHtml(family.short_title)} <span>${escapeHtml(family.count)}</span>
+      </button>`).join("");
+    const families = catalog.families.map((family, familyIndex) => {
+      const rows = (family.products || []).map((product, productIndex) => {
+        const value = `${group.systemTitle || "Позиции каталога"}|${group.title}|ELTEX ${product.model}`;
+        const specs = (product.specs || []).map(spec => `
+          <span><small>${escapeHtml(spec.label)}</small><b>${escapeHtml(spec.value)}</b></span>`).join("");
+        return `
+          <div class="catalog-v2-vendor-model${productIndex > 3 ? " is-extra" : ""}" data-vendor-product${productIndex > 3 ? " hidden" : ""}>
+            <a class="catalog-v2-vendor-model-name" href="${escapeHtml(product.official_url)}" target="_blank" rel="noopener">${escapeHtml(product.model)}</a>
+            <div class="catalog-v2-vendor-model-specs">${specs}</div>
+            <button class="catalog-v2-vendor-model-request" type="button" data-request-item="${escapeHtml(value)}" aria-pressed="false"><span>В заявку</span><i aria-hidden="true">+</i></button>
+          </div>`;
+      }).join("");
+      const remaining = Math.max(0, Number(family.count || 0) - 4);
+      const showMore = remaining ? `
+        <button class="catalog-v2-vendor-more" type="button" data-vendor-show-more aria-expanded="false" data-collapsed-label="Показать ещё ${remaining} моделей">
+          <span>Показать ещё ${remaining} моделей</span><i aria-hidden="true"></i>
+        </button>` : "";
+      const image = family.products?.[0]?.image || "";
+      return `
+        <details class="catalog-v2-vendor-family" data-vendor-family="${escapeHtml(family.slug)}"${familyIndex < 3 ? " open" : ""}>
+          <summary>
+            <span class="catalog-v2-vendor-family-toggle" aria-hidden="true"></span>
+            <span class="catalog-v2-vendor-family-copy"><strong>${escapeHtml(family.title)}</strong><small>${escapeHtml(family.summary)}</small></span>
+            <span class="catalog-v2-vendor-family-count">${escapeHtml(family.count_label || `${family.count} моделей`)}</span>
+            <span class="catalog-v2-vendor-family-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="catalog-v2-vendor-family-body">
+            <div class="catalog-v2-vendor-family-image">${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(family.products[0].model)}" loading="lazy">` : ""}</div>
+            <div class="catalog-v2-vendor-models">${rows}${showMore}</div>
+          </div>
+        </details>`;
+    }).join("");
+    return `
+      <article class="catalog-v2-vendor-catalog" data-vendor-product-catalog>
+        <header class="catalog-v2-vendor-catalog-head">
+          <div><h3>${escapeHtml(catalog.title)}</h3><p>${escapeHtml(catalog.summary)}</p></div>
+          <a class="catalog-v2-vendor-brand" href="${escapeHtml(catalog.vendor.official_site)}" target="_blank" rel="noopener" aria-label="Официальный сайт ${escapeHtml(catalog.vendor.name)}">
+            <img src="${escapeHtml(catalog.vendor.logo)}" alt="${escapeHtml(catalog.vendor.name)}">
+          </a>
+        </header>
+        <div class="catalog-v2-vendor-filters" role="group" aria-label="Семейства коммутаторов ${escapeHtml(catalog.vendor.name)}">
+          <button class="is-active" type="button" data-vendor-family-filter="all" aria-pressed="true">Все <span>${escapeHtml(catalog.product_count)}</span></button>
+          ${filters}
+        </div>
+        <div class="catalog-v2-vendor-families">${families}</div>
+        <footer class="catalog-v2-vendor-catalog-note">
+          <span aria-hidden="true">i</span>
+          <p>Стоимость и наличие уточняются после проверки спецификации. Технические данные — из <a href="${escapeHtml(catalog.source.catalog_url)}" target="_blank" rel="noopener">официального каталога ${escapeHtml(catalog.vendor.name)}</a>.</p>
+        </footer>
+      </article>`;
+  };
+
   const renderProduct = group => {
     if (!content) return;
     delete content.dataset.catalogV2Count;
@@ -316,17 +375,7 @@
       <a class="logo-tile" href="${escapeHtml(vendor.url || `/vendors/?vendors=${encodeURIComponent(vendor.slug || "")}`)}" title="${escapeHtml(vendor.name)}">
         ${vendor.logo ? `<img src="${escapeHtml(vendor.logo)}" alt="${escapeHtml(vendor.name)}" loading="lazy">` : `<span>${escapeHtml(vendor.name)}</span>`}
       </a>`).join("");
-
-    content.className = "catalog-v2-product";
-    content.innerHTML = `
-      <article class="catalog-v2-product-hero">
-        <img src="${escapeHtml(imageFor(group))}" alt="" loading="lazy">
-        <div class="catalog-v2-product-hero-copy">
-          <span>Товарная группа</span>
-          <h2>${escapeHtml(group.title)}</h2>
-          <p>${escapeHtml(group.summary || "Подберём исполнение, аналоги и производителей под требования проекта.")}</p>
-        </div>
-      </article>
+    const productSelection = group.vendorCatalog ? vendorCatalogHtml(group) : `
       <article class="catalog-v2-passport">
         <div class="catalog-v2-passport-grid">
           <section class="catalog-v2-passport-panel">
@@ -352,7 +401,19 @@
               </div>`}</div>
           </section>
         </div>
+      </article>`;
+
+    content.className = "catalog-v2-product";
+    content.innerHTML = `
+      <article class="catalog-v2-product-hero">
+        <img src="${escapeHtml(imageFor(group))}" alt="" loading="lazy">
+        <div class="catalog-v2-product-hero-copy">
+          <span>Товарная группа</span>
+          <h2>${escapeHtml(group.title)}</h2>
+          <p>${escapeHtml(group.summary || "Подберём исполнение, аналоги и производителей под требования проекта.")}</p>
+        </div>
       </article>
+      ${productSelection}
       <section class="glass catalog-mini-request catalog-mini-request-compact" data-catalog-request-panel>
         <input type="hidden" name="items" data-request-items>
         <textarea class="mini-request-raw" name="request_text" data-request-output aria-label="Комментарий к заявке"></textarea>
@@ -507,6 +568,39 @@
   };
 
   rootElement.addEventListener("click", async event => {
+    const familyFilter = event.target.closest("[data-vendor-family-filter]");
+    if (familyFilter) {
+      const catalog = familyFilter.closest("[data-vendor-product-catalog]");
+      const selected = familyFilter.dataset.vendorFamilyFilter;
+      catalog?.querySelectorAll("[data-vendor-family-filter]").forEach(button => {
+        const active = button === familyFilter;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      catalog?.querySelectorAll("[data-vendor-family]").forEach(family => {
+        const visible = selected === "all" || family.dataset.vendorFamily === selected;
+        family.hidden = !visible;
+        if (visible && selected !== "all") family.open = true;
+      });
+      return;
+    }
+
+    const showMore = event.target.closest("[data-vendor-show-more]");
+    if (showMore) {
+      const models = showMore.closest(".catalog-v2-vendor-models");
+      const expanded = showMore.getAttribute("aria-expanded") === "true";
+      models?.querySelectorAll("[data-vendor-product].is-extra").forEach(row => {
+        row.hidden = expanded;
+      });
+      showMore.setAttribute("aria-expanded", String(!expanded));
+      const label = showMore.querySelector("span");
+      if (label) {
+        if (!showMore.dataset.collapsedLabel) showMore.dataset.collapsedLabel = label.textContent.trim();
+        label.textContent = expanded ? showMore.dataset.collapsedLabel : "Свернуть модели";
+      }
+      return;
+    }
+
     const treeToggle = event.target.closest("[data-catalog-v2-toggle]");
     if (treeToggle) {
       event.preventDefault();
