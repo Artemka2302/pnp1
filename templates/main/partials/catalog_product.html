@@ -13,10 +13,6 @@
   <div class="catalog-v2-passport-grid">
     <section class="catalog-v2-passport-panel">
       <h3>Типы продукции</h3>
-      <div class="catalog-v2-request-guide" role="note">
-        <span class="catalog-v2-request-guide-icon" aria-hidden="true">+</span>
-        <span><strong>Соберите заявку прямо в каталоге</strong><small>Нажмите на нужный тип продукции — выбранная позиция появится в заявке.</small></span>
-      </div>
       <div class="catalog-v2-type-list">
         {% for type in catalog_node.types %}
         <button class="catalog-v2-type-row" type="button" data-request-item="{{ catalog_node.systemTitle }}|{{ catalog_node.title }}|{{ type.title }}" aria-pressed="false">
