@@ -3,16 +3,18 @@
 from .models import Partner, VendorProductGroup
 
 
-HOME_BRAND_LIMIT = 24
 HOME_BRAND_DIRECTIONS = {
-    "it-infrastructure": "it",
-    "low-current": "security",
+    "architecture": "architecture",
+    "constructive": "constructive",
     "eom": "engineering",
     "ev-charging-infrastructure": "engineering",
     "water": "engineering",
     "hvac": "engineering",
+    "low-current": "engineering",
+    "it-infrastructure": "engineering",
     "gas": "engineering",
 }
+HOME_BRAND_GROUPS = ("architecture", "constructive", "engineering")
 
 
 def homepage_brand_cards():
@@ -33,13 +35,9 @@ def homepage_brand_cards():
         brand = brands.setdefault(slug, {"slug": slug, "name": name, "logo": logo, "groups": set()})
         brand["groups"].add(HOME_BRAND_DIRECTIONS[direction])
 
-    # Keep a bounded homepage showcase; the complete pool remains in the vendor list.
-    counts = dict.fromkeys(("it", "security", "engineering"), 0)
     cards = []
     for brand in sorted(brands.values(), key=lambda b: (featured.get(b["slug"], 10000), b["name"].casefold())):
-        groups = [key for key in counts if key in brand["groups"] and counts[key] < HOME_BRAND_LIMIT]
+        groups = [key for key in HOME_BRAND_GROUPS if key in brand["groups"]]
         if groups:
-            for key in groups:
-                counts[key] += 1
             cards.append({**brand, "groups": " ".join(groups)})
     return cards
