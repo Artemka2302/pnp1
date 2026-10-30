@@ -723,8 +723,17 @@ class MiniRequestApiTests(TestCase):
         response = self.client.get("/contacts/")
 
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<h1 id="contacts-title">Контакты</h1>', html=True)
+        self.assertNotContains(response, 'contacts-hero')
+        self.assertContains(response, 'css/contacts.css')
+        self.assertContains(response, 'aria-labelledby="contacts-title"')
+        self.assertContains(response, 'href="tel:+74955653005"')
+        self.assertContains(response, 'href="mailto:info@pnp1.ru"')
+        self.assertContains(response, 'ул. Подольских Курсантов')
+        self.assertContains(response, 'id="request-form"')
         self.assertContains(response, 'data-contact-request-panel="supply"')
         self.assertContains(response, 'data-contact-request-panel="cooperation"')
+        self.assertContains(response, 'action="/api/catalog-request/"')
         self.assertContains(response, "/api/cooperation-request/")
 
     def test_home_page_contains_supply_and_cooperation_forms(self):

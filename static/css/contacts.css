@@ -1,0 +1,153 @@
+/* Contact-first page. Form fields and shared site styles stay unchanged. */
+body.contacts-page .contacts-request-section {
+  padding: 36px 0 64px;
+}
+
+body.contacts-page .quick-contact-layout {
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  grid-template-areas: "request contacts";
+  gap: 28px;
+  align-items: start;
+}
+
+body.contacts-page .contact-request-column {
+  grid-area: request;
+  min-width: 0;
+}
+
+body.contacts-page #request-form {
+  width: 100%;
+  scroll-margin-top: calc(110px + env(safe-area-inset-top));
+}
+
+body.contacts-page .contacts-details {
+  grid-area: contacts;
+  min-width: 0;
+  padding: clamp(24px, 2.8vw, 36px);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent2);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(196, 58, 103, .12), transparent 48%),
+    linear-gradient(145deg, #202c47, #121f35);
+  color: var(--ink);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .24);
+}
+
+body.contacts-page .contacts-details-company {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+body.contacts-page .contacts-details h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(30px, 3vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -.035em;
+}
+
+body.contacts-page .contacts-details-list {
+  margin: 14px 0 0;
+}
+
+body.contacts-page .contacts-detail {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+body.contacts-page .contacts-detail:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+body.contacts-page .contacts-detail dt {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+body.contacts-page .contacts-detail dd {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+body.contacts-page .contacts-detail a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  max-width: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+body.contacts-page .contacts-detail a:hover {
+  color: #ffc0d5;
+}
+
+body.contacts-page .contacts-detail a:focus-visible {
+  outline: 2px solid #ffc0d5 !important;
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+
+body.contacts-page .contacts-detail-phone dd {
+  font-size: clamp(23px, 2.2vw, 32px);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+}
+
+body.contacts-page .contacts-detail-email dd {
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.3;
+}
+
+body.contacts-page .contacts-detail address {
+  font-style: normal;
+}
+
+@media (max-width: 980px) {
+  body.contacts-page .quick-contact-layout {
+    max-width: 720px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "contacts" "request";
+    gap: 20px;
+  }
+}
+
+@media (max-width: 680px) {
+  body.contacts-page .contacts-request-section {
+    /* The shared mobile header is fixed; the removed hero supplied this gap. */
+    padding: calc(var(--home-mobile-header-height, 84px) + env(safe-area-inset-top) + 22px) 0 40px;
+  }
+
+  body.contacts-page .contacts-details {
+    padding: 22px 20px;
+    border-radius: 14px;
+  }
+
+  body.contacts-page .contacts-detail {
+    padding: 16px 0;
+  }
+
+  body.contacts-page .contacts-detail dd {
+    font-size: 17px;
+  }
+
+  body.contacts-page .contacts-detail-phone dd {
+    font-size: 26px;
+  }
+
+  body.contacts-page .contacts-detail-email dd {
+    font-size: 24px;
+  }
+}

@@ -26,26 +26,38 @@
   </style>
 {% endblock %}
 
-{% block content %}
-<section class="hero hero-small contacts-hero pnp-mobile-standard-hero">
-  <div class="vertical-accent"></div>
-  <div class="container">
-    <div class="eyebrow">Контакты</div>
-    <h1 aria-label="Запросить коммерческое предложение">
-      <span class="pnp-mobile-hero-line">Запросить</span>
-      <span class="pnp-mobile-hero-line accent-word">коммерческое</span>
-      <span class="pnp-mobile-hero-line">предложение</span>
-    </h1>
-    <p class="hero-subtitle">Опишите задачу, прикрепите спецификацию или предложите сотрудничество. Заявки клиентов и предложения партнёров попадут к нужным специалистам.</p>
-    <div class="hero-actions pnp-mobile-only-actions">
-      <a class="btn pnp-btn-primary" href="#request-form">Отправить заявку</a>
-      <a class="btn ghost pnp-btn-secondary" href="?form=cooperation#request-form">Сотрудничество</a>
-    </div>
-  </div>
-</section>
+{% block final_styles %}
+  <link rel="stylesheet" href="{% static 'css/contacts.css' %}?v=20261030-contact-layout-v1">
+{% endblock %}
 
+{% block content %}
 <section class="section contacts-request-section">
   <div class="container contact-layout quick-contact-layout">
+    <aside class="contacts-details" aria-labelledby="contacts-title">
+      <header class="contacts-details-head">
+        <span class="contacts-details-company">ПНП · Первый национальный поставщик</span>
+        <h1 id="contacts-title">Контакты</h1>
+      </header>
+      <dl class="contacts-details-list">
+        <div class="contacts-detail contacts-detail-phone">
+          <dt>Телефон</dt>
+          <dd><a href="{{ CONTACT_PHONE_HREF }}">{{ CONTACT_PHONE_DISPLAY }}</a></dd>
+        </div>
+        <div class="contacts-detail contacts-detail-email">
+          <dt>Электронная почта</dt>
+          <dd><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></dd>
+        </div>
+        <div class="contacts-detail contacts-detail-address">
+          <dt>Адрес</dt>
+          <dd><address>г. Москва, ул. Подольских Курсантов,<br>д. 3 стр. 2, помещ. 1/2</address></dd>
+        </div>
+        <div class="contacts-detail contacts-detail-site">
+          <dt>Сайт</dt>
+          <dd><a href="https://pnp1.ru/">pnp1.ru <span aria-hidden="true">↗</span></a></dd>
+        </div>
+      </dl>
+    </aside>
+
     <div class="contact-request-column">
       <article class="glass request-panel home-request-card contact-request-card" id="request-form" data-contact-request-switcher>
         <div class="contact-request-tabs" role="tablist" aria-label="Тип обращения">
@@ -156,14 +168,6 @@
         </section>
       </article>
     </div>
-
-    <aside class="contact-mini">
-      <h3>Контакты компании</h3>
-      <div class="contact-line"><span>Телефон</span><a href="{{ CONTACT_PHONE_HREF }}">{{ CONTACT_PHONE_DISPLAY }}</a></div>
-      <div class="contact-line"><span>Email</span><a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></div>
-      <div class="contact-line"><span>Сайт</span><a href="https://www.pnp1.ru">www.pnp1.ru</a></div>
-      <div class="contact-line"><span>Адрес</span><b>г. Москва, ул. Подольских Курсантов, д. 3 стр. 2, помещ. 1/2</b></div>
-    </aside>
   </div>
 </section>
 {% endblock %}
