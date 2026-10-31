@@ -33,13 +33,15 @@ from .models import (
     ProductType,
     UploadedFile,
     Vendor,
+    VendorProductGroup,
 )
 from .bitrix import send_lead_to_bitrix
 from .company_lookup import lookup_configured, selected_company
 from .catalog_sections import PROJECT_DIRECTIONS, PROJECT_GROUPS
 from .catalog_duplicates import GROUP_ALIASES, canonical_group_slug
 from .home_brands import homepage_brand_cards
-from .seo import catalog_template_context, sitemap_paths
+from .seo import catalog_template_context, sitemap_paths, solution_page_context
+from .vendor_navigation import public_product_groups, solution_catalog_context, vendor_landing_url
 from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 from .vendor_products import search_vendor_products
 from .ai import (
@@ -133,7 +135,7 @@ Disallow: /
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /*?
+Disallow: /admin/
 """
     content += f"\nSitemap: {request.build_absolute_uri(reverse('site_sitemap'))}\n"
     response = HttpResponse(content, content_type="text/plain; charset=utf-8")
@@ -207,7 +209,10 @@ def solutions(request):
     if query:
         needle = query.casefold()
         vendors = [vendor for vendor in vendors if needle in json.dumps(vendor, ensure_ascii=False).casefold()]
-    return render(request, "main/solutions.html", {"solution_vendors": vendors, "solution_query": query})
+    return render(request, "main/solutions.html", {
+        "solution_vendors": vendors, "solution_query": query,
+        **solution_page_context(request),
+    })
 
 
 @require_GET
@@ -215,10 +220,13 @@ def solution_vendor(request, vendor_slug):
     vendor = find_solution_vendor(vendor_slug)
     if vendor is None:
         raise Http404("Manufacturer not found")
+    catalog_context = solution_catalog_context(vendor)
     return render(request, "main/solution_vendor.html", {
         "solution_vendor": vendor,
         "solution_documents": solution_documents(vendor),
         "solution_sections": solution_sections(vendor),
+        **catalog_context,
+        **solution_page_context(request, vendor, official_site=catalog_context["solution_official_site"]),
     })
 
 
@@ -233,6 +241,7 @@ def solution_document(request, vendor_slug, document_slug):
     return render(request, "main/solution_document.html", {
         "solution_vendor": vendor,
         "solution_document": document,
+        **solution_page_context(request, vendor, document),
     })
 
 
@@ -376,11 +385,11 @@ def catalog_result_item(
 def catalog_group_result(group):
     vendors = [
         {
-            "name": vendor.name,
-            "url": f"{reverse('vendors')}?{urlencode([('vendors', vendor.slug)])}#vendorRowsSection",
-            "logo_url": static(vendor.logo) if vendor.logo else "",
+            "name": link.vendor.name,
+            "url": vendor_landing_url(link.vendor.slug),
+            "logo_url": static(link.vendor.logo) if link.vendor.logo else "",
         }
-        for vendor in list(group.vendors.all())[:4]
+        for link in getattr(group, "search_vendor_links", [])[:4]
     ]
     return catalog_result_item(
         "Товарная группа",
@@ -408,7 +417,7 @@ def catalog_type_result(product_type):
 
 
 def catalog_vendor_result(vendor):
-    groups = list(vendor.product_groups.all())
+    groups = [link.product_group for link in getattr(vendor, "search_public_links", [])]
     related_groups = []
     for group in groups[:3]:
         related_groups.append(
@@ -422,8 +431,8 @@ def catalog_vendor_result(vendor):
         "Производитель",
         vendor.name,
         [group_path_parts(groups[0])[0] if groups else "Производители"],
-        f"{reverse('vendors')}?{urlencode([('vendors', vendor.slug)])}#vendorRowsSection",
-        summary=vendor.notes or "Связанный производитель из базы каталога.",
+        vendor_landing_url(vendor.slug),
+        summary="Товарные группы: " + ", ".join(group.title for group in groups[:3]) if groups else "Подбор по требованиям проекта.",
         related_groups=related_groups,
         logo_url=static(vendor.logo) if vendor.logo else "",
     )
@@ -482,8 +491,12 @@ def catalog_search_groups(query):
         )
 
     product_groups = (
-        ProductGroup.objects.select_related("system__direction__block")
-        .prefetch_related("vendors")
+        public_product_groups().select_related("system__direction__block")
+        .prefetch_related(Prefetch(
+            "vendorproductgroup_set",
+            queryset=VendorProductGroup.objects.filter(show_in_catalog=True).select_related("vendor"),
+            to_attr="search_vendor_links",
+        ))
         .filter(system__direction__slug__in=PUBLIC_DIRECTION_SLUGS)
         .filter(
             Q(title__icontains=query)
@@ -556,13 +569,17 @@ def catalog_search_groups(query):
     vendors = (
         Vendor.objects.prefetch_related(
             Prefetch(
-                "product_groups",
-                queryset=ProductGroup.objects.select_related("system__direction__block").order_by("system__direction__title", "system__title", "title"),
+                "vendorproductgroup_set",
+                queryset=VendorProductGroup.objects.filter(
+                    show_in_vendors=True, product_group__in=public_product_groups(),
+                ).select_related("product_group__system__direction__block").order_by("product_group__title"),
+                to_attr="search_public_links",
             )
         )
+        .filter(vendorproductgroup__show_in_vendors=True,
+                vendorproductgroup__product_group__in=public_product_groups())
         .filter(
             Q(name__icontains=query)
-            | Q(notes__icontains=query)
             | Q(product_groups__title__icontains=query)
             | Q(product_groups__system__title__icontains=query)
             | Q(product_groups__system__direction__title__icontains=query)
@@ -919,7 +936,7 @@ def attach_partner_vendor_urls(partners):
             or vendors_by_name.get(normalize_partner_vendor_key(partner.name))
         )
         if vendor:
-            partner.vendor_filter_url = f"{vendors_url}?{urlencode({'vendors': vendor.slug})}#allManufacturers"
+            partner.vendor_filter_url = vendor_landing_url(vendor.slug)
             partner.vendor_filter_match = vendor.name
         else:
             partner.vendor_filter_url = f"{vendors_url}?{urlencode({'q': partner.name})}#allManufacturers"

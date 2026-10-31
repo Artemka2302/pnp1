@@ -447,7 +447,10 @@
     const currentPath = `${window.location.pathname}${window.location.search}`;
     if (currentPath === node.url && mode !== "replace") return;
     const method = mode === "replace" ? "replaceState" : "pushState";
-    history[method]({ catalogTarget: node.id }, "", node.url);
+    // Keep the initial query URL crawlable so its noindex directive remains visible.
+    const destination = mode === "replace" && window.location.pathname === node.url ? currentPath : node.url;
+    history[method]({ catalogTarget: node.id }, "", destination);
+    document.getElementById("catalogRobots")?.setAttribute("content", location.search ? "noindex,follow" : "index,follow");
   };
 
   const headingTag = (element, tag) => {
@@ -465,19 +468,34 @@
     if (node.seo) {
       document.title = node.seo.title;
       document.querySelector('meta[name="description"]')?.setAttribute("content", node.seo.description);
+      document.querySelector('meta[property="og:title"]')?.setAttribute("content", node.seo.title);
+      document.querySelector('meta[property="og:description"]')?.setAttribute("content", node.seo.description);
     }
-    document.querySelector('link[rel="canonical"]')?.setAttribute("href", new URL(node.url, location.origin).href);
+    const canonical = new URL(node.url, location.origin).href;
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", canonical);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", canonical);
+    document.getElementById("catalogRobots")?.setAttribute("content", location.search ? "noindex,follow" : "index,follow");
     const schema = document.getElementById("catalogBreadcrumbData");
     if (schema) {
       const rows = node.breadcrumbs || [];
       schema.textContent = JSON.stringify(rows.length ? {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
+        "@id": `${canonical}#breadcrumbs`,
         itemListElement: rows.map((row, index) => ({
           "@type": "ListItem", position: index + 1, name: row.title,
           item: new URL(row.url, location.origin).href,
         })),
       } : null);
+    }
+    const collection = document.getElementById("catalogCollectionData");
+    if (collection) {
+      collection.textContent = JSON.stringify({
+        "@context": "https://schema.org", "@type": "CollectionPage",
+        "@id": `${canonical}#webpage`, url: canonical, name: node.title,
+        description: node.seo?.description || "", inLanguage: "ru-RU",
+        ...((node.breadcrumbs || []).length ? { breadcrumb: { "@id": `${canonical}#breadcrumbs` } } : {}),
+      });
     }
   };
 

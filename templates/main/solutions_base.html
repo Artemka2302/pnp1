@@ -4,5 +4,6 @@
 {% block extra_head %}
   <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
   {% if request.GET %}<meta name="robots" content="noindex,follow">{% endif %}
+  {% include "main/includes/seo_social.html" %}
 {% endblock %}
 {% block final_styles %}<link rel="stylesheet" href="{% static 'css/solutions.css' %}?v=20261022-logo-surface-v17">{% endblock %}

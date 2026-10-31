@@ -1,8 +1,8 @@
 {% extends "main/solutions_base.html" %}
 {% load static %}
 {% block body_class %}solutions-page solution-document-page{% endblock %}
-{% block title %}{{ solution_document.title }} — презентация {{ solution_vendor.name }} — ПНП{% endblock %}
-{% block description %}{{ solution_document.description }} Презентация {{ solution_vendor.name }}, {{ solution_document.pages }} страниц. Просмотр и скачивание PDF.{% endblock %}
+{% block title %}{{ page_seo.title }}{% endblock %}
+{% block description %}{{ page_seo.description }}{% endblock %}
 {% block content %}
 <section class="section solution-reader-section">
   <div class="container">

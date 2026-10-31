@@ -5,7 +5,7 @@ from unittest.mock import patch
 from xml.etree import ElementTree
 
 from django.conf import settings
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.template.loader import render_to_string
 
 from .ai import build_ai_messages
@@ -13,7 +13,7 @@ from .catalog_images import catalog_image_payload
 from .solutions import find_solution_vendor, homepage_solution_showcase, solution_documents, solution_sections, solution_vendors
 
 
-class SolutionLibraryTests(SimpleTestCase):
+class SolutionLibraryTests(TestCase):
     def test_home_showcase_includes_all_current_materials_and_interleaves_brands(self):
         showcase = homepage_solution_showcase()
         vendors = solution_vendors()

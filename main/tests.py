@@ -275,7 +275,7 @@ class PublicRouteSmokeTests(TestCase):
         self.assertTrue(data["groups"])
         self.assertTrue(any(item.get("target") for group in data["groups"] for item in group["items"]))
 
-    def test_catalog_search_api_links_vendors_to_vendor_filter(self):
+    def test_catalog_search_api_links_eltex_to_existing_materials_page(self):
         response = self.client.get(
             "/api/catalog-search/",
             {"q": "Eltex"},
@@ -286,7 +286,7 @@ class PublicRouteSmokeTests(TestCase):
         data = response.json()
         self.assertGreater(data["total_count"], 0)
         self.assertIn("Производители", data["html"])
-        self.assertIn("vendorRowsSection", data["html"])
+        self.assertIn('/solutions/eltex/', data["html"])
 
     def test_catalog_page_contains_only_lazy_catalog_data(self):
         response = self.client.get("/catalog/")
@@ -417,14 +417,15 @@ class PublicRouteSmokeTests(TestCase):
         self.assertNotContains(response, "catalogSearchData")
         self.assertLess(len(response.content), 150_000)
 
-    def test_robots_file_blocks_api_filters_and_gptbot(self):
+    def test_robots_file_blocks_private_routes_but_allows_reading_noindex(self):
         response = self.client.get("/robots.txt")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "text/plain; charset=utf-8")
         self.assertContains(response, "User-agent: GPTBot")
         self.assertContains(response, "Disallow: /api/")
-        self.assertContains(response, "Disallow: /*?")
+        self.assertContains(response, "Disallow: /admin/")
+        self.assertNotContains(response, "Disallow: /*?")
 
     def test_filtered_vendor_page_is_noindex_with_clean_canonical(self):
         response = self.client.get("/vendors/", {"q": "Eltex"})

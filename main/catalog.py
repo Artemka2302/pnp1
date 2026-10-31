@@ -9,10 +9,11 @@ from .catalog_sections import PROJECT_DIRECTIONS, SYSTEM_ORDER, project_section
 from .catalog_duplicates import canonical_group_slug
 from .catalog_images import catalog_image_payload
 from .vendor_products import vendor_catalog_for_group
+from .vendor_navigation import vendor_landing_url
 
 
 CATALOG_CACHE_TTL = 15 * 60
-CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v8:version"
+CATALOG_CACHE_VERSION_KEY = "pnp:catalog:project-sections-v9:version"
 
 PUBLIC_DIRECTION_SLUGS = tuple(PROJECT_DIRECTIONS)
 
@@ -37,7 +38,7 @@ def catalog_cache_version():
 
 
 def catalog_cache_key(namespace, value=""):
-    return f"pnp:catalog:sections-v8:v{catalog_cache_version()}:{namespace}:{value}"
+    return f"pnp:catalog:sections-v9:v{catalog_cache_version()}:{namespace}:{value}"
 
 
 def invalidate_catalog_cache():
@@ -197,7 +198,7 @@ def group_payload(group):
                 "name": vendor.name,
                 "slug": vendor.slug,
                 "logo": catalog_image_url(vendor.logo) if vendor.logo else "",
-                "url": f"{reverse('vendors')}?vendors={vendor.slug}#vendorRowsSection",
+                "url": vendor_landing_url(vendor.slug),
             }
             for vendor in vendors[:12]
         ],

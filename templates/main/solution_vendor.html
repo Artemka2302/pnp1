@@ -1,8 +1,8 @@
 {% extends "main/solutions_base.html" %}
 {% load static %}
 {% block body_class %}solutions-page solution-vendor-page{% endblock %}
-{% block title %}Отраслевые решения {{ solution_vendor.name }} — ПНП{% endblock %}
-{% block description %}{{ solution_vendor.description }} Презентации {{ solution_vendor.name }}: просмотр и скачивание PDF на сайте ПНП.{% endblock %}
+{% block title %}{{ page_seo.title }}{% endblock %}
+{% block description %}{{ page_seo.description }}{% endblock %}
 {% block content %}
 <section class="section solution-vendor-intro{% if solution_vendor.background %} solution-vendor-intro--photo{% endif %}">
   {% if solution_vendor.background %}<img class="solution-vendor-background" src="{% static solution_vendor.background.image %}" alt="" aria-hidden="true" fetchpriority="high" decoding="async">{% endif %}
@@ -17,6 +17,15 @@
 </section>
 <section class="section solution-documents" id="presentations">
   <div class="container">
+    {% if solution_catalog_groups %}
+    <section class="solution-topic" aria-labelledby="solutionCatalogTitle">
+      <div class="solutions-section-head"><div><h2 id="solutionCatalogTitle">{{ solution_vendor.name }} в каталоге ПНП</h2><p>Товарные группы, связанные с {{ solution_vendor.name }} в каталоге. Конкретные модели и применимость уточняются по спецификации.</p></div></div>
+      <nav class="solution-section-nav" aria-label="Товарные группы {{ solution_vendor.name }}">
+        {% for group in solution_catalog_groups %}<a href="{{ group.get_absolute_url }}">{{ group.system.direction.project_section.code }} · {{ group.title }}</a>{% endfor %}
+      </nav>
+    </section>
+    {% endif %}
+    {% if solution_official_site %}<a class="solution-back" href="{{ solution_official_site }}" target="_blank" rel="noopener noreferrer">Сайт {{ solution_vendor.name }} ↗</a>{% endif %}
     <div class="solutions-section-head"><div><h2>{{ solution_vendor.section_title|default:"Решения для вашей отрасли" }}</h2><p>Презентации {{ solution_vendor.name }}. Выберите задачу и изучите материал прямо на сайте.</p></div></div>
     {% if solution_sections %}
     <nav class="solution-section-nav" aria-label="Разделы решений {{ solution_vendor.name }}">

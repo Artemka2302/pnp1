@@ -1,0 +1,8 @@
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ПНП">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="{{ page_seo.title }}">
+<meta property="og:description" content="{{ page_seo.description }}">
+<meta property="og:url" content="{{ page_seo.url }}">
+{% if page_seo.image %}<meta property="og:image" content="{{ page_seo.image }}">{% endif %}
+<script type="application/ld+json" id="pageStructuredData">{{ page_schema_json|safe }}</script>
